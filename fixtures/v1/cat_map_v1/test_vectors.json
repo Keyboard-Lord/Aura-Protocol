@@ -1,0 +1,455 @@
+{
+  "version": 1,
+  "primitive": "aura_cat_map_v1",
+  "modulus": {
+    "name": "mersenne_521",
+    "hex": "0x01ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+  },
+  "matrix": {
+    "forward": [[1, 1], [1, 2]],
+    "inverse": [[2, -1], [-1, 1]]
+  },
+  "encoding": {
+    "coordinate_encoding": "66-byte big-endian",
+    "state_encoding": "x_bytes_66 || y_bytes_66"
+  },
+  "hashes": {
+    "final_state_hash": "sha256(state_encoding)",
+    "trace_commitment": "derive_trace_commitment_521_v1",
+    "commitment_root": "derive_dcm_layer1_commitments_521_v1"
+  },
+  "checkpoints": ["s1", "s2", "s3", "s5", "s8", "s16", "s32"],
+  "production_vectors": [
+    {
+      "name": "zero_zero_32",
+      "entropy_hex": "00",
+      "challenge_hex": "00",
+      "initial": { "x": "0x0", "y": "0x0" },
+      "initial_state_encoding_hex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "states": {
+        "s1": { "x": "0x0", "y": "0x0" },
+        "s2": { "x": "0x0", "y": "0x0" },
+        "s3": { "x": "0x0", "y": "0x0" },
+        "s5": { "x": "0x0", "y": "0x0" },
+        "s8": { "x": "0x0", "y": "0x0" },
+        "s16": { "x": "0x0", "y": "0x0" },
+        "s32": { "x": "0x0", "y": "0x0" }
+      },
+      "final_state_encoding_hex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "final_state_hash": "115bad14f1c9f2c027a84de21b107015722cb76be8d0abf3760ad8e00d6c24a5",
+      "trace_commitment": "c75ef729d5de83a0e5be44e2fddf1c6f72dad2c34a989b48d7bb6887d16da93e",
+      "commitment_root": "441f2a91262a7f7f049bdd57eaf666ea2a18fc7304d189c5fe8272dc20ef048f",
+      "notes": "Fixed all-zero baseline."
+    },
+    {
+      "name": "one_one_32",
+      "entropy_hex": "01",
+      "challenge_hex": "01",
+      "initial": { "x": "0x1", "y": "0x1" },
+      "initial_state_encoding_hex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001",
+      "states": {
+        "s1": { "x": "0x2", "y": "0x3" },
+        "s2": { "x": "0x5", "y": "0x8" },
+        "s3": { "x": "0xd", "y": "0x15" },
+        "s5": { "x": "0x59", "y": "0x90" },
+        "s8": { "x": "0x63d", "y": "0xa18" },
+        "s16": { "x": "0x35c7e2", "y": "0x5704e7" },
+        "s32": { "x": "0xf9d297a859d", "y": "0x19438b44a658" }
+      },
+      "final_state_encoding_hex": "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f9d297a859d00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000019438b44a658",
+      "final_state_hash": "141538194ffc0c79075b3da10133381d8353fea54e0663612a9ebc368bb45caf",
+      "trace_commitment": "9396363345f04c7d7d7fcb48adb9f6502dd6a91bc944a47c640cd4f142880bba",
+      "commitment_root": "4699ed73c0756bb782631d24e8735f5563e847ed0e3fdca219519e82c1935727",
+      "notes": "Fixed Fibonacci-seeded baseline."
+    },
+    {
+      "name": "boundary_nm1_one_32",
+      "entropy_hex": "01fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe",
+      "challenge_hex": "01",
+      "initial": {
+        "x": "0x1fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe",
+        "y": "0x1"
+      },
+      "initial_state_encoding_hex": "01fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001",
+      "states": {
+        "s1": { "x": "0x0", "y": "0x1" },
+        "s2": { "x": "0x1", "y": "0x2" },
+        "s3": { "x": "0x3", "y": "0x5" },
+        "s5": { "x": "0x15", "y": "0x22" },
+        "s8": { "x": "0x179", "y": "0x262" },
+        "s16": { "x": "0xcb228", "y": "0x148add" },
+        "s32": { "x": "0x3af9a19bbd9", "y": "0x5f6c7b064e2" }
+      },
+      "final_state_encoding_hex": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003af9a19bbd900000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005f6c7b064e2",
+      "final_state_hash": "e5d8e5fe1bdee8464e62ed475107fbe1420a2b3baeac22d30645f9ffafe3fd4d",
+      "trace_commitment": "162de09bc21e8f6e9e8efa82db5659f9e4cae0ea937ec6b4e9f67d482baed9b5",
+      "commitment_root": "d959a71999b484fffeea333f2f498f3cf7d797f043aeb386def5f7f7244428b4",
+      "notes": "Fixed near-modulus boundary baseline."
+    },
+    {
+      "name": "zero_one_32",
+      "entropy_hex": "00",
+      "challenge_hex": "01",
+      "initial": { "x": "0x0", "y": "0x1" },
+      "initial_state_encoding_hex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001",
+      "states": {
+        "s1": { "x": "0x1", "y": "0x2" },
+        "s2": { "x": "0x3", "y": "0x5" },
+        "s3": { "x": "0x8", "y": "0xd" },
+        "s5": { "x": "0x37", "y": "0x59" },
+        "s8": { "x": "0x3db", "y": "0x63d" },
+        "s16": { "x": "0x213d05", "y": "0x35c7e2" },
+        "s32": { "x": "0x9a661ca20bb", "y": "0xf9d297a859d" }
+      },
+      "final_state_encoding_hex": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000009a661ca20bb0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f9d297a859d",
+      "final_state_hash": "ad1a054e17c1e80aa6e830d40d29cfa9b3ed1fc06cf19dd0052de3014cc974f6",
+      "trace_commitment": "f1995984140345ecc52d3822e3c102ae267e92c4809862d571e127632c221c68",
+      "commitment_root": "5cd95bf3b2328c2eb87899a328bcdd5e3a4a997f5d5e261d8ec092d8f86958f2",
+      "notes": "Asymmetric seed: zero entropy, one challenge."
+    },
+    {
+      "name": "one_zero_32",
+      "entropy_hex": "01",
+      "challenge_hex": "00",
+      "initial": { "x": "0x1", "y": "0x0" },
+      "initial_state_encoding_hex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "states": {
+        "s1": { "x": "0x1", "y": "0x1" },
+        "s2": { "x": "0x2", "y": "0x3" },
+        "s3": { "x": "0x5", "y": "0x8" },
+        "s5": { "x": "0x22", "y": "0x37" },
+        "s8": { "x": "0x262", "y": "0x3db" },
+        "s16": { "x": "0x148add", "y": "0x213d05" },
+        "s32": { "x": "0x5f6c7b064e2", "y": "0x9a661ca20bb" }
+      },
+      "final_state_encoding_hex": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005f6c7b064e200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000009a661ca20bb",
+      "final_state_hash": "ebd6ae7d452ae030865bb658f32e125607c104a6429960e41b9ac326b72d4806",
+      "trace_commitment": "f848aa64b22b6166c9147dc66f913fe4acaf28ce9461d9ba2416fccb9f2af0cc",
+      "commitment_root": "042f203540a098a4025cb51b87cf26119abecf069bb44a20ba3896c3fac1806b",
+      "notes": "Asymmetric seed: one entropy, zero challenge."
+    },
+    {
+      "name": "ff32_zero_32",
+      "entropy_hex": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "challenge_hex": "00",
+      "initial": { "x": "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "y": "0x0" },
+      "initial_state_encoding_hex": "00000000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "states": {
+        "s1": {
+          "x": "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "y": "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+        },
+        "s2": {
+          "x": "0x1fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe",
+          "y": "0x2fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffd"
+        },
+        "s3": {
+          "x": "0x4fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffb",
+          "y": "0x7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff8"
+        },
+        "s5": {
+          "x": "0x21ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffde",
+          "y": "0x36ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffc9"
+        },
+        "s8": {
+          "x": "0x261fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffd9e",
+          "y": "0x3dafffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffc25"
+        },
+        "s16": {
+          "x": "0x148adcffffffffffffffffffffffffffffffffffffffffffffffffffffffffffeb7523",
+          "y": "0x213d04ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffdec2fb"
+        },
+        "s32": {
+          "x": "0x5f6c7b064e1fffffffffffffffffffffffffffffffffffffffffffffffffffffa09384f9b1e",
+          "y": "0x9a661ca20bafffffffffffffffffffffffffffffffffffffffffffffffffffff6599e35df45"
+        }
+      },
+      "final_state_encoding_hex": "0000000000000000000000000000000000000000000000000000000005f6c7b064e1fffffffffffffffffffffffffffffffffffffffffffffffffffffa09384f9b1e0000000000000000000000000000000000000000000000000000000009a661ca20bafffffffffffffffffffffffffffffffffffffffffffffffffffff6599e35df45",
+      "final_state_hash": "ee15af843f85bca54e824deeffab3a54c9e27778ffe56b2182f5cea5d80bedb4",
+      "trace_commitment": "353295ec57c3eeff95a7e9c823ed93823e92d793874d079363a3d3c24821656a",
+      "commitment_root": "1490a16106391159025bd83e39abb5f8b8a70f0456b198b110064ea0c33877b0",
+      "notes": "32-byte all-ones entropy with zero challenge."
+    },
+    {
+      "name": "zero_ff32_32",
+      "entropy_hex": "00",
+      "challenge_hex": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "initial": { "x": "0x0", "y": "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" },
+      "initial_state_encoding_hex": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "states": {
+        "s1": {
+          "x": "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "y": "0x1fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe"
+        },
+        "s2": {
+          "x": "0x2fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffd",
+          "y": "0x4fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffb"
+        },
+        "s3": {
+          "x": "0x7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff8",
+          "y": "0xcfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff3"
+        },
+        "s5": {
+          "x": "0x36ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffc9",
+          "y": "0x58ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffa7"
+        },
+        "s8": {
+          "x": "0x3dafffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffc25",
+          "y": "0x63cfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff9c3"
+        },
+        "s16": {
+          "x": "0x213d04ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffdec2fb",
+          "y": "0x35c7e1ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffca381e"
+        },
+        "s32": {
+          "x": "0x9a661ca20bafffffffffffffffffffffffffffffffffffffffffffffffffffff6599e35df45",
+          "y": "0xf9d297a859cfffffffffffffffffffffffffffffffffffffffffffffffffffff062d6857a63"
+        }
+      },
+      "final_state_encoding_hex": "0000000000000000000000000000000000000000000000000000000009a661ca20bafffffffffffffffffffffffffffffffffffffffffffffffffffff6599e35df45000000000000000000000000000000000000000000000000000000000f9d297a859cfffffffffffffffffffffffffffffffffffffffffffffffffffff062d6857a63",
+      "final_state_hash": "c87be3a9cb95b34463fc38c9ef7a2e5371a34b772377a6381c3dfa01b9c3ebd8",
+      "trace_commitment": "2de92d36e3bbe2302d68756d90c0ab3403a02153406850f73fd10b3ef583a3d6",
+      "commitment_root": "9cb582b6f56ba844eb2a0d523883ab147f1e00716a415f2f14f16604c01b78de",
+      "notes": "Zero entropy with 32-byte all-ones challenge."
+    },
+    {
+      "name": "aa32_55_32",
+      "entropy_hex": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "challenge_hex": "5555555555555555555555555555555555555555555555555555555555555555",
+      "initial": {
+        "x": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "y": "0x5555555555555555555555555555555555555555555555555555555555555555"
+      },
+      "initial_state_encoding_hex": "00000000000000000000000000000000000000000000000000000000000000000000aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa000000000000000000000000000000000000000000000000000000000000000000005555555555555555555555555555555555555555555555555555555555555555",
+      "states": {
+        "s1": {
+          "x": "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "y": "0x15555555555555555555555555555555555555555555555555555555555555554"
+        },
+        "s2": {
+          "x": "0x25555555555555555555555555555555555555555555555555555555555555553",
+          "y": "0x3aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa7"
+        },
+        "s3": {
+          "x": "0x5fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffa",
+          "y": "0x9aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1"
+        },
+        "s5": {
+          "x": "0x28ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffd7",
+          "y": "0x425555555555555555555555555555555555555555555555555555555555555513"
+        },
+        "s8": {
+          "x": "0x2dfaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa7cb",
+          "y": "0x4a655555555555555555555555555555555555555555555555555555555555550af"
+        },
+        "s16": {
+          "x": "0x18c63faaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa91e46b",
+          "y": "0x2815f955555555555555555555555555555555555555555555555555555555552d3f5c"
+        },
+        "s32": {
+          "x": "0x7315063a37faaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa3795a47072b",
+          "y": "0xba34f04ed06555555555555555555555555555555555555555555555555555549b20650684f"
+        }
+      },
+      "final_state_encoding_hex": "0000000000000000000000000000000000000000000000000000000007315063a37faaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa3795a47072b000000000000000000000000000000000000000000000000000000000ba34f04ed06555555555555555555555555555555555555555555555555555549b20650684f",
+      "final_state_hash": "4383fdea7a9c18736acddbe3f63a927265e6a3eb2e58d56c87707563a9811f2b",
+      "trace_commitment": "c059e26903351a24ecdb534a445257de0cf466c502554cdcb2e197b5db2e26f2",
+      "commitment_root": "3855298815fba700cc2096badd1213fbd398baf9ba85310149650337d1c3d993",
+      "notes": "Alternating byte-pattern pair."
+    },
+    {
+      "name": "55_aa_32",
+      "entropy_hex": "5555555555555555555555555555555555555555555555555555555555555555",
+      "challenge_hex": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "initial": {
+        "x": "0x5555555555555555555555555555555555555555555555555555555555555555",
+        "y": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "initial_state_encoding_hex": "00000000000000000000000000000000000000000000000000000000000000000000555555555555555555555555555555555555555555555555555555555555555500000000000000000000000000000000000000000000000000000000000000000000aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "states": {
+        "s1": {
+          "x": "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "y": "0x1aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa9"
+        },
+        "s2": {
+          "x": "0x2aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa8",
+          "y": "0x45555555555555555555555555555555555555555555555555555555555555551"
+        },
+        "s3": {
+          "x": "0x6fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff9",
+          "y": "0xb555555555555555555555555555555555555555555555555555555555555554a"
+        },
+        "s5": {
+          "x": "0x2fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffd0",
+          "y": "0x4daaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa5d"
+        },
+        "s8": {
+          "x": "0x35d55555555555555555555555555555555555555555555555555555555555551f8",
+          "y": "0x571aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa539"
+        },
+        "s16": {
+          "x": "0x1d01a255555555555555555555555555555555555555555555555555555555553853b3",
+          "y": "0x2eeeedaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa7bbbbd"
+        },
+        "s32": {
+          "x": "0x86bd916e21d55555555555555555555555555555555555555555555555555554ce97c3e7338",
+          "y": "0xda03c3fb951aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa9d0a6e6af159"
+        }
+      },
+      "final_state_encoding_hex": "00000000000000000000000000000000000000000000000000000000086bd916e21d55555555555555555555555555555555555555555555555555554ce97c3e7338000000000000000000000000000000000000000000000000000000000da03c3fb951aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa9d0a6e6af159",
+      "final_state_hash": "5ad10b5a639597ba72a1ab2950796777136895b95335582fe768b80e8090d472",
+      "trace_commitment": "428e44811d52a1640e52e672dba318fd8b78f7c11d0cfef3c7f64c52ec2c631f",
+      "commitment_root": "a1eb235b764e4d71fcfeb5b661d05ec90bfa65e6d964099c09f26d5d97042de4",
+      "notes": "Alternating byte-pattern pair with roles swapped."
+    },
+    {
+      "name": "structured_counter_rev_32",
+      "entropy_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+      "challenge_hex": "1f1e1d1c1b1a191817161514131211100f0e0d0c0b0a09080706050403020100",
+      "initial": {
+        "x": "0x102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+        "y": "0x1f1e1d1c1b1a191817161514131211100f0e0d0c0b0a09080706050403020100"
+      },
+      "initial_state_encoding_hex": "00000000000000000000000000000000000000000000000000000000000000000000000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f000000000000000000000000000000000000000000000000000000000000000000001f1e1d1c1b1a191817161514131211100f0e0d0c0b0a09080706050403020100",
+      "states": {
+        "s1": {
+          "x": "0x1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f",
+          "y": "0x3e3d3c3b3a393837363534333231302f2e2d2c2b2a292827262524232221201f"
+        },
+        "s2": {
+          "x": "0x5d5c5b5a595857565554535251504f4e4d4c4b4a494847464544434241403f3e",
+          "y": "0x9b99979593918f8d8b89878583817f7d7b79777573716f6d6b69676563615f5d"
+        },
+        "s3": {
+          "x": "0xf8f5f2efece9e6e3e0dddad7d4d1cecbc8c5c2bfbcb9b6b3b0adaaa7a4a19e9b",
+          "y": "0x1948f8a85807b76716c67625d58534e49443f3a35302b26211c17120d0802fdf8"
+        },
+        "s5": {
+          "x": "0x6af9a85705b46311c06f1dcc7b29d88735e49341f09f4dfcab5a08b76614c371e",
+          "y": "0xad1af8d6b492704e2c09e7c5a3815f3d1af8d6b492704e2c09e7c5a3815f3d1a9"
+        },
+        "s8": {
+          "x": "0x77fb81068c11971ca227ad32b83dc348ce53d95ee469ef74fa80058b10961ba0de",
+          "y": "0xc222be59f5912cc863ff9b36d26e09a540dc7813af4ae6821db954f08c27c35e85"
+        },
+        "s16": {
+          "x": "0x40a613d566f88a1bad3ed061f38516a839cb5cee8011a334c657e97b0c9e2fc12bbc3",
+          "y": "0x689a967eb6ef275f97d0084078b0e9215991ca023a72aae31b538bc3fc346ca49db9b"
+        },
+        "s32": {
+          "x": "0x12c4e729f2eb0b4b8bcc0c4c8ccd0d4d8dce0e4e8ecf0f4f8fd0105090d111518673c5f6e5e",
+          "y": "0x1e5e7f102bbe5296db1f63a7ec3074b8fd4185ca0e5296db1f63a7ec3074b8fd2f20d3e7da5"
+        }
+      },
+      "final_state_encoding_hex": "00000000000000000000000000000000000000000000000000000000012c4e729f2eb0b4b8bcc0c4c8ccd0d4d8dce0e4e8ecf0f4f8fd0105090d111518673c5f6e5e0000000000000000000000000000000000000000000000000000000001e5e7f102bbe5296db1f63a7ec3074b8fd4185ca0e5296db1f63a7ec3074b8fd2f20d3e7da5",
+      "final_state_hash": "38e48f5512d15521b22d7bc5b02ea0e7fb54bb72e476313343ca26c4293a571e",
+      "trace_commitment": "1119404f506322779db3b5c53e8bff7aeca9fd81c400a4fe6ed6441ea35ab4c9",
+      "commitment_root": "2133321760c3694656d39e8c2180a0c4c9fe61a130d1e1671916b3315dbe56c7",
+      "notes": "Structured 32-byte increasing/decreasing counters."
+    },
+    {
+      "name": "structured_hexwalk_32",
+      "entropy_hex": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+      "challenge_hex": "fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210",
+      "initial": {
+        "x": "0x123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+        "y": "0xfedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210"
+      },
+      "initial_state_encoding_hex": "000000000000000000000000000000000000000000000000000000000000000000000123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef00000000000000000000000000000000000000000000000000000000000000000000fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210",
+      "states": {
+        "s1": {
+          "x": "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "y": "0x1fedcba9876543210fedcba9876543210fedcba9876543210fedcba987654320f"
+        },
+        "s2": {
+          "x": "0x2fedcba9876543210fedcba9876543210fedcba9876543210fedcba987654320e",
+          "y": "0x4fdb97530eca86421fdb97530eca86421fdb97530eca86421fdb97530eca8641d"
+        },
+        "s3": {
+          "x": "0x7fc962fc962fc9632fc962fc962fc9632fc962fc962fc9632fc962fc962fc962b",
+          "y": "0xcfa4fa4fa4fa4fa54fa4fa4fa4fa4fa54fa4fa4fa4fa4fa54fa4fa4fa4fa4fa48"
+        },
+        "s5": {
+          "x": "0x36e81b4e81b4e81b64e81b4e81b4e81b64e81b4e81b4e81b64e81b4e81b4e81b2e",
+          "y": "0x58d950c83fb72ea641d950c83fb72ea641d950c83fb72ea641d950c83fb72ea5e9"
+        },
+        "s8": {
+          "x": "0x3d9530eca8641fdbb07530eca8641fdbb07530eca8641fdbb07530eca8641fdb72e",
+          "y": "0x63a49f49f49f49f4c7f49f49f49f49f4c7f49f49f49f49f4c7f49f49f49f49f4645"
+        },
+        "s16": {
+          "x": "0x212e930b60b60b60c396360b60b60b60c396360b60b60b60c396360b60b60b60a267a3",
+          "y": "0x35b082950c83fb73004b4d950c83fb73004b4d950c83fb73004b4d950c83fb72ca9acb"
+        },
+        "s32": {
+          "x": "0x9a2302e234f159e2a9db9fdddfd159e2a9db9fdddfd159e2a9db9fdddfd159e20fb89cfbaae",
+          "y": "0xf9660579ac85e6f86ee336fec2d5e6f86ee336fec2d5e6f86ee336fec2d5e6f7757d3185165"
+        }
+      },
+      "final_state_encoding_hex": "0000000000000000000000000000000000000000000000000000000009a2302e234f159e2a9db9fdddfd159e2a9db9fdddfd159e2a9db9fdddfd159e20fb89cfbaae000000000000000000000000000000000000000000000000000000000f9660579ac85e6f86ee336fec2d5e6f86ee336fec2d5e6f86ee336fec2d5e6f7757d3185165",
+      "final_state_hash": "057b6a42f325e2da598061bc89a012df5cb911fab725066aeb8cba34f80700ea",
+      "trace_commitment": "160fd8c8cf2c56c67981836ad30384ed59a0ff69f1247fe0cf9842d6f14aa0b7",
+      "commitment_root": "9982c03276d19c319af343b3ab8bb64c615213f7a51bf924002446bbc62491e7",
+      "notes": "Structured nibble-walk seeds."
+    },
+    {
+      "name": "oversized_modulus_plus_one_32",
+      "entropy_hex": "01ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff01",
+      "challenge_hex": "01",
+      "initial": { "x": "0x1", "y": "0x1" },
+      "initial_state_encoding_hex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001",
+      "states": {
+        "s1": { "x": "0x2", "y": "0x3" },
+        "s2": { "x": "0x5", "y": "0x8" },
+        "s3": { "x": "0xd", "y": "0x15" },
+        "s5": { "x": "0x59", "y": "0x90" },
+        "s8": { "x": "0x63d", "y": "0xa18" },
+        "s16": { "x": "0x35c7e2", "y": "0x5704e7" },
+        "s32": { "x": "0xf9d297a859d", "y": "0x19438b44a658" }
+      },
+      "final_state_encoding_hex": "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f9d297a859d00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000019438b44a658",
+      "final_state_hash": "141538194ffc0c79075b3da10133381d8353fea54e0663612a9ebc368bb45caf",
+      "trace_commitment": "9396363345f04c7d7d7fcb48adb9f6502dd6a91bc944a47c640cd4f142880bba",
+      "commitment_root": "4699ed73c0756bb782631d24e8735f5563e847ed0e3fdca219519e82c1935727",
+      "notes": "Oversized entropy input proving modulo reduction beyond 66 bytes."
+    },
+    {
+      "name": "endian_probe_32",
+      "entropy_hex": "0100",
+      "challenge_hex": "0001",
+      "initial": { "x": "0x100", "y": "0x1" },
+      "initial_state_encoding_hex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001",
+      "states": {
+        "s1": { "x": "0x101", "y": "0x102" },
+        "s2": { "x": "0x203", "y": "0x305" },
+        "s3": { "x": "0x508", "y": "0x80d" },
+        "s5": { "x": "0x2237", "y": "0x3759" },
+        "s8": { "x": "0x265db", "y": "0x3e13d" },
+        "s16": { "x": "0x14ac1a05", "y": "0x2172cce2" },
+        "s32": { "x": "0x6006e122f02bb", "y": "0x9b5fef39b409d" }
+      },
+      "final_state_encoding_hex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006006e122f02bb000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000009b5fef39b409d",
+      "final_state_hash": "744ad5421642b82a8c9564a1b2d4ed76ee1d120885ea27ca7294a4e25a4ad102",
+      "trace_commitment": "aba9812e0ea4cf33a64fb3cc21940121e6c3f26980feb4a385d72dfaebbb193b",
+      "commitment_root": "3a8f4775258a06bad32990bdc0ac6d60d10f31a1e6d56072ff94344decf968aa",
+      "notes": "Two-byte probe proving big-endian seed reduction."
+    }
+  ],
+  "toy_prime_cycle_suites": [
+    {
+      "p": 5,
+      "cycle_lengths": [1, 2, 2, 10, 10],
+      "representatives": [[0, 0], [1, 3], [2, 1], [0, 1], [0, 2]]
+    },
+    {
+      "p": 7,
+      "cycle_lengths": [1, 8, 8, 8, 8, 8, 8],
+      "representatives": [[0, 0], [0, 1], [0, 2], [0, 3], [1, 0], [1, 3], [2, 0]]
+    },
+    {
+      "p": 11,
+      "cycle_lengths": [1, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
+      "representatives": [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7], [0, 8], [0, 9], [0, 10], [1, 0], [1, 4], [1, 5], [1, 6], [1, 8], [2, 0], [2, 1], [2, 5], [2, 8], [3, 0], [3, 7], [4, 0], [5, 2], [6, 3]]
+    }
+  ]
+}

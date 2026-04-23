@@ -1,0 +1,13 @@
+[package]
+name = "aura_l2_execution_v1"
+version = "0.1.0"
+edition = "2021"
+description = "Deterministic Aura L2 local execution engine v1 for the transfer-only proving-chain milestone"
+
+[dependencies]
+ed25519-dalek = "1.0.1"
+sha2 = "0.10"
+serde = { version = "1", features = ["derive"] }
+
+[dev-dependencies]
+serde_json = "1"

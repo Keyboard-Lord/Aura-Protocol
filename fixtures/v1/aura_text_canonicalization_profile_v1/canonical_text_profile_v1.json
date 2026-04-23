@@ -1,0 +1,123 @@
+{
+  "profile": "AURA_TEXT_CANONICALIZATION_PROFILE_V1",
+  "depends_on": "AURA_HASH_V1",
+  "cases": [
+    {
+      "label": "empty_string",
+      "input_hex": "",
+      "normalized_text_utf8_hex": "",
+      "text_payload_bytes_hex": "",
+      "aura_hash_v1_canonical_message_bytes_hex": "0000000000000000",
+      "hash_preimage_hex": "415552415f484153485f56310000000000000000",
+      "hash_hex": "a051904a9eece60705777389c5569a32754956653e576931acac12a570ce1f40"
+    },
+    {
+      "label": "single_a",
+      "input_hex": "61",
+      "normalized_text_utf8_hex": "61",
+      "text_payload_bytes_hex": "61",
+      "aura_hash_v1_canonical_message_bytes_hex": "010000000000000061",
+      "hash_preimage_hex": "415552415f484153485f5631010000000000000061",
+      "hash_hex": "ca40dbf72f45e97105924d7d4af52a7cd25936278397a6fc97ff600d86d766e8"
+    },
+    {
+      "label": "hello",
+      "input_hex": "68656c6c6f",
+      "normalized_text_utf8_hex": "68656c6c6f",
+      "text_payload_bytes_hex": "68656c6c6f",
+      "aura_hash_v1_canonical_message_bytes_hex": "050000000000000068656c6c6f",
+      "hash_preimage_hex": "415552415f484153485f5631050000000000000068656c6c6f",
+      "hash_hex": "2ac821c177a2aa3cb284ad6244d3e0684700c839b5062b66b9e73753192c1c0d"
+    },
+    {
+      "label": "hello_lf_world",
+      "input_hex": "68656c6c6f0a776f726c64",
+      "normalized_text_utf8_hex": "68656c6c6f0a776f726c64",
+      "text_payload_bytes_hex": "68656c6c6f0a776f726c64",
+      "aura_hash_v1_canonical_message_bytes_hex": "0b0000000000000068656c6c6f0a776f726c64",
+      "hash_preimage_hex": "415552415f484153485f56310b0000000000000068656c6c6f0a776f726c64",
+      "hash_hex": "f239171c28b7390c68c2708f29fb9f8b43a15c99b4f301d3715948143c428151"
+    },
+    {
+      "label": "hello_trailing_space",
+      "input_hex": "68656c6c6f20",
+      "normalized_text_utf8_hex": "68656c6c6f20",
+      "text_payload_bytes_hex": "68656c6c6f20",
+      "aura_hash_v1_canonical_message_bytes_hex": "060000000000000068656c6c6f20",
+      "hash_preimage_hex": "415552415f484153485f5631060000000000000068656c6c6f20",
+      "hash_hex": "4a47830f82971521852e8cc9de80b60d04b309f8215c704b7cd0c35634848099"
+    },
+    {
+      "label": "hello_leading_space",
+      "input_hex": "2068656c6c6f",
+      "normalized_text_utf8_hex": "2068656c6c6f",
+      "text_payload_bytes_hex": "2068656c6c6f",
+      "aura_hash_v1_canonical_message_bytes_hex": "06000000000000002068656c6c6f",
+      "hash_preimage_hex": "415552415f484153485f563106000000000000002068656c6c6f",
+      "hash_hex": "ef37f42bcab86c7a551065d8a55057881f752519f37ab142ee414aea766c0009"
+    },
+    {
+      "label": "hello_trailing_lf",
+      "input_hex": "68656c6c6f0a",
+      "normalized_text_utf8_hex": "68656c6c6f0a",
+      "text_payload_bytes_hex": "68656c6c6f0a",
+      "aura_hash_v1_canonical_message_bytes_hex": "060000000000000068656c6c6f0a",
+      "hash_preimage_hex": "415552415f484153485f5631060000000000000068656c6c6f0a",
+      "hash_hex": "8445c59e51468b31859e425abae4cb09e1eee3e4a9321852f910bc79fe859870"
+    },
+    {
+      "label": "e_acute_nfc",
+      "input_hex": "c3a9",
+      "normalized_text_utf8_hex": "c3a9",
+      "text_payload_bytes_hex": "c3a9",
+      "aura_hash_v1_canonical_message_bytes_hex": "0200000000000000c3a9",
+      "hash_preimage_hex": "415552415f484153485f56310200000000000000c3a9",
+      "hash_hex": "3bff42e10aab9f47d6287bc27b99bd443ce2d1dfc99f57bba0fa590de8f51acd"
+    },
+    {
+      "label": "e_acute_nfd",
+      "input_hex": "65cc81",
+      "normalized_text_utf8_hex": "c3a9",
+      "text_payload_bytes_hex": "c3a9",
+      "aura_hash_v1_canonical_message_bytes_hex": "0200000000000000c3a9",
+      "hash_preimage_hex": "415552415f484153485f56310200000000000000c3a9",
+      "hash_hex": "3bff42e10aab9f47d6287bc27b99bd443ce2d1dfc99f57bba0fa590de8f51acd"
+    },
+    {
+      "label": "mixed_newlines",
+      "input_hex": "68656c6c6f0d0a776f726c640d",
+      "normalized_text_utf8_hex": "68656c6c6f0a776f726c640a",
+      "text_payload_bytes_hex": "68656c6c6f0a776f726c640a",
+      "aura_hash_v1_canonical_message_bytes_hex": "0c0000000000000068656c6c6f0a776f726c640a",
+      "hash_preimage_hex": "415552415f484153485f56310c0000000000000068656c6c6f0a776f726c640a",
+      "hash_hex": "3539eeb55e5e480f6899d25afd9136d96df0287d791cb9d4ac99adc61c504422"
+    }
+  ],
+  "mode_separation_cases": [
+    {
+      "label": "raw_vs_text_decomposed_e_acute",
+      "raw_input_hex": "65cc81",
+      "text_input_hex": "65cc81",
+      "text_payload_bytes_hex": "c3a9",
+      "raw_hash_hex": "c163a288ff26d5bb322149b95388ebb5c50c2cf57ce2e378597f1dcb41a44d39",
+      "text_hash_hex": "3bff42e10aab9f47d6287bc27b99bd443ce2d1dfc99f57bba0fa590de8f51acd"
+    }
+  ],
+  "rejection_cases": [
+    {
+      "label": "bom_prefix",
+      "input_hex": "efbbbf68656c6c6f",
+      "reject_reason": "message_contains_bom"
+    },
+    {
+      "label": "bom_internal",
+      "input_hex": "6865efbbbf6c6f",
+      "reject_reason": "message_contains_bom"
+    },
+    {
+      "label": "invalid_utf8",
+      "input_hex": "ff61",
+      "reject_reason": "message_must_be_valid_utf8"
+    }
+  ]
+}

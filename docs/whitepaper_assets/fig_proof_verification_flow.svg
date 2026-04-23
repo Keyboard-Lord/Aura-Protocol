@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760" viewBox="0 0 1400 760">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#274c77"/>
+    </marker>
+  </defs>
+  <rect width="1400" height="760" fill="#fbfbfb"/>
+  <text x="700" y="52" text-anchor="middle" font-family="Georgia, serif" font-size="32" fill="#102542">Lower-Layer Proof Verification Flow</text>
+
+  <rect x="90" y="130" width="360" height="220" rx="18" fill="#eef4f8" stroke="#274c77" stroke-width="2"/>
+  <text x="270" y="180" text-anchor="middle" font-family="Georgia, serif" font-size="24" fill="#102542">Public claim inputs</text>
+  <text x="270" y="220" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#102542">initial_state</text>
+  <text x="270" y="252" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#102542">iteration_count</text>
+  <text x="270" y="284" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#102542">final_state</text>
+  <text x="270" y="316" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#102542">commitment_root</text>
+
+  <rect x="90" y="420" width="360" height="180" rx="18" fill="#fff7e6" stroke="#b7791f" stroke-width="2"/>
+  <text x="270" y="472" text-anchor="middle" font-family="Georgia, serif" font-size="24" fill="#5a3b00">Witness</text>
+  <text x="270" y="512" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#5a3b00">ordered pair-state trace</text>
+  <text x="270" y="544" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#5a3b00">base-128 digits, 28-bit limbs, carry witnesses</text>
+
+  <rect x="520" y="250" width="360" height="220" rx="18" fill="#dbeafe" stroke="#274c77" stroke-width="2"/>
+  <text x="700" y="306" text-anchor="middle" font-family="Georgia, serif" font-size="24" fill="#102542">Winterfell prover</text>
+  <text x="700" y="342" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#102542">193 trace columns</text>
+  <text x="700" y="372" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#102542">234 transition constraints</text>
+  <text x="700" y="402" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#102542">real STARK proof artifact</text>
+
+  <rect x="950" y="130" width="360" height="220" rx="18" fill="#eef4f8" stroke="#274c77" stroke-width="2"/>
+  <text x="1130" y="186" text-anchor="middle" font-family="Georgia, serif" font-size="24" fill="#102542">Verifier acceptance</text>
+  <text x="1130" y="222" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#102542">verifies proof against public claim</text>
+  <text x="1130" y="254" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#102542">checks proof-bound transcript digest</text>
+  <text x="1130" y="286" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#102542">checks proof-bound session id</text>
+
+  <rect x="950" y="420" width="360" height="180" rx="18" fill="#ddecdc" stroke="#3b6b35" stroke-width="2"/>
+  <text x="1130" y="474" text-anchor="middle" font-family="Georgia, serif" font-size="24" fill="#204d26">Accepted output</text>
+  <text x="1130" y="512" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#204d26">lower-layer claim</text>
+  <text x="1130" y="544" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#204d26">session_id, transcript_digest, commitment_root</text>
+
+  <line x1="450" y1="240" x2="520" y2="300" stroke="#274c77" stroke-width="4" marker-end="url(#arrow)"/>
+  <line x1="450" y1="510" x2="520" y2="420" stroke="#274c77" stroke-width="4" marker-end="url(#arrow)"/>
+  <line x1="880" y1="360" x2="950" y2="240" stroke="#274c77" stroke-width="4" marker-end="url(#arrow)"/>
+  <line x1="880" y1="360" x2="950" y2="500" stroke="#274c77" stroke-width="4" marker-end="url(#arrow)"/>
+</svg>

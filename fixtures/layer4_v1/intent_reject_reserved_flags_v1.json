@@ -1,0 +1,25 @@
+{
+  "contract": "AURA_LAYER4_INTENT_HASH_V1",
+  "fixture_name": "intent_reject_reserved_flags_v1",
+  "expected_reject_reason": "intent_flags_reserved_bits_non_zero",
+  "intent": {
+    "intent_version": 1,
+    "intent_flags": 2,
+    "rollup_id_hex": "1111111111111111111111111111111111111111111111111111111111111111",
+    "tx_kind": "VALUE_TRANSFER",
+    "sender_account_id_hex": "2222222222222222222222222222222222222222222222222222222222222222",
+    "sender_nonce": 7,
+    "validity_flags": 12,
+    "not_before_unix_seconds": 0,
+    "not_after_unix_seconds": 0,
+    "not_before_batch_number": 120,
+    "not_after_batch_number": 125,
+    "fee_policy_kind": "MAX_FEE_PER_TX_NATIVE",
+    "max_fee_native": 500,
+    "client_context_commitment_hex": "0000000000000000000000000000000000000000000000000000000000000000",
+    "operation_body": {
+      "recipient_account_id_hex": "3333333333333333333333333333333333333333333333333333333333333333",
+      "amount": 2500
+    }
+  }
+}

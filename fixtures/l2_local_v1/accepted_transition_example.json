@@ -1,0 +1,14 @@
+{"fixture_schema_version":1,
+  "fixture_name": "accepted_transition_example",
+  "batch_number": 0,
+  "parent_batch_commitment_hex": "0000000000000000000000000000000000000000000000000000000000000000",
+  "transactions": [
+    {
+      "sender_account_id_hex": "1111111111111111111111111111111111111111111111111111111111111111",
+      "recipient_account_id_hex": "2222222222222222222222222222222222222222222222222222222222222222",
+      "sender_nonce": 0,
+      "amount": 75
+    }
+  ],
+  "expected_result": "ACCEPTED"
+}

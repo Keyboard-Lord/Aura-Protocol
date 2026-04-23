@@ -1,0 +1,80 @@
+{
+  "vectors": [
+    {
+      "fixture_name": "minimal_valid_v1",
+      "transaction": {
+        "tx_version": 1,
+        "tx_kind": 1,
+        "proof_statement_type": 1,
+        "rollup_id_hex": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "asset_id_hex": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "anchor_state_root_hex": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "inputs": [
+          {
+            "nullifier_hex": "1111111111111111111111111111111111111111111111111111111111111111",
+            "note_commitment_reference_hex": "2121212121212121212121212121212121212121212121212121212121212121"
+          }
+        ],
+        "outputs": [
+          {
+            "note_commitment_hex": "3131313131313131313131313131313131313131313131313131313131313131"
+          }
+        ],
+        "admission_burn": 1,
+        "notary_burn": 3,
+        "priority_weight": 4,
+        "transaction_commitment_hex": "e8b6a29fbd997ed0a79d293c8670dea853591171076494e444b21ac665682635",
+        "public_statement": {
+          "tx_version": 1,
+          "tx_kind": 1,
+          "proof_statement_type": 1,
+          "rollup_id_hex": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "asset_id_hex": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "anchor_state_root_hex": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "input_nullifier_hexes": [
+            "1111111111111111111111111111111111111111111111111111111111111111"
+          ],
+          "output_note_commitment_hexes": [
+            "3131313131313131313131313131313131313131313131313131313131313131"
+          ],
+          "input_count": 1,
+          "output_count": 1,
+          "admission_burn": 1,
+          "notary_burn": 3,
+          "priority_weight": 4,
+          "transaction_commitment_hex": "e8b6a29fbd997ed0a79d293c8670dea853591171076494e444b21ac665682635"
+        }
+      },
+      "authorization_payload": {
+        "payload_version": 1,
+        "payload_kind": 1,
+        "tx_version": 1,
+        "tx_kind": 1,
+        "proof_statement_type": 1,
+        "signer_kind": 1,
+        "signer_public_key_hex": "2152f8d19b791d24453242e15f2eab6cb7cffa7b6a5ed30097960e069881db12",
+        "authorization_nonce_hex": "5555555555555555555555555555555555555555555555555555555555555555",
+        "transaction_commitment_hex": "e8b6a29fbd997ed0a79d293c8670dea853591171076494e444b21ac665682635",
+        "public_statement_digest_hex": "ac2c829d61bc9576c670f9226e29fdf9facd6e315ee6d20fced306aa4bc1fab1"
+      },
+      "authorization_payload_bytes_hex": "415552415f544f4b454e5f415554484f52495a4154494f4e5f5041594c4f41445f56310100000001010000000101012152f8d19b791d24453242e15f2eab6cb7cffa7b6a5ed30097960e069881db125555555555555555555555555555555555555555555555555555555555555555e8b6a29fbd997ed0a79d293c8670dea853591171076494e444b21ac665682635ac2c829d61bc9576c670f9226e29fdf9facd6e315ee6d20fced306aa4bc1fab1",
+      "authorization_envelope": {
+        "envelope_version": 1,
+        "scheme": 1,
+        "payload": {
+          "payload_version": 1,
+          "payload_kind": 1,
+          "tx_version": 1,
+          "tx_kind": 1,
+          "proof_statement_type": 1,
+          "signer_kind": 1,
+          "signer_public_key_hex": "2152f8d19b791d24453242e15f2eab6cb7cffa7b6a5ed30097960e069881db12",
+          "authorization_nonce_hex": "5555555555555555555555555555555555555555555555555555555555555555",
+          "transaction_commitment_hex": "e8b6a29fbd997ed0a79d293c8670dea853591171076494e444b21ac665682635",
+          "public_statement_digest_hex": "ac2c829d61bc9576c670f9226e29fdf9facd6e315ee6d20fced306aa4bc1fab1"
+        },
+        "signature_hex": "cb184cb28e9a25c37c77f190f0fd8ba2804c03bcc2a536cfba4adbda460e908b6ac936e66ca852600582d6020547d7a809ea83887f31d8562348ebd1c85cb307"
+      }
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+
+running 1 test
+
+╔══════════════════════════════════════════════════════════════════╗
+║         AURA PROTOCOL ADVERSARIAL AUDIT V1                       ║
+║         Stress Testing Across All Security Layers                ║
+╚══════════════════════════════════════════════════════════════════╝
+
+=== ATTACK SURFACE 1: INPUT LAYER ===
+
+=== ATTACK SURFACE 2: IDENTITY / HASH ATTACKS ===
+
+=== ATTACK SURFACE 3: INIT / DERIVATION ATTACKS ===
+
+=== ATTACK SURFACE 4: STORM / RECURRENCE ATTACKS ===
+
+=== ATTACK SURFACE 5: TRACE ATTACKS ===
+
+=== ATTACK SURFACE 6: PROOF ATTACKS ===
+
+=== ATTACK SURFACE 7: SETTLEMENT ATTACKS ===
+
+=== ATTACK SURFACE 8: CROSS-LANGUAGE DRIFT ATTACKS ===
+
+╔══════════════════════════════════════════════════════════════════╗
+║                      AUDIT SUMMARY                               ║
+╚══════════════════════════════════════════════════════════════════╝
+Attack Matrix Summary:
+- Total Tests: 31
+- PASSED (correctly rejected): 31
+- FAILED (unexpected success): 0
+- CRITICAL (security bypass): 0
+- PARTIAL (undefined behavior): 0
+
+Final Verdict: Adversarial Integrity: PASSED
+
+✅ All adversarial tests completed. System integrity verified.
+test adversarial_audit_complete_matrix ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 3 filtered out; finished in 1.12s
+

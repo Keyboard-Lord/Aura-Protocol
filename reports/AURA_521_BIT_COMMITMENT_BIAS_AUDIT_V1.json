@@ -1,0 +1,663 @@
+{
+  "scope": "research-only / non-authoritative / no claim of a full 521-bit break",
+  "command": "cargo test -p aura_intent_lineage_v1 --release --test deterministic_commitment_521_bias_audit_v1 non_authoritative_research_deterministic_commitment_521_bias_audit_v1 -- --ignored --nocapture",
+  "target": {
+    "layer2_lineage_commitment_hex": "01e98f99acaa1d49e50ee1dca6d8045a7785c36bb64f5dfb20e779750641ea734a026b6c5c73882c86a694e039d2f176d2ed7ce59de94caea45fb81c29ad5a2f5617",
+    "canonical_preimage_len": 300,
+    "canonical_preimage_hex": "415552415f415554484f52495a4154494f4e5f4c494e454147455f5631010100017b64c5bd4f5d157daf7100494c9ae4d48237a16e11476357f090ad839d4159ef76dbd2f074da73a6e98119e7c06633a72633845fa210d181e86e4ab7a0c7f44a0155555555555555555555555555555555555555555555555555555555555555550000000000000000000000000000000000000000000000000000000000000000027fbb895d47d0231a4b63d6637409833956fb9d19fa399624d0076ed8824bb288036666666666666666666666666666666666666666666666666666666666666666921000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "canonical_input_len": 413,
+    "canonical_input_hex": "415552415f44455445524d494e49535449435f434f4d4d49544d454e545f3532315f56313d00000000000000415552415f4e41544956455f4c41594552325f415554484f52495a4154494f4e5f4c494e454147455f4f424a4543545f434f4d4d49544d454e545f56312c01000000000000415552415f415554484f52495a4154494f4e5f4c494e454147455f5631010100017b64c5bd4f5d157daf7100494c9ae4d48237a16e11476357f090ad839d4159ef76dbd2f074da73a6e98119e7c06633a72633845fa210d181e86e4ab7a0c7f44a0155555555555555555555555555555555555555555555555555555555555555550000000000000000000000000000000000000000000000000000000000000000027fbb895d47d0231a4b63d6637409833956fb9d19fa399624d0076ed8824bb288036666666666666666666666666666666666666666666666666666666666666666921000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "exact_recomputation_equal": true
+  },
+  "construction_trace": {
+    "domain_separator_ascii": "AURA_NATIVE_LAYER2_AUTHORIZATION_LINEAGE_OBJECT_COMMITMENT_V1",
+    "context_domain_separator_ascii": "AURA_DETERMINISTIC_COMMITMENT_521_V1",
+    "field_layout": [
+      {
+        "field": "authorization_lineage_domain_separator",
+        "start": 0,
+        "len": 29,
+        "end_exclusive": 29,
+        "start_chunk": 0,
+        "end_chunk": 0
+      },
+      {
+        "field": "version",
+        "start": 29,
+        "len": 1,
+        "end_exclusive": 30,
+        "start_chunk": 0,
+        "end_chunk": 0
+      },
+      {
+        "field": "lineage_flags",
+        "start": 30,
+        "len": 2,
+        "end_exclusive": 32,
+        "start_chunk": 0,
+        "end_chunk": 0
+      },
+      {
+        "field": "dcm_commitment_kind",
+        "start": 32,
+        "len": 1,
+        "end_exclusive": 33,
+        "start_chunk": 0,
+        "end_chunk": 0
+      },
+      {
+        "field": "dcm_commitment_root",
+        "start": 33,
+        "len": 32,
+        "end_exclusive": 65,
+        "start_chunk": 0,
+        "end_chunk": 1
+      },
+      {
+        "field": "dcm_trace_commitment",
+        "start": 65,
+        "len": 32,
+        "end_exclusive": 97,
+        "start_chunk": 1,
+        "end_chunk": 1
+      },
+      {
+        "field": "subject_binding_type",
+        "start": 97,
+        "len": 1,
+        "end_exclusive": 98,
+        "start_chunk": 1,
+        "end_chunk": 1
+      },
+      {
+        "field": "subject_id",
+        "start": 98,
+        "len": 32,
+        "end_exclusive": 130,
+        "start_chunk": 1,
+        "end_chunk": 2
+      },
+      {
+        "field": "subject_public_key",
+        "start": 130,
+        "len": 32,
+        "end_exclusive": 162,
+        "start_chunk": 2,
+        "end_chunk": 2
+      },
+      {
+        "field": "intent_type",
+        "start": 162,
+        "len": 1,
+        "end_exclusive": 163,
+        "start_chunk": 2,
+        "end_chunk": 2
+      },
+      {
+        "field": "intent_hash",
+        "start": 163,
+        "len": 32,
+        "end_exclusive": 195,
+        "start_chunk": 2,
+        "end_chunk": 3
+      },
+      {
+        "field": "freshness_mode",
+        "start": 195,
+        "len": 1,
+        "end_exclusive": 196,
+        "start_chunk": 3,
+        "end_chunk": 3
+      },
+      {
+        "field": "freshness_nonce",
+        "start": 196,
+        "len": 32,
+        "end_exclusive": 228,
+        "start_chunk": 3,
+        "end_chunk": 3
+      },
+      {
+        "field": "freshness_reference",
+        "start": 228,
+        "len": 8,
+        "end_exclusive": 236,
+        "start_chunk": 3,
+        "end_chunk": 3
+      },
+      {
+        "field": "proof_material_v1_hash",
+        "start": 236,
+        "len": 32,
+        "end_exclusive": 268,
+        "start_chunk": 3,
+        "end_chunk": 4
+      },
+      {
+        "field": "fractal_key_v1_hash",
+        "start": 268,
+        "len": 32,
+        "end_exclusive": 300,
+        "start_chunk": 4,
+        "end_chunk": 4
+      }
+    ],
+    "freshness_reference_offset_in_preimage": 228,
+    "freshness_reference_offset_in_canonical_input": 341,
+    "affected_chunk_index": 5,
+    "affected_chunk_start": 320,
+    "affected_chunk_end": 384,
+    "chunks": [
+      {
+        "chunk_index": 0,
+        "start": 0,
+        "end_exclusive": 64,
+        "chunk_hex": "415552415f44455445524d494e49535449435f434f4d4d49544d454e545f3532315f56313d00000000000000415552415f4e41544956455f4c41594552325f41",
+        "chunk_element_hex": "0000415552415f44455445524d494e49535449435f434f4d4d49544d454e545f3532315f56313d00000000000000415552415f4e41544956455f4c41594552325f41",
+        "mixed_chunk_hex": "0000415552415f44455445524d494e49535449435f434f4d4d49544d454e545f3532315f56313d00000000000000415552415f4e41544956455f4c41594552326042",
+        "x_before_hex": "0000000000000000000000000000000000000000000000415552415f44455445524d494e49535449435f434f4d4d49544d454e545f3532315f534545445f585f5631",
+        "y_before_hex": "0000000000000000000000000000000000000000000000415552415f44455445524d494e49535449435f434f4d4d49544d454e545f3532315f534545445f595f5631",
+        "x_after_hex": "0000415552415f44455445524d494e49535449435f434fcff7edd70bcdd8fce9d9ccc3fbe8d7e59286be869e9a9ad3fdeccbfbf6ffbeadb90405d6cbe20403f10ca4",
+        "y_after_hex": "004fb5941c4353b949ea1c6e2db345ce40e000da345f817e33c9d1ebc8c2d6b090ecbabc53da4aa11690a5e25392be7cf6dcaef5eec2a7fba9522dac4f9e8ae69d38"
+      },
+      {
+        "chunk_index": 1,
+        "start": 64,
+        "end_exclusive": 128,
+        "chunk_hex": "5554484f52495a4154494f4e5f4c494e454147455f4f424a4543545f434f4d4d49544d454e545f56312c01000000000000415552415f415554484f52495a4154",
+        "chunk_element_hex": "00005554484f52495a4154494f4e5f4c494e454147455f4f424a4543545f434f4d4d49544d454e545f56312c01000000000000415552415f415554484f52495a4154",
+        "mixed_chunk_hex": "00005554484f52495a4154494f4e5f4c494e454147455f4f424a4543545f434f4d4d49544d454e545f56312c01000000000000415552415f415554484f52495a4356",
+        "x_before_hex": "0000415552415f44455445524d494e49535449435f434fcff7edd70bcdd8fce9d9ccc3fbe8d7e59286be869e9a9ad3fdeccbfbf6ffbeadb90405d6cbe20403f10ca4",
+        "y_before_hex": "004fb5941c4353b949ea1c6e2db345ce40e000da345f817e33c9d1ebc8c2d6b090ecbabc53da4aa11690a5e25392be7cf6dcaef5eec2a7fba9522dac4f9e8ae69d38",
+        "x_after_hex": "00504c3db6d40546e97fb609ca4af363dd828f5edae8309d6e01ee3aeafb16e9b806c80c89f77e87fca55dacef2d927ae3a8ab2e43d39713eead58c080f4d831ed32",
+        "y_after_hex": "00991139b7f3f93920686980a9d028139f025c8170909ed03ac96c05e287ed3fbb2fadc0443223d3fffcf0d897e560a7d8ee1abd53c0f9dd7a00d4779a166b628ee0"
+      },
+      {
+        "chunk_index": 2,
+        "start": 128,
+        "end_exclusive": 192,
+        "chunk_hex": "494f4e5f4c494e454147455f5631010100017b64c5bd4f5d157daf7100494c9ae4d48237a16e11476357f090ad839d4159ef76dbd2f074da73a6e98119e7c066",
+        "chunk_element_hex": "0000494f4e5f4c494e454147455f5631010100017b64c5bd4f5d157daf7100494c9ae4d48237a16e11476357f090ad839d4159ef76dbd2f074da73a6e98119e7c066",
+        "mixed_chunk_hex": "0000494f4e5f4c494e454147455f5631010100017b64c5bd4f5d157daf7100494c9ae4d48237a16e11476357f090ad839d4159ef76dbd2f074da73a6e98119e7c369",
+        "x_before_hex": "00504c3db6d40546e97fb609ca4af363dd828f5edae8309d6e01ee3aeafb16e9b806c80c89f77e87fca55dacef2d927ae3a8ab2e43d39713eead58c080f4d831ed32",
+        "y_before_hex": "00991139b7f3f93920686980a9d028139f025c8170909ed03ac96c05e287ed3fbb2fadc0443223d3fffcf0d897e560a7d8ee1abd53c0f9dd7a00d4779a166b628ee0",
+        "x_after_hex": "00e9a6c6bd274ac9582d60d1b97a71a87d85ebe1c6dd952af8286fbe7cf40472bfd15aa1506143ca0de9b1dd77a3a0a659d81fdb0e7063e1dd88a0df048c5d7c3f7b",
+        "y_after_hex": "0090b17af5a00762721167355ea431ae08e5c8cab0eb90782165dca4ba596a713c7cb43041dbafe27f4d6f30a1a1d1307f26d14bc01c6aedc86594be80d10ef36b80"
+      },
+      {
+        "chunk_index": 3,
+        "start": 192,
+        "end_exclusive": 256,
+        "chunk_hex": "33a72633845fa210d181e86e4ab7a0c7f44a01555555555555555555555555555555555555555555555555555555555555555500000000000000000000000000",
+        "chunk_element_hex": "000033a72633845fa210d181e86e4ab7a0c7f44a01555555555555555555555555555555555555555555555555555555555555555500000000000000000000000000",
+        "mixed_chunk_hex": "000033a72633845fa210d181e86e4ab7a0c7f44a01555555555555555555555555555555555555555555555555555555555555555500000000000000000000000404",
+        "x_before_hex": "00e9a6c6bd274ac9582d60d1b97a71a87d85ebe1c6dd952af8286fbe7cf40472bfd15aa1506143ca0de9b1dd77a3a0a659d81fdb0e7063e1dd88a0df048c5d7c3f7b",
+        "y_before_hex": "0090b17af5a00762721167355ea431ae08e5c8cab0eb90782165dca4ba596a713c7cb43041dbafe27f4d6f30a1a1d1307f26d14bc01c6aedc86594be80d10ef36b80",
+        "x_after_hex": "017a8be8d8fad68b6c4f9989008cee0e2733a8f6791e7af86ee3a1b88ca2c43951a36426e7924901e28c76636e9ac72c2e54467c238ccecfa5ee359d855d6c6faeff",
+        "y_after_hex": "0147b04dcacc98cc122e4e00ed833bded051bd98fed3d891341d37abae1b17067de25ff44d4429800d681e779e757beae65ea5ab71e20c13efd0d71fb3b71d1f5b58"
+      },
+      {
+        "chunk_index": 4,
+        "start": 256,
+        "end_exclusive": 320,
+        "chunk_hex": "00000000000000000000000000000000000000027fbb895d47d0231a4b63d6637409833956fb9d19fa399624d0076ed8824bb288036666666666666666666666",
+        "chunk_element_hex": "000000000000000000000000000000000000000000027fbb895d47d0231a4b63d6637409833956fb9d19fa399624d0076ed8824bb288036666666666666666666666",
+        "mixed_chunk_hex": "000000000000000000000000000000000000000000027fbb895d47d0231a4b63d6637409833956fb9d19fa399624d0076ed8824bb288036666666666666666666b6b",
+        "x_before_hex": "017a8be8d8fad68b6c4f9989008cee0e2733a8f6791e7af86ee3a1b88ca2c43951a36426e7924901e28c76636e9ac72c2e54467c238ccecfa5ee359d855d6c6faeff",
+        "y_before_hex": "0147b04dcacc98cc122e4e00ed833bded051bd98fed3d891341d37abae1b17067de25ff44d4429800d681e779e757beae65ea5ab71e20c13efd0d71fb3b71d1f5b58",
+        "x_after_hex": "00c23c36a3c76f577e7de789ee1029ecf785668f77f4d3452c5e21345dd826a3a5e93824b80fc97d8d0e8f14a335131e838b6e7347f6de49fc2573239f7aeff575c3",
+        "y_after_hex": "00bc9b1834780700e817b021061416755679cf3081e00728756d0d390ab84a38f37edeefa97adc8f4eccb5144a9e113d9491031033092be5210ee373967f311824be"
+      },
+      {
+        "chunk_index": 5,
+        "start": 320,
+        "end_exclusive": 384,
+        "chunk_hex": "66666666666666666666666666666666666666666692100000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "chunk_element_hex": "000066666666666666666666666666666666666666666692100000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "mixed_chunk_hex": "000066666666666666666666666666666666666666666692100000000000000000000000000000000000000000000000000000000000000000000000000000000606",
+        "x_before_hex": "00c23c36a3c76f577e7de789ee1029ecf785668f77f4d3452c5e21345dd826a3a5e93824b80fc97d8d0e8f14a335131e838b6e7347f6de49fc2573239f7aeff575c3",
+        "y_before_hex": "00bc9b1834780700e817b021061416755679cf3081e00728756d0d390ab84a38f37edeefa97adc8f4eccb5144a9e113d9491031033092be5210ee373967f311824be",
+        "x_after_hex": "017f3db53ea5dcbeccfbfe115a8aa6c8b4659c26603b40ffb1cb2e6d689070dc99681714618aa60cdbdb4428edd3245c181c71837b000a2f1d34569735fa210da087",
+        "y_after_hex": "00a23f48546591d42ff4f5e075199e85b8f3e63829f5063cb3908d91f8677367786c14bc5cf107bae2f9e4c2572d40ba2cad7493ae0936143e433a0acc79582bc579"
+      },
+      {
+        "chunk_index": 6,
+        "start": 384,
+        "end_exclusive": 413,
+        "chunk_hex": "0000000000000000000000000000000000000000000000000000000000",
+        "chunk_element_hex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "mixed_chunk_hex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000707",
+        "x_before_hex": "017f3db53ea5dcbeccfbfe115a8aa6c8b4659c26603b40ffb1cb2e6d689070dc99681714618aa60cdbdb4428edd3245c181c71837b000a2f1d34569735fa210da087",
+        "y_before_hex": "00a23f48546591d42ff4f5e075199e85b8f3e63829f5063cb3908d91f8677367786c14bc5cf107bae2f9e4c2572d40ba2cad7493ae0936143e433a0acc79582bc579",
+        "x_after_hex": "00217cfd930b6e92fcf0f3f1cfa4454e6d59825e8a30473c655bbbff60f7e44411d42bd0be7badc7bed528eb4500651644c9e617290940435b7790a2027379396d08",
+        "y_after_hex": "00c3bc45e77100672ce5e9d244bde3d4264d6896b4254d7918ec4991595f57ab8a40408d1b6cb582a1cf0dad9c2da5d071775aaad712765799bacaacceecd86c3281"
+      }
+    ],
+    "trailer_hex": "0000000000415552415f4e41544956455f4c41594552325f415554484f52495a4154494f4e5f4c494e454147455f4f424a4543545f434f4d4d49544d454e545f57d5",
+    "final_element_hex": "01e98f99acaa1d49e50ee1dca6d8045a7785c36bb64f5dfb20e779750641ea734a026b6c5c73882c86a694e039d2f176d2ed7ce59de94caea45fb81c29ad5a2f5617",
+    "final_commitment_hex": "01e98f99acaa1d49e50ee1dca6d8045a7785c36bb64f5dfb20e779750641ea734a026b6c5c73882c86a694e039d2f176d2ed7ce59de94caea45fb81c29ad5a2f5617"
+  },
+  "stage_prefix_localization": {
+    "neighbor_family": "freshness_reference = 2^48 + candidate, exact over candidate in [0, 2^16)",
+    "candidate_count": 65536,
+    "target_reference": 4242,
+    "stages": [
+      {
+        "stage": "affected_chunk_element",
+        "prefix_match_counts_to_target": {
+          "bits_8": 65536,
+          "bits_16": 65536,
+          "bits_24": 65536,
+          "bits_32": 65536
+        },
+        "distinct_32_bit_prefixes": 1,
+        "constant_bits_in_first_32_across_family": 32,
+        "min_one_ratio_first_32": 0.0,
+        "max_one_ratio_first_32": 1.0
+      },
+      {
+        "stage": "affected_mixed_chunk",
+        "prefix_match_counts_to_target": {
+          "bits_8": 65536,
+          "bits_16": 65536,
+          "bits_24": 65536,
+          "bits_32": 65536
+        },
+        "distinct_32_bit_prefixes": 1,
+        "constant_bits_in_first_32_across_family": 32,
+        "min_one_ratio_first_32": 0.0,
+        "max_one_ratio_first_32": 1.0
+      },
+      {
+        "stage": "x_after_affected_round",
+        "prefix_match_counts_to_target": {
+          "bits_8": 65536,
+          "bits_16": 65536,
+          "bits_24": 65536,
+          "bits_32": 65536
+        },
+        "distinct_32_bit_prefixes": 1,
+        "constant_bits_in_first_32_across_family": 32,
+        "min_one_ratio_first_32": 0.0,
+        "max_one_ratio_first_32": 1.0
+      },
+      {
+        "stage": "y_after_affected_round",
+        "prefix_match_counts_to_target": {
+          "bits_8": 65536,
+          "bits_16": 65536,
+          "bits_24": 65536,
+          "bits_32": 65536
+        },
+        "distinct_32_bit_prefixes": 1,
+        "constant_bits_in_first_32_across_family": 32,
+        "min_one_ratio_first_32": 0.0,
+        "max_one_ratio_first_32": 1.0
+      },
+      {
+        "stage": "final_commitment",
+        "prefix_match_counts_to_target": {
+          "bits_8": 65536,
+          "bits_16": 65536,
+          "bits_24": 65536,
+          "bits_32": 65536
+        },
+        "distinct_32_bit_prefixes": 1,
+        "constant_bits_in_first_32_across_family": 32,
+        "min_one_ratio_first_32": 0.0,
+        "max_one_ratio_first_32": 1.0
+      }
+    ],
+    "first_mixing_stage_without_32_bit_diffusion": "x_after_affected_round / y_after_affected_round already retain the target's entire first 32 bits across the full 2^16 structured-neighbor family. That is the first actual mixing stage after the varying chunk, so the diffusion failure localizes to the commitment transform rather than to canonical packing or final serialization."
+  },
+  "avalanche_summary": [
+    {
+      "algorithm": "deterministic_commitment_521_v1",
+      "mutation_family": "all_preimage_single_bit_flips",
+      "sample_count": 2400,
+      "output_bits": 528,
+      "min_changed_bits": 3,
+      "max_changed_bits": 295,
+      "avg_changed_bits": 163.08875,
+      "avg_changed_fraction": 0.30888020833333335,
+      "prefix_changed_counts": {
+        "bits_8": 707,
+        "bits_16": 1464,
+        "bits_24": 1521,
+        "bits_32": 1563
+      }
+    },
+    {
+      "algorithm": "deterministic_commitment_521_v1",
+      "mutation_family": "freshness_reference_single_bit_flips",
+      "sample_count": 64,
+      "output_bits": 528,
+      "min_changed_bits": 112,
+      "max_changed_bits": 135,
+      "avg_changed_bits": 124.3125,
+      "avg_changed_fraction": 0.2354403409090909,
+      "prefix_changed_counts": {
+        "bits_8": 0,
+        "bits_16": 0,
+        "bits_24": 0,
+        "bits_32": 0
+      }
+    },
+    {
+      "algorithm": "sha256_preimage",
+      "mutation_family": "all_preimage_single_bit_flips",
+      "sample_count": 2400,
+      "output_bits": 256,
+      "min_changed_bits": 103,
+      "max_changed_bits": 155,
+      "avg_changed_bits": 128.0675,
+      "avg_changed_fraction": 0.500263671875,
+      "prefix_changed_counts": {
+        "bits_8": 2394,
+        "bits_16": 2400,
+        "bits_24": 2400,
+        "bits_32": 2400
+      }
+    },
+    {
+      "algorithm": "sha256_preimage",
+      "mutation_family": "freshness_reference_single_bit_flips",
+      "sample_count": 64,
+      "output_bits": 256,
+      "min_changed_bits": 108,
+      "max_changed_bits": 155,
+      "avg_changed_bits": 129.90625,
+      "avg_changed_fraction": 0.5074462890625,
+      "prefix_changed_counts": {
+        "bits_8": 64,
+        "bits_16": 64,
+        "bits_24": 64,
+        "bits_32": 64
+      }
+    },
+    {
+      "algorithm": "sha512_preimage",
+      "mutation_family": "all_preimage_single_bit_flips",
+      "sample_count": 2400,
+      "output_bits": 512,
+      "min_changed_bits": 214,
+      "max_changed_bits": 297,
+      "avg_changed_bits": 256.1041666666667,
+      "avg_changed_fraction": 0.5002034505208334,
+      "prefix_changed_counts": {
+        "bits_8": 2392,
+        "bits_16": 2400,
+        "bits_24": 2400,
+        "bits_32": 2400
+      }
+    },
+    {
+      "algorithm": "sha512_preimage",
+      "mutation_family": "freshness_reference_single_bit_flips",
+      "sample_count": 64,
+      "output_bits": 512,
+      "min_changed_bits": 218,
+      "max_changed_bits": 295,
+      "avg_changed_bits": 255.203125,
+      "avg_changed_fraction": 0.498443603515625,
+      "prefix_changed_counts": {
+        "bits_8": 64,
+        "bits_16": 64,
+        "bits_24": 64,
+        "bits_32": 64
+      }
+    },
+    {
+      "algorithm": "sha512_reduce_to_field_521",
+      "mutation_family": "all_preimage_single_bit_flips",
+      "sample_count": 2400,
+      "output_bits": 528,
+      "min_changed_bits": 222,
+      "max_changed_bits": 293,
+      "avg_changed_bits": 256.12333333333333,
+      "avg_changed_fraction": 0.4850820707070707,
+      "prefix_changed_counts": {
+        "bits_8": 0,
+        "bits_16": 0,
+        "bits_24": 2389,
+        "bits_32": 2400
+      }
+    },
+    {
+      "algorithm": "sha512_reduce_to_field_521",
+      "mutation_family": "freshness_reference_single_bit_flips",
+      "sample_count": 64,
+      "output_bits": 528,
+      "min_changed_bits": 227,
+      "max_changed_bits": 280,
+      "avg_changed_bits": 255.421875,
+      "avg_changed_fraction": 0.48375355113636365,
+      "prefix_changed_counts": {
+        "bits_8": 0,
+        "bits_16": 0,
+        "bits_24": 64,
+        "bits_32": 64
+      }
+    },
+    {
+      "algorithm": "sha512x2_expand_reduce_to_field_521",
+      "mutation_family": "all_preimage_single_bit_flips",
+      "sample_count": 2400,
+      "output_bits": 528,
+      "min_changed_bits": 226,
+      "max_changed_bits": 297,
+      "avg_changed_bits": 260.67083333333335,
+      "avg_changed_fraction": 0.4936947601010101,
+      "prefix_changed_counts": {
+        "bits_8": 1177,
+        "bits_16": 2395,
+        "bits_24": 2400,
+        "bits_32": 2400
+      }
+    },
+    {
+      "algorithm": "sha512x2_expand_reduce_to_field_521",
+      "mutation_family": "freshness_reference_single_bit_flips",
+      "sample_count": 64,
+      "output_bits": 528,
+      "min_changed_bits": 232,
+      "max_changed_bits": 285,
+      "avg_changed_bits": 261.5,
+      "avg_changed_fraction": 0.4952651515151515,
+      "prefix_changed_counts": {
+        "bits_8": 35,
+        "bits_16": 64,
+        "bits_24": 64,
+        "bits_32": 64
+      }
+    }
+  ],
+  "field_mutation_summary": [
+    {
+      "field": "dcm_commitment_root",
+      "start": 33,
+      "len": 32,
+      "start_chunk": 0,
+      "end_chunk": 1,
+      "current_commitment_changed_bits": 267,
+      "current_commitment_prefix_changed": {
+        "bits_8": false,
+        "bits_16": true,
+        "bits_24": true,
+        "bits_32": true
+      },
+      "sha256_changed_bits": 123,
+      "sha512_changed_bits": 264,
+      "sha512_reduce_to_field_changed_bits": 256,
+      "sha512_expand_to_field_changed_bits": 260
+    },
+    {
+      "field": "dcm_trace_commitment",
+      "start": 65,
+      "len": 32,
+      "start_chunk": 1,
+      "end_chunk": 1,
+      "current_commitment_changed_bits": 269,
+      "current_commitment_prefix_changed": {
+        "bits_8": true,
+        "bits_16": true,
+        "bits_24": true,
+        "bits_32": true
+      },
+      "sha256_changed_bits": 137,
+      "sha512_changed_bits": 258,
+      "sha512_reduce_to_field_changed_bits": 259,
+      "sha512_expand_to_field_changed_bits": 256
+    },
+    {
+      "field": "subject_id",
+      "start": 98,
+      "len": 32,
+      "start_chunk": 1,
+      "end_chunk": 2,
+      "current_commitment_changed_bits": 114,
+      "current_commitment_prefix_changed": {
+        "bits_8": false,
+        "bits_16": false,
+        "bits_24": false,
+        "bits_32": false
+      },
+      "sha256_changed_bits": 124,
+      "sha512_changed_bits": 281,
+      "sha512_reduce_to_field_changed_bits": 269,
+      "sha512_expand_to_field_changed_bits": 249
+    },
+    {
+      "field": "intent_hash",
+      "start": 163,
+      "len": 32,
+      "start_chunk": 2,
+      "end_chunk": 3,
+      "current_commitment_changed_bits": 202,
+      "current_commitment_prefix_changed": {
+        "bits_8": false,
+        "bits_16": true,
+        "bits_24": true,
+        "bits_32": true
+      },
+      "sha256_changed_bits": 138,
+      "sha512_changed_bits": 251,
+      "sha512_reduce_to_field_changed_bits": 260,
+      "sha512_expand_to_field_changed_bits": 267
+    },
+    {
+      "field": "freshness_nonce",
+      "start": 196,
+      "len": 32,
+      "start_chunk": 3,
+      "end_chunk": 3,
+      "current_commitment_changed_bits": 196,
+      "current_commitment_prefix_changed": {
+        "bits_8": false,
+        "bits_16": false,
+        "bits_24": false,
+        "bits_32": false
+      },
+      "sha256_changed_bits": 136,
+      "sha512_changed_bits": 253,
+      "sha512_reduce_to_field_changed_bits": 278,
+      "sha512_expand_to_field_changed_bits": 272
+    },
+    {
+      "field": "freshness_reference",
+      "start": 228,
+      "len": 8,
+      "start_chunk": 3,
+      "end_chunk": 3,
+      "current_commitment_changed_bits": 131,
+      "current_commitment_prefix_changed": {
+        "bits_8": false,
+        "bits_16": false,
+        "bits_24": false,
+        "bits_32": false
+      },
+      "sha256_changed_bits": 135,
+      "sha512_changed_bits": 247,
+      "sha512_reduce_to_field_changed_bits": 259,
+      "sha512_expand_to_field_changed_bits": 269
+    }
+  ],
+  "prefix_diffusion_controls": [
+    {
+      "algorithm": "deterministic_commitment_521_v1",
+      "output_len": 66,
+      "match_counts_to_target": {
+        "bits_8": 65536,
+        "bits_16": 65536,
+        "bits_24": 65536,
+        "bits_32": 65536
+      },
+      "distinct_32_bit_prefixes": 1,
+      "constant_bits_in_first_32_across_family": 32,
+      "min_one_ratio_first_32": 0.0,
+      "max_one_ratio_first_32": 1.0
+    },
+    {
+      "algorithm": "sha256_preimage",
+      "output_len": 32,
+      "match_counts_to_target": {
+        "bits_8": 247,
+        "bits_16": 0,
+        "bits_24": 0,
+        "bits_32": 0
+      },
+      "distinct_32_bit_prefixes": 65535,
+      "constant_bits_in_first_32_across_family": 0,
+      "min_one_ratio_first_32": 0.4955596923828125,
+      "max_one_ratio_first_32": 0.507537841796875
+    },
+    {
+      "algorithm": "sha512_preimage",
+      "output_len": 64,
+      "match_counts_to_target": {
+        "bits_8": 261,
+        "bits_16": 3,
+        "bits_24": 0,
+        "bits_32": 0
+      },
+      "distinct_32_bit_prefixes": 65536,
+      "constant_bits_in_first_32_across_family": 0,
+      "min_one_ratio_first_32": 0.4952545166015625,
+      "max_one_ratio_first_32": 0.504425048828125
+    },
+    {
+      "algorithm": "sha512_reduce_to_field_521",
+      "output_len": 66,
+      "match_counts_to_target": {
+        "bits_8": 65536,
+        "bits_16": 65536,
+        "bits_24": 260,
+        "bits_32": 0
+      },
+      "distinct_32_bit_prefixes": 41525,
+      "constant_bits_in_first_32_across_family": 16,
+      "min_one_ratio_first_32": 0.0,
+      "max_one_ratio_first_32": 0.503997802734375
+    },
+    {
+      "algorithm": "sha512x2_expand_reduce_to_field_521",
+      "output_len": 66,
+      "match_counts_to_target": {
+        "bits_8": 32858,
+        "bits_16": 139,
+        "bits_24": 0,
+        "bits_32": 0
+      },
+      "distinct_32_bit_prefixes": 65475,
+      "constant_bits_in_first_32_across_family": 7,
+      "min_one_ratio_first_32": 0.0,
+      "max_one_ratio_first_32": 0.5048065185546875
+    }
+  ],
+  "alternate_field_native_construction_available_in_repo": false,
+  "alternate_field_native_construction_note": "No alternate byte-oriented field-native commitment primitive is currently implemented in the repo. The comparison therefore uses research-only widened/reduced hash-to-field controls to separate field reduction behavior from the current accumulator construction.",
+  "root_cause_hypothesis": "The failure is construction-level. Canonical packing is singular and byte-exact, and the same FieldElement521V1 serialization behaves normally for the widened SHA-512x2 hash-to-field control. The varying Layer 2 field, freshness_reference, sits late in the packed input and only perturbs low-order bytes of one 64-byte chunk. That chunk is embedded directly as a field element with no avalanche step, then absorbed by a low-degree accumulator that only uses addition, one square term, and small fixed multipliers. In the audit family, the first true mixing stage after the affected chunk still preserves the target's first 32 output bits across all 65536 tested neighbors, and the final output does the same. By contrast, the widened SHA-512x2 control produced 65475 distinct 32-bit prefixes with zero constant bits in the first 32 across the same family. The current primitive therefore leaves the high-order prefix dominated by fixed seeds and earlier fixed chunks instead of diffusing the late-field entropy. The bug is not preimage encoding and not final byte serialization; it is the direct field embedding plus insufficient commitment transform.",
+  "bug_classification": "construction-level, not encoding-level",
+  "should_demote_from_primary_commitment_status": true,
+  "minimum_safe_replacement_strategy": "Demote DeterministicCommitment521V1 from Layer 2 primary-commitment duty. Keep the canonical Layer 2 preimage and domain separator exactly as they are, but replace the current low-degree field accumulator with a domain-separated cryptographic expand-then-reduce construction such as reduce_mod_p(SHA-512(tag_x || preimage) || SHA-512(tag_y || preimage)). That preserves deterministic replay and canonical encoding while forcing a real compression/avalanche stage before field serialization."
+}

@@ -1,0 +1,221 @@
+{
+  "scope": "non-authoritative research only",
+  "command": "cargo test -p aura_l2_local_chain_v0 --release non_authoritative_research_reduced_bit_hash_targets_v1 -- --ignored --nocapture",
+  "oracle_model_summary": {
+    "active_canonical_report_digest": "Truncated second-preimage search over a disjoint canonical request subspace formed by toggling one byte of head.previous_head_hash and varying the final u64 suffix; all other accepted-transfer request fields remain fixed.",
+    "native_layer2_lineage_hash": "Truncated second-preimage search over a disjoint canonical NativeLayer2AuthorizationLineageObjectV1 subspace formed by varying freshness_reference at base 2^48 + candidate while keeping the DCM commitments, subject binding, and intent fixed.",
+    "layer3_consumer_result_digest": "Truncated second-preimage search over a disjoint canonical Layer 3 consumer subspace induced by the same Layer 2 freshness_reference variation, with the real STARK proof artifact fixed to the canonical lower-layer claim and the transcript/result digests recomputed exactly."
+  },
+  "targets": [
+    {
+      "name": "active_canonical_report_digest",
+      "digest_hex": "0d35aa8138667b797bef640ddbbf1cd2f5deba359a9b15f0a0c4496df3177b0f",
+      "canonical_input_len": 557,
+      "canonical_input_hex": "415552415f4c325f43414e4f4e4943414c5f504950454c494e455f5245504f52545f4449474553545f5631010000001600000000000000617572615f6c6f63616c5f706970656c696e655f7631200000000000000061636365707465645f7472616e736665725f737461726b5f706970656c696e650500000000000000535441524b0800000000000000414343455054454408000000000000004143434550544544b61398f0ad1632233c06cfc1d6d663434d2f67327088f629fadbd1e124f7a25e011a79febfe1ed98104767ffd4f912a7c97ab3062326c21ea14eaffca58595b205011a79febfe1ed98104767ffd4f912a7c97ab3062326c21ea14eaffca58595b2058b3d2493a8fb02fd954e420b2dff6e9db0be17dd4b11505017e938448ad8b46be8964c9814e957a38e49bbd659e0b0d6fea692ddd84491fc5f7ebd59dc800966722e482e0b8231282c164cf2d23c190497650cf288a18a88f73dffb55142dfb91111111111111111111111111111111111111111111111111111111111111111e803000000000000b7030000000000003100000000000000f8174eb164be5f50e41e3ff295553ea8505a2860f186ed8effd2e573185a023a479948ac66fe02c5e16a00882788c38e6743bfbeff52f8f1e8e1d963d31a329404000000000000006e6f6e6500000001c8e9653160a22d3f20297c1a3f6497e3ea7e61f64df0d9c9dc054dce37d62c1101dc34a7792af0955f7f544976c56c42940aa1820c633797db9a987660944cb851",
+      "recomputed_equal": true,
+      "fixture_name_transport_binding_changes_digest": true
+    },
+    {
+      "name": "native_layer2_lineage_hash",
+      "digest_hex": "23a5718a42f4b330ec0185effd32414c162cc6a4a0c8d3ecdaa2ec6b957c01b5",
+      "canonical_input_len": 300,
+      "canonical_input_hex": "415552415f415554484f52495a4154494f4e5f4c494e454147455f5631010100017b64c5bd4f5d157daf7100494c9ae4d48237a16e11476357f090ad839d4159ef76dbd2f074da73a6e98119e7c06633a72633845fa210d181e86e4ab7a0c7f44a0155555555555555555555555555555555555555555555555555555555555555550000000000000000000000000000000000000000000000000000000000000000027fbb895d47d0231a4b63d6637409833956fb9d19fa399624d0076ed8824bb288036666666666666666666666666666666666666666666666666666666666666666921000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "recomputed_equal": true
+    },
+    {
+      "name": "layer3_consumer_result_digest",
+      "digest_hex": "6248d417e8405708b8ec3be0213d191fc53bc9934a431e9c02c2eb267732b629",
+      "canonical_input_len": 257,
+      "canonical_input_hex": "0171b4d97015a4f6c3d59218bbf8e49d4e24f5c1503e5ef1438eedd35ab7cab258df8fdc1771462bf886709fe802bfca02ca8fa02e118d769f1679c2632456cfaafb284a6727fe99e58f85899ec5b56f4c46b65cd5123cfaeb4f0de84e18491a3e2420650aa670b03cfe2daa0e9b0120226e16c3edd2810b5bb7341d97d975283e23a5718a42f4b330ec0185effd32414c162cc6a4a0c8d3ecdaa2ec6b957c01b57b64c5bd4f5d157daf7100494c9ae4d48237a16e11476357f090ad839d4159ef76dbd2f074da73a6e98119e7c06633a72633845fa210d181e86e4ab7a0c7f44a7fbb895d47d0231a4b63d6637409833956fb9d19fa399624d0076ed8824bb288",
+      "recomputed_equal": true
+    }
+  ],
+  "search_results": {
+    "active_canonical_report_digest": [
+      {
+        "bits": 16,
+        "space_size": 65536,
+        "queries_run": 65536,
+        "fully_exhausted": true,
+        "first_match_index": 2451,
+        "observed_match_count": 1,
+        "grover_marked_count": 1,
+        "grover_query_estimate": 201,
+        "grover_success_probability": 0.999988,
+        "elapsed_ms": 165
+      },
+      {
+        "bits": 20,
+        "space_size": 1048576,
+        "queries_run": 1048576,
+        "fully_exhausted": true,
+        "first_match_index": null,
+        "observed_match_count": 0,
+        "grover_marked_count": 1,
+        "grover_query_estimate": 804,
+        "grover_success_probability": 1.0,
+        "elapsed_ms": 2708
+      },
+      {
+        "bits": 24,
+        "space_size": 16777216,
+        "queries_run": 16777216,
+        "fully_exhausted": true,
+        "first_match_index": null,
+        "observed_match_count": 0,
+        "grover_marked_count": 1,
+        "grover_query_estimate": 3216,
+        "grover_success_probability": 1.0,
+        "elapsed_ms": 43455
+      },
+      {
+        "bits": 28,
+        "space_size": 268435456,
+        "queries_run": 1048576,
+        "fully_exhausted": false,
+        "first_match_index": null,
+        "observed_match_count": 0,
+        "grover_marked_count": 1,
+        "grover_query_estimate": 12867,
+        "grover_success_probability": 1.0,
+        "elapsed_ms": 2756
+      },
+      {
+        "bits": 32,
+        "space_size": 4294967296,
+        "queries_run": 1048576,
+        "fully_exhausted": false,
+        "first_match_index": null,
+        "observed_match_count": 0,
+        "grover_marked_count": 1,
+        "grover_query_estimate": 51471,
+        "grover_success_probability": 1.0,
+        "elapsed_ms": 2749
+      }
+    ],
+    "native_layer2_lineage_hash": [
+      {
+        "bits": 16,
+        "space_size": 65536,
+        "queries_run": 65536,
+        "fully_exhausted": true,
+        "first_match_index": null,
+        "observed_match_count": 0,
+        "grover_marked_count": 1,
+        "grover_query_estimate": 201,
+        "grover_success_probability": 0.999988,
+        "elapsed_ms": 35
+      },
+      {
+        "bits": 20,
+        "space_size": 1048576,
+        "queries_run": 1048576,
+        "fully_exhausted": true,
+        "first_match_index": 136086,
+        "observed_match_count": 3,
+        "grover_marked_count": 3,
+        "grover_query_estimate": 464,
+        "grover_success_probability": 1.0,
+        "elapsed_ms": 594
+      },
+      {
+        "bits": 24,
+        "space_size": 16777216,
+        "queries_run": 16777216,
+        "fully_exhausted": true,
+        "first_match_index": 10903855,
+        "observed_match_count": 1,
+        "grover_marked_count": 1,
+        "grover_query_estimate": 3216,
+        "grover_success_probability": 1.0,
+        "elapsed_ms": 9204
+      },
+      {
+        "bits": 28,
+        "space_size": 268435456,
+        "queries_run": 1048576,
+        "fully_exhausted": false,
+        "first_match_index": null,
+        "observed_match_count": 0,
+        "grover_marked_count": 1,
+        "grover_query_estimate": 12867,
+        "grover_success_probability": 1.0,
+        "elapsed_ms": 573
+      },
+      {
+        "bits": 32,
+        "space_size": 4294967296,
+        "queries_run": 1048576,
+        "fully_exhausted": false,
+        "first_match_index": null,
+        "observed_match_count": 0,
+        "grover_marked_count": 1,
+        "grover_query_estimate": 51471,
+        "grover_success_probability": 1.0,
+        "elapsed_ms": 574
+      }
+    ],
+    "layer3_consumer_result_digest": [
+      {
+        "bits": 16,
+        "space_size": 65536,
+        "queries_run": 65536,
+        "fully_exhausted": true,
+        "first_match_index": 22794,
+        "observed_match_count": 2,
+        "grover_marked_count": 2,
+        "grover_query_estimate": 142,
+        "grover_success_probability": 0.999987,
+        "elapsed_ms": 243
+      },
+      {
+        "bits": 20,
+        "space_size": 1048576,
+        "queries_run": 1048576,
+        "fully_exhausted": true,
+        "first_match_index": null,
+        "observed_match_count": 0,
+        "grover_marked_count": 1,
+        "grover_query_estimate": 804,
+        "grover_success_probability": 1.0,
+        "elapsed_ms": 3934
+      },
+      {
+        "bits": 24,
+        "space_size": 16777216,
+        "queries_run": 16777216,
+        "fully_exhausted": true,
+        "first_match_index": null,
+        "observed_match_count": 0,
+        "grover_marked_count": 1,
+        "grover_query_estimate": 3216,
+        "grover_success_probability": 1.0,
+        "elapsed_ms": 62736
+      },
+      {
+        "bits": 28,
+        "space_size": 268435456,
+        "queries_run": 1048576,
+        "fully_exhausted": false,
+        "first_match_index": null,
+        "observed_match_count": 0,
+        "grover_marked_count": 1,
+        "grover_query_estimate": 12867,
+        "grover_success_probability": 1.0,
+        "elapsed_ms": 3913
+      },
+      {
+        "bits": 32,
+        "space_size": 4294967296,
+        "queries_run": 1048576,
+        "fully_exhausted": false,
+        "first_match_index": null,
+        "observed_match_count": 0,
+        "grover_marked_count": 1,
+        "grover_query_estimate": 51471,
+        "grover_success_probability": 1.0,
+        "elapsed_ms": 3921
+      }
+    ]
+  }
+}

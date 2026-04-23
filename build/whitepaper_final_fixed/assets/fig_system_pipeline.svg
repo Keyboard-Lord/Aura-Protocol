@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="780" viewBox="0 0 1400 780">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#274c77"/>
+    </marker>
+  </defs>
+  <rect width="1400" height="780" fill="#fbfbfb"/>
+  <text x="700" y="50" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="32" fill="#102542">Aura Canonical Off-Chain Pipeline</text>
+
+  <rect x="150" y="90" width="1100" height="70" rx="16" fill="#d9e7f5"/>
+  <text x="700" y="133" text-anchor="middle" font-family="Georgia, serif" font-size="22" fill="#102542">Representation and transport stay off-chain until the final submit_proof adapter.</text>
+
+  <rect x="220" y="200" width="960" height="72" rx="14" fill="#eef4f8" stroke="#274c77" stroke-width="2"/>
+  <text x="700" y="245" text-anchor="middle" font-family="Georgia, serif" font-size="24" fill="#102542">Prepared proof_hash</text>
+
+  <line x1="700" y1="272" x2="700" y2="320" stroke="#274c77" stroke-width="4" marker-end="url(#arrow)"/>
+
+  <rect x="220" y="320" width="960" height="86" rx="14" fill="#fff7e6" stroke="#b7791f" stroke-width="2"/>
+  <text x="700" y="360" text-anchor="middle" font-family="Georgia, serif" font-size="24" fill="#5a3b00">UDOT bundle (non-canonical representation)</text>
+  <text x="700" y="390" text-anchor="middle" font-family="Georgia, serif" font-size="19" fill="#5a3b00">Explicit udot_version, exact glyph equality, no inference</text>
+
+  <line x1="700" y1="406" x2="700" y2="454" stroke="#274c77" stroke-width="4" marker-end="url(#arrow)"/>
+
+  <rect x="120" y="454" width="1160" height="172" rx="16" fill="#eef4f8" stroke="#274c77" stroke-width="2"/>
+  <text x="700" y="490" text-anchor="middle" font-family="Georgia, serif" font-size="24" fill="#102542">Nested wire objects</text>
+
+  <rect x="170" y="520" width="240" height="62" rx="12" fill="#dbeafe" stroke="#274c77" stroke-width="2"/>
+  <text x="290" y="558" text-anchor="middle" font-family="Georgia, serif" font-size="19" fill="#102542">SubmitProofRequestWireV1</text>
+
+  <rect x="440" y="520" width="240" height="62" rx="12" fill="#dbeafe" stroke="#274c77" stroke-width="2"/>
+  <text x="560" y="558" text-anchor="middle" font-family="Georgia, serif" font-size="19" fill="#102542">AuthorizationIntentEnvelopeV1</text>
+
+  <rect x="710" y="520" width="240" height="62" rx="12" fill="#dbeafe" stroke="#274c77" stroke-width="2"/>
+  <text x="830" y="558" text-anchor="middle" font-family="Georgia, serif" font-size="19" fill="#102542">StarkProofEnvelopeV1</text>
+
+  <rect x="980" y="520" width="250" height="62" rx="12" fill="#dbeafe" stroke="#274c77" stroke-width="2"/>
+  <text x="1105" y="558" text-anchor="middle" font-family="Georgia, serif" font-size="19" fill="#102542">SolanaSettlementRequestWireV1</text>
+
+  <text x="700" y="612" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#5b6570">UDOT stays nested under the submit request and is never flattened into on-chain fields.</text>
+
+  <line x1="700" y1="626" x2="700" y2="676" stroke="#274c77" stroke-width="4" marker-end="url(#arrow)"/>
+
+  <rect x="300" y="676" width="800" height="66" rx="14" fill="#ddecdc" stroke="#3b6b35" stroke-width="2"/>
+  <text x="700" y="717" text-anchor="middle" font-family="Georgia, serif" font-size="25" fill="#204d26">Solana submit_proof payload = tag || proof_hash</text>
+</svg>

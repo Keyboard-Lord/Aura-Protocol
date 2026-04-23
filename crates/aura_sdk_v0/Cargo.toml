@@ -1,0 +1,15 @@
+[package]
+name = "aura_sdk_v0"
+version = "0.1.0"
+edition = "2021"
+description = "Aura SDK v0 for the active transfer-only local proving foundation"
+
+[dependencies]
+aura_l2_execution_v1 = { path = "../aura_l2_execution_v1" }
+aura_l2_public_input_v1 = { path = "../aura_l2_public_input_v1" }
+aura_l2_prover_v1 = { path = "../aura_l2_prover_v1" }
+aura_l2_verifier_v1 = { path = "../aura_l2_verifier_v1" }
+aura_l2_local_settlement_v1 = { path = "../aura_l2_local_settlement_v1" }
+aura_l2_local_chain_v0 = { path = "../aura_l2_local_chain_v0" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"

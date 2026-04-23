@@ -1,0 +1,14 @@
+[package]
+name = "aura_l2_local_settlement_v1"
+version = "0.1.0"
+edition = "2021"
+description = "Aura L2 local settlement engine v1 for the first complete local proving chain"
+
+[dependencies]
+aura_l2_execution_v1 = { path = "../aura_l2_execution_v1" }
+aura_l2_prover_v1 = { path = "../aura_l2_prover_v1" }
+aura_l2_public_input_v1 = { path = "../aura_l2_public_input_v1" }
+aura_l2_verifier_v1 = { path = "../aura_l2_verifier_v1" }
+
+[dev-dependencies]
+aura_l2_trace_builder_v1 = { path = "../aura_l2_trace_builder_v1" }

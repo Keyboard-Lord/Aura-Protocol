@@ -1,0 +1,12 @@
+[package]
+name = "aura_notarization_export_v1"
+version = "0.1.0"
+edition = "2021"
+description = "Downstream notarization export boundary for the frozen Aura token/notary v1 surfaces"
+
+[dependencies]
+aura_l2_execution_v1 = { path = "../aura_l2_execution_v1" }
+serde = { version = "1", features = ["derive"] }
+
+[dev-dependencies]
+serde_json = "1"

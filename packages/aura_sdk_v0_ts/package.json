@@ -1,0 +1,16 @@
+{
+  "name": "aura_sdk_v0_ts",
+  "version": "0.1.0",
+  "description": "TypeScript SDK v0 parity layer for the active Aura transfer-only local proving foundation",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "test": "node --test"
+  }
+}

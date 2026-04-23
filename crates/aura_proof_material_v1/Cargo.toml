@@ -1,0 +1,8 @@
+[package]
+name = "aura_proof_material_v1"
+version = "0.1.0"
+edition = "2021"
+description = "Frozen Aura v1 proof-material commitment"
+
+[dependencies]
+sha2 = "0.10"

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="520" viewBox="0 0 1400 520">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#274c77"/>
+    </marker>
+  </defs>
+  <rect width="1400" height="520" fill="#fbfbfb"/>
+  <text x="700" y="56" text-anchor="middle" font-family="Georgia, serif" font-size="32" fill="#102542">Bijective Cat-Map Runtime</text>
+
+  <rect x="120" y="150" width="280" height="140" rx="18" fill="#eef4f8" stroke="#274c77" stroke-width="2"/>
+  <text x="260" y="208" text-anchor="middle" font-family="Georgia, serif" font-size="28" fill="#102542">(x_n, y_n)</text>
+  <text x="260" y="248" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#5b6570">canonical pair-state</text>
+
+  <rect x="530" y="120" width="340" height="200" rx="18" fill="#dbeafe" stroke="#274c77" stroke-width="2"/>
+  <text x="700" y="176" text-anchor="middle" font-family="Georgia, serif" font-size="26" fill="#102542">Forward matrix</text>
+  <text x="700" y="216" text-anchor="middle" font-family="Georgia, serif" font-size="24" fill="#102542">[[1, 1], [1, 2]] mod N</text>
+  <text x="700" y="258" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#5b6570">unique successor, exact fast-forward by powers</text>
+
+  <rect x="1000" y="150" width="280" height="140" rx="18" fill="#eef4f8" stroke="#274c77" stroke-width="2"/>
+  <text x="1140" y="208" text-anchor="middle" font-family="Georgia, serif" font-size="28" fill="#102542">(x_{n+1}, y_{n+1})</text>
+  <text x="1140" y="248" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#5b6570">next canonical pair-state</text>
+
+  <line x1="400" y1="220" x2="530" y2="220" stroke="#274c77" stroke-width="4" marker-end="url(#arrow)"/>
+  <line x1="870" y1="220" x2="1000" y2="220" stroke="#274c77" stroke-width="4" marker-end="url(#arrow)"/>
+
+  <rect x="470" y="360" width="460" height="96" rx="18" fill="#fff7e6" stroke="#b7791f" stroke-width="2"/>
+  <text x="700" y="404" text-anchor="middle" font-family="Georgia, serif" font-size="24" fill="#5a3b00">Inverse matrix: [[2, -1], [-1, 1]] mod N</text>
+  <text x="700" y="436" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#5a3b00">unique predecessor, exact backward validation</text>
+</svg>

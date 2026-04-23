@@ -1,0 +1,12 @@
+[package]
+name = "aura_proof_material_v2"
+version = "0.1.0"
+edition = "2021"
+description = "Typed off-chain Aura v2 proof-material boundary"
+
+[features]
+active_integration = []
+
+[dependencies]
+aura_intent_lineage_v1 = { path = "../aura_intent_lineage_v1" }
+sha2 = "0.10"

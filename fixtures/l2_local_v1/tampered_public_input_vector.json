@@ -1,0 +1,18 @@
+{"fixture_schema_version":1,
+  "fixture_name": "tampered_public_input_vector",
+  "batch_number": 0,
+  "parent_batch_commitment_hex": "0000000000000000000000000000000000000000000000000000000000000000",
+  "transactions": [
+    {
+      "sender_account_id_hex": "1111111111111111111111111111111111111111111111111111111111111111",
+      "recipient_account_id_hex": "2222222222222222222222222222222222222222222222222222222222222222",
+      "sender_nonce": 0,
+      "amount": 150
+    }
+  ],
+  "tamper_public_inputs": {
+    "byte_offset": 44,
+    "xor_with": 1
+  },
+  "expected_result": "VERIFICATION_REJECTED"
+}

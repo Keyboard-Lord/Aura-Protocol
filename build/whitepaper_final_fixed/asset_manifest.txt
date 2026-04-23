@@ -1,0 +1,9 @@
+Aura whitepaper build asset manifest
+
+assets/eq_binding_tuple.svg
+assets/eq_cat_map_matrix.svg
+assets/eq_cat_map_recurrence.svg
+assets/fig_cat_map_transform.svg
+assets/fig_proof_verification_flow.svg
+assets/fig_system_pipeline.svg
+assets/fig_trace_commitment.svg

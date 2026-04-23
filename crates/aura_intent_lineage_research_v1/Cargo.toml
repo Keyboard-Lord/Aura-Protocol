@@ -1,0 +1,12 @@
+[package]
+name = "aura_intent_lineage_research_v1"
+version = "0.1.0"
+edition = "2021"
+description = "Standalone Aura research overlays feeding the lower-layer cat-map spine"
+
+[features]
+active_integration = []
+
+[dependencies]
+aura_intent_lineage_v1 = { path = "../aura_intent_lineage_v1" }
+sha2 = "0.10"

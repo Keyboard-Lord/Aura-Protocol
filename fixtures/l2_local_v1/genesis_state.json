@@ -1,0 +1,16 @@
+{"fixture_schema_version":1,
+  "fixture_name": "genesis_state",
+  "rollup_id_hex": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "accounts": [
+    {
+      "account_id_hex": "1111111111111111111111111111111111111111111111111111111111111111",
+      "balance": 1000,
+      "nonce": 0
+    },
+    {
+      "account_id_hex": "2222222222222222222222222222222222222222222222222222222222222222",
+      "balance": 250,
+      "nonce": 0
+    }
+  ]
+}

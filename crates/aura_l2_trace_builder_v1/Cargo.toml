@@ -1,0 +1,10 @@
+[package]
+name = "aura_l2_trace_builder_v1"
+version = "0.1.0"
+edition = "2021"
+description = "Deterministic Aura L2 trace and witness builder v1 for the local proving-chain milestone"
+
+[dependencies]
+aura_l2_execution_v1 = { path = "../aura_l2_execution_v1" }
+aura_l2_public_input_v1 = { path = "../aura_l2_public_input_v1" }
+sha2 = "0.10"

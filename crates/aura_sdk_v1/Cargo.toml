@@ -1,0 +1,16 @@
+[package]
+name = "aura_sdk_v1"
+version = "0.1.0"
+edition = "2021"
+description = "Rust SDK for the frozen Aura v1 proof-preparation flow"
+
+[dependencies]
+aura_proof_material_v1 = { path = "../aura_proof_material_v1" }
+aura_fractal_key_v1 = { path = "../aura_fractal_key_v1" }
+aura_fractal_key_integration_v1 = { path = "../aura_fractal_key_integration_v1" }
+aura_intent_lineage_v1 = { path = "../aura_intent_lineage_v1" }
+aura_udot_v2 = { path = "../aura_udot_v2" }
+serde = { version = "1", features = ["derive"] }
+
+[dev-dependencies]
+serde_json = "1"

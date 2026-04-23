@@ -1,0 +1,11 @@
+[package]
+name = "aura_l2_prover_v1"
+version = "0.1.0"
+edition = "2021"
+description = "Aura L2 local prover v1 with an explicit mock-to-real proving boundary"
+
+[dependencies]
+aura_l2_execution_v1 = { path = "../aura_l2_execution_v1" }
+aura_l2_trace_builder_v1 = { path = "../aura_l2_trace_builder_v1" }
+sha2 = "0.10"
+winterfell = "0.13.1"

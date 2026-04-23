@@ -1,0 +1,9 @@
+[package]
+name = "aura_l2_public_input_v1"
+version = "0.1.0"
+edition = "2021"
+description = "Exact Aura L2 public-input envelope encoding v1"
+
+[dependencies]
+aura_l2_execution_v1 = { path = "../aura_l2_execution_v1" }
+sha2 = "0.10"

@@ -1,0 +1,673 @@
+   Compiling aura_intent_lineage_v1 v0.1.0 (/Users/mcrae/Desktop/AURA/crates/aura_intent_lineage_v1)
+warning: fields `classification`, `width_bits`, `domain_separator_ascii`, `selector`, and `oracle_definition` are never read
+   --> crates/aura_intent_lineage_v1/tests/cryptanalytic_reduced_bit_commitments_v1.rs:129:5
+    |
+127 | struct TargetSpecV1 {
+    |        ------------ fields in this struct
+128 |     name: &'static str,
+129 |     classification: &'static str,
+    |     ^^^^^^^^^^^^^^
+130 |     width_bits: u16,
+    |     ^^^^^^^^^^
+131 |     domain_separator_ascii: &'static str,
+    |     ^^^^^^^^^^^^^^^^^^^^^^
+132 |     selector: TargetSelectorV1,
+    |     ^^^^^^^^
+133 |     oracle_definition: fn() -> OracleDefinitionV1,
+    |     ^^^^^^^^^^^^^^^^^
+    |
+    = note: `TargetSpecV1` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `aura_intent_lineage_v1` (test "cryptanalytic_reduced_bit_commitments_v1") generated 1 warning
+    Finished `release` profile [optimized] target(s) in 0.61s
+     Running tests/cryptanalytic_reduced_bit_commitments_v1.rs (/tmp/aura-commitment-smoke/release/deps/cryptanalytic_reduced_bit_commitments_v1-fffe2e8a33119a05)
+
+running 1 test
+test non_authoritative_research_reduced_bit_commitment_targets_v1 has been running for over 60 seconds
+{
+  "scope": "research-only / non-authoritative / no claim of a full 521-bit break",
+  "command": "cargo test -p aura_intent_lineage_v1 --release --test cryptanalytic_reduced_bit_commitments_v1 non_authoritative_research_reduced_bit_commitment_targets_v1 -- --ignored --nocapture",
+  "oracle_family": "Disjoint canonical structured-neighbor second-preimage search over freshness_reference = 2^48 + candidate, with canonical serialization fixed and all downstream commitment/digest bytes recomputed exactly from that canonical variation only.",
+  "targets": [
+    {
+      "name": "layer2_lineage_commitment",
+      "classification": "primary_521_commitment",
+      "width_bits": 521,
+      "domain_separator_ascii": "AURA_NATIVE_LAYER2_AUTHORIZATION_LINEAGE_OBJECT_COMMITMENT_V1",
+      "target_hex": "01e98f99acaa1d49e50ee1dca6d8045a7785c36bb64f5dfb20e779750641ea734a026b6c5c73882c86a694e039d2f176d2ed7ce59de94caea45fb81c29ad5a2f5617",
+      "canonical_input_len": 300,
+      "canonical_input_hex": "415552415f415554484f52495a4154494f4e5f4c494e454147455f5631010100017b64c5bd4f5d157daf7100494c9ae4d48237a16e11476357f090ad839d4159ef76dbd2f074da73a6e98119e7c06633a72633845fa210d181e86e4ab7a0c7f44a0155555555555555555555555555555555555555555555555555555555555555550000000000000000000000000000000000000000000000000000000000000000027fbb895d47d0231a4b63d6637409833956fb9d19fa399624d0076ed8824bb288036666666666666666666666666666666666666666666666666666666666666666921000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "recomputed_equal": true,
+      "oracle_definition": {
+        "search_kind": "structured_neighbor_second_preimage",
+        "preimage_space": "Canonical NativeLayer2AuthorizationLineageObjectV1 lineage preimages produced by varying freshness_reference = 2^48 + candidate while keeping DCM commitments, subject binding, and intent fixed.",
+        "variable_fields": [
+          "lineage.freshness_reference"
+        ],
+        "fixed_fields": [
+          "lineage.version",
+          "lineage.lineage_flags",
+          "lineage.dcm_commitment_root",
+          "lineage.dcm_trace_commitment",
+          "lineage.subject_binding_type",
+          "lineage.subject_id",
+          "lineage.intent_hash",
+          "lineage.freshness_nonce"
+        ],
+        "marked_item": "A candidate is marked when the truncated candidate lineage_commitment equals the truncated canonical target lineage_commitment.",
+        "canonicality_restriction": "Only the one canonical lineage preimage encoding is allowed; no alternate serialization or non-canonical field encoding is admitted."
+      }
+    },
+    {
+      "name": "layer3_result_commitment",
+      "classification": "primary_521_commitment",
+      "width_bits": 521,
+      "domain_separator_ascii": "AURA_LAYER3_AUTHORIZATION_LINEAGE_CONSUMER_RESULT_COMMITMENT_V1",
+      "target_hex": "01129c2b3c8160ae97a83f03dbbfaf04d5c6687e5502b33bcc6a56744d75ce33274271ae88e2e3710b612227c785d93653f5e5577fc21b3c71364d69d9ff076b04ac",
+      "canonical_input_len": 323,
+      "canonical_input_hex": "01f9d46f19e3bebf4937b27da5bea0946080cd4206a8465c85bf5591919c53da772ca5860c93bb5f52ce8089faa05e31b8e6c22375ec1f027f12c3174c3b7690d782e56fb7525fa99d503bd79162b2ac57473f8de38ba3aeec5ee9bbafc26771252420650aa670b03cfe2daa0e9b0120226e16c3edd2810b5bb7341d97d975283e01e98f99acaa1d49e50ee1dca6d8045a7785c36bb64f5dfb20e779750641ea734a026b6c5c73882c86a694e039d2f176d2ed7ce59de94caea45fb81c29ad5a2f561723a5718a42f4b330ec0185effd32414c162cc6a4a0c8d3ecdaa2ec6b957c01b57b64c5bd4f5d157daf7100494c9ae4d48237a16e11476357f090ad839d4159ef76dbd2f074da73a6e98119e7c06633a72633845fa210d181e86e4ab7a0c7f44a7fbb895d47d0231a4b63d6637409833956fb9d19fa399624d0076ed8824bb288",
+      "recomputed_equal": true,
+      "oracle_definition": {
+        "search_kind": "structured_neighbor_second_preimage",
+        "preimage_space": "Canonical Layer 3 result material bytes induced by the same canonical Layer 2 freshness_reference variation, with public-claim, constraint-summary, transcript, and proof-bound digests recomputed exactly from that canonical variation and proof-artifact fields held fixed.",
+        "variable_fields": [
+          "proof_result.lineage_commitment",
+          "proof_result.lineage_hash",
+          "proof_result.public_claim_digest",
+          "proof_result.layer3_transcript_digest",
+          "proof_result.layer3_proof_bound_transcript_digest"
+        ],
+        "fixed_fields": [
+          "decision",
+          "proof_result.layer3_proof_binding_digest",
+          "proof_result.dcm_commitment_root",
+          "proof_result.dcm_trace_commitment",
+          "proof_result.intent_hash",
+          "proof_artifact.public_input_digest",
+          "proof_artifact.proof_binding_digest"
+        ],
+        "marked_item": "A candidate is marked when the truncated candidate result_commitment equals the truncated canonical target result_commitment.",
+        "canonicality_restriction": "The oracle only updates bytes through the exact canonical Layer 2 -> Layer 3 serialization path; no alternate consumer/result encoding is allowed."
+      }
+    },
+    {
+      "name": "layer3_layer4_ingress_commitment",
+      "classification": "primary_521_commitment",
+      "width_bits": 521,
+      "domain_separator_ascii": "AURA_LAYER3_LAYER4_VERIFIED_AUTHORIZATION_INGRESS_COMMITMENT_V1",
+      "target_hex": "0031c1dc4a6c229b262f986893cea99fa84d445550e2c426e191e0ccfa3edde07fb32711b683f884e4586c68a43368014cfa319dba97fb517394425879fbd3471bed",
+      "canonical_input_len": 1520,
+      "canonical_input_hex": "415552415f4c41594552335f4c41594552345f56455249464945445f415554484f52495a4154494f4e5f494e47524553535f5631010000415552415f4c41594552335f415554484f52495a4154494f4e5f4c494e454147455f434f4e53554d45525f4f424a4543545f563101000001f9d46f19e3bebf4937b27da5bea0946080cd4206a8465c85bf5591919c53da772ca5860c93bb5f52ce8089faa05e31b8e6c22375ec1f027f12c3174c3b7690d782e56fb7525fa99d503bd79162b2ac57473f8de38ba3aeec5ee9bbafc26771252420650aa670b03cfe2daa0e9b0120226e16c3edd2810b5bb7341d97d975283e01e98f99acaa1d49e50ee1dca6d8045a7785c36bb64f5dfb20e779750641ea734a026b6c5c73882c86a694e039d2f176d2ed7ce59de94caea45fb81c29ad5a2f561723a5718a42f4b330ec0185effd32414c162cc6a4a0c8d3ecdaa2ec6b957c01b57b64c5bd4f5d157daf7100494c9ae4d48237a16e11476357f090ad839d4159ef76dbd2f074da73a6e98119e7c06633a72633845fa210d181e86e4ab7a0c7f44a7fbb895d47d0231a4b63d6637409833956fb9d19fa399624d0076ed8824bb28801129c2b3c8160ae97a83f03dbbfaf04d5c6687e5502b33bcc6a56744d75ce33274271ae88e2e3710b612227c785d93653f5e5577fc21b3c71364d69d9ff076b04ac6a1ce3b12256cd7651d0486d67ebc5cd3ffe13c1c309c18f38b497d82132dfbb01ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff05000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000030000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000070000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e70000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003147b64c5bd4f5d157daf7100494c9ae4d48237a16e11476357f090ad839d4159ef415552415f415554484f52495a4154494f4e5f4c494e454147455f5631010100017b64c5bd4f5d157daf7100494c9ae4d48237a16e11476357f090ad839d4159ef76dbd2f074da73a6e98119e7c06633a72633845fa210d181e86e4ab7a0c7f44a0155555555555555555555555555555555555555555555555555555555555555550000000000000000000000000000000000000000000000000000000000000000027fbb895d47d0231a4b63d6637409833956fb9d19fa399624d0076ed8824bb28803666666666666666666666666666666666666666666666666666666666666666692100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e98f99acaa1d49e50ee1dca6d8045a7785c36bb64f5dfb20e779750641ea734a026b6c5c73882c86a694e039d2f176d2ed7ce59de94caea45fb81c29ad5a2f561723a5718a42f4b330ec0185effd32414c162cc6a4a0c8d3ecdaa2ec6b957c01b5d9000000415552415f4c41594552345f494e54454e545f484153485f5631010000111111111111111111111111111111111111111111111111111111111111111102222222222222222222222222222222222222222222222222222222222222222207000000000000000c000000000000000000000000000000000078000000000000007d0000000000000001f40100000000000000000000000000000000000000000000000000000000000000000000000000003333333333333333333333333333333333333333333333333333333333333333c409000000000000",
+      "recomputed_equal": true,
+      "oracle_definition": {
+        "search_kind": "structured_neighbor_second_preimage",
+        "preimage_space": "Canonical ingress serialized-object bytes formed from the canonical intent body and a canonical consumer object whose Layer 2-derived fields are varied only through freshness_reference = 2^48 + candidate.",
+        "variable_fields": [
+          "consumer_object.public_claim.layer2_object.lineage.freshness_reference",
+          "consumer_object.proof_result.lineage_commitment",
+          "consumer_object.proof_result.lineage_hash",
+          "consumer_object.proof_result.result_commitment",
+          "consumer_object.proof_result.result_digest"
+        ],
+        "fixed_fields": [
+          "ingress_version",
+          "ingress_flags",
+          "intent_body",
+          "consumer_object.decision",
+          "consumer_object.proof_result.layer3_proof_binding_digest"
+        ],
+        "marked_item": "A candidate is marked when the truncated candidate ingress_commitment equals the truncated canonical target ingress_commitment.",
+        "canonicality_restriction": "Only the one ingress serialized-object encoding is searched; no alternate consumer-object or intent serialization path is admitted."
+      }
+    },
+    {
+      "name": "layer4_public_statement_commitment",
+      "classification": "primary_521_commitment",
+      "width_bits": 521,
+      "domain_separator_ascii": "AURA_LAYER4_VERIFIED_AUTHORIZATION_PUBLIC_STATEMENT_COMMITMENT_V1",
+      "target_hex": "006d29c69a69d29f02bbf59fb526bf1685bf8de424dd01092bc40b71f869f02a38c63c83780ed118c066e4843a2f0787515dde82cf9ab6146e53d6ade11b0e5a0f37",
+      "canonical_input_len": 371,
+      "canonical_input_hex": "0101000101e98f99acaa1d49e50ee1dca6d8045a7785c36bb64f5dfb20e779750641ea734a026b6c5c73882c86a694e039d2f176d2ed7ce59de94caea45fb81c29ad5a2f561723a5718a42f4b330ec0185effd32414c162cc6a4a0c8d3ecdaa2ec6b957c01b5015555555555555555555555555555555555555555555555555555555555555555027fbb895d47d0231a4b63d6637409833956fb9d19fa399624d0076ed8824bb288036666666666666666666666666666666666666666666666666666666666666666921000000000000001129c2b3c8160ae97a83f03dbbfaf04d5c6687e5502b33bcc6a56744d75ce33274271ae88e2e3710b612227c785d93653f5e5577fc21b3c71364d69d9ff076b04ac2ca5860c93bb5f52ce8089faa05e31b8e6c22375ec1f027f12c3174c3b7690d782e56fb7525fa99d503bd79162b2ac57473f8de38ba3aeec5ee9bbafc26771252420650aa670b03cfe2daa0e9b0120226e16c3edd2810b5bb7341d97d975283e",
+      "recomputed_equal": true,
+      "oracle_definition": {
+        "search_kind": "structured_neighbor_second_preimage",
+        "preimage_space": "Canonical verified-authority public-statement bytes with the same canonical Layer 2 freshness_reference variation propagated into lineage_commitment, lineage_hash, layer3_result_commitment, transcript_digest, and bound-transcript digest.",
+        "variable_fields": [
+          "lineage_commitment",
+          "lineage_hash",
+          "freshness_reference",
+          "layer3_result_commitment",
+          "layer3_transcript_digest",
+          "layer3_proof_bound_transcript_digest"
+        ],
+        "fixed_fields": [
+          "version",
+          "lineage_flags",
+          "dcm_commitment_kind",
+          "subject_binding_type",
+          "subject_id",
+          "intent_type",
+          "intent_hash",
+          "freshness_mode",
+          "freshness_nonce",
+          "layer3_proof_binding_digest"
+        ],
+        "marked_item": "A candidate is marked when the truncated candidate public-statement commitment equals the truncated canonical target public-statement commitment.",
+        "canonicality_restriction": "The oracle follows the single public-statement byte layout only; no alternate field ordering or serialization is allowed."
+      }
+    },
+    {
+      "name": "lineage_hash_control",
+      "classification": "helper_256_digest_control",
+      "width_bits": 256,
+      "domain_separator_ascii": "raw_sha256(lineage_preimage)",
+      "target_hex": "23a5718a42f4b330ec0185effd32414c162cc6a4a0c8d3ecdaa2ec6b957c01b5",
+      "canonical_input_len": 300,
+      "canonical_input_hex": "415552415f415554484f52495a4154494f4e5f4c494e454147455f5631010100017b64c5bd4f5d157daf7100494c9ae4d48237a16e11476357f090ad839d4159ef76dbd2f074da73a6e98119e7c06633a72633845fa210d181e86e4ab7a0c7f44a0155555555555555555555555555555555555555555555555555555555555555550000000000000000000000000000000000000000000000000000000000000000027fbb895d47d0231a4b63d6637409833956fb9d19fa399624d0076ed8824bb288036666666666666666666666666666666666666666666666666666666666666666921000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "recomputed_equal": true,
+      "oracle_definition": {
+        "search_kind": "structured_neighbor_second_preimage_control",
+        "preimage_space": "The same canonical Layer 2 lineage preimage family used for the primary lineage_commitment search, evaluated only as a retained 32-byte helper digest control.",
+        "variable_fields": [
+          "lineage.freshness_reference"
+        ],
+        "fixed_fields": [
+          "lineage.dcm_commitment_root",
+          "lineage.dcm_trace_commitment",
+          "lineage.subject_binding_type",
+          "lineage.subject_id",
+          "lineage.intent_hash",
+          "lineage.freshness_nonce"
+        ],
+        "marked_item": "A candidate is marked when the truncated candidate lineage_hash equals the truncated canonical target lineage_hash.",
+        "canonicality_restriction": "Only the canonical lineage preimage bytes are hashed."
+      }
+    },
+    {
+      "name": "layer3_result_digest_control",
+      "classification": "helper_256_digest_control",
+      "width_bits": 256,
+      "domain_separator_ascii": "AURA_LAYER3_AUTHORIZATION_LINEAGE_CONSUMER_RESULT_V1",
+      "target_hex": "6a1ce3b12256cd7651d0486d67ebc5cd3ffe13c1c309c18f38b497d82132dfbb",
+      "canonical_input_len": 323,
+      "canonical_input_hex": "01f9d46f19e3bebf4937b27da5bea0946080cd4206a8465c85bf5591919c53da772ca5860c93bb5f52ce8089faa05e31b8e6c22375ec1f027f12c3174c3b7690d782e56fb7525fa99d503bd79162b2ac57473f8de38ba3aeec5ee9bbafc26771252420650aa670b03cfe2daa0e9b0120226e16c3edd2810b5bb7341d97d975283e01e98f99acaa1d49e50ee1dca6d8045a7785c36bb64f5dfb20e779750641ea734a026b6c5c73882c86a694e039d2f176d2ed7ce59de94caea45fb81c29ad5a2f561723a5718a42f4b330ec0185effd32414c162cc6a4a0c8d3ecdaa2ec6b957c01b57b64c5bd4f5d157daf7100494c9ae4d48237a16e11476357f090ad839d4159ef76dbd2f074da73a6e98119e7c06633a72633845fa210d181e86e4ab7a0c7f44a7fbb895d47d0231a4b63d6637409833956fb9d19fa399624d0076ed8824bb288",
+      "recomputed_equal": true,
+      "oracle_definition": {
+        "search_kind": "structured_neighbor_second_preimage_control",
+        "preimage_space": "The same canonical Layer 3 result material family used for the primary result_commitment search, evaluated only as a retained 32-byte helper digest control.",
+        "variable_fields": [
+          "proof_result.lineage_commitment",
+          "proof_result.lineage_hash",
+          "proof_result.public_claim_digest",
+          "proof_result.layer3_transcript_digest",
+          "proof_result.layer3_proof_bound_transcript_digest"
+        ],
+        "fixed_fields": [
+          "decision",
+          "proof_result.layer3_proof_binding_digest",
+          "proof_result.dcm_commitment_root",
+          "proof_result.dcm_trace_commitment",
+          "proof_result.intent_hash"
+        ],
+        "marked_item": "A candidate is marked when the truncated candidate result_digest equals the truncated canonical target result_digest.",
+        "canonicality_restriction": "Only the canonical result-material byte encoding is hashed."
+      }
+    }
+  ],
+  "sanity_samples": [
+    {
+      "candidate": 0,
+      "lineage_commitment_hex": "01e98f99acaa1d49e50ee1dca6d8045a7785c123737424da38251313a1741d4016cf3839294054f9537361f00d402fca861f167f9de94caea65fb79c29ad5a2f5617",
+      "result_commitment_hex": "005be2427cc8fcb61d653da9250c597a6484a038e2ae3758725b96aa224fdd2a6f0182a4fc27224b2698f06fb7701a02834da84ebcb91217091f0c618307ad85dc5d",
+      "ingress_commitment_hex": "016880c705a26640c2bcb5ccb97eb68dbf2bb191c45eac966c84363a44caabbc8f34f011cbbfac07acee974b0545e85c6d21932872fce4747b3a7c0b18795d31a161",
+      "public_statement_commitment_hex": "016074a86ef5c24576bf07db6516d348e2ad1c5eb0a1f73d12125745493ddca8957e99840febaa0250368dc63b12083aa362dad91c3edb11f819a933cec14b2af9c8",
+      "lineage_hash_hex": "533643d3e6f6ee07a7edf9a45b98083c0dc301cff6cdd7d663fc04f05c641b5b",
+      "result_digest_hex": "14442737a4219a01c74307f5ad5bc60325e156b4196028242ff5b81d8d5e8110"
+    },
+    {
+      "candidate": 1,
+      "lineage_commitment_hex": "01e98f99acaa1d49e50ee1dca6d8045a7785c12773792672d1584646d4a750734a026b6c5c73882c86a69521a8da2f4a861f1a7f9ce94caea65fb79c29ad5a2f5617",
+      "result_commitment_hex": "00aa4d19eab4aff1b789ee6b82545922b516d61baf79d89366e64e7f5405bfebe23c59fa03244ea83a8afe15a24253630c0bc18631e6235a40c9974d212a65c6c1bd",
+      "ingress_commitment_hex": "005be51ef5df37dfbb8b581b610959eb1718a481caff408b5689d1c7d3596c4c0a3ff35ffb9c4454b9658e91b974e3ba4ced81b148d60f120483f27549591e986d5a",
+      "public_statement_commitment_hex": "00df106136f02e5b326dab0647e19da3764c2f82bbdff1f78e4326e9e30f04e9da0781cf48ba809ba3d22908fc31d7c42da5840ab2ce41fab84a1dca119860351728",
+      "lineage_hash_hex": "9530ac720562df4c5ec135dfd4d8650abfd9e354f3aa728135a12c79345754e8",
+      "result_digest_hex": "18b50a69ef37c3dd5da7e9657eee3b0a89d984224286a958703b050edb41aba2"
+    },
+    {
+      "candidate": 255,
+      "lineage_commitment_hex": "01e98f99acaa1d49e50ee1dca6d8045a7785c51f7870bbdad2251313a1741d4016cf3839294054f9537362540f272f4a8623127e9ee94caea65fb79c29ad5a2f5617",
+      "result_commitment_hex": "014607f5045f73304c71ce0263d0ff049ca0642057b8bbc5c8072a3fbed8aa20cd98204487596cb55d98e339375d234235784162e0edbc6040198ae02f8c115f451a",
+      "ingress_commitment_hex": "004c4f2e73353a58e12f20f0113e81964242f18d08f20674d4c7c88bceef126419e39f32b2d9a8fc8087e7c2b398a09c6aaeee5b0a3d9adbcf2a71d83f7fc90b90f4",
+      "public_statement_commitment_hex": "009bc639e1f56f2b1cb6058726f5f5984d0b9fc779be6a386102c39ce8b971a2f7e5aca2abbde044056deaf54e97e4d2b38c247aa28012c7e61b7d45adaa25e7a5ab",
+      "lineage_hash_hex": "df5e4cf8ba188651d98c0c0d1a7787f0aefbb6ad7639eb2a5512bfc2dd36577a",
+      "result_digest_hex": "efe231f1fc88e4b92579e3f35bcefb085f03e67705c7b97deaff975daf0fa4ce"
+    },
+    {
+      "candidate": 4095,
+      "lineage_commitment_hex": "01e98f99acaa1d49e50ee1dca6d8045a7785c51fb47106f2c31f1313a1741d4016cf3839294054f95373625432ece85915a312ba9eda4caea65fb79c29ad5a2f5617",
+      "result_commitment_hex": "018889dcfc0341a65b9a62f466da695653fa9bd94cf73c0c28dd1415fc92e705fb04983950215d2bc07d47ca4789d898fbaad1de1a2f12214c0c1ee3b44ea5f04fd3",
+      "ingress_commitment_hex": "00616e29f6e06308b09eb6644eff52903cfe120cdbf521fba34d086ee5c078b47a10f80ce4ffabb86b60e19a385c32eed461f6f9e44bb781528acf24b7857f6f65d9",
+      "public_statement_commitment_hex": "00a0bd3bd1d0338b14a89d02525668b1ea2a919299b0c2d447da5fcbe1903334a65e788f58943e73467b15ec23a97b493510b2055cf30fe5ea0da0c7ae0f7e8e8da9",
+      "lineage_hash_hex": "24861b01dd59390db67496494ee240b77088ce05cd1abfc2b8e70a23f56bc622",
+      "result_digest_hex": "6f6e261ae2b83168c598f22f67b4c068dc9cbef5f839186b5f8810109c05c744"
+    }
+  ],
+  "search_results": {
+    "layer2_lineage_commitment": [
+      {
+        "bits": 16,
+        "space_size": 65536,
+        "queries_run": 65536,
+        "fully_exhausted": true,
+        "first_match_index": 0,
+        "observed_match_count": 65536,
+        "elapsed_ms": 32195,
+        "grover_marked_count": 65536,
+        "grover_query_estimate": 0,
+        "grover_success_probability": 1.0
+      },
+      {
+        "bits": 20,
+        "space_size": 1048576,
+        "queries_run": 1048576,
+        "fully_exhausted": true,
+        "first_match_index": 0,
+        "observed_match_count": 1048576,
+        "elapsed_ms": 518596,
+        "grover_marked_count": 1048576,
+        "grover_query_estimate": 0,
+        "grover_success_probability": 1.0
+      },
+      {
+        "bits": 24,
+        "space_size": 16777216,
+        "queries_run": 1048576,
+        "fully_exhausted": false,
+        "first_match_index": 0,
+        "observed_match_count": 1048576,
+        "elapsed_ms": 518596,
+        "grover_marked_count": 1048576,
+        "grover_query_estimate": 3,
+        "grover_success_probability": 0.9613189697265625
+      },
+      {
+        "bits": 28,
+        "space_size": 268435456,
+        "queries_run": 1048576,
+        "fully_exhausted": false,
+        "first_match_index": 0,
+        "observed_match_count": 1048576,
+        "elapsed_ms": 518596,
+        "grover_marked_count": 1048576,
+        "grover_query_estimate": 12,
+        "grover_success_probability": 0.9999470421032736
+      },
+      {
+        "bits": 32,
+        "space_size": 4294967296,
+        "queries_run": 1048576,
+        "fully_exhausted": false,
+        "first_match_index": 0,
+        "observed_match_count": 1048576,
+        "elapsed_ms": 518596,
+        "grover_marked_count": 1048576,
+        "grover_query_estimate": 50,
+        "grover_success_probability": 0.9999453461091142
+      }
+    ],
+    "layer3_layer4_ingress_commitment": [
+      {
+        "bits": 16,
+        "space_size": 65536,
+        "queries_run": 65536,
+        "fully_exhausted": true,
+        "first_match_index": 691,
+        "observed_match_count": 110,
+        "elapsed_ms": 32195,
+        "grover_marked_count": 110,
+        "grover_query_estimate": 19,
+        "grover_success_probability": 0.9992469218455267
+      },
+      {
+        "bits": 20,
+        "space_size": 1048576,
+        "queries_run": 1048576,
+        "fully_exhausted": true,
+        "first_match_index": 1846,
+        "observed_match_count": 132,
+        "elapsed_ms": 518596,
+        "grover_marked_count": 132,
+        "grover_query_estimate": 69,
+        "grover_success_probability": 0.9998744620950236
+      },
+      {
+        "bits": 24,
+        "space_size": 16777216,
+        "queries_run": 1048576,
+        "fully_exhausted": false,
+        "first_match_index": 23510,
+        "observed_match_count": 6,
+        "elapsed_ms": 518596,
+        "grover_marked_count": 6,
+        "grover_query_estimate": 1313,
+        "grover_success_probability": 0.9999999591179167
+      },
+      {
+        "bits": 28,
+        "space_size": 268435456,
+        "queries_run": 1048576,
+        "fully_exhausted": false,
+        "first_match_index": 23510,
+        "observed_match_count": 1,
+        "elapsed_ms": 518596,
+        "grover_marked_count": 1,
+        "grover_query_estimate": 12867,
+        "grover_success_probability": 0.9999999967987345
+      },
+      {
+        "bits": 32,
+        "space_size": 4294967296,
+        "queries_run": 1048576,
+        "fully_exhausted": false,
+        "first_match_index": null,
+        "observed_match_count": 0,
+        "elapsed_ms": 518596,
+        "grover_marked_count": 1,
+        "grover_query_estimate": 51471,
+        "grover_success_probability": 0.9999999998832676
+      }
+    ],
+    "layer3_result_commitment": [
+      {
+        "bits": 16,
+        "space_size": 65536,
+        "queries_run": 65536,
+        "fully_exhausted": true,
+        "first_match_index": 516,
+        "observed_match_count": 130,
+        "elapsed_ms": 32195,
+        "grover_marked_count": 130,
+        "grover_query_estimate": 17,
+        "grover_success_probability": 0.999868973842375
+      },
+      {
+        "bits": 20,
+        "space_size": 1048576,
+        "queries_run": 1048576,
+        "fully_exhausted": true,
+        "first_match_index": 14360,
+        "observed_match_count": 138,
+        "elapsed_ms": 518596,
+        "grover_marked_count": 138,
+        "grover_query_estimate": 68,
+        "grover_success_probability": 0.9999991831980526
+      },
+      {
+        "bits": 24,
+        "space_size": 16777216,
+        "queries_run": 1048576,
+        "fully_exhausted": false,
+        "first_match_index": 345907,
+        "observed_match_count": 5,
+        "elapsed_ms": 518596,
+        "grover_marked_count": 5,
+        "grover_query_estimate": 1438,
+        "grover_success_probability": 0.9999999605194219
+      },
+      {
+        "bits": 28,
+        "space_size": 268435456,
+        "queries_run": 1048576,
+        "fully_exhausted": false,
+        "first_match_index": null,
+        "observed_match_count": 0,
+        "elapsed_ms": 518596,
+        "grover_marked_count": 1,
+        "grover_query_estimate": 12867,
+        "grover_success_probability": 0.9999999967987345
+      },
+      {
+        "bits": 32,
+        "space_size": 4294967296,
+        "queries_run": 1048576,
+        "fully_exhausted": false,
+        "first_match_index": null,
+        "observed_match_count": 0,
+        "elapsed_ms": 518596,
+        "grover_marked_count": 1,
+        "grover_query_estimate": 51471,
+        "grover_success_probability": 0.9999999998832676
+      }
+    ],
+    "layer3_result_digest_control": [
+      {
+        "bits": 16,
+        "space_size": 65536,
+        "queries_run": 65536,
+        "fully_exhausted": true,
+        "first_match_index": null,
+        "observed_match_count": 0,
+        "elapsed_ms": 32195,
+        "grover_marked_count": 1,
+        "grover_query_estimate": 201,
+        "grover_success_probability": 0.9999882596461666
+      },
+      {
+        "bits": 20,
+        "space_size": 1048576,
+        "queries_run": 1048576,
+        "fully_exhausted": true,
+        "first_match_index": 763127,
+        "observed_match_count": 1,
+        "elapsed_ms": 518596,
+        "grover_marked_count": 1,
+        "grover_query_estimate": 804,
+        "grover_success_probability": 0.999999756965361
+      },
+      {
+        "bits": 24,
+        "space_size": 16777216,
+        "queries_run": 1048576,
+        "fully_exhausted": false,
+        "first_match_index": null,
+        "observed_match_count": 0,
+        "elapsed_ms": 518596,
+        "grover_marked_count": 1,
+        "grover_query_estimate": 3216,
+        "grover_success_probability": 0.99999994255802
+      },
+      {
+        "bits": 28,
+        "space_size": 268435456,
+        "queries_run": 1048576,
+        "fully_exhausted": false,
+        "first_match_index": null,
+        "observed_match_count": 0,
+        "elapsed_ms": 518596,
+        "grover_marked_count": 1,
+        "grover_query_estimate": 12867,
+        "grover_success_probability": 0.9999999967987345
+      },
+      {
+        "bits": 32,
+        "space_size": 4294967296,
+        "queries_run": 1048576,
+        "fully_exhausted": false,
+        "first_match_index": null,
+        "observed_match_count": 0,
+        "elapsed_ms": 518596,
+        "grover_marked_count": 1,
+        "grover_query_estimate": 51471,
+        "grover_success_probability": 0.9999999998832676
+      }
+    ],
+    "layer4_public_statement_commitment": [
+      {
+        "bits": 16,
+        "space_size": 65536,
+        "queries_run": 65536,
+        "fully_exhausted": true,
+        "first_match_index": 634,
+        "observed_match_count": 124,
+        "elapsed_ms": 32195,
+        "grover_marked_count": 124,
+        "grover_query_estimate": 18,
+        "grover_success_probability": 0.9984685669635109
+      },
+      {
+        "bits": 20,
+        "space_size": 1048576,
+        "queries_run": 1048576,
+        "fully_exhausted": true,
+        "first_match_index": 899,
+        "observed_match_count": 137,
+        "elapsed_ms": 518596,
+        "grover_marked_count": 137,
+        "grover_query_estimate": 68,
+        "grover_success_probability": 0.9999769467619718
+      },
+      {
+        "bits": 24,
+        "space_size": 16777216,
+        "queries_run": 1048576,
+        "fully_exhausted": false,
+        "first_match_index": 129880,
+        "observed_match_count": 4,
+        "elapsed_ms": 518596,
+        "grover_marked_count": 4,
+        "grover_query_estimate": 1608,
+        "grover_success_probability": 0.9999999999795979
+      },
+      {
+        "bits": 28,
+        "space_size": 268435456,
+        "queries_run": 1048576,
+        "fully_exhausted": false,
+        "first_match_index": null,
+        "observed_match_count": 0,
+        "elapsed_ms": 518596,
+        "grover_marked_count": 1,
+        "grover_query_estimate": 12867,
+        "grover_success_probability": 0.9999999967987345
+      },
+      {
+        "bits": 32,
+        "space_size": 4294967296,
+        "queries_run": 1048576,
+        "fully_exhausted": false,
+        "first_match_index": null,
+        "observed_match_count": 0,
+        "elapsed_ms": 518596,
+        "grover_marked_count": 1,
+        "grover_query_estimate": 51471,
+        "grover_success_probability": 0.9999999998832676
+      }
+    ],
+    "lineage_hash_control": [
+      {
+        "bits": 16,
+        "space_size": 65536,
+        "queries_run": 65536,
+        "fully_exhausted": true,
+        "first_match_index": null,
+        "observed_match_count": 0,
+        "elapsed_ms": 32195,
+        "grover_marked_count": 1,
+        "grover_query_estimate": 201,
+        "grover_success_probability": 0.9999882596461666
+      },
+      {
+        "bits": 20,
+        "space_size": 1048576,
+        "queries_run": 1048576,
+        "fully_exhausted": true,
+        "first_match_index": 136086,
+        "observed_match_count": 3,
+        "elapsed_ms": 518596,
+        "grover_marked_count": 3,
+        "grover_query_estimate": 464,
+        "grover_success_probability": 0.9999996785986683
+      },
+      {
+        "bits": 24,
+        "space_size": 16777216,
+        "queries_run": 1048576,
+        "fully_exhausted": false,
+        "first_match_index": null,
+        "observed_match_count": 0,
+        "elapsed_ms": 518596,
+        "grover_marked_count": 1,
+        "grover_query_estimate": 3216,
+        "grover_success_probability": 0.99999994255802
+      },
+      {
+        "bits": 28,
+        "space_size": 268435456,
+        "queries_run": 1048576,
+        "fully_exhausted": false,
+        "first_match_index": null,
+        "observed_match_count": 0,
+        "elapsed_ms": 518596,
+        "grover_marked_count": 1,
+        "grover_query_estimate": 12867,
+        "grover_success_probability": 0.9999999967987345
+      },
+      {
+        "bits": 32,
+        "space_size": 4294967296,
+        "queries_run": 1048576,
+        "fully_exhausted": false,
+        "first_match_index": null,
+        "observed_match_count": 0,
+        "elapsed_ms": 518596,
+        "grover_marked_count": 1,
+        "grover_query_estimate": 51471,
+        "grover_success_probability": 0.9999999998832676
+      }
+    ]
+  },
+  "structural_assessment": [
+    {
+      "target": "layer2_lineage_commitment",
+      "canonicalization_singular": true,
+      "alternate_encoding_observed": false,
+      "unexpected_equivalent_object_observed": false,
+      "effective_search_space_smaller_than_modeled": false,
+      "helper_surface_promoted_to_primary": false,
+      "summary": "The Layer 2 surface is canonically singular, but the reduced-bit harness showed strong high-prefix concentration for lineage_commitment over the tested disjoint freshness_reference family. That is not a full break, but it does deviate from plain random-like truncation and is the main structural concern surfaced by this research pass."
+    },
+    {
+      "target": "layer3_result_commitment",
+      "canonicalization_singular": true,
+      "alternate_encoding_observed": false,
+      "unexpected_equivalent_object_observed": false,
+      "effective_search_space_smaller_than_modeled": false,
+      "helper_surface_promoted_to_primary": false,
+      "summary": "The Layer 3 result surface has a single material-byte encoding. Helper digests remain embedded transcript context, but the primary truth surface is the 521-bit result_commitment rather than any 32-byte digest field, and no analogous prefix bias was observed in the bounded run."
+    },
+    {
+      "target": "layer3_layer4_ingress_commitment",
+      "canonicalization_singular": true,
+      "alternate_encoding_observed": false,
+      "unexpected_equivalent_object_observed": false,
+      "effective_search_space_smaller_than_modeled": false,
+      "helper_surface_promoted_to_primary": false,
+      "summary": "The ingress commitment is singular under one serialized-object path. It carries validated helper digest bytes through the consumer object, but no helper digest acts as an independent primary commitment surface, and the bounded search looked consistent with ordinary truncation."
+    },
+    {
+      "target": "layer4_public_statement_commitment",
+      "canonicalization_singular": true,
+      "alternate_encoding_observed": false,
+      "unexpected_equivalent_object_observed": false,
+      "effective_search_space_smaller_than_modeled": false,
+      "helper_surface_promoted_to_primary": false,
+      "summary": "The public-statement commitment uses one fixed byte layout with no alternate serializer. Transcript/helper digests remain committed context, not standalone authority, and the bounded search showed no shortcut beyond truncation."
+    }
+  ],
+  "cross_surface_summary": {
+    "primary_521_commitments_are_stronger_canonical_targets_than_helpers": false,
+    "helper_surface_leaked_into_primary_role": false,
+    "conclusion": "The Aura canonical encodings stayed singular, and the Layer 3 / Layer 3->4 primary commitments behaved like ordinary truncated deterministic targets in the bounded search. However, the direct Layer 2 lineage_commitment showed strong top-prefix concentration across the disjoint structured-neighbor family, so the new primary stack is not uniformly shortcut-free under reduced-bit testing yet."
+  }
+}

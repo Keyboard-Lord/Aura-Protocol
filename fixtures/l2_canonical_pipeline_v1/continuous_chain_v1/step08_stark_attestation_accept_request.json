@@ -1,0 +1,107 @@
+{
+  "pipeline_schema_version": 1,
+  "pipeline_id": "aura_local_pipeline_v1",
+  "fixture_name": "continuous_chain_step08_stark_attestation_accept",
+  "proof_system": "MOCK",
+  "economic": {
+    "economic_policy_version": 1,
+    "request_kind": "attestation",
+    "burn_intent": "canonical_report",
+    "declared_fee_units": 48
+  },
+  "accounting": {
+    "accounting_policy_version": 1,
+    "payment_intent": "burn_to_produce_canonical_truth",
+    "settlement_intent": "record_canonical_outcome"
+  },
+  "ledger": {
+    "ledger_policy_version": 1,
+    "payer_account_id_hex": "1111111111111111111111111111111111111111111111111111111111111111",
+    "total_supply": 1250,
+    "burned_supply": 293,
+    "accounts": [
+      {
+        "account_id_hex": "1111111111111111111111111111111111111111111111111111111111111111",
+        "balance": 707
+      },
+      {
+        "account_id_hex": "2222222222222222222222222222222222222222222222222222222222222222",
+        "balance": 250
+      }
+    ]
+  },
+  "head": {
+    "settlement_head_version": 1,
+    "previous_head_hash_hex": "b9c57de0dd2d92cd7bd0cbef26f36df8db99bf28849fb2db379458425a267d9c",
+    "head_sequence_number": 6
+  },
+  "wallet_binding": {
+    "wallet_binding_version": 1,
+    "account_id_hex": "1111111111111111111111111111111111111111111111111111111111111111",
+    "wallet_address": "29d2S7vB453rNYFdR5Ycwt7y9haRT5fwVwL9zTmBhfV2"
+  },
+  "token_anchor": {
+    "token_policy_version": 1,
+    "network_mode": "local",
+    "settlement_anchor_type": "local",
+    "enforce_external_match": false
+  },
+  "attestation": {
+    "attestation_schema_version": 2,
+    "attestation_scope": "claim_consistency_with_provided_evidence_only",
+    "attestation_proof_kind": "STARK",
+    "normalization_policy_version": 1,
+    "attestation_constraints": {
+      "require_unique_labels": true,
+      "max_evidence_items": 16,
+      "max_total_normalized_bytes": 16384
+    },
+    "claim": {
+      "claim_kind": "normalized_json_field_equals_utf8",
+      "claim_payload": {
+        "target_label": "invoice_record",
+        "field_path": [
+          "invoice",
+          "status"
+        ],
+        "expected_value_utf8": "paid"
+      }
+    },
+    "evidence_items": [
+      {
+        "label": "invoice_record",
+        "evidence_kind": "inline_json_utf8",
+        "evidence_payload": {
+          "payload_utf8": "{\n  \"invoice\": {\n    \"status\": \"paid\",\n    \"id\": \"INV-001\"\n  },\n  \"note\": \"Paid in full.\"\n}\n"
+        },
+        "provenance": {
+          "provenance_policy_version": 1,
+          "provenance_type": "inline",
+          "source_type": "fixture",
+          "source_identifier": "invoice_record"
+        }
+      }
+    ]
+  },
+  "genesis": {
+    "rollup_id_hex": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "accounts": [
+      {
+        "account_id_hex": "1111111111111111111111111111111111111111111111111111111111111111",
+        "balance": 890,
+        "nonce": 3
+      },
+      {
+        "account_id_hex": "2222222222222222222222222222222222222222222222222222222222222222",
+        "balance": 360,
+        "nonce": 0
+      }
+    ]
+  },
+  "batch": {
+    "batch_number": 0,
+    "parent_batch_commitment_hex": "0000000000000000000000000000000000000000000000000000000000000000",
+    "transactions": []
+  },
+  "expected_result": "ACCEPTED"
+}

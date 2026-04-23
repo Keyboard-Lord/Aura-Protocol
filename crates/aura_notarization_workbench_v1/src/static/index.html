@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Aura Notarization Workbench v1</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Deterministic Burn-Money Protocol</p>
+          <h1>Aura Notarization Workbench</h1>
+          <p class="lede">
+            Operator-facing wallet surface for composing canonical transaction/notarization paths,
+            inspecting canonical notarization records, previewing receipts, and exporting stable
+            proof-money artifacts.
+          </p>
+        </div>
+        <div class="hero-card">
+          <span class="hero-label">Frozen downstream surface</span>
+          <strong>Compose -> Canonical Path -> Record Wire JSON -> Summary -> Receipt Export</strong>
+          <div class="scope-note">
+            <h2>About This Workbench</h2>
+            <p>
+              Local workbench for canonical notarization record inspection, transaction composition,
+              and receipt export.
+            </p>
+            <p>
+              It composes deterministic private-transfer-burn transactions through Rust-only
+              canonical builders, derives burn and notary artifacts, and renders the existing
+              canonical summary plus Markdown / HTML receipts.
+            </p>
+            <p>
+              It does not perform blockchain submission, production wallet integration, or
+              browser-side signing. It can prepare frozen authorization requests for external
+              signers and expose a local dev signer for local-only testing.
+            </p>
+            <p>
+              README:
+              <a href="/Users/mcrae/Desktop/AURA/crates/aura_notarization_workbench_v1/README.md">
+                crates/aura_notarization_workbench_v1/README.md
+              </a>
+            </p>
+          </div>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <section class="panel input-panel">
+          <div class="panel-head">
+            <h2>Compose / Inspect</h2>
+            <p>Choose whether you want to build a canonical path from operator input or inspect an existing canonical record.</p>
+          </div>
+
+          <div class="action-groups controls">
+            <div class="action-group tab-group">
+              <button id="mode-compose" type="button" class="tab active">Compose</button>
+              <button id="mode-inspect" type="button" class="tab">Inspect</button>
+            </div>
+          </div>
+
+          <section id="compose-section" class="mode-section">
+            <div class="mode-copy">
+              <h3>Compose</h3>
+              <p>Prepare a frozen authorization request, carry it through signing, then complete the deterministic notarization path server-side.</p>
+            </div>
+
+            <div class="action-groups controls">
+              <div class="action-group">
+                <button id="load-compose-sample" type="button">Load Compose Sample</button>
+                <button id="prepare-authorization" type="button" class="accent">Prepare Authorization</button>
+                <button id="download-sign-carrier-request" type="button" disabled>Download Sign Carrier Request</button>
+                <button id="run-local-signer" type="button" disabled>Run Local Signer</button>
+                <button id="load-guided-signer-response" type="button" disabled>Load Guided Signer Response</button>
+                <button id="import-sign-carrier-response" type="button" disabled>Import Sign Carrier Response</button>
+                <button id="copy-sign-request-json" type="button" disabled>Copy Sign Request JSON</button>
+                <button id="copy-payload-bytes" type="button" disabled>Copy Payload Bytes Hex</button>
+                <button id="local-dev-sign" type="button" disabled>Local Dev Sign (Dev Only)</button>
+                <button id="compose-transaction" type="button" class="accent" disabled>Complete Compose</button>
+                <button id="export-compose-bundle" type="button" disabled>Export Compose Bundle</button>
+                <button id="download-export-bundle-json" type="button" disabled>Download Export Bundle JSON</button>
+                <button id="copy-export-bundle-json" type="button" disabled>Copy Export Bundle JSON</button>
+                <button id="clear-workbench" type="button">Clear Workbench</button>
+              </div>
+            </div>
+            <input
+              id="import-sign-carrier-response-file"
+              type="file"
+              accept="application/json,.json"
+              hidden
+            />
+
+            <div class="field-grid">
+              <label class="field">
+                <span>Rollup ID</span>
+                <input id="compose-rollup-id" type="text" spellcheck="false" placeholder="64 lowercase hex chars" />
+              </label>
+              <label class="field">
+                <span>Asset ID</span>
+                <input id="compose-asset-id" type="text" spellcheck="false" placeholder="64 lowercase hex chars" />
+              </label>
+              <label class="field">
+                <span>Anchor State Root</span>
+                <input id="compose-anchor-root" type="text" spellcheck="false" placeholder="64 lowercase hex chars" />
+              </label>
+            </div>
+
+            <div class="compose-groups">
+              <div class="compose-group">
+                <div class="group-head">
+                  <div>
+                    <h4>Inputs</h4>
+                    <p>Nullifier + note commitment reference pairs.</p>
+                  </div>
+                  <button id="add-input-row" type="button">Add Input</button>
+                </div>
+                <div id="compose-inputs" class="row-list"></div>
+              </div>
+
+              <div class="compose-group">
+                <div class="group-head">
+                  <div>
+                    <h4>Outputs</h4>
+                    <p>Note commitment list.</p>
+                  </div>
+                  <button id="add-output-row" type="button">Add Output</button>
+                </div>
+                <div id="compose-outputs" class="row-list"></div>
+              </div>
+            </div>
+
+            <div class="compose-group authorization-stage">
+              <div class="group-head">
+                <div>
+                  <h4>Authorization Boundary</h4>
+                  <p>Freeze one signer session, export the exact sign request bytes, then attach a sign response before compose can proceed.</p>
+                </div>
+              </div>
+
+              <div class="field-grid">
+                <label class="field">
+                  <span>Signer Public Key</span>
+                  <input id="authorization-signer-public-key" type="text" spellcheck="false" placeholder="64 lowercase hex chars" />
+                </label>
+                <label class="field">
+                  <span>Authorization Nonce</span>
+                  <input id="authorization-nonce" type="text" spellcheck="false" placeholder="64 lowercase hex chars" />
+                </label>
+              </div>
+
+              <div class="authorization-meta">
+                <div>
+                  <dt>Authorization Status</dt>
+                  <dd id="authorization-status">Awaiting prepare</dd>
+                </div>
+                <div>
+                  <dt>Session ID</dt>
+                  <dd id="authorization-session-id">—</dd>
+                </div>
+                <div>
+                  <dt>Guided Request Path</dt>
+                  <dd id="signer-launcher-request-path">—</dd>
+                </div>
+                <div>
+                  <dt>Guided Response Path</dt>
+                  <dd id="signer-launcher-response-path">—</dd>
+                </div>
+              </div>
+
+              <label class="field">
+                <span>Frozen Sign Request JSON</span>
+                <pre id="authorization-sign-request-preview" class="json-preview"></pre>
+              </label>
+
+              <label class="field">
+                <span>Frozen Payload Bytes Hex</span>
+                <pre id="authorization-payload-bytes-preview" class="json-preview mono-wrap"></pre>
+              </label>
+
+              <label class="field">
+                <span>Guided Signer Command</span>
+                <pre id="signer-launcher-command-preview" class="json-preview mono-wrap"></pre>
+              </label>
+
+              <label class="field">
+                <span>Authorization Sign Response or Carrier Response JSON</span>
+                <textarea
+                  id="authorization-response-input"
+                  spellcheck="false"
+                  placeholder='{"carrier_version":1,"session_id_hex":"...","authorization_sign_response":{"response_version":1,"envelope":{...}}}'
+                ></textarea>
+              </label>
+
+              <div class="action-groups controls compact">
+                <div class="action-group">
+                  <button id="clear-authorization-response" type="button" disabled>Clear Sign Response</button>
+                </div>
+              </div>
+
+              <div class="support-note">
+                External signer responses are the real authorization model. Prepare Authorization writes the same frozen sign carrier request to a deterministic local path and shows the exact local signer command below. Run Local Signer if you want the backend to invoke that same helper locally after prompting for a one-shot private key that is not stored in workbench state. Use Load Guided Signer Response after running the guided command yourself, or keep using Download Sign Carrier Request plus Import Sign Carrier Response as the fallback. “Local Dev Sign” uses a fixed local test key and is scoped to local-only testing.
+              </div>
+            </div>
+          </section>
+
+          <section id="inspect-section" class="mode-section hidden">
+            <div class="mode-copy">
+              <h3>Inspect</h3>
+              <p>Paste canonical notarization record wire JSON, load a fixture sample, or import a file.</p>
+            </div>
+
+            <div class="action-groups controls">
+              <div class="action-group">
+                <button id="load-sample" type="button">Load Record Sample</button>
+                <label class="file-button">
+                  <input id="file-input" type="file" accept="application/json,.json" />
+                  Import JSON
+                </label>
+                <button id="inspect-record" type="button" class="accent">Inspect Record</button>
+                <button id="clear-inspect-draft" type="button">Clear Inspect Draft</button>
+              </div>
+            </div>
+
+            <label class="field">
+              <span>Canonical Record Wire JSON</span>
+              <textarea
+                id="record-input"
+                spellcheck="false"
+                placeholder='{"record_version":1,"proof_statement_type":1,"ack_digest_hex":"..."}'
+              ></textarea>
+            </label>
+          </section>
+
+          <div id="status" class="status idle" role="status">Ready to prepare authorization, complete compose, or inspect canonical record input.</div>
+        </section>
+
+        <section class="panel path-panel">
+          <div class="panel-head">
+            <h2>Canonical Path</h2>
+            <p>Deterministic burn fields plus the canonical transaction, public statement, and notarization record artifacts.</p>
+          </div>
+
+          <div class="burn-grid" id="burn-grid">
+            <div><dt>Input Count</dt><dd id="burn-input-count">—</dd></div>
+            <div><dt>Output Count</dt><dd id="burn-output-count">—</dd></div>
+            <div><dt>Admission Burn</dt><dd id="burn-admission">—</dd></div>
+            <div><dt>Notary Burn</dt><dd id="burn-notary">—</dd></div>
+            <div><dt>Priority Weight</dt><dd id="burn-priority">—</dd></div>
+          </div>
+
+          <div class="json-stack">
+            <label class="field">
+              <span>Canonical Transaction Wire JSON</span>
+              <pre id="transaction-preview" class="json-preview"></pre>
+            </label>
+            <label class="field">
+              <span>Canonical Public Statement Wire JSON</span>
+              <pre id="public-statement-preview" class="json-preview"></pre>
+            </label>
+            <label class="field">
+              <span>Canonical Notarization Record Wire JSON</span>
+              <pre id="notarization-record-preview" class="json-preview"></pre>
+            </label>
+          </div>
+        </section>
+
+        <section class="panel summary-panel">
+          <div class="panel-head">
+            <h2>Canonical Summary</h2>
+            <p>Stable downstream summary fields only, in frozen summary order.</p>
+          </div>
+
+          <div class="action-groups summary-actions">
+            <div class="action-group">
+              <button id="copy-summary-json" type="button" disabled>Copy Summary JSON</button>
+              <button id="copy-record-digest" type="button" disabled>Copy Notarization Record Digest</button>
+            </div>
+          </div>
+
+          <dl id="summary-list" class="summary-list">
+            <div><dt>Summary Version</dt><dd>—</dd></div>
+            <div><dt>Record Version</dt><dd>—</dd></div>
+            <div><dt>Proof Statement Type</dt><dd>—</dd></div>
+            <div><dt>Proof Statement Label</dt><dd>—</dd></div>
+            <div><dt>Ack Digest</dt><dd>—</dd></div>
+            <div><dt>Seal Payload Digest</dt><dd>—</dd></div>
+            <div><dt>UDOT Seed Digest</dt><dd>—</dd></div>
+            <div><dt>Notarization Record Digest</dt><dd>—</dd></div>
+          </dl>
+
+          <div class="summary-note">
+            Burn and priority fields are displayed in the canonical path panel while the frozen
+            summary surface remains unchanged.
+          </div>
+        </section>
+
+        <section class="panel preview-panel">
+          <div class="panel-head">
+            <h2>Receipt Preview</h2>
+            <p>Rendered directly from the frozen Markdown / HTML receipt surfaces.</p>
+          </div>
+
+          <div class="action-groups preview-actions">
+            <div class="action-group tab-group">
+              <button id="tab-markdown" type="button" class="tab active">Markdown</button>
+              <button id="tab-html" type="button" class="tab">HTML</button>
+            </div>
+            <div class="action-group">
+              <button id="copy-markdown" type="button" disabled>Copy Markdown Receipt</button>
+              <button id="copy-html" type="button" disabled>Copy HTML Receipt</button>
+            </div>
+            <div class="action-group">
+              <button id="download-markdown" type="button" disabled>Download .md</button>
+              <button id="download-html" type="button" disabled>Download .html</button>
+              <button id="export-receipt-pair" type="button" class="accent" disabled>Export Receipt Pair</button>
+            </div>
+          </div>
+
+          <pre id="markdown-preview" class="preview markdown-preview"></pre>
+          <div id="html-preview" class="preview html-preview hidden"></div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

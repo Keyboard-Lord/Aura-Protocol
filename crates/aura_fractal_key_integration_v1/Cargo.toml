@@ -1,0 +1,8 @@
+[package]
+name = "aura_fractal_key_integration_v1"
+version = "0.1.0"
+edition = "2021"
+description = "Frozen Aura v1 integration between ProofMaterialV1 and FractalKeyV1"
+
+[dependencies]
+aura_fractal_key_v1 = { path = "../aura_fractal_key_v1" }

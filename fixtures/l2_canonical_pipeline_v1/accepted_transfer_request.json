@@ -1,0 +1,84 @@
+{
+  "pipeline_schema_version": 1,
+  "pipeline_id": "aura_local_pipeline_v1",
+  "fixture_name": "accepted_transfer_stark_pipeline",
+  "proof_system": "STARK",
+  "economic": {
+    "economic_policy_version": 1,
+    "request_kind": "execution",
+    "burn_intent": "canonical_report",
+    "declared_fee_units": 49
+  },
+  "accounting": {
+    "accounting_policy_version": 1,
+    "payment_intent": "burn_to_produce_canonical_truth",
+    "settlement_intent": "record_canonical_outcome"
+  },
+  "ledger": {
+    "ledger_policy_version": 1,
+    "payer_account_id_hex": "1111111111111111111111111111111111111111111111111111111111111111",
+    "total_supply": 1250,
+    "burned_supply": 0,
+    "accounts": [
+      {
+        "account_id_hex": "1111111111111111111111111111111111111111111111111111111111111111",
+        "balance": 1000
+      },
+      {
+        "account_id_hex": "2222222222222222222222222222222222222222222222222222222222222222",
+        "balance": 250
+      }
+    ]
+  },
+  "head": {
+    "settlement_head_version": 1,
+    "previous_head_hash_hex": "8a2ce870aa1ef47b5e78116dc9591363d1224932893d445719a1be2df732710f",
+    "head_sequence_number": 1
+  },
+  "wallet_binding": {
+    "wallet_binding_version": 1,
+    "account_id_hex": "1111111111111111111111111111111111111111111111111111111111111111",
+    "wallet_address": "29d2S7vB453rNYFdR5Ycwt7y9haRT5fwVwL9zTmBhfV2"
+  },
+  "token_anchor": {
+    "token_policy_version": 1,
+    "network_mode": "bridged",
+    "settlement_anchor_type": "external",
+    "external_balance_reference": {
+      "reference_id": "solana://simulated/payer-main",
+      "observed_balance": 1000,
+      "observed_slot": 123456,
+      "connected": true
+    },
+    "enforce_external_match": true,
+    "expected_external_balance": 1000
+  },
+  "genesis": {
+    "rollup_id_hex": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "accounts": [
+      {
+        "account_id_hex": "1111111111111111111111111111111111111111111111111111111111111111",
+        "balance": 1000,
+        "nonce": 0
+      },
+      {
+        "account_id_hex": "2222222222222222222222222222222222222222222222222222222222222222",
+        "balance": 250,
+        "nonce": 0
+      }
+    ]
+  },
+  "batch": {
+    "batch_number": 0,
+    "parent_batch_commitment_hex": "0000000000000000000000000000000000000000000000000000000000000000",
+    "transactions": [
+      {
+        "sender_account_id_hex": "1111111111111111111111111111111111111111111111111111111111111111",
+        "recipient_account_id_hex": "2222222222222222222222222222222222222222222222222222222222222222",
+        "sender_nonce": 0,
+        "amount": 75
+      }
+    ]
+  },
+  "expected_result": "ACCEPTED"
+}

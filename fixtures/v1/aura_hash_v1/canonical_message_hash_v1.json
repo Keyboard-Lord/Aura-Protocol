@@ -1,0 +1,53 @@
+{
+  "domain_separator_utf8": "AURA_HASH_V1",
+  "length_prefix_bytes": 8,
+  "cases": [
+    {
+      "label": "raw_bytes",
+      "input_kind": "raw_bytes",
+      "input_hex": "0001020304ff",
+      "canonical_message_bytes_hex": "06000000000000000001020304ff",
+      "hash_preimage_hex": "415552415f484153485f563106000000000000000001020304ff",
+      "hash_hex": "72b2d0ab2407d59fbffcab432cb7b756cf5f2c03c909d43c463ac6289198ee0a"
+    },
+    {
+      "label": "text_nfc_lf",
+      "input_kind": "text_utf8",
+      "input_hex": "43616665cc810d0a6c696e65320d",
+      "normalized_text_utf8_hex": "436166c3a90a6c696e65320a",
+      "equivalent_normalized_input_hex": "436166c3a90a6c696e65320a",
+      "canonical_message_bytes_hex": "0c00000000000000436166c3a90a6c696e65320a",
+      "hash_preimage_hex": "415552415f484153485f56310c00000000000000436166c3a90a6c696e65320a",
+      "hash_hex": "e99f00d5ba271b32210da4ebda6431112dcd22e6e44e306f53ef3851047d0421"
+    },
+    {
+      "label": "whitespace_significant",
+      "input_kind": "text_utf8",
+      "input_hex": "68656c6c6f20",
+      "normalized_text_utf8_hex": "68656c6c6f20",
+      "canonical_message_bytes_hex": "060000000000000068656c6c6f20",
+      "hash_preimage_hex": "415552415f484153485f5631060000000000000068656c6c6f20",
+      "hash_hex": "4a47830f82971521852e8cc9de80b60d04b309f8215c704b7cd0c35634848099"
+    }
+  ],
+  "rejection_cases": [
+    {
+      "label": "bom_prefix",
+      "input_kind": "text_utf8",
+      "input_hex": "efbbbf68656c6c6f",
+      "reject_reason": "message_contains_bom"
+    },
+    {
+      "label": "bom_internal",
+      "input_kind": "text_utf8",
+      "input_hex": "6865efbbbf6c6f",
+      "reject_reason": "message_contains_bom"
+    },
+    {
+      "label": "invalid_utf8",
+      "input_kind": "text_utf8",
+      "input_hex": "ff61",
+      "reject_reason": "message_must_be_valid_utf8"
+    }
+  ]
+}

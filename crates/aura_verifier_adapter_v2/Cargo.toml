@@ -1,0 +1,11 @@
+[package]
+name = "aura_verifier_adapter_v2"
+version = "0.1.0"
+edition = "2021"
+description = "Fail-closed Aura v2 verifier-adapter boundary"
+
+[features]
+active_integration = []
+
+[dependencies]
+aura_proof_material_v2 = { path = "../aura_proof_material_v2" }

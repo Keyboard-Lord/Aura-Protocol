@@ -1,0 +1,22 @@
+{
+  "contract": "AURA_AUTHORIZATION_LINEAGE_SCHEMA_V1",
+  "fixture_name": "authorization_lineage_reject_reserved_flags_v1",
+  "expected_reject_reason": "lineage_flags_reserved_bits_non_zero",
+  "lineage": {
+    "version": 1,
+    "lineage_flags": 16,
+    "dcm_commitment_kind": "DCM_ROOT_COMMITMENT_V1",
+    "dcm_commitment_root_hex": "4444444444444444444444444444444444444444444444444444444444444444",
+    "dcm_trace_commitment_hex": "0000000000000000000000000000000000000000000000000000000000000000",
+    "subject_binding_type": "RAW_ED25519_PUBLIC_KEY_32",
+    "subject_id_hex": "5555555555555555555555555555555555555555555555555555555555555555",
+    "subject_public_key_hex": "0000000000000000000000000000000000000000000000000000000000000000",
+    "intent_type": "AURA_LAYER4_INTENT_HASH_V1",
+    "intent_hash_hex": "7fbb895d47d0231a4b63d6637409833956fb9d19fa399624d0076ed8824bb288",
+    "freshness_mode": "NONCE_PLUS_SLOT_NUMBER",
+    "freshness_nonce_hex": "6666666666666666666666666666666666666666666666666666666666666666",
+    "freshness_reference": 4242,
+    "proof_material_v1_hash_hex": "0000000000000000000000000000000000000000000000000000000000000000",
+    "fractal_key_v1_hash_hex": "0000000000000000000000000000000000000000000000000000000000000000"
+  }
+}
