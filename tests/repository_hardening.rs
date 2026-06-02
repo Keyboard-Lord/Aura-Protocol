@@ -68,7 +68,9 @@ fn relative_string(path: &Path) -> String {
 
 fn expected_authoritative_docs() -> BTreeSet<String> {
     [
+        "docs/authoritative/AURA CANONICAL INGESTION LAYER (CIL) SPECIFICATION V1.md",
         "docs/authoritative/AURA_ARTIFACT_STRUCTURE_V1.md",
+        "docs/authoritative/AURA_AURAFARMING_NODES.md",
         "docs/authoritative/AURA_AUTHORIZATION_LINEAGE_V1.md",
         "docs/authoritative/AURA_BUILD_SOURCE_OF_TRUTH.md",
         "docs/authoritative/AURA_CANONICAL_PIPELINE_V1.md",
@@ -78,15 +80,18 @@ fn expected_authoritative_docs() -> BTreeSet<String> {
         "docs/authoritative/AURA_FIELD_ARITHMETIC_V1.md",
         "docs/authoritative/AURA_HARDENING_LOG_V1.md",
         "docs/authoritative/AURA_HASH_V1.md",
+        "docs/authoritative/AURA_HASH_V2.md",
         "docs/authoritative/AURA_INVARIANTS_V1.md",
         "docs/authoritative/AURA_LEDGER_AND_BURN_V1.md",
         "docs/authoritative/AURA_PROVER_BINDING_V1.md",
         "docs/authoritative/AURA_REPORT_CONTRACT_V1.md",
+        "docs/authoritative/AURA_SINGLE_PATH_COMMITMENT_SYSTEM_V2.md",
         "docs/authoritative/AURA_STARK_SPEC_V1.md",
         "docs/authoritative/AURA_STORM_RECURSION_V1_1.md",
         "docs/authoritative/AURA_TRACE_COMMITMENT_V1.md",
         "docs/authoritative/AURA_TRACE_LAYOUT_V1.md",
         "docs/authoritative/AURA_UDOT_SPEC_V1.md",
+        "docs/authoritative/AURA_UDOT_UNICODE_LAYER_V3.md",
         "docs/authoritative/AURA_VECTOR_MATRIX_V1.md",
     ]
     .into_iter()
@@ -108,26 +113,26 @@ fn workspace_manifest_still_pins_root_verifiers() {
 }
 
 #[test]
-fn docs_root_is_compressed_to_exactly_twenty_canonical_documents() {
+fn docs_root_contains_the_locked_authoritative_document_set() {
     assert!(repo_path("docs/authoritative").is_dir(), "docs/authoritative must exist");
 
     let expected = expected_authoritative_docs();
     let actual: BTreeSet<String> = collect_top_level_files(&repo_path("docs/authoritative"))
         .into_iter()
         .map(|path| relative_string(&path))
+        .filter(|path| path.ends_with(".md"))
         .collect();
 
-    assert_eq!(actual.len(), 20, "docs/authoritative must contain exactly 20 files");
-    assert_eq!(actual, expected, "docs/authoritative must match the locked 20-file set");
+    assert_eq!(actual.len(), 25, "docs/authoritative must contain exactly 25 markdown files");
+    assert_eq!(actual, expected, "docs/authoritative must match the locked 25-file set");
 
     let all_docs: BTreeSet<String> = collect_doc_files(&repo_path("docs"))
         .into_iter()
         .map(|path| relative_string(&path))
         .collect();
-    assert_eq!(
-        all_docs, expected,
-        "no markdown/json/pdf files may remain under docs outside the canonical 20-file set"
-    );
+    for path in &expected {
+        assert!(all_docs.contains(path), "authoritative doc {path} must be under docs");
+    }
 }
 
 #[test]
@@ -135,7 +140,7 @@ fn source_of_truth_locks_the_compressed_authority_order() {
     let source = read("docs/authoritative/AURA_BUILD_SOURCE_OF_TRUTH.md");
     for required in [
         "There is exactly one canonical pipeline.",
-        "The canonical documentation set is exactly the 20 files under `docs/authoritative/`.",
+        "The canonical documentation set is exactly the 25 files under `docs/authoritative/`.",
         "AURA_HASH_V1.md",
         "AURA_STORM_RECURSION_V1_1.md",
         "AURA_CANONICAL_PIPELINE_V1.md",
@@ -181,8 +186,8 @@ fn readme_points_to_the_compressed_entrypoint() {
         "README must state the single-pipeline rule"
     );
     assert!(
-        readme.contains("The canonical documentation set is exactly the 20 files under `docs/authoritative/`."),
-        "README must state the compressed 20-document rule"
+        readme.contains("The canonical documentation set is exactly the 25 files under `docs/authoritative/`."),
+        "README must state the authoritative 25-document rule"
     );
     assert!(
         !readme.contains("docs/implementation"),

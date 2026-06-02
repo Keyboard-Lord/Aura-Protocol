@@ -5,6 +5,8 @@
 //! Layer 2 DCM-rooted authorization lineage, or the Layer 3 STARK proving
 //! layer.
 
+#![allow(unexpected_cfgs)]
+
 use core::convert::TryInto;
 use solana_program::{
     account_info::{next_account_info, AccountInfo},

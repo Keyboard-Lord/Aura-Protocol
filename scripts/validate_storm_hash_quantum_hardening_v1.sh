@@ -60,15 +60,15 @@ run_invariant_stage() {
 
 ensure_source_of_truth_lock_v1() {
   grep -Fq 'There is exactly one canonical pipeline.' "$source_of_truth_document_path"
-  grep -Fq 'The canonical documentation set is exactly the 20 files under `docs/authoritative/`.' "$source_of_truth_document_path"
+  grep -Fq 'The canonical documentation set is exactly the 25 files under `docs/authoritative/`.' "$source_of_truth_document_path"
   grep -Fq 'No file outside `docs/authoritative/` defines:' "$source_of_truth_document_path"
 }
 
 ensure_hardening_log_lock_v1() {
-  grep -Fq '`LOCK-01`: `HASH_V1` is the sole canonical identity function.' "$hardening_log_document_path"
+  grep -Fq '`LOCK-01`: `HASH_V2` is the sole active canonical identity function (521-bit SHA3-512-based). `HASH_V1` is FROZEN LEGACY.' "$hardening_log_document_path"
   grep -Fq '`LOCK-02`: Text normalization is NFC + LF with BOM rejection only.' "$hardening_log_document_path"
   grep -Fq '`LOCK-04`: `TRACE_ROOT` uses ordered SHA3-256 Merkle reduction with duplicate-last odd-level handling.' "$hardening_log_document_path"
-  grep -Fq '`LOCK-08`: UDOT requires explicit `udot_version` and exact `aura_hash_hex = proof_hash_hex`.' "$hardening_log_document_path"
+  grep -Fq '`LOCK-08`: Canonical UDOT is v2-only, derived directly from `proof_hash_hex`, and carries no `aura_hash_hex` alias or canonical `matrix_form`.' "$hardening_log_document_path"
 }
 
 ensure_canonical_message_encoding_document_v1() {

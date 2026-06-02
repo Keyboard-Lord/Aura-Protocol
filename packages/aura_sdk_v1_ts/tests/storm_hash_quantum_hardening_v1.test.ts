@@ -34,9 +34,9 @@ const PHASE_B_SAMPLE_COUNT_V1 = 128;
 const PHASE_D_TRACE_STEPS_V1 = 64n;
 const PHASE_E_TRACE_STEPS_V1 = 10_000n;
 const FROZEN_STORM_FIXTURE_SHA256_V1 =
-  "88dc1bfe22cd2ecb4c9afd6141a9b8e16b73d8c5c07f07170e3e4d342b3506a8";
+  "6e38910c2f174882b1456dbbe53b47d19d0f796cc6aff8b6771414bf40e914eb";
 const FROZEN_SESSION_FIXTURE_SHA256_V1 =
-  "c881987228bb5c878c9bd9375d6e98ffedad87a19d479bc9802f7061dae5ef31";
+  "a0c5359675d4564c752646a5e24aed246a6894a68cc74cfcc12a3ab277c5240d";
 const CONTEXT_MUTABLE_BYTE_RANGES_V1: Array<[number, number]> = [
   [1, 32],
   [65, 32],
@@ -103,12 +103,12 @@ test("phase A distribution invariants hold and match the frozen vector", () => {
     fixture.expected.aura_hash521_v1_hex,
   );
 
-  const onesPerBit = new Array<number>(521).fill(0);
+  const onesPerBit = new Array<number>(512).fill(0);
   const top9Counts = new Array<number>(512).fill(0);
   let zeroOutputs = 0;
   for (let sample = 0; sample < PHASE_A_SAMPLE_COUNT_V1; sample += 1) {
     const hash = auraHash521V1(deterministicBytesV1(sample, 40));
-    for (let bit = 0; bit < 521; bit += 1) {
+    for (let bit = 0; bit < onesPerBit.length; bit += 1) {
       onesPerBit[bit] += fieldBitV1(hash, bit);
     }
     top9Counts[top9BitsV1(hash)] += 1;
@@ -399,12 +399,12 @@ function deterministicBytesV1(seed: number, len: number): Uint8Array {
 }
 
 function fieldBitV1(bytes: Uint8Array, bitIndex: number): number {
-  const targetBitIndex = 7 + bitIndex;
+  const targetBitIndex = 16 + bitIndex;
   return ((bytes[Math.floor(targetBitIndex / 8)] ?? 0) >> (7 - (targetBitIndex % 8))) & 1;
 }
 
 function top9BitsV1(bytes: Uint8Array): number {
-  return (((bytes[0] ?? 0) & 0x01) << 8) | (bytes[1] ?? 0);
+  return ((bytes[2] ?? 0) << 1) | ((bytes[3] ?? 0) >> 7);
 }
 
 function hammingDistanceV1(left: Uint8Array, right: Uint8Array): number {

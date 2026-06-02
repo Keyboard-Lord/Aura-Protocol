@@ -23,7 +23,7 @@ semantics, this document governs. All protocol truth flows from this root.
 
 ## Canonical Set
 
-The canonical documentation set is exactly the 21 files under `docs/authoritative/`.
+The canonical documentation set is exactly the 25 files under `docs/authoritative/`.
 
 No file outside `docs/authoritative/` defines:
 
@@ -40,29 +40,33 @@ This index file owns set membership and authority order.
 
 This file defines document order. Authority order resolves references only.
 
-The 20 protocol-definition documents are fixed in this order:
+The 25 authoritative documents are fixed in this order:
 
 0. `AURA_SINGLE_PATH_COMMITMENT_SYSTEM_V2.md` — **ROOT AUTHORITY** (protocol specification)
-1. `AURA_HASH_V2.md` — **ACTIVE AUTHORITY** (canonical 521-bit identity)
-2. `AURA_STORM_RECURSION_V1_1.md` — **ACTIVE AUTHORITY**
-3. `AURA_FIELD_ARITHMETIC_V1.md` — **ACTIVE AUTHORITY**
-4. `AURA_DERIVATION_FUNCTIONS_V1.md` — **ACTIVE AUTHORITY**
-5. `AURA_TRACE_LAYOUT_V1.md` — **ACTIVE AUTHORITY**
-6. `AURA_TRACE_COMMITMENT_V1.md` — **ACTIVE AUTHORITY**
-7. `AURA_STARK_SPEC_V1.md` — **ACTIVE AUTHORITY**
-8. `AURA_PROVER_BINDING_V1.md` — **ACTIVE AUTHORITY**
-9. `AURA_CANONICAL_PIPELINE_V1.md` — **ACTIVE AUTHORITY**
-10. `AURA_REPORT_CONTRACT_V1.md` — **ACTIVE AUTHORITY**
-11. `AURA_LEDGER_AND_BURN_V1.md` — **ACTIVE AUTHORITY**
-12. `AURA_AUTHORIZATION_LINEAGE_V1.md` — **ACTIVE AUTHORITY**
-13. `AURA_CONTINUOUS_SETTLEMENT_V1.md` — **ACTIVE AUTHORITY**
-14. `AURA_UDOT_SPEC_V1.md` — **ACTIVE AUTHORITY**
-15. `AURA_ARTIFACT_STRUCTURE_V1.md` — **ACTIVE AUTHORITY**
-16. `AURA_INVARIANTS_V1.md` — **VALIDATION**
-17. `AURA_FAILURE_CLASSES_V1.md` — **VALIDATION**
-18. `AURA_VECTOR_MATRIX_V1.md` — **VALIDATION**
-19. `AURA_HARDENING_LOG_V1.md` — **VALIDATION**
-20. `AURA_HASH_V1.md` — **FROZEN LEGACY**
+1. `AURA CANONICAL INGESTION LAYER (CIL) SPECIFICATION V1.md` — **ACTIVE AUTHORITY**
+2. `AURA_HASH_V2.md` — **ACTIVE AUTHORITY** (canonical 521-bit identity)
+3. `AURA_STORM_RECURSION_V1_1.md` — **ACTIVE AUTHORITY**
+4. `AURA_FIELD_ARITHMETIC_V1.md` — **ACTIVE AUTHORITY**
+5. `AURA_DERIVATION_FUNCTIONS_V1.md` — **ACTIVE AUTHORITY**
+6. `AURA_TRACE_LAYOUT_V1.md` — **ACTIVE AUTHORITY**
+7. `AURA_TRACE_COMMITMENT_V1.md` — **ACTIVE AUTHORITY**
+8. `AURA_STARK_SPEC_V1.md` — **ACTIVE AUTHORITY**
+9. `AURA_PROVER_BINDING_V1.md` — **ACTIVE AUTHORITY**
+10. `AURA_CANONICAL_PIPELINE_V1.md` — **ACTIVE AUTHORITY**
+11. `AURA_REPORT_CONTRACT_V1.md` — **ACTIVE AUTHORITY**
+12. `AURA_LEDGER_AND_BURN_V1.md` — **ACTIVE AUTHORITY**
+13. `AURA_AUTHORIZATION_LINEAGE_V1.md` — **ACTIVE AUTHORITY**
+14. `AURA_CONTINUOUS_SETTLEMENT_V1.md` — **ACTIVE AUTHORITY**
+15. `AURA_UDOT_SPEC_V1.md` — **ACTIVE AUTHORITY**
+16. `AURA_ARTIFACT_STRUCTURE_V1.md` — **ACTIVE AUTHORITY**
+17. `AURA_INVARIANTS_V1.md` — **VALIDATION**
+18. `AURA_FAILURE_CLASSES_V1.md` — **VALIDATION**
+19. `AURA_VECTOR_MATRIX_V1.md` — **VALIDATION**
+20. `AURA_HARDENING_LOG_V1.md` — **VALIDATION**
+21. `AURA_HASH_V1.md` — **FROZEN LEGACY**
+22. `AURA_UDOT_UNICODE_LAYER_V3.md` — **SUPPORTING**
+23. `AURA_AURAFARMING_NODES.md` — **RESEARCH / SUPPORTING**
+24. `AURA_BUILD_SOURCE_OF_TRUTH.md` — **ROOT AUTHORITY / META**
 
 **Resolution Rule:** When documents conflict, the lower-numbered document governs.
 

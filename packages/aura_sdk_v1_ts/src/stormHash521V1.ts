@@ -54,15 +54,35 @@ function reduceBytesMod521(bytes: Uint8Array): Uint8Array {
   // Reduce modulo 2^521 - 1
   const reduced = value % MODULUS_521_V1;
   
-  // Encode as 66 bytes big-endian
-  const result = new Uint8Array(FIELD_ELEMENT_521_BYTE_LEN_V1);
-  let remaining = reduced;
-  for (let i = FIELD_ELEMENT_521_BYTE_LEN_V1 - 1; i >= 0; i--) {
-    result[i] = Number(remaining & 0xffn);
-    remaining >>= 8n;
-  }
+  const result = fieldBigIntToRustBytesV1(reduced);
   
   return validateFieldElement521BytesV1(result, "H_521 output");
+}
+
+function fieldBigIntToRustBytesV1(value: bigint): Uint8Array {
+  const result = new Uint8Array(FIELD_ELEMENT_521_BYTE_LEN_V1);
+  let remaining = value;
+  const limbs: number[] = [];
+
+  for (let index = 0; index < 17; index += 1) {
+    limbs.push(Number(remaining & 0xffff_ffffn));
+    remaining >>= 32n;
+  }
+
+  for (let limbIndex = 0; limbIndex < 16; limbIndex += 1) {
+    const limb = limbs[limbIndex] ?? 0;
+    const start = FIELD_ELEMENT_521_BYTE_LEN_V1 - ((limbIndex + 1) * 4);
+    result[start] = (limb >>> 24) & 0xff;
+    result[start + 1] = (limb >>> 16) & 0xff;
+    result[start + 2] = (limb >>> 8) & 0xff;
+    result[start + 3] = limb & 0xff;
+  }
+
+  const top = limbs[16] ?? 0;
+  result[0] = (top >>> 8) & 0xff;
+  result[1] = top & 0xff;
+
+  return result;
 }
 
 export function bytesToHexLowerV1(bytes: Uint8Array): string {
@@ -118,6 +138,14 @@ export function compareBytesLexV1(left: Uint8Array, right: Uint8Array): number {
   }
 
   return 0;
+}
+
+export function extractFirst9BitsMsbFirst(bytes: Uint8Array): number {
+  if (!(bytes instanceof Uint8Array) || bytes.length < 2) {
+    throw new TypeError("first 9-bit extraction requires at least 2 bytes");
+  }
+
+  return ((bytes[0] ?? 0) << 1) | ((bytes[1] ?? 0) >> 7);
 }
 
 export function concatBytesV1(...parts: Uint8Array[]): Uint8Array {

@@ -2,7 +2,8 @@
 
 **Classification:** `IMPLEMENTATION`
 
-The canonical documentation set is exactly the 25 files under `docs/authoritative/` (20 protocol-definition documents plus 5 supporting/specification documents).
+The canonical documentation set is exactly the 25 files under `docs/authoritative/`.
+This set contains 20 protocol-definition documents plus 5 supporting/specification documents.
 
 ## Quick Start (3 Commands for Reviewers)
 
