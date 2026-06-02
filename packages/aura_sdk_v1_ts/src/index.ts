@@ -5,6 +5,7 @@ export * from "./stormStateV1.ts";
 export * from "./stormExecutionV1.ts";
 export * from "./stormTraceCommitmentV1.ts";
 export * from "./stormClaimV1.ts";
+export * from "./auraHashReaderV1.ts";
 export * from "./stormEncryptionBindingV1.ts";
 export * from "./sessionKeyV1.ts";
 export * from "./sessionEncryptionContextV1.ts";
