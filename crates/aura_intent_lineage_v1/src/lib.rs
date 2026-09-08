@@ -64,6 +64,8 @@ mod storm_context_v1;
 mod storm_encryption_binding_v1;
 mod storm_execution_v1;
 mod storm_hash521_v1;
+/// Experimental research overlay; excluded from canonical claims and wires.
+pub mod storm_hierarchy_v2;
 mod storm_state_v1;
 mod storm_trace_commitment_v1;
 mod symmetric_envelope_v1;

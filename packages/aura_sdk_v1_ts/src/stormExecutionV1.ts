@@ -230,3 +230,6 @@ function mod521(value: bigint): bigint {
 function encodeAscii(value: string): Uint8Array {
   return new TextEncoder().encode(value);
 }
+
+// Shared with the experimental hierarchy; no change to V1 arithmetic or outputs.
+export { fieldHexToBigInt, bigIntToFieldHex, mod521 };
