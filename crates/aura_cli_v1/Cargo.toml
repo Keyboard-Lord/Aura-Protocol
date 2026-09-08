@@ -2,6 +2,7 @@
 name = "aura_cli_v1"
 version = "0.1.0"
 edition = "2021"
+workspace = "../../legacy/solana"
 description = "CLI for the frozen Aura v1 proof-preparation flow"
 
 [[bin]]

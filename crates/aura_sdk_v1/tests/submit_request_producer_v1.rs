@@ -1,8 +1,4 @@
-use aura_sdk_v1::{
-    build_submit_proof_request_wire_v1, generate_submit_proof_request_v1,
-    proof_hash_hex_from_wallet_visual_v1, validate_submit_proof_request_wire_v1, AuraSdkErrorV1,
-    BuildSubmitProofRequestWireRequestV1, GenerateSubmitProofRequestV1, SubmitProofRequestWireV1,
-};
+use aura_sdk_v1::{legacy::build_submit_proof_request_wire_v1, legacy::generate_submit_proof_request_v1, proof_hash_hex_from_wallet_visual_v1, legacy::validate_submit_proof_request_wire_v1, AuraSdkErrorV1, legacy::BuildSubmitProofRequestWireRequestV1, legacy::GenerateSubmitProofRequestV1, legacy::SubmitProofRequestWireV1};
 use serde_json::json;
 use std::fs;
 use std::path::{Path, PathBuf};

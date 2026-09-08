@@ -1,15 +1,16 @@
-use crate::authorization::{
+use super::authorization::{
     validate_authorization_intent_envelope_v1, AuthorizationIntentEnvelopeV1,
     GenerateAuthorizationIntentV1,
 };
 #[allow(unused_imports)]
-pub use crate::settlement::{
+pub use super::settlement::{
     generate_solana_settlement_request_v1, validate_solana_settlement_request_v1,
     GenerateSolanaSettlementRequestV1, SolanaCommitmentConfigV1, SolanaSettlementRequestWireV1,
     SolanaSettlementVersionV1,
 };
 use crate::udot::normalize_udot_hash;
-use crate::{generate_authorization_intent_v1, AuraSdkErrorV1};
+use crate::{AuraSdkErrorV1};
+use super::{generate_authorization_intent_v1};
 use aura_intent_lineage_v1::{
     DcmConfig521V1, DcmState521V1, FieldElement521V1, DCM_STATE_521_CANONICAL_BYTE_LEN_V1,
     FIELD_ELEMENT_521_BYTE_LEN_V1,
@@ -17,8 +18,9 @@ use aura_intent_lineage_v1::{
 use serde::{Deserialize, Serialize};
 
 /// ```compile_fail
-/// use aura_sdk_v1::{
-///     GenerateAuthorizationIntentV1, GenerateStarkProofEnvelopeV1, GenerateSubmitProofRequestV1,
+/// use aura_sdk_v1::legacy::{
+///     GenerateAuthorizationIntentV1, GenerateStarkProofEnvelopeV1,
+///     GenerateSubmitProofRequestV1,
 /// };
 ///
 /// let _ = GenerateStarkProofEnvelopeV1 {

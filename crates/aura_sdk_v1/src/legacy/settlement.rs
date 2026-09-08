@@ -1,11 +1,12 @@
-use crate::proof::{
+use super::proof::{
     validate_stark_proof_envelope_v1, GenerateStarkProofEnvelopeV1, StarkProofEnvelopeV1,
 };
-use crate::{generate_stark_proof_envelope_v1, AuraSdkErrorV1};
+use crate::{AuraSdkErrorV1};
+use super::{generate_stark_proof_envelope_v1};
 use serde::{Deserialize, Deserializer, Serialize};
 
 /// ```compile_fail
-/// use aura_sdk_v1::{
+/// use aura_sdk_v1::legacy::{
 ///     GenerateAuthorizationIntentV1, GenerateSolanaSettlementRequestV1,
 ///     GenerateStarkProofEnvelopeV1, GenerateSubmitProofRequestV1,
 ///     SolanaCommitmentConfigV1,

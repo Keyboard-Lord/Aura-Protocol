@@ -322,6 +322,19 @@ pub fn canonical_storm_trace_witness_bytes_v1(witness: &StormTraceWitnessV1) -> 
     bytes
 }
 
+fn decode_bounded_count_v1(
+    bytes: &[u8], offset: &mut usize, item_width: usize, field: &'static str,
+) -> Result<usize, StormTraceWitnessEncodingErrorV1> {
+    let count = decode_u64_from_bytes_v1(bytes, offset, field)?;
+    let available = bytes.len().saturating_sub(*offset) / item_width;
+    if count > available as u64 {
+        return Err(StormTraceWitnessEncodingErrorV1::InvalidLength {
+            field, expected: usize::try_from(count).unwrap_or(usize::MAX), actual: available,
+        });
+    }
+    Ok(count as usize)
+}
+
 pub fn decode_storm_trace_witness_bytes_v1(
     bytes: &[u8],
 ) -> Result<StormTraceWitnessV1, StormTraceWitnessEncodingErrorV1> {
@@ -334,7 +347,7 @@ pub fn decode_storm_trace_witness_bytes_v1(
 
     let trace_root = read_fixed_bytes_v1::<HASH_LEN_V1>(bytes, &mut offset, "trace_root")?;
 
-    let trace_len = decode_u64_from_bytes_v1(bytes, &mut offset, "trace_len")? as usize;
+    let trace_len = decode_bounded_count_v1(bytes, &mut offset, STORM_STATE_521_ROW_BYTE_LEN_V1, "trace_len")?;
     let mut trace = Vec::with_capacity(trace_len);
     for index in 0..trace_len {
         trace.push(
@@ -351,7 +364,7 @@ pub fn decode_storm_trace_witness_bytes_v1(
         );
     }
 
-    let step_len = decode_u64_from_bytes_v1(bytes, &mut offset, "step_len")? as usize;
+    let step_len = decode_bounded_count_v1(bytes, &mut offset, STORM_TRACE_STEP_WITNESS_521_CANONICAL_BYTE_LEN_V1, "step_len")?;
     let mut steps = Vec::with_capacity(step_len);
     for _ in 0..step_len {
         let step_index = decode_u64_from_bytes_v1(bytes, &mut offset, "step_index")?;
@@ -729,6 +742,22 @@ mod tests {
             }
             .to_bytes(),
             iteration_count: 4,
+        }
+    }
+
+    #[test]
+    fn witness_counts_are_bounded_before_allocation() {
+        let claim = build_storm_claim_v1(&sample_inputs(), [0; 32], [0; 32]);
+        let witness = build_storm_trace_witness_v1(&claim).unwrap();
+        let encoded = canonical_storm_trace_witness_bytes_v1(&witness);
+        let trace_count_offset = super::STORM_AIR_PUBLIC_INPUTS_521_CANONICAL_BYTE_LEN_V1
+            + 2 * super::FIELD_ELEMENT_521_BYTE_LEN_V1 + super::HASH_LEN_V1;
+        let step_count_offset = trace_count_offset + 8
+            + witness.trace.len() * super::STORM_STATE_521_ROW_BYTE_LEN_V1;
+        for offset in [trace_count_offset, step_count_offset] {
+            let mut malformed = encoded.clone();
+            malformed[offset..offset + 8].copy_from_slice(&u64::MAX.to_le_bytes());
+            assert!(decode_storm_trace_witness_bytes_v1(&malformed).is_err());
         }
     }
 

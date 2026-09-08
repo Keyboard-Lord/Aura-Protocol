@@ -1,0 +1,18 @@
+[package]
+name = "aura_protocol"
+version = "0.1.0"
+edition = "2021"
+workspace = ".."
+description = "Retired Aura v1 Solana program, preserved as historical evidence"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[dependencies]
+solana-program = "1.18.26"
+
+[dev-dependencies]
+aura_fractal_key_integration_v1 = { path = "../../../crates/aura_fractal_key_integration_v1" }
+solana-program-test = "1.18.26"
+solana-sdk = "1.18.26"
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }

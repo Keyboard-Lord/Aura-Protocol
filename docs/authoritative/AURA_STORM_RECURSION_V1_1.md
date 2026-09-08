@@ -53,6 +53,14 @@ The same inputs MUST reproduce the same:
 - `final_state`
 - ordered trace
 
+Determinism is forward-only; the transition is not injective. For fixed step
+injections and parameters, `(x, y)` and `(-x, -y)` produce the same successor
+because both squared terms and the product `x*y` are unchanged. These states are
+distinct whenever `(x, y) != (0, 0)` in this odd-characteristic field. A final
+state alone therefore does not uniquely identify a predecessor or an arbitrary
+trace. Validation must retain the prescribed input binding and ordered trace
+commitment. This corrects a uniqueness claim; it does not change the recurrence.
+
 ## Locked Validation
 
 - `fixtures/v1/storm_v1/storm_execution_parity_vector_v1.json`

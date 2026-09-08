@@ -12,5 +12,8 @@
   },
   "scripts": {
     "test": "node --test"
+  },
+  "dependencies": {
+    "@noble/curves": "2.0.1"
   }
 }

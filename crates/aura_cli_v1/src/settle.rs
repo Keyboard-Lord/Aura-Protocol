@@ -3,12 +3,7 @@ use crate::{
     load_and_prepare, write_field, write_json, AuraCliErrorV1, CliSolanaCommitmentConfigV1,
     CliUdotOutputFormatV1, FlowArgsV1,
 };
-use aura_sdk_v1::{
-    build_settlement_pipeline_from_prepared_proof_v1, generate_solana_settlement_request_v1,
-    BuildSettlementPipelineFromPreparedProofRequestV1, GenerateAuthorizationIntentV1,
-    GenerateSolanaSettlementRequestV1, GenerateStarkProofEnvelopeV1, GenerateSubmitProofRequestV1,
-    SolanaSettlementRequestWireV1,
-};
+use aura_sdk_v1::{legacy::build_settlement_pipeline_from_prepared_proof_v1, legacy::generate_solana_settlement_request_v1, legacy::BuildSettlementPipelineFromPreparedProofRequestV1, legacy::GenerateAuthorizationIntentV1, legacy::GenerateSolanaSettlementRequestV1, legacy::GenerateStarkProofEnvelopeV1, legacy::GenerateSubmitProofRequestV1, legacy::SolanaSettlementRequestWireV1};
 use clap::{Args, Subcommand};
 use std::io::Write;
 
@@ -159,9 +154,9 @@ fn write_solana_settlement_request_text<W: Write>(
         writer,
         "commitment_config",
         match request.commitment_config {
-            aura_sdk_v1::SolanaCommitmentConfigV1::Processed => "processed",
-            aura_sdk_v1::SolanaCommitmentConfigV1::Confirmed => "confirmed",
-            aura_sdk_v1::SolanaCommitmentConfigV1::Finalized => "finalized",
+            aura_sdk_v1::legacy::SolanaCommitmentConfigV1::Processed => "processed",
+            aura_sdk_v1::legacy::SolanaCommitmentConfigV1::Confirmed => "confirmed",
+            aura_sdk_v1::legacy::SolanaCommitmentConfigV1::Finalized => "finalized",
         },
     )?;
     write_stark_proof_envelope_text(writer, &request.stark_proof_envelope)

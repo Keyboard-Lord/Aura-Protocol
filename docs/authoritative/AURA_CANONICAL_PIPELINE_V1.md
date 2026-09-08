@@ -1,97 +1,69 @@
 # AURA_CANONICAL_PIPELINE_V1
 
-**Classification:** `ACTIVE AUTHORITY`  
-**Layer:** `L3`  
-**Purpose:** Define the single active object pipeline  
-**Status:** `ACTIVE`
+**Classification:** `ACTIVE AUTHORITY`
+**Layer:** `L3`
+**Purpose:** Own canonical pipeline dependencies and boundaries
+**Status:** `BITCOIN AUTHORIZATION PATH IMPLEMENTED; INTEGRATION CLEANUP IN PROGRESS`
 
-> **ACTIVE AUTHORITY — PIPELINE STAGES**
-> This document defines the exact stage ordering of the canonical pipeline.
-> No alternate stage order is valid. Each stage emits exactly one artifact.
+There is one canonical data path:
 
-Implementation:
+`execution inputs -> Storm claim / TRACE_ROOT -> canonical proof bytes -> proof_material_hash -> proof_hash -> authorization v2 -> Bitcoin anchor request`
 
-- Rust preparation: `crates/aura_sdk_v1/src/lib.rs`
-- Rust submission pipeline: `crates/aura_sdk_v1/src/submission.rs`
-- TypeScript: `packages/aura_sdk_v1_ts/src/index.ts`
-- Frozen fixtures: `fixtures/v1/canonical_prepare/*` and `fixtures/v1/canonical_pipeline_v1/*`
+UDOT is a deterministic presentation derived from the same `proof_hash`, owned by
+[AURA_ARTIFACT_STRUCTURE_V1](AURA_ARTIFACT_STRUCTURE_V1.md). It supplies no alternate
+proof identity and is not required to establish proof soundness.
 
-There is exactly one canonical pipeline:
+The earlier ordering put material hashing before creation of the proof bytes it
+hashes. That ordering is not executable. The order above follows the existing byte
+and verification dependencies without changing cryptographic semantics.
 
-`request -> proof_material_hash -> proof_hash -> udot_bundle_v2 -> authorization -> storm -> trace -> proof -> settlement`
+## Owners and representations
 
-## Stage Map
+| Stage | Single owner and output |
+| --- | --- |
+| Execution inputs, Storm and trace commitment | `aura_intent_lineage_v1`: existing `StormExecutionInputsV1`, `StormClaim521V1`, canonical trace layout and `TRACE_ROOT` |
+| Proof | Existing canonical Storm witness-backend proof bytes in `stark_prover_v1.rs`; compact public inputs are derived from that claim |
+| Material and bound reference | `aura_proof_material_v1` and `aura_fractal_key_v1`; exact bytes in the artifact owner |
+| Authorization | `aura_sdk_v1::authorization`; envelope and replay rules in [AURA_AUTHORIZATION_LINEAGE_V1](AURA_AUTHORIZATION_LINEAGE_V1.md) |
+| Settlement | `aura_bitcoin_v1::BitcoinAnchorRequestV1`; wire and Core transport in [AURA_REPORT_CONTRACT_V1](AURA_REPORT_CONTRACT_V1.md) |
 
-`request`
+The existing proof wire contains its claim and witness. Derived proof-artifact
+metadata is reconstructed by its owning decoder; decoding is not verification.
+Authorization acceptance invokes the actual verifier, reconstructs the bound proof
+reference, checks lineage and signature, and commits replay state before returning
+an anchor request. A shape-only proof envelope never grants acceptance.
 
-- one fully normalized canonical request object
+The current Storm backend is witness replay, not a succinct zero-knowledge STARK.
+The retained cat-map Winterfell backend is a separate historical implementation;
+a migration must not silently substitute it for Storm or claim it proves Storm.
 
-Legacy normalization, compatibility lifting, and version selection happen strictly before this
-stage.
+## Canonical boundary rules
 
-`proof_material_hash`
+Required fields, versions, lowercase hex and network selection are explicit.
+Reject missing, extra, malformed or mismatched canonical fields without normalization.
+No canonical authorization or anchor wire embeds an upstream proof, UDOT bundle,
+compatibility claim, or alternate representation of the same concept. Actual proof
+bytes are supplied separately to the verification owner.
 
-- `proof_material_hash`
+Legacy conversion is never canonical entry. The retired Rust SDK wires are under
+`aura_sdk_v1::legacy`; TypeScript equivalents are under `src/legacy/solana.ts` and
+`legacy`. Their old `StarkProofEnvelopeV1`, nested authorization/settlement objects,
+and `fixtures/v1/canonical_pipeline_v1/` are historical evidence only.
 
-`proof_hash`
+Core derivations are deterministic for fixed canonical inputs. Nonce generation,
+BIP340 signing randomness, journal admission, funding and chain observation are
+explicit operational steps; they do not redefine canonical proof identity. Re-signing
+an action or observing a reorg cannot create a new nonce reservation.
 
-- `proof_hash`
+## Verification and scope
 
-`udot_bundle_v2`
+`scripts/verify_bitcoin_foundation_v1.sh` covers shared anchor/authorization vectors,
+strict rejection, proof/material/lineage binding and durable replay. Regtest uses
+the Rust acceptance command before actual Core publication and verifies reorg retry.
+The canonical command emits an anchor request only after successful admission.
 
-- `UdotBundleV2`
-
-`authorization`
-
-- `AuthorizationIntentEnvelopeV1`
-
-`storm`
-
-- `StormClaim521V1`
-
-`trace`
-
-- `TRACE_ROOT`
-
-`proof`
-
-- `StarkProofEnvelopeV1`
-
-`settlement`
-
-- `SolanaSettlementRequestWireV1`
-
-No alternate stage order is valid.
-
-## Purity Rule
-
-Each stage emits exactly one artifact.
-
-Every stage output is a pure function of its stage inputs with no representational degrees of
-freedom.
-
-No canonical stage output may contain:
-
-- optional fields
-- `null`
-- alternate encodings
-- duplicated substructures from another canonical object
-
-Downstream stages reference upstream artifacts by canonical identifiers, principally
-`proof_hash_hex`; they do not carry exact nested copies of upstream objects.
-
-## Fail-Closed Enforcement
-
-**MUST:** Any pipeline deviation results in immediate fail-closed rejection with full burn.
-
-Specific rejections:
-
-- Alternate stage order → `PIPELINE_WIRE_INVALID` → reject + burn
-- Missing required field → `PIPELINE_WIRE_INVALID` → reject + burn
-- Unexpected field present → `PIPELINE_WIRE_INVALID` → reject + burn
-- `null` in canonical field → `PIPELINE_WIRE_INVALID` → reject + burn
-- Non-canonical hex encoding → `PIPELINE_WIRE_INVALID` → reject + burn
-- Optional fields in stage output → reject + burn
-- Embedded upstream objects (instead of reference) → reject + burn
-
-Full burn is consumed on every terminal outcome. No partial success. No exceptions.
+Local execution, ledger and burn requirements remain owned by
+[AURA_LEDGER_AND_BURN_V1](AURA_LEDGER_AND_BURN_V1.md). The SDK's proof/authorization
+and Bitcoin transport checks do not themselves debit a ledger. End-to-end economic
+integration is not established by the current authorization regtest and remains an
+explicit integration discrepancy, not a claimed successful burn implementation.

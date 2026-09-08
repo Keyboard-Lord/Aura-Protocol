@@ -1,16 +1,16 @@
-use crate::authorization::{
+use super::authorization::{
     validate_authorization_intent_envelope_v1, AuthorizationFreshnessBindingTypeV1,
     AuthorizationIntentEnvelopeV1, AuthorizationIntentTypeV1, AuthorizationIntentVersionV1,
     AuthorizationLineageBindingV1, AuthorizationSubjectBindingTypeV1,
 };
-use crate::proof::{
+use super::proof::{
     validate_stark_proof_envelope_v1, DcmClaimWireV1, StarkProofEnvelopeV1, StarkProofVersionV1,
 };
-use crate::settlement::{
+use super::settlement::{
     validate_solana_settlement_request_v1, SolanaCommitmentConfigV1, SolanaSettlementRequestWireV1,
     SolanaSettlementVersionV1,
 };
-use crate::submission::{
+use super::submission::{
     build_submit_proof_request_wire_v1, BuildSubmitProofRequestWireRequestV1,
     SubmitProofRequestWireV1,
 };
@@ -18,7 +18,7 @@ use crate::{AuraSdkErrorV1, PreparedSubmitProofV1};
 use serde::{Deserialize, Serialize};
 
 /// ```compile_fail
-/// use aura_sdk_v1::{BuildSettlementPipelineFromPreparedProofRequestV1, PreparedSubmitProofV1};
+/// use aura_sdk_v1::{legacy::BuildSettlementPipelineFromPreparedProofRequestV1, PreparedSubmitProofV1};
 ///
 /// let prepared: PreparedSubmitProofV1 = todo!();
 /// let _ = BuildSettlementPipelineFromPreparedProofRequestV1 {

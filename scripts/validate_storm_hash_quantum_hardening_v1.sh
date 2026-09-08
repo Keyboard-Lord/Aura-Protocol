@@ -154,6 +154,8 @@ run_invariant_stage '10/10' \
   'TypeScript parity + hardening invariants' \
   'cross_language_parity_or_sdk_binding_violation' \
   run_with_warning_gate npm test --prefix packages/aura_sdk_v1_ts -- \
+  src/stormExecutionV1.test.ts \
+  src/stormClaimV1.test.ts \
   tests/storm_parity_v1.test.ts \
   tests/session_encryption_v1.test.ts \
   tests/storm_hash_quantum_hardening_v1.test.ts

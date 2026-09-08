@@ -346,13 +346,32 @@ pub fn prove_storm_air_real_v1(
         .map_err(StormAirRealProverErrorV1::WitnessValidationFailed)?;
 
     let proof_bytes = canonical_storm_real_proof_bytes_v1(claim, &witness);
+    Ok(assemble_storm_air_real_artifact_v1(public_inputs, claim.trace_state_count(), proof_bytes))
+}
+
+/// Decode the existing canonical proof wire and reconstruct its derived metadata.
+/// This does not verify the proof; callers must run `verify_storm_air_real_v1`.
+pub fn decode_storm_air_real_artifact_v1(
+    proof_bytes: Vec<u8>,
+) -> Result<(StormClaim521V1, StormAirRealProofArtifactV1), StormAirRealProofDecodeErrorV1> {
+    let (claim, _) = decode_storm_real_proof_bytes_v1(&proof_bytes)?;
+    let count = claim.iteration_count.checked_add(1)
+        .ok_or(StormAirRealProofDecodeErrorV1::InvalidTraceStateCount)?;
+    let inputs = crate::build_storm_air_public_inputs_v1(&claim);
+    let artifact = assemble_storm_air_real_artifact_v1(&inputs, count, proof_bytes);
+    Ok((claim, artifact))
+}
+
+fn assemble_storm_air_real_artifact_v1(
+    public_inputs: &StormAirPublicInputsV1, trace_state_count: u64, proof_bytes: Vec<u8>,
+) -> StormAirRealProofArtifactV1 {
     let proof_bytes_digest = derive_storm_air_real_proof_bytes_digest_v1(&proof_bytes);
     let mut proof_artifact = StormAirRealProofArtifactV1 {
         backend_kind: STORM_AIR_REAL_PROOF_BACKEND_WITNESS_V1,
         proof_version: STORM_AIR_REAL_PROOF_VERSION_V1,
         public_input_digest: derive_storm_air_real_public_input_digest_v1(public_inputs),
-        trace_state_count: claim.trace_state_count(),
-        internal_trace_length: claim.trace_state_count(),
+        trace_state_count,
+        internal_trace_length: trace_state_count,
         trace_width: STORM_AIR_REAL_PROOF_TRACE_WIDTH_V1,
         backend_constraint_count: STORM_AIR_REAL_PROOF_CONSTRAINT_COUNT_V1,
         proof_bytes,
@@ -361,7 +380,7 @@ pub fn prove_storm_air_real_v1(
     };
     proof_artifact.proof_binding_digest =
         derive_storm_air_real_proof_binding_digest_v1(&proof_artifact);
-    Ok(proof_artifact)
+    proof_artifact
 }
 
 pub(crate) fn canonical_storm_real_proof_bytes_v1(
@@ -408,6 +427,7 @@ pub(crate) fn decode_storm_real_proof_bytes_v1(
 
 #[derive(Debug, PartialEq, Eq)]
 pub enum StormAirRealProofDecodeErrorV1 {
+    InvalidTraceStateCount,
     InvalidLength {
         field: &'static str,
         expected: usize,
@@ -423,6 +443,7 @@ pub enum StormAirRealProofDecodeErrorV1 {
 impl fmt::Display for StormAirRealProofDecodeErrorV1 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
+            Self::InvalidTraceStateCount => write!(f, "storm proof trace state count overflows"),
             Self::InvalidLength {
                 field,
                 expected,

@@ -1,8 +1,4 @@
-use aura_sdk_v1::{
-    generate_authorization_intent_v1, proof_hash_hex_from_wallet_visual_v1,
-    validate_authorization_intent_envelope_v1, AuraSdkErrorV1, AuthorizationIntentEnvelopeV1,
-    GenerateAuthorizationIntentV1, GenerateSubmitProofRequestV1,
-};
+use aura_sdk_v1::{legacy::generate_authorization_intent_v1, proof_hash_hex_from_wallet_visual_v1, legacy::validate_authorization_intent_envelope_v1, AuraSdkErrorV1, legacy::AuthorizationIntentEnvelopeV1, legacy::GenerateAuthorizationIntentV1, legacy::GenerateSubmitProofRequestV1};
 use serde_json::{json, Value};
 
 #[path = "support/canonical_pipeline_fixture_v1.rs"]

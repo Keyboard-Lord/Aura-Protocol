@@ -1,0 +1,11 @@
+[package]
+name = "aura_bitcoin_v1"
+version = "0.1.0"
+edition = "2021"
+description = "Canonical Aura Bitcoin reference anchoring"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+
+[dev-dependencies]
+serde_json = "1"

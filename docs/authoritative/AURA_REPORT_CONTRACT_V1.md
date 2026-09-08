@@ -2,57 +2,102 @@
 
 **Classification:** `ACTIVE AUTHORITY`  
 **Layer:** `L3`  
-**Purpose:** Define the final pipeline settlement object  
-**Status:** `ACTIVE`
+**Purpose:** Own the Bitcoin anchor request and publication contract
 
-> **ACTIVE AUTHORITY — SETTLEMENT WIRE FORMAT**
-> This document defines the canonical settlement request format.
-> Only proof_hash_hex is carried on-chain. No embedded upstream objects.
+**Status:** `ACTIVE — PIPELINE INTEGRATION INCOMPLETE`
 
-Implementation:
+Bitcoin OP_RETURN reference anchoring was explicitly approved in this task.
+This document owns the wire; the [decision record](../decisions/bitcoin-anchoring.md)
+preserves the rationale. Bitcoin records the reference, not an Aura proof verdict.
 
-- Rust: `crates/aura_sdk_v1/src/settlement.rs`
-- TypeScript: `packages/aura_sdk_v1_ts/src/index.ts`
-- Frozen fixture: `fixtures/v1/canonical_pipeline_v1/solana_settlement_request_v1.json`
+## Canonical request
 
-## Final Object
+`BitcoinAnchorRequestV1` contains exactly:
 
-`SolanaSettlementRequestWireV1` is:
+- `anchor_version`: the string `v1`
+- `network`: `mainnet`, `testnet3`, `signet`, `regtest`, or `testnet4`
+- `proof_hash_hex`: canonical lowercase 64-hex, carrying the existing proof reference
 
-- `settlement_version`
-- `solana_rpc_url`
-- `commitment_config`
-- `proof_hash_hex`
+All fields are required and non-null. Unknown fields and non-canonical strings
+are rejected without normalization. There are no embedded proof, authorization,
+UDOT, RPC, wallet, or fee objects. Proof-reference derivation remains owned by
+[AURA_ARTIFACT_STRUCTURE_V1](AURA_ARTIFACT_STRUCTURE_V1.md); this adapter does not
+recompute or replace it.
 
-## Wire Rules
+## Bitcoin output
 
-- `settlement_version` MUST be `v1`
-- `solana_rpc_url` MUST be present and MUST NOT be `null`
-- `commitment_config` MUST be `processed`, `confirmed`, or `finalized`
-- `proof_hash_hex` MUST be canonical lowercase 64-hex
-- unexpected fields are invalid
+The payload is exactly 38 bytes:
 
-## Reference Rule
+| Bytes | Meaning |
+| --- | --- |
+| 0..4 | ASCII `AURA` |
+| 4 | Anchor format `0x01` |
+| 5 | Network: mainnet `0x00`, testnet3 `0x01`, signet `0x02`, regtest `0x03`, testnet4 `0x04` |
+| 6..38 | The 32 bytes decoded from `proof_hash_hex`, in their existing order |
 
-The final object carries only the canonical proof reference.
+The output has zero satoshis and exactly the script `0x6a 0x26 <payload>`.
+The anchor format version does not infer a proof version.
 
-It MUST NOT embed:
+A transaction must have exactly one matching Aura output. Change and unrelated
+outputs are permitted. An OP_RETURN output whose first push location begins with
+ASCII `AURA` is treated as an Aura candidate, including non-minimal PUSHDATA1/2/4
+forms. All candidates must pass canonical decoding; malformed or duplicate Aura
+outputs are rejected. The accepted output must match the expected network and
+proof reference. Nonzero values, alternate push encodings, trailing bytes,
+unknown network tags, and unsupported versions are invalid.
 
-- `stark_proof_envelope`
-- `authorization_intent`
-- `udot_bundle`
-- any other upstream canonical object
+## Verification and publication boundary
 
-## Fail-Closed Enforcement
+A canonical Aura pipeline must verify its proof, bind its material to the expected
+reference, and authorize the operation before publication. A valid request or
+transaction output is not sufficient evidence of those checks. The current Core
+transport is a low-level implementation; its functions do not perform Aura proof
+verification or authorization. The [authorization owner](AURA_AUTHORIZATION_LINEAGE_V1.md)
+performs those checks and durably reserves the nonce before producing this request.
+Retiring the older Solana SDK pipeline remains required migration work.
 
-**MUST:** Any settlement wire deviation results in immediate fail-closed rejection.
+Operational configuration supplies the Core endpoint/wallet, explicit fee rate,
+maximum fee in satoshis, and confirmation threshold. Funding and signing use
+Core PSBT facilities. Inspect the final transaction's decoded outputs; immediately
+before broadcast, check mempool acceptance and its actual fee against the ceiling.
+Transaction IDs are transport evidence, never alternative Aura identities.
 
-Specific rejections:
+No Bitcoin fee payment implements Aura's local burn accounting. Codec/transport
+errors return failures without debiting an Aura ledger. Local accounting is owned
+by [AURA_LEDGER_AND_BURN_V1](AURA_LEDGER_AND_BURN_V1.md).
 
-- Invalid settlement_version → `SETTLEMENT_INVALID` → reject + burn
-- Missing proof_hash_hex → `SETTLEMENT_INVALID` → reject + burn
-- Non-canonical hex encoding → `SETTLEMENT_INVALID` → reject + burn
-- Embedded upstream objects → `SETTLEMENT_INVALID` → reject + burn
-- Unexpected fields → `SETTLEMENT_INVALID` → reject + burn
+## Observation
 
-Full burn consumed on all terminal outcomes. No settlement without valid proof reference.
+The operator-controlled validating Core node is the chain-observation trust
+boundary. The implemented observer retrieves a wallet transaction, checks the
+actual decoded outputs and transaction ID, and checks block inclusion using an
+explicit block hash. It needs wallet history and the relevant block data; it does
+not require a third-party indexer or `txindex`.
+
+Broadcast/unconfirmed transactions are pending. Positive inclusion below the
+configured depth is included; meeting the depth is confirmed. Conflicted wallet
+transactions are reported as conflicted. These are operational observations,
+not canonical request fields. Every observation is recomputed from Core, with
+active-chain block identity and stable-tip checks. Reorgs revoke prior confirmation;
+a moving tip fails the observation for retry. Confirmation is not irreversible
+finality. Callers must persist and refresh observations rather than treating a
+stored confirmation as permanent.
+
+An anchor alone establishes neither off-chain proof availability nor author
+identity. Duplicate publication must not count as a new authorized Aura action;
+that enforcement belongs at the authorization boundary, not in output decoding.
+
+## Implementation and evidence
+
+- Rust codec/output validation: `crates/aura_bitcoin_v1/src/lib.rs`
+- Matching TypeScript codec: `packages/aura_bitcoin_v1_ts/src/index.ts`
+- Core PSBT/publication/observation: `packages/aura_bitcoin_v1_ts/src/coreRpc.ts`
+- Shared vectors: `fixtures/bitcoin_v1/anchor_vectors_v1.json`
+- Focused gate: `bash scripts/verify_bitcoin_foundation_v1.sh`
+- Regtest: `BITCOIND=/path/to/bitcoind node scripts/verify_bitcoin_regtest_v1.mjs`
+
+Regtest verifies an actual Aura proof, material and BIP340 authorization through
+the Rust journal before anchoring its reference, then checks persistent retry after
+a reorg. Solana SDK wires and `fixtures/v1/canonical_pipeline_v1/` remain legacy
+migration surfaces; they no longer define the canonical settlement wire. Their
+active callers/dependencies must still be retired before migration completion.

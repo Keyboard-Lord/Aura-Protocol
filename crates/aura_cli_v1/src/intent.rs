@@ -1,9 +1,6 @@
 use crate::submit::write_submit_proof_request_text;
 use crate::{write_field, write_json, AuraCliErrorV1, CliUdotOutputFormatV1};
-use aura_sdk_v1::{
-    generate_authorization_intent_v1, AuthorizationIntentEnvelopeV1, GenerateAuthorizationIntentV1,
-    GenerateSubmitProofRequestV1,
-};
+use aura_sdk_v1::{legacy::generate_authorization_intent_v1, legacy::AuthorizationIntentEnvelopeV1, legacy::GenerateAuthorizationIntentV1, legacy::GenerateSubmitProofRequestV1};
 use clap::{Args, Subcommand};
 use std::io::Write;
 

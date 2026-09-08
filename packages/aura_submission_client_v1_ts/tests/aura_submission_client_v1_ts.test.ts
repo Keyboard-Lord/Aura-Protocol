@@ -2,21 +2,9 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 
-import {
-  AuraSubmissionClientErrorV1,
-  AuraSubmissionWireErrorV1,
-  deriveProofRecordAddressV1,
-  parseSubmitProofRequestWireV1,
-  prepareSubmitProofInstructionFromWireV1,
-  prepareSubmitProofTransactionFromWireV1,
-  submitProofFromWireV1,
-} from "../src/index.ts";
-import {
-  buildSubmitProofRequestWireV1,
-  buildSettlementPipelineFromPreparedProofV1,
-  prepareSubmitProofFlowV1,
-  proofHashHexFromWalletVisualV1,
-} from "../../aura_sdk_v1_ts/src/index.ts";
+import { AuraSubmissionClientErrorV1, AuraSubmissionWireErrorV1, deriveProofRecordAddressV1, parseSubmitProofRequestWireV1, prepareSubmitProofInstructionFromWireV1, prepareSubmitProofTransactionFromWireV1, submitProofFromWireV1 } from "../src/index.ts";
+import { proofHashHexFromWalletVisualV1 } from "../../aura_sdk_v1_ts/src/index.ts";
+import { buildSubmitProofRequestWireV1, buildSettlementPipelineFromPreparedProofV1, prepareSubmitProofFlowV1 } from "../../aura_sdk_v1_ts/src/legacy/solana.ts";
 import {
   loadCanonicalPipelineFixtureJsonV1,
   loadCanonicalPipelineFixtureTextV1,

@@ -1,9 +1,4 @@
-use aura_sdk_v1::{
-    build_settlement_pipeline_from_prepared_proof_v1, proof_hash_hex_from_wallet_visual_v1,
-    validate_solana_settlement_request_v1, AuthorizationIntentEnvelopeV1,
-    BuildSettlementPipelineFromPreparedProofRequestV1, SolanaCommitmentConfigV1,
-    SolanaSettlementRequestWireV1, StarkProofEnvelopeV1, SubmitProofRequestWireV1,
-};
+use aura_sdk_v1::{legacy::build_settlement_pipeline_from_prepared_proof_v1, proof_hash_hex_from_wallet_visual_v1, legacy::validate_solana_settlement_request_v1, legacy::AuthorizationIntentEnvelopeV1, legacy::BuildSettlementPipelineFromPreparedProofRequestV1, legacy::SolanaCommitmentConfigV1, legacy::SolanaSettlementRequestWireV1, legacy::StarkProofEnvelopeV1, legacy::SubmitProofRequestWireV1};
 use serde_json::json;
 use std::fs;
 use std::path::{Path, PathBuf};

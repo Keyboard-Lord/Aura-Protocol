@@ -2,6 +2,7 @@
 name = "aura_reference_demo_v1"
 version = "0.1.0"
 edition = "2021"
+workspace = "../../legacy/solana"
 description = "Deterministic reference demo for the frozen Aura v1 flow"
 
 [[bin]]

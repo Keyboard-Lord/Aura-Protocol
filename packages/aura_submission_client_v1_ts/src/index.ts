@@ -4,11 +4,7 @@ import {
   createPublicKey,
   sign as signEd25519,
 } from "node:crypto";
-import {
-  parseWalletVisualV1,
-  proofHashHexFromWalletVisualV1,
-  type SubmitProofRequestWireV1,
-} from "../../aura_sdk_v1_ts/src/index.ts";
+import { parseWalletVisualV1, proofHashHexFromWalletVisualV1, type SubmitProofRequestWireV1 } from "../../aura_sdk_v1_ts/src/index.ts";
 
 const BASE58_ALPHABET =
   "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";

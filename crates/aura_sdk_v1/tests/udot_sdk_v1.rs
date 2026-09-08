@@ -1,12 +1,4 @@
-use aura_sdk_v1::{
-    generate_udot_artifact_bundle_wire_v1, generate_udot_artifacts_v1,
-    parse_udot_artifact_bundle_wire_v1, parse_udot_artifact_v1, parse_udot_artifact_wire_v1,
-    validate_udot_artifact_v1, validate_udot_artifact_wire_v1, AuraSdkErrorV1,
-    GenerateUdotArtifactBundleWireRequestV1, GenerateUdotArtifactsRequestV1,
-    ParseUdotArtifactRequestV1, UdotArtifactBundleWireV1, UdotArtifactKind, UdotArtifactWireV1,
-    UdotParseError, UdotValidationError, UdotVersion, ValidateUdotArtifactRequestV1,
-    ValidateUdotArtifactWireRequestV1,
-};
+use aura_sdk_v1::{generate_udot_artifact_bundle_wire_v1, generate_udot_artifacts_v1, parse_udot_artifact_bundle_wire_v1, parse_udot_artifact_v1, parse_udot_artifact_wire_v1, validate_udot_artifact_v1, validate_udot_artifact_wire_v1, AuraSdkErrorV1, GenerateUdotArtifactBundleWireRequestV1, GenerateUdotArtifactsRequestV1, ParseUdotArtifactRequestV1, UdotArtifactBundleWireV1, UdotArtifactKind, UdotArtifactWireV1, UdotParseError, UdotValidationError, UdotVersion, ValidateUdotArtifactRequestV1, ValidateUdotArtifactWireRequestV1};
 use serde_json;
 
 #[path = "../../aura_udot_v2/tests/support/udot_fixture_v1.rs"]

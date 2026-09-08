@@ -9,6 +9,7 @@ import {
   deriveX0,
   deriveY0,
   executeStormV1,
+  encodeStepU64Le,
 } from "./stormExecutionV1.ts";
 import { encodeStormContextV1, STORM_CONTEXT_V1_VERSION } from "./stormContextV1.ts";
 
@@ -54,4 +55,29 @@ test("storm trace includes the initial state and each successive step", () => {
   assert.equal(trace.length, Number(inputs.iterationCount) + 1);
   assert.deepEqual(execution.initialState, trace[0]);
   assert.deepEqual(execution.finalState, trace[trace.length - 1]);
+});
+
+test("storm execution rejects non-bigint and out-of-range iteration counts before replay", () => {
+  for (const invalid of [NaN, Infinity, 0, 0.5, "0", "1", null, undefined, false, {}, -1n, 1n << 64n]) {
+    assert.throws(
+      () => executeStormV1({ ...sampleInputs(), iterationCount: invalid as bigint }),
+      /storm iterationCount must be a bigint fitting u64/,
+      `unexpected acceptance of ${String(invalid)}`,
+    );
+  }
+});
+
+test("storm step encoding rejects coercion and preserves the u64 boundaries", () => {
+  for (const invalid of [NaN, 0, "0", null, undefined, {}, -1n, 1n << 64n]) {
+    assert.throws(
+      () => encodeStepU64Le(invalid as bigint),
+      /storm step index must be a bigint fitting u64/,
+    );
+  }
+  assert.deepEqual(encodeStepU64Le(0n), new Uint8Array(8));
+  assert.deepEqual(encodeStepU64Le((1n << 64n) - 1n), new Uint8Array(8).fill(255));
+  assert.deepEqual(encodeStepU64Le(256n), Uint8Array.of(0, 1, 0, 0, 0, 0, 0, 0));
+  const zero = executeStormV1({ ...sampleInputs(), iterationCount: 0n });
+  assert.equal(zero.trace.length, 1);
+  assert.deepEqual(zero.initialState, zero.finalState);
 });

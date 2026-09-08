@@ -1,7 +1,5 @@
 use crate::{write_field, write_json, AuraCliErrorV1, CliUdotOutputFormatV1};
-use aura_sdk_v1::{
-    generate_submit_proof_request_v1, GenerateSubmitProofRequestV1, SubmitProofRequestWireV1,
-};
+use aura_sdk_v1::{legacy::generate_submit_proof_request_v1, legacy::GenerateSubmitProofRequestV1, legacy::SubmitProofRequestWireV1};
 use clap::{Args, Subcommand};
 use std::io::Write;
 

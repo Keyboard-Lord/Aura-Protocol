@@ -59,8 +59,8 @@ export function deriveB(contextBytesV1: Uint8Array): string {
 }
 
 export function encodeStepU64Le(n: bigint): Uint8Array {
-  if (n < 0n || n > 0xffff_ffff_ffff_ffffn) {
-    throw new TypeError("storm step index must fit u64");
+  if (typeof n !== "bigint" || n < 0n || n > 0xffff_ffff_ffff_ffffn) {
+    throw new TypeError("storm step index must be a bigint fitting u64");
   }
 
   const bytes = new Uint8Array(8);
@@ -179,8 +179,9 @@ function validateInputs(inputs: StormExecutionInputsV1): void {
   requireSide(inputs.sideA, "storm sideA");
   requireSide(inputs.sideB, "storm sideB");
   validateStormContextBytesV1(inputs.contextBytesV1);
-  if (inputs.iterationCount < 0n || inputs.iterationCount > 0xffff_ffff_ffff_ffffn) {
-    throw new TypeError("storm iterationCount must fit u64");
+  if (typeof inputs.iterationCount !== "bigint"
+    || inputs.iterationCount < 0n || inputs.iterationCount > 0xffff_ffff_ffff_ffffn) {
+    throw new TypeError("storm iterationCount must be a bigint fitting u64");
   }
 }
 

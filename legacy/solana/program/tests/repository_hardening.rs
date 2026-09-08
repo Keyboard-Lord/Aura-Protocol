@@ -6,6 +6,9 @@ use std::{
 
 fn repo_root() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("../../..")
+        .canonicalize()
+        .expect("legacy program remains inside the Aura repository")
 }
 
 fn repo_path(relative: &str) -> PathBuf {

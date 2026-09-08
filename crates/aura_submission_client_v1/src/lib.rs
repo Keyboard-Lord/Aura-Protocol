@@ -1,8 +1,6 @@
 //! Rust client for the frozen Aura v1 `submit_proof` path.
 
-use aura_sdk_v1::{
-    validate_solana_settlement_request_v1, validate_wallet_visual_v1, AuraSdkErrorV1,
-};
+use aura_sdk_v1::{legacy::validate_solana_settlement_request_v1, validate_wallet_visual_v1, AuraSdkErrorV1};
 use core::fmt;
 use solana_client::{client_error::ClientError, rpc_client::RpcClient};
 use solana_sdk::{
@@ -15,10 +13,7 @@ use solana_sdk::{
 };
 use std::str::FromStr;
 
-pub use aura_sdk_v1::{
-    SolanaCommitmentConfigV1, SolanaSettlementRequestWireV1, SolanaSettlementVersionV1,
-    SubmitProofRequestWireV1,
-};
+pub use aura_sdk_v1::{legacy::SolanaCommitmentConfigV1, legacy::SolanaSettlementRequestWireV1, legacy::SolanaSettlementVersionV1, legacy::SubmitProofRequestWireV1};
 
 const PROOF_RECORD_SEED_V1: &[u8] = b"proof-record";
 const SUBMIT_PROOF_TAG_V1: u8 = 2;

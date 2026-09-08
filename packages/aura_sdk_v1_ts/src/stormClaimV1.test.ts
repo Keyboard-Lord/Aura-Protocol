@@ -37,3 +37,12 @@ test("storm claim validates and yields public inputs", () => {
   assert.equal(claim.modulusId, STORM_MODULUS_ID_521_V1);
   assert.equal(publicInputs.traceRootHex, claim.traceRootHex);
 });
+
+test("storm claim and public-input validation reject a coerced iteration count", () => {
+  const claim = buildStormClaimV1({ ...sampleInputs(), iterationCount: 0n });
+  for (const invalid of [NaN, "0", 0, undefined, null]) {
+    const malformed = { ...claim, iterationCount: invalid as unknown as bigint };
+    assert.throws(() => validateStormClaimV1(malformed), /iterationCount must be a bigint fitting u64/);
+    assert.throws(() => buildStormPublicInputsV1(malformed), /iterationCount must be a bigint fitting u64/);
+  }
+});

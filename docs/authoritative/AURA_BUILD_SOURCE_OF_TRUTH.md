@@ -27,14 +27,35 @@ The canonical documentation set is exactly the 25 files under `docs/authoritativ
 
 No file outside `docs/authoritative/` defines:
 
-- how the system works
-- what is authoritative
-- what is implemented
-- what is deprecated
+- normative protocol behavior
+- canonical document membership or precedence
+- protocol conformance requirements
+- protocol deprecation policy
 
 `README.md`, package `README.md` files, fixture notes, and code comments are implementation metadata only.
 
 This index file owns set membership and authority order.
+
+## Specification and Implementation Evidence
+
+This registry defines intended protocol authority. The current checked-out source,
+fixtures, and executed tests establish implementation state. A specification's
+`ACTIVE AUTHORITY` label does not establish that its requirements are implemented.
+Implementation metadata may describe that evidence and identify discrepancies;
+it must not introduce alternate normative definitions.
+
+The Bitcoin OP_RETURN architecture is approved and its codec and Core transport
+are implemented. End-to-end Aura integration remains incomplete: the root crate
+and older submission clients still target Solana. The SDK proof and settlement
+wires currently differ from their owning documents, and the Rust and TypeScript
+proof envelopes differ from each other. These are unresolved conformance defects,
+not sanctioned alternate canonical pipelines. Preserve cryptographic bytes while
+repairing the affected boundaries; do not infer new hash semantics from migration.
+
+Research, historical evidence, and unapproved proposals do not acquire authority
+through titles such as "final", "canonical", or "source of truth". Proposals remain
+non-authoritative until explicitly approved and incorporated into the owning
+documents with corresponding implementation and validation.
 
 ## Authority Order
 
@@ -99,7 +120,7 @@ Active behavior is limited to:
 - `STORM_V1_1`
 - `TRACE_ROOT`
 - the canonical `StarkProofEnvelopeV1` wire
-- the canonical `SolanaSettlementRequestWireV1` wire
+- the canonical `BitcoinAnchorRequestV1` wire
 - the local ledger, burn, and settlement fixtures still exercised by `scripts/verify_active_foundation.sh`
 
 `PROOF_MATERIAL_V2` is a repository name only.

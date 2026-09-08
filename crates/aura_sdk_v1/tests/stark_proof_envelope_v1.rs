@@ -1,8 +1,4 @@
-use aura_sdk_v1::{
-    generate_stark_proof_envelope_v1, proof_hash_hex_from_wallet_visual_v1,
-    validate_stark_proof_envelope_v1, AuraSdkErrorV1, GenerateAuthorizationIntentV1,
-    GenerateStarkProofEnvelopeV1, GenerateSubmitProofRequestV1, StarkProofEnvelopeV1,
-};
+use aura_sdk_v1::{legacy::generate_stark_proof_envelope_v1, proof_hash_hex_from_wallet_visual_v1, legacy::validate_stark_proof_envelope_v1, AuraSdkErrorV1, legacy::GenerateAuthorizationIntentV1, legacy::GenerateStarkProofEnvelopeV1, legacy::GenerateSubmitProofRequestV1, legacy::StarkProofEnvelopeV1};
 use serde_json::{json, Value};
 
 const PROGRAM_ID_BASE58: &str = "11111111111111111111111111111111";

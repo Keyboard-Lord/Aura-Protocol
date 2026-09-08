@@ -1,10 +1,5 @@
 use aura_protocol::{process_instruction, ChallengeAccount, ProofRecord};
-use aura_sdk_v1::{
-    generate_solana_settlement_request_v1, generate_submit_proof_request_v1,
-    proof_hash_hex_from_wallet_visual_v1, GenerateAuthorizationIntentV1,
-    GenerateSolanaSettlementRequestV1, GenerateStarkProofEnvelopeV1, GenerateSubmitProofRequestV1,
-    SolanaCommitmentConfigV1, SolanaSettlementRequestWireV1, SubmitProofRequestWireV1,
-};
+use aura_sdk_v1::{legacy::generate_solana_settlement_request_v1, legacy::generate_submit_proof_request_v1, proof_hash_hex_from_wallet_visual_v1, legacy::GenerateAuthorizationIntentV1, legacy::GenerateSolanaSettlementRequestV1, legacy::GenerateStarkProofEnvelopeV1, legacy::GenerateSubmitProofRequestV1, legacy::SolanaCommitmentConfigV1, legacy::SolanaSettlementRequestWireV1, legacy::SubmitProofRequestWireV1};
 use aura_submission_client_v1::{
     derive_proof_record_address_v1, parse_solana_settlement_request_wire_v1,
     parse_submit_proof_request_wire_v1, prepare_submit_proof_instruction_from_settlement_wire_v1,

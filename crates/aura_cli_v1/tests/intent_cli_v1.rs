@@ -1,5 +1,5 @@
 use aura_cli_v1::Cli;
-use aura_sdk_v1::AuthorizationIntentEnvelopeV1;
+use aura_sdk_v1::legacy::AuthorizationIntentEnvelopeV1;
 use clap::Parser;
 use serde_json::Value;
 use std::process::Command;

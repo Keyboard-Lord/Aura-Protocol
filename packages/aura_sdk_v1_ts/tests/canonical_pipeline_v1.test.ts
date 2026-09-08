@@ -2,19 +2,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 
-import {
-  AuraSdkErrorV1,
-  generateAuthorizationIntentV1,
-  generateSolanaSettlementRequestV1,
-  generateStarkProofEnvelopeV1,
-  generateSubmitProofRequestV1,
-  prepareSubmitProofFlowV1,
-  proofHashHexFromWalletVisualV1,
-  type SolanaSettlementRequestWireV1,
-  type StormClaim521V1,
-  UdotHashError,
-  validateSolanaSettlementRequestV1,
-} from "../src/index.ts";
+import { AuraSdkErrorV1, proofHashHexFromWalletVisualV1, type SolanaSettlementRequestWireV1, type StormClaim521V1, UdotHashError } from "../src/index.ts";
+import { generateAuthorizationIntentV1, generateSolanaSettlementRequestV1, generateStarkProofEnvelopeV1, generateSubmitProofRequestV1, prepareSubmitProofFlowV1, validateSolanaSettlementRequestV1 } from "../src/legacy/solana.ts";
 import {
   loadCanonicalPipelineFixtureJsonV1,
   loadCanonicalPipelineFixtureTextV1,

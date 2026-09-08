@@ -1,87 +1,68 @@
-# AURA
+# Aura
 
-**Classification:** `IMPLEMENTATION`
+**Classification:** `IMPLEMENTATION METADATA`
 
-The canonical documentation set is exactly the 25 files under `docs/authoritative/`.
-This set contains 20 protocol-definition documents plus 5 supporting/specification documents.
+Aura is undergoing a Bitcoin migration. The current repository still contains a
+Solana program and submission clients. Bitcoin anchor encoding and Core transport
+are implemented and regtest-validated. BIP340 authorization now verifies the actual
+Storm proof and material binding, durably reserves its nonce, and produces the
+Bitcoin anchor request. Legacy SDK pipeline replacement remains unfinished.
 
-## Quick Start (3 Commands for Reviewers)
+## Start here
 
-```bash
-git clone <repository-url> && cd AURA
-cargo build --workspace
-bash scripts/verify_repo_truth.sh
-```
+Read the [document registry](docs/authoritative/AURA_BUILD_SOURCE_OF_TRUTH.md)
+first. It owns document membership, precedence, and concept ownership. The canonical documentation set is exactly the 25 files under `docs/authoritative/`.
 
-## Start Here
+There is exactly one canonical pipeline. This is the protocol requirement;
+current SDK wires and their specifications do not yet agree. The live source and
+tests establish implementation state, while the registry defines intended
+authority. Passing a fixture test alone does not establish protocol conformance.
 
-1. **Root Authority:** [docs/authoritative/AURA_SINGLE_PATH_COMMITMENT_SYSTEM_V2.md](docs/authoritative/AURA_SINGLE_PATH_COMMITMENT_SYSTEM_V2.md)
-2. **Document Registry:** [docs/authoritative/AURA_BUILD_SOURCE_OF_TRUTH.md](docs/authoritative/AURA_BUILD_SOURCE_OF_TRUTH.md)
+## Implementation map
 
-## Document Hierarchy
+| Surface | Owner / entry point | Current role |
+| --- | --- | --- |
+| Hash, field, Storm, trace and proof machinery | [aura_intent_lineage_v1](crates/aura_intent_lineage_v1/src/lib.rs) | Preserve cryptographic semantics. The [Storm prover](crates/aura_intent_lineage_v1/src/stark_prover_v1.rs) transports a witness for replay; its retained cat-map STARK is a separate legacy path. |
+| Proof material and bound proof reference | [proof material](crates/aura_proof_material_v1/src/lib.rs), [FractalKey](crates/aura_fractal_key_v1/src/lib.rs) | Byte-level construction; the [integration adapter](crates/aura_fractal_key_integration_v1/src/lib.rs) currently supplies Solana subject/challenge account bytes. |
+| SDK objects | [Rust SDK](crates/aura_sdk_v1/src/lib.rs), [TypeScript SDK](packages/aura_sdk_v1_ts/src/index.ts) | Preparation and wire validation; proof-envelope parity and reference-only boundary repairs remain outstanding. |
+| Bitcoin anchoring | [Rust codec](crates/aura_bitcoin_v1/src/lib.rs), [TypeScript codec](packages/aura_bitcoin_v1_ts/src/index.ts), [Core transport](packages/aura_bitcoin_v1_ts/src/coreRpc.ts) | Approved OP_RETURN anchor, PSBT funding/signing, output checks, and reorg-aware observation. |
+| Authorization | [Rust acceptance](crates/aura_sdk_v1/src/authorization.rs), [TypeScript signing](packages/aura_sdk_v1_ts/src/authorizationV2.ts) | BIP340 v2, actual proof/material/lineage verification, durable journal and idempotent retry. |
+| Legacy settlement transport | [Rust client](crates/aura_submission_client_v1/src/lib.rs), [TypeScript client](packages/aura_submission_client_v1_ts/src/index.ts), [root program](src/lib.rs) | Solana transaction publication and commitment recording. |
+| Local execution and settlement | [local chain](crates/aura_l2_local_chain_v0/src/lib.rs), [local verifier](crates/aura_l2_verifier_v1/src/lib.rs) | Local foundation; local acceptance is not Bitcoin inclusion or confirmation. |
+| Presentation | [UDOT](crates/aura_udot_v2/src/lib.rs) | Artifact presentation, separate from settlement transport. |
 
-- **ROOT AUTHORITY (1):** `AURA_SINGLE_PATH_COMMITMENT_SYSTEM_V2.md` — Complete protocol spec
-- **ACTIVE AUTHORITY (15):** Core protocol layer documents (L0-L5)
-- **VALIDATION (4):** Invariants, failure classes, test registry, hardening log
-- **FROZEN LEGACY (1):** `AURA_HASH_V1.md` — Historical V1 identity
+## Making a change
 
-## Quick Navigation
+1. Locate the concept's owning document through the registry and inspect its implementation with targeted `rg` searches.
+2. Preserve canonical bytes unless a semantic change is explicitly justified. Keep legacy adapters outside canonical entry and downstream wires reference-only.
+3. Run affected Rust and TypeScript tests, including shared fixtures and malformed-input rejection. Do not regenerate a mismatching fixture until the defect's owner is established.
+4. Update the owning specification and implementation metadata when behavior is verified. Record remaining discrepancies rather than claiming conformance.
 
-- Identity: [AURA_HASH_V2.md](docs/authoritative/AURA_HASH_V2.md)
-- Field: [AURA_FIELD_ARITHMETIC_V1.md](docs/authoritative/AURA_FIELD_ARITHMETIC_V1.md)
-- Storm: [AURA_STORM_RECURSION_V1_1.md](docs/authoritative/AURA_STORM_RECURSION_V1_1.md)
-- Pipeline: [AURA_CANONICAL_PIPELINE_V1.md](docs/authoritative/AURA_CANONICAL_PIPELINE_V1.md)
-- Settlement: [AURA_REPORT_CONTRACT_V1.md](docs/authoritative/AURA_REPORT_CONTRACT_V1.md)
+## Validation
 
-There is exactly one canonical pipeline.
+Use the toolchain pinned in [rust-toolchain.toml](rust-toolchain.toml) and Node.js
+22 or newer. Plain `cargo test` targets the root Solana package, not the complete
+workspace. Start with the crate or TypeScript test affected by a change.
 
-## Canonical Verification Path
+| Command | Coverage |
+| --- | --- |
+| `cargo test -p <affected-crate> --offline` | Selected Rust crate |
+| `node --test packages/aura_sdk_v1_ts/tests/<test>.test.ts` | Selected TypeScript regression |
+| `bash scripts/verify_bitcoin_foundation_v1.sh` | Shared anchor/authorization vectors, durable replay and Core transport unit tests |
+| `BITCOIND=/path/to/bitcoind node scripts/verify_bitcoin_regtest_v1.mjs` | Actual Aura authorization through Bitcoin anchoring, reorg revocation and persistent nonce retry |
+| `bash scripts/verify_active_foundation.sh` | Local foundation, pipeline fixtures, and selected SDK/hash checks |
+| `bash scripts/test_udot_parity.sh` | Frozen v1 SDK/CLI/UDOT checks |
+| `bash scripts/verify_repo_truth.sh` | Broad milestone check, including Solana runtime and the preceding suites |
 
-For protocol verification, run these in order:
+The verifier scripts' names describe their intended scope, not certification that
+all authoritative requirements are satisfied. The active-foundation script does
+not run every Rust SDK wire test.
 
-| Step | Command | Purpose |
-|------|---------|---------|
-| 1 | `bash scripts/verify_repo_truth.sh` | Full repository hardening and invariant verification |
-| 2 | `bash scripts/run_canonical_pipeline_v1.sh` | Canonical pipeline fixture execution with pin verification |
-| 3 | `cat reports/AURA_MANUAL_PIPELINE_WALK_V1.md` | Human-readable pipeline walkthrough output |
+## Supporting material
 
-## Active Implementation Surfaces
-
-**Core Protocol (Frozen v1):**
-- [crates/aura_intent_lineage_v1](crates/aura_intent_lineage_v1) — HASH_V2, STORM_V1_1, trace commitment
-- [crates/aura_sdk_v1](crates/aura_sdk_v1) — Rust SDK for proof-preparation flow
-- [packages/aura_sdk_v1_ts](packages/aura_sdk_v1_ts) — TypeScript SDK for canonical pipeline
-
-**L2 Local Chain (Active Foundation):**
-- [crates/aura_l2_local_chain_v0](crates/aura_l2_local_chain_v0) — Local proving foundation
-- [crates/aura_l2_execution_v1](crates/aura_l2_execution_v1) — Execution engine
-- [crates/aura_l2_verifier_v1](crates/aura_l2_verifier_v1) — STARK proof verification
-- [fixtures/l2_canonical_pipeline_v1](fixtures/l2_canonical_pipeline_v1) — Canonical pipeline fixtures
-
-## Research / Non-Authority
-
-- [crates/aura_intent_lineage_research_v1](crates/aura_intent_lineage_research_v1) — Research overlay, does not define protocol
-- [reports/](reports/) — Generated verification reports (non-authoritative)
-
-## Building from Source
-
-Prerequisites:
-
-1. **Rust** — Version automatically managed via `rust-toolchain.toml` (currently 1.88.0)
-2. **Node.js** — >= 22.0.0 (specified in package.json engines)
-
-Full verification (what CI runs):
-
-```bash
-# Build the workspace
-cargo build --workspace
-
-# Run the full verification suite
-bash scripts/verify_repo_truth.sh
-```
-
-The verification script runs:
-- Repository hardening invariants
-- Frozen Solana MVP runtime tests
-- Active local proving foundation tests
-- Frozen v1 UDOT/SDK/CLI parity tests
+[Reports](reports/) are evidence or proposals, not protocol authority.
+[Research code](crates/aura_intent_lineage_research_v1) and
+[research assets](docs/research_assets/) do not define the active protocol.
+The [Bitcoin architecture decision](docs/decisions/bitcoin-anchoring.md) is approved.
+The report contract owns the anchor wire; the [authorization owner](docs/authoritative/AURA_AUTHORIZATION_LINEAGE_V1.md)
+defines the approved BIP340 contract. Retiring the old SDK pipeline remains migration work.

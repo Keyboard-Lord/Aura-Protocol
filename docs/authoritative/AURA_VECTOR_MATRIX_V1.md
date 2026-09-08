@@ -47,3 +47,10 @@
 - `fixtures/layer4_v1/*.json`
 - `scripts/run_canonical_pipeline_v1.sh`
 - `packages/aura_sdk_v0_ts/src/index.test.ts`
+
+## Bitcoin Anchoring
+
+- Shared Rust/TypeScript vectors: `fixtures/bitcoin_v1/anchor_vectors_v1.json`
+- Focused gate: `scripts/verify_bitcoin_foundation_v1.sh`
+- Core transport integration: `scripts/verify_bitcoin_regtest_v1.mjs`
+- Regtest coverage establishes transport behavior, not end-to-end Aura proof acceptance.

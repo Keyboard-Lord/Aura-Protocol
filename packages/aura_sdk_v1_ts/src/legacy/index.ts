@@ -25,3 +25,5 @@
  * @deprecated Use `stormHash521V1` (AURA_HASH_V2) instead.
  */
 export * as auraHashV1 from "../auraHashV1.ts";
+
+export * from "./solana.ts";

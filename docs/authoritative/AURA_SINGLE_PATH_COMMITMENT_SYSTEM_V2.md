@@ -143,7 +143,9 @@ Where:
 - Fully deterministic  
 - No randomness  
 - Entropy is reproducible  
-- Every state has exactly one predecessor and successor  
+- Each state has exactly one successor for fixed execution inputs and step index.
+  A unique predecessor is not guaranteed; see the non-injectivity note in
+  [STORM_V1_1](AURA_STORM_RECURSION_V1_1.md#determinism).
 
 ---
 ## 3.5 System Constants
@@ -249,6 +251,7 @@ m
 → TRACE_ROOT
 → STARK_PROOF π
 → SETTLEMENT_OBJECT
+```
 
 Each step:
 
@@ -261,15 +264,10 @@ Each step:
 
 ## 8. Settlement Object
 
-The final artifact contains:
-
-- MESSAGE_ROOT  
-- TRACE_ROOT  
-- STARK_PROOF  
-- Burn Summary  
-- Authorization Lineage  
-
-Only this object is valid for execution.
+The final settlement request is the Bitcoin proof-reference anchor owned by
+[AURA_REPORT_CONTRACT_V1](AURA_REPORT_CONTRACT_V1.md). It carries no embedded
+upstream proof, message, trace, burn, or authorization objects. The settlement
+adapter preserves the proof reference and does not redefine its derivation.
 
 ---
 

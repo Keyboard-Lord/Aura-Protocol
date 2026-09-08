@@ -1,11 +1,9 @@
-use crate::{
-    generate_wallet_visual_v1, validate_wallet_visual_v1, AuraSdkErrorV1, PreparedSubmitProofV1,
-};
+use crate::{generate_wallet_visual_v1, validate_wallet_visual_v1, AuraSdkErrorV1, PreparedSubmitProofV1};
 use crate::udot::normalize_udot_hash;
 use serde::{Deserialize, Serialize};
 
 /// ```no_run
-/// use aura_sdk_v1::GenerateSubmitProofRequestV1;
+/// use aura_sdk_v1::legacy::GenerateSubmitProofRequestV1;
 ///
 /// let _ = GenerateSubmitProofRequestV1 {
 ///     program_id_base58: String::from("11111111111111111111111111111111"),
@@ -23,7 +21,7 @@ pub struct GenerateSubmitProofRequestV1 {
 }
 
 /// ```no_run
-/// use aura_sdk_v1::{BuildSubmitProofRequestWireRequestV1, PreparedSubmitProofV1};
+/// use aura_sdk_v1::{legacy::BuildSubmitProofRequestWireRequestV1, PreparedSubmitProofV1};
 ///
 /// let prepared: PreparedSubmitProofV1 = todo!();
 /// let _ = BuildSubmitProofRequestWireRequestV1 {

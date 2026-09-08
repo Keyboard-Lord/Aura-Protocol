@@ -17,3 +17,6 @@ target/
 #.idea/
 
 .DS_Store
+
+# Installed JavaScript dependencies; manifests and lockfiles remain tracked.
+node_modules/

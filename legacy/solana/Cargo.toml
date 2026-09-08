@@ -1,0 +1,22 @@
+# Retired Solana implementation and consumers; outside the active Aura workspace.
+[workspace]
+resolver = "2"
+members = [
+    "program",
+    "../../crates/aura_cli_v1",
+    "../../crates/aura_submission_client_v1",
+    "../../crates/aura_reference_demo_v1",
+]
+default-members = ["program"]
+
+[patch.crates-io]
+solana-client = { path = "../../third_party/solana-client-1.18.26" }
+
+[profile.dev.package.winter-air]
+debug-assertions = false
+
+[profile.dev.package.winter-prover]
+debug-assertions = false
+
+[profile.test.package.winter-prover]
+debug-assertions = false

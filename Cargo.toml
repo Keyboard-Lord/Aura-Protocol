@@ -1,35 +1,22 @@
-[package]
-name = "aura_protocol"
-version = "0.1.0"
-edition = "2021"
-description = "Frozen Aura v1 Solana MVP for challenge issuance and proof-commitment recording"
-
 [workspace]
 resolver = "2"
-members = [".", "crates/*"]
-default-members = ["."]
+members = ["crates/*"]
+exclude = [
+    "crates/aura_cli_v1",
+    "crates/aura_submission_client_v1",
+    "crates/aura_reference_demo_v1",
+    "legacy/solana",
+]
+default-members = [
+    "crates/aura_bitcoin_v1",
+    "crates/aura_sdk_v1",
+    "crates/aura_intent_lineage_v1",
+]
 
 [workspace.metadata.aura]
 canonical_repo_verifier = "scripts/verify_repo_truth.sh"
 canonical_active_verifier = "scripts/verify_active_foundation.sh"
 canonical_frozen_v1_verifier = "scripts/test_udot_parity.sh"
-
-# Keep the canonical verifier warning-clean while staying on the frozen Solana
-# line used by the repo's test surfaces.
-[patch.crates-io]
-solana-client = { path = "third_party/solana-client-1.18.26" }
-
-[lib]
-crate-type = ["cdylib", "lib"]
-
-[dependencies]
-solana-program = "1.18.26"
-
-[dev-dependencies]
-aura_fractal_key_integration_v1 = { path = "crates/aura_fractal_key_integration_v1" }
-solana-program-test = "1.18.26"
-solana-sdk = "1.18.26"
-tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 
 [profile.dev.package.winter-air]
 debug-assertions = false

@@ -2,10 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 
-import {
-  AuraSdkErrorV1,
-  prepareSubmitProofFlowV1,
-} from "../src/index.ts";
+import { AuraSdkErrorV1, prepareBoundProofMaterialV1 } from "../src/index.ts";
 
 const subjectBytes = hexToBytes(readTextFixture("subject_pubkey.hex"));
 const challengeBytes = hexToBytes(readTextFixture("challenge_account_pubkey.hex"));
@@ -21,8 +18,8 @@ const expectedVectors = {
   proofHash: readTextFixture("proof_hash.hex"),
 } as const;
 
-test("prepareSubmitProofFlowV1 matches the frozen Rust sample vectors", async () => {
-  const prepared = await prepareSubmitProofFlowV1(
+test("prepareBoundProofMaterialV1 matches the frozen Rust sample vectors", async () => {
+  const prepared = await prepareBoundProofMaterialV1(
     subjectBytes,
     challengeBytes,
     proofBlobBytes,
@@ -60,15 +57,15 @@ test("prepareSubmitProofFlowV1 matches the frozen Rust sample vectors", async ()
   );
 });
 
-test("prepareSubmitProofFlowV1 is deterministic across repeated runs", async () => {
-  const preparedA = await prepareSubmitProofFlowV1(
+test("prepareBoundProofMaterialV1 is deterministic across repeated runs", async () => {
+  const preparedA = await prepareBoundProofMaterialV1(
     subjectBytes,
     challengeBytes,
     proofBlobBytes,
     publicInputsBytes,
     verificationKeyBytes,
   );
-  const preparedB = await prepareSubmitProofFlowV1(
+  const preparedB = await prepareBoundProofMaterialV1(
     subjectBytes,
     challengeBytes,
     proofBlobBytes,
@@ -84,9 +81,9 @@ test("prepareSubmitProofFlowV1 is deterministic across repeated runs", async () 
   );
 });
 
-test("prepareSubmitProofFlowV1 rejects a subject that is not 32 bytes", async () => {
+test("prepareBoundProofMaterialV1 rejects a subject that is not 32 bytes", async () => {
   await assert.rejects(
-    prepareSubmitProofFlowV1(
+    prepareBoundProofMaterialV1(
       new Uint8Array(31).fill(0x11),
       challengeBytes,
       proofBlobBytes,
@@ -95,13 +92,13 @@ test("prepareSubmitProofFlowV1 rejects a subject that is not 32 bytes", async ()
     ),
     (error: unknown) =>
       error instanceof RangeError &&
-      error.message === "subjectPubkeyBytes must be exactly 32 bytes",
+      error.message === "subjectBindingBytes must be exactly 32 bytes",
   );
 });
 
-test("prepareSubmitProofFlowV1 rejects a proof blob that is not a Uint8Array", async () => {
+test("prepareBoundProofMaterialV1 rejects a proof blob that is not a Uint8Array", async () => {
   await assert.rejects(
-    prepareSubmitProofFlowV1(
+    prepareBoundProofMaterialV1(
       subjectBytes,
       challengeBytes,
       5 as unknown as Uint8Array,
@@ -115,7 +112,7 @@ test("prepareSubmitProofFlowV1 rejects a proof blob that is not a Uint8Array", a
 });
 
 test("returned errors stay within the SDK error surface", async () => {
-  const prepared = await prepareSubmitProofFlowV1(
+  const prepared = await prepareBoundProofMaterialV1(
     subjectBytes,
     challengeBytes,
     proofBlobBytes,
