@@ -1,4 +1,4 @@
-use aura_sdk_v1::{legacy::generate_solana_settlement_request_v1, legacy::generate_submit_proof_request_v1, prepare_submit_proof_flow_v1, proof_hash_hex_from_wallet_visual_v1, AuraSdkErrorV1, legacy::GenerateAuthorizationIntentV1, legacy::GenerateSolanaSettlementRequestV1, legacy::GenerateStarkProofEnvelopeV1, legacy::GenerateSubmitProofRequestV1, legacy::SolanaCommitmentConfigV1, legacy::SolanaSettlementRequestWireV1, UdotHashError};
+use aura_sdk_v1::{legacy::generate_solana_settlement_request_v1, legacy::generate_submit_proof_request_v1, legacy::prepare_submit_proof_flow_v1, proof_hash_hex_from_wallet_visual_v1, AuraSdkErrorV1, legacy::GenerateAuthorizationIntentV1, legacy::GenerateSolanaSettlementRequestV1, legacy::GenerateStarkProofEnvelopeV1, legacy::GenerateSubmitProofRequestV1, legacy::SolanaCommitmentConfigV1, legacy::SolanaSettlementRequestWireV1, UdotHashError};
 use serde_json::{json, Value};
 use std::{fs, path::PathBuf};
 
@@ -50,7 +50,7 @@ fn decode_nibble(value: u8) -> u8 {
     }
 }
 
-fn canonical_prepared_submit_proof_v1() -> aura_sdk_v1::PreparedSubmitProofV1 {
+fn canonical_prepared_submit_proof_v1() -> aura_sdk_v1::legacy::PreparedSubmitProofV1 {
     prepare_submit_proof_flow_v1(
         decode_hex_32(&load_hex_fixture("subject_pubkey.hex")),
         decode_hex_32(&load_hex_fixture("challenge_account_pubkey.hex")),

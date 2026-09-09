@@ -2,8 +2,9 @@
 import { validateStormClaimV1 } from "../stormClaimV1.ts";
 import type { StormClaim521V1 } from "../stormClaimV1.ts";
 import { AuraSdkErrorV1, generateWalletVisualV1, validateWalletVisualV1, validatePreparedSubmitProofInputV1, requireCanonicalHashHexV1, requireObjectRecord, requireString, rejectUnknownKeysV1, decodeHexNibbleV1, hexLowerV1, hexToBytes, isWhitespaceCharV1 } from "../sdkCoreV1.ts";
-import type { PreparedSubmitProofV1 } from "../sdkCoreV1.ts";
-export { prepareBoundProofMaterialV1 as prepareSubmitProofFlowV1 } from "../sdkCoreV1.ts";
+import type { PreparedBoundProofMaterialV1 as PreparedSubmitProofV1 } from "../sdkCoreV1.ts";
+export type { PreparedBoundProofMaterialV1 as PreparedSubmitProofV1 } from "../sdkCoreV1.ts";
+export { FractalKeyBindingErrorV1 as SubmitProofIntegrationErrorV1, prepareBoundProofMaterialV1 as prepareSubmitProofFlowV1 } from "../sdkCoreV1.ts";
 export interface GenerateSubmitProofRequestV1 {
   programIdBase58: string;
   submitterPubkeyBase58: string;

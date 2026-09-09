@@ -4,7 +4,7 @@ use aura_cli_v1::{
     ProofCommandV1, ProofGenerateArgsV1, SettleArgsV1, SettleBuildPipelineArgsV1, SettleCommandV1,
     SettleGenerateArgsV1, SubmitProofArgsV1, SubmitProofCommandV1, SubmitProofGenerateArgsV1,
 };
-use aura_sdk_v1::prepare_submit_proof_flow_v1;
+use aura_sdk_v1::legacy::prepare_submit_proof_flow_v1;
 use clap::Parser;
 use std::path::{Path, PathBuf};
 use std::process::Command;

@@ -1,4 +1,4 @@
-use aura_sdk_v1::{prepare_submit_proof_flow_v1, AuraSdkErrorV1, PreparedSubmitProofV1};
+use aura_sdk_v1::{legacy::prepare_submit_proof_flow_v1, AuraSdkErrorV1, legacy::PreparedSubmitProofV1};
 use aura_submission_client_v1::{
     prepare_submit_proof_instruction_v1, prepare_submit_proof_transaction_v1,
     PreparedSubmitProofInstructionV1, PreparedSubmitProofTransactionV1,

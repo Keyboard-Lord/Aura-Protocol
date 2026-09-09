@@ -62,11 +62,18 @@ export interface FractalKeyV1 {
   components: [FractalComponentV1, FractalComponentV1, FractalComponentV1];
 }
 
-export interface PreparedSubmitProofV1 {
+export interface PreparedBoundProofMaterialV1 {
   proofMaterial: ProofMaterialV1;
   proofMaterialHash: Uint8Array;
   fractalKey: FractalKeyV1;
   proofHash: Uint8Array;
+}
+
+export interface UdotBundleV2 {
+  proof_hash_hex: string;
+  seal_line: string;
+  crest: string;
+  matrix_sequence: string;
 }
 
 export type UdotVersion = "v2" | "v1-legacy";
@@ -210,12 +217,12 @@ export class FractalKeyV1Error extends Error {
   }
 }
 
-export class SubmitProofIntegrationErrorV1 extends Error {
+export class FractalKeyBindingErrorV1 extends Error {
   readonly code = "VerificationFailed";
 
   constructor(message: string, options?: ErrorOptions) {
     super(message, options);
-    this.name = "SubmitProofIntegrationErrorV1";
+    this.name = "FractalKeyBindingErrorV1";
   }
 }
 
@@ -328,7 +335,7 @@ export async function prepareBoundProofMaterialV1(
   proofBlobBytes: Uint8Array,
   publicInputsBytes: Uint8Array,
   verificationKeyBytes: Uint8Array,
-): Promise<PreparedSubmitProofV1> {
+): Promise<PreparedBoundProofMaterialV1> {
   const subjectBinding = copyBytes32("subjectBindingBytes", subjectBindingBytes);
   const challengeBinding = copyBytes32(
     "freshnessBindingBytes",
@@ -359,7 +366,7 @@ export async function prepareBoundProofMaterialV1(
   }
 
   try {
-    const preparation = await prepareSubmitProofV1(
+    const preparation = await prepareBoundProofReferenceV1(
       subjectBinding,
       challengeBinding,
       proofMaterialHash,
@@ -380,8 +387,66 @@ export async function prepareBoundProofMaterialV1(
   }
 }
 
-/** Legacy Solana preparation adapter; canonical code uses the binding-oriented entry. */
+export async function generateUdotBundleV2(proofHashHex: string): Promise<UdotBundleV2> {
+  const proof_hash_hex = requireCanonicalHashHexV1(
+    requireString(proofHashHex, "proofHashHex"),
+    "proofHashHex",
+  );
+  const derived = await deriveUdotV2(hexToBytes(proof_hash_hex));
+  return {
+    proof_hash_hex,
+    seal_line: derived.sealLine,
+    crest: derived.crest,
+    matrix_sequence: derived.matrixSequence,
+  };
+}
 
+export async function validateUdotBundleV2(
+  value: unknown,
+  expectedProofHashHex: string,
+): Promise<UdotBundleV2> {
+  const expectedHash = requireCanonicalHashHexV1(
+    requireString(expectedProofHashHex, "expectedProofHashHex"),
+    "expectedProofHashHex",
+  );
+  const record = requireObjectRecord(value, "UdotBundleV2");
+  const fields = ["proof_hash_hex", "seal_line", "crest", "matrix_sequence"] as const;
+  const prototype = Object.getPrototypeOf(record);
+  const keys = Reflect.ownKeys(record);
+  if (
+    (prototype !== Object.prototype && prototype !== null) ||
+    keys.length !== fields.length ||
+    fields.some((field) => !Object.hasOwn(record, field))
+  ) {
+    throw new TypeError(`UdotBundleV2 must contain exactly ${fields.join(", ")}`);
+  }
+  const bundle: UdotBundleV2 = {
+    proof_hash_hex: requireCanonicalHashHexV1(
+      requireString(record.proof_hash_hex, "proof_hash_hex"),
+      "proof_hash_hex",
+    ),
+    seal_line: requireString(record.seal_line, "seal_line"),
+    crest: requireString(record.crest, "crest"),
+    matrix_sequence: requireString(record.matrix_sequence, "matrix_sequence"),
+  };
+  if (bundle.proof_hash_hex !== expectedHash) {
+    throw new AuraSdkErrorV1(
+      "UdotBundleHashMismatch",
+      "UDOT bundle proof_hash_hex does not match expected proof hash",
+    );
+  }
+  const expected = await generateUdotBundleV2(expectedHash);
+  for (const field of ["seal_line", "crest", "matrix_sequence"] as const) {
+    if (bundle[field] !== expected[field]) {
+      throw new AuraSdkErrorV1(
+        "UdotArtifactValidationFailed",
+        `UDOT bundle ${field} does not match proof hash`,
+        { cause: new UdotValidationError("Mismatch", `${field} mismatch`) },
+      );
+    }
+  }
+  return bundle;
+}
 
 export async function generateUdotArtifactsV1(
   request: GenerateUdotArtifactsRequestV1,
@@ -853,22 +918,22 @@ function verifyProofMaterialStructure(proofMaterial: ProofMaterialV1): void {
   }
 }
 
-async function prepareSubmitProofV1(
-  subjectPubkeyBytes: Uint8Array,
-  challengeAccountPubkeyBytes: Uint8Array,
+async function prepareBoundProofReferenceV1(
+  subjectBindingBytes: Uint8Array,
+  freshnessBindingBytes: Uint8Array,
   proofMaterialHash: Uint8Array,
 ): Promise<{ fractalKey: FractalKeyV1; proofHash: Uint8Array }> {
   const fractalKey = buildFractalKeyV1(
-    subjectPubkeyBytes,
-    challengeAccountPubkeyBytes,
+    subjectBindingBytes,
+    freshnessBindingBytes,
     proofMaterialHash,
   );
   const proofHash = await proofHashV1(fractalKey);
 
-  await verifyPreSubmitV1(
+  await verifyBoundProofReferenceV1(
     fractalKey,
-    subjectPubkeyBytes,
-    challengeAccountPubkeyBytes,
+    subjectBindingBytes,
+    freshnessBindingBytes,
     proofMaterialHash,
     proofHash,
   );
@@ -910,7 +975,7 @@ async function proofHashV1(fractalKey: FractalKeyV1): Promise<Uint8Array> {
 
 export async function validatePreparedSubmitProofInputV1(
   value: unknown,
-): Promise<PreparedSubmitProofV1> {
+): Promise<PreparedBoundProofMaterialV1> {
   const record = requireObjectRecord(value, "preparedSubmitProof");
   rejectUnknownKeysV1(record, "preparedSubmitProof", [
     "proofMaterial",
@@ -1031,23 +1096,23 @@ export async function validatePreparedSubmitProofInputV1(
   }
 }
 
-async function verifyPreSubmitV1(
+async function verifyBoundProofReferenceV1(
   fractalKey: FractalKeyV1,
-  subjectPubkeyBytes: Uint8Array,
-  challengeAccountPubkeyBytes: Uint8Array,
+  subjectBindingBytes: Uint8Array,
+  freshnessBindingBytes: Uint8Array,
   proofMaterialHash: Uint8Array,
   expectedProofHash: Uint8Array,
 ): Promise<void> {
   try {
     await verifyFractalKeyV1(
       fractalKey,
-      subjectPubkeyBytes,
-      challengeAccountPubkeyBytes,
+      subjectBindingBytes,
+      freshnessBindingBytes,
       proofMaterialHash,
       expectedProofHash,
     );
   } catch (error) {
-    throw new SubmitProofIntegrationErrorV1(
+    throw new FractalKeyBindingErrorV1(
       `fractal key verification failed: ${messageFromError(error)}`,
       { cause: error },
     );
@@ -1798,4 +1863,3 @@ export function isWhitespaceCharV1(value: string): boolean {
 }
 
 // Successor canonical authorization; the v1 account-bound APIs above are legacy.
-

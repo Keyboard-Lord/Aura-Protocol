@@ -2,7 +2,7 @@ use crate::{
     read_json_file, udot_version_label, write_envelope, write_json, write_udot_wire_artifact_text,
     AuraCliErrorV1, CliUdotArtifactKindV1, CliUdotOutputFormatV1, CliUdotVersionV1,
 };
-use aura_sdk_v1::{generate_udot_artifact_bundle_wire_v1, generate_udot_artifacts_v1, parse_udot_artifact_v1, parse_udot_artifact_wire_v1, validate_udot_artifact_v1, validate_udot_artifact_wire_v1, GenerateUdotArtifactBundleWireRequestV1, GenerateUdotArtifactsRequestV1, ParseUdotArtifactRequestV1, UdotArtifactWireV1, ValidateUdotArtifactRequestV1, ValidateUdotArtifactWireRequestV1};
+use aura_sdk_v1::{legacy::generate_udot_artifact_bundle_wire_v1, legacy::generate_udot_artifacts_v1, legacy::parse_udot_artifact_v1, legacy::parse_udot_artifact_wire_v1, legacy::validate_udot_artifact_v1, legacy::validate_udot_artifact_wire_v1, legacy::GenerateUdotArtifactBundleWireRequestV1, legacy::GenerateUdotArtifactsRequestV1, legacy::ParseUdotArtifactRequestV1, legacy::UdotArtifactWireV1, legacy::ValidateUdotArtifactRequestV1, legacy::ValidateUdotArtifactWireRequestV1};
 use clap::{ArgGroup, Args, Subcommand};
 use std::io::Write;
 use std::path::PathBuf;

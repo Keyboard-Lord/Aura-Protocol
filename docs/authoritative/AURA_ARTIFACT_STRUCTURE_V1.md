@@ -11,9 +11,15 @@
 
 Implementation:
 
-- Rust: `crates/aura_sdk_v1/src/lib.rs`
-- TypeScript: `packages/aura_sdk_v1_ts/src/sdkCoreV1.ts`
+- Rust: `prepare_bound_proof_material_v1` in `crates/aura_sdk_v1/src/lib.rs`
+- TypeScript: `prepareBoundProofMaterialV1` in `packages/aura_sdk_v1_ts/src/sdkCoreV1.ts`
 - Frozen preparation fixtures: `fixtures/v1/canonical_prepare/*`
+
+Both return `PreparedBoundProofMaterialV1` using subject and freshness binding bytes.
+Preparation binds bytes; it does not verify an Aura proof or grant authorization.
+The [authorization owner](AURA_AUTHORIZATION_LINEAGE_V1.md) supplies and validates
+the approved identity and nonce. Historical account-oriented preparation names
+are accessible only through explicit `legacy` entry points.
 
 ## Artifact Chain
 

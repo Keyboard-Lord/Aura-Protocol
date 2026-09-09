@@ -1,7 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { AuraSdkErrorV1, generateUdotArtifactBundleWireV1, generateUdotArtifactsV1, parseUdotArtifactBundleWireV1, parseUdotArtifactV1, parseUdotArtifactWireV1, UdotHashError, UdotParseError, UdotValidationError, validateUdotArtifactWireV1, validateUdotArtifactV1 } from "../src/index.ts";
+import { AuraSdkErrorV1, UdotHashError, UdotParseError, UdotValidationError } from "../src/index.ts";
+import { generateUdotArtifactBundleWireV1, generateUdotArtifactsV1, parseUdotArtifactBundleWireV1, parseUdotArtifactV1, parseUdotArtifactWireV1, validateUdotArtifactWireV1, validateUdotArtifactV1 } from "../src/legacy/udot.ts";
 import {
   assertUdotFixtureSchemaV1,
   loadUdotTestVectorsV1,

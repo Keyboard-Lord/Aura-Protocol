@@ -38,19 +38,20 @@ run_with_warning_gate cargo test -p aura_l2_local_settlement_v1 --target-dir "$t
 printf '\n[7/12] Local-chain integration tests\n'
 run_with_warning_gate cargo test -p aura_l2_local_chain_v0 --target-dir "$target_dir" --offline
 
-printf '\n[8/12] Canonical pipeline exact runner with execution, attestation, burn, accounting, and ledger pins\n'
+printf '\n[8/12] Local execution runner with attestation, burn, accounting, and ledger pins\n'
 bash scripts/run_canonical_pipeline_v1.sh
 
 printf '\n[9/12] TypeScript SDK v0 canonical bridge tests\n'
 run_with_warning_gate node --test packages/aura_sdk_v0_ts/src/index.test.ts packages/aura_sdk_v0_ts/src/cat_map_fixture_v1.test.ts
 
-printf '\n[10/12] TypeScript SDK v1 canonical pipeline object tests\n'
-run_with_warning_gate npm test --prefix packages/aura_sdk_v1_ts -- tests/canonical_pipeline_v1.test.ts tests/prepared_proof_pipeline_v1.test.ts
+printf '\n[10/12] Canonical v2 authorization and SDK public boundary tests\n'
+run_with_warning_gate node --test packages/aura_sdk_v1_ts/tests/authorization_v2.test.ts packages/aura_sdk_v1_ts/tests/public_boundary_v2.test.ts
 
 printf '\n[11/12] Storm hash + message-root hardening invariants\n'
 bash scripts/validate_storm_hash_quantum_hardening_v1.sh
 
-printf '\n[12/12] Bitcoin anchor vectors and transport unit tests\n'
+printf '\n[12/12] Bitcoin workspace boundary, vectors, durable authorization and transport tests\n'
+node scripts/verify_bitcoin_boundary_v1.mjs
 bash scripts/verify_bitcoin_foundation_v1.sh
 
 printf '\nAura active foundation verification passed.\n'

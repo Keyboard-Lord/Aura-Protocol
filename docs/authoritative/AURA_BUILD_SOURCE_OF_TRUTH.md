@@ -119,7 +119,8 @@ Active behavior is limited to:
 - `MESSAGE_ROOT`
 - `STORM_V1_1`
 - `TRACE_ROOT`
-- the canonical `StarkProofEnvelopeV1` wire
+- the existing canonical Storm witness-backend proof bytes owned by `AURA_STARK_SPEC_V1.md`
+- the canonical BIP340 `AuthorizationEnvelopeV2` boundary
 - the canonical `BitcoinAnchorRequestV1` wire
 - the local ledger, burn, and settlement fixtures still exercised by `scripts/verify_active_foundation.sh`
 
@@ -127,30 +128,23 @@ Active behavior is limited to:
 
 `PROOF_MATERIAL_V2` MUST NOT define active behavior.
 
-## Cryptographic Hash Usage Matrix
+## Cryptographic ownership map
 
-The protocol uses hash functions with EXACTLY these semantics:
+This registry identifies owners; it does not restate competing preimages.
 
-| Layer | Hash Function | Purpose | Document |
-|-------|---------------|---------|----------|
-| **L0 Identity** | **SHA3-512** | Canonical identity surface: `H_521(m) = Reduce_N(SHA3-512(m))` | ROOT AUTHORITY |
-| **L0 Text** | SHA3-512 | Text mode canonicalization verification | HASH_V2 |
-| **L1 Storm Init** | SHA3-512 | `y0 = Reduce_N(SHA3-512(x0 || "init"))` | ROOT AUTHORITY |
-| **L1 Storm Params** | SHA3-512 | Parameter derivation with domain separation (bit-packing) | DERIVATION_FUNCTIONS_V1 |
-| **L1 Storm Injection** | SHA3-512 | Entropy: `(φ_n, ψ_n)` from `StormV1()` | ROOT AUTHORITY |
-| **L2 Trace Commitment** | **SHA3-256** | Merkle leaf/parent hashing: `leaf_n = SHA3-256(row_bytes)` | TRACE_COMMITMENT_V1 |
-| **L2 Prover Binding** | **SHA3-256** | Side/context hashes for compact public inputs | PROVER_BINDING_V1 |
-| **L3 Proof Envelope** | SHA3-512 | Final artifact derivation (post-proof) | ROOT AUTHORITY |
-| **L3 Export Hash** | SHA3-512 | External compatibility: `EXPORT_HASH = SHA3-512(...)` | HASH_V2 |
-| **L5 UDOT** | **SHA-256** | Glyph derivation from proof_hash (presentation only) | UDOT_SPEC_V1 |
-| **Legacy V1** | SHA-256 | Historical identity (FROZEN) | HASH_V1 |
+| Concept | Construction | Owner |
+| --- | --- | --- |
+| Active field-valued hash primitive | Single SHA3-512, big-endian field reduction | `AURA_HASH_V2.md` |
+| Storm initialization, parameters and forcing | The same primitive with exact caller domain/payload bytes | `AURA_DERIVATION_FUNCTIONS_V1.md` |
+| Ordered trace commitment | SHA3-256 leaves and parents | `AURA_TRACE_COMMITMENT_V1.md` |
+| Compact input binding | Domain-separated SHA3-256 | `AURA_PROVER_BINDING_V1.md` |
+| Proof material and FractalKey proof reference | Existing SHA256 canonical-byte hashing | `AURA_ARTIFACT_STRUCTURE_V1.md` |
+| BIP340 authorization message | Tagged SHA256 | `AURA_AUTHORIZATION_LINEAGE_V1.md` |
+| UDOT presentation | Existing SHA256 glyph derivation | `AURA_UDOT_SPEC_V1.md` |
+| Preserved historical message hash | Existing SHA256 framing | `AURA_HASH_V1.md` |
 
-**CRITICAL RULES:**
-- Identity surface MUST use SHA3-512 ONLY
-- Trace commitment MUST use SHA3-256 per TRACE_COMMITMENT_V1
-- Merkle construction MUST use SHA3-256 for leaf/parent hashing
-- UDOT uses SHA-256 for presentation-layer glyph derivation (non-canonical)
-- Any deviation from this matrix results in fail-closed rejection
+There is no active `EXPORT_HASH` alternate proof identifier or separate 512+9-bit
+parameter hash construction. Research hashes do not enter canonical admission.
 
 ## Compression Rule
 

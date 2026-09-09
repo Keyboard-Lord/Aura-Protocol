@@ -1,8 +1,7 @@
 //! Canonical v2 authorization. Legacy account-bound objects are not accepted here.
 use aura_bitcoin_v1::{BitcoinAnchorRequestV1, BitcoinNetworkV1};
-use aura_fractal_key_v1::{FractalKeyBuilderInputV1, FractalKeyV1};
+use crate::prepare_bound_proof_material_v1;
 use aura_intent_lineage_v1::{build_storm_air_public_inputs_v1, verify_storm_air_real_v1, StormAirRealProofArtifactV1, StormClaim521V1};
-use aura_proof_material_v1::ProofMaterialV1;
 use rusqlite::{params, Connection, OpenFlags, OptionalExtension, TransactionBehavior};
 use secp256k1::{schnorr::Signature, Secp256k1, XOnlyPublicKey};
 use serde::{Deserialize, Serialize};
@@ -102,11 +101,10 @@ fn verify_bound_proof(
         || claim.context_bytes_v1[145..177] != subject {
         return Err("proof context and authorization lineage mismatch".into());
     }
-    let material = ProofMaterialV1::build(&artifact.proof_bytes, &inputs.canonical_bytes(), &[]);
-    let key = FractalKeyV1::build(FractalKeyBuilderInputV1 {
-        subject_binding: subject, challenge_binding: nonce, proof_material_hash: material.proof_material_hash(),
-    });
-    if key.proof_hash() != decode_hex_v2::<32>(&envelope.proof_hash_hex)? {
+    let prepared = prepare_bound_proof_material_v1(
+        subject, nonce, &artifact.proof_bytes, &inputs.canonical_bytes(), &[],
+    )?;
+    if prepared.proof_hash != decode_hex_v2::<32>(&envelope.proof_hash_hex)? {
         return Err("proof material binding mismatch".into());
     }
     Ok(())

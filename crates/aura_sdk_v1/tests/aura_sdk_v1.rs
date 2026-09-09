@@ -1,6 +1,6 @@
-use aura_fractal_key_integration_v1::prepare_submit_proof_v1;
+use aura_fractal_key_integration_v1::prepare_bound_proof_reference_v1;
 use aura_proof_material_v1::ProofMaterialV1;
-use aura_sdk_v1::{prepare_submit_proof_flow_v1, PreparedSubmitProofV1};
+use aura_sdk_v1::{prepare_bound_proof_material_v1, PreparedBoundProofMaterialV1};
 use std::fs;
 use std::path::{Path, PathBuf};
 
@@ -69,7 +69,7 @@ fn decode_nibble(byte: u8) -> u8 {
     }
 }
 
-fn expected_prepared_flow() -> PreparedSubmitProofV1 {
+fn expected_prepared_flow() -> PreparedBoundProofMaterialV1 {
     let fixture = canonical_prepare_fixture();
     let proof_material = ProofMaterialV1::build(
         &fixture.proof_blob,
@@ -78,9 +78,9 @@ fn expected_prepared_flow() -> PreparedSubmitProofV1 {
     );
     let proof_material_hash = proof_material.proof_material_hash();
     let preparation =
-        prepare_submit_proof_v1(fixture.subject, fixture.challenge, proof_material_hash).unwrap();
+        prepare_bound_proof_reference_v1(fixture.subject, fixture.challenge, proof_material_hash).unwrap();
 
-    PreparedSubmitProofV1 {
+    PreparedBoundProofMaterialV1 {
         proof_material,
         proof_material_hash,
         fractal_key: preparation.fractal_key,
@@ -89,9 +89,9 @@ fn expected_prepared_flow() -> PreparedSubmitProofV1 {
 }
 
 #[test]
-fn prepare_submit_proof_flow_v1_matches_existing_layers() {
+fn prepare_bound_proof_material_v1_matches_existing_layers() {
     let fixture = canonical_prepare_fixture();
-    let prepared = prepare_submit_proof_flow_v1(
+    let prepared = prepare_bound_proof_material_v1(
         fixture.subject,
         fixture.challenge,
         &fixture.proof_blob,
@@ -104,9 +104,9 @@ fn prepare_submit_proof_flow_v1_matches_existing_layers() {
 }
 
 #[test]
-fn prepare_submit_proof_flow_v1_is_deterministic() {
+fn prepare_bound_proof_material_v1_is_deterministic() {
     let fixture = canonical_prepare_fixture();
-    let prepared_a = prepare_submit_proof_flow_v1(
+    let prepared_a = prepare_bound_proof_material_v1(
         fixture.subject,
         fixture.challenge,
         &fixture.proof_blob,
@@ -114,7 +114,7 @@ fn prepare_submit_proof_flow_v1_is_deterministic() {
         &fixture.verification_key,
     )
     .unwrap();
-    let prepared_b = prepare_submit_proof_flow_v1(
+    let prepared_b = prepare_bound_proof_material_v1(
         fixture.subject,
         fixture.challenge,
         &fixture.proof_blob,
@@ -132,9 +132,9 @@ fn prepare_submit_proof_flow_v1_is_deterministic() {
 }
 
 #[test]
-fn prepare_submit_proof_flow_v1_matches_canonical_cross_surface_hashes() {
+fn prepare_bound_proof_material_v1_matches_canonical_cross_surface_hashes() {
     let fixture = canonical_prepare_fixture();
-    let prepared = prepare_submit_proof_flow_v1(
+    let prepared = prepare_bound_proof_material_v1(
         fixture.subject,
         fixture.challenge,
         &fixture.proof_blob,

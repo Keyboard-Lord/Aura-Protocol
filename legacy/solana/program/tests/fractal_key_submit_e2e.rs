@@ -1,4 +1,4 @@
-use aura_fractal_key_integration_v1::prepare_submit_proof_v1;
+use aura_fractal_key_integration_v1::legacy::prepare_submit_proof_v1;
 use aura_protocol::{process_instruction, ChallengeAccount, ProofRecord};
 use solana_program_test::{processor, BanksClientError, ProgramTest, ProgramTestContext};
 use solana_sdk::{

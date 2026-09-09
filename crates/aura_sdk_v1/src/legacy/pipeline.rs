@@ -14,11 +14,11 @@ use super::submission::{
     build_submit_proof_request_wire_v1, BuildSubmitProofRequestWireRequestV1,
     SubmitProofRequestWireV1,
 };
-use crate::{AuraSdkErrorV1, PreparedSubmitProofV1};
+use crate::{AuraSdkErrorV1, legacy::PreparedSubmitProofV1};
 use serde::{Deserialize, Serialize};
 
 /// ```compile_fail
-/// use aura_sdk_v1::{legacy::BuildSettlementPipelineFromPreparedProofRequestV1, PreparedSubmitProofV1};
+/// use aura_sdk_v1::{legacy::BuildSettlementPipelineFromPreparedProofRequestV1, legacy::PreparedSubmitProofV1};
 ///
 /// let prepared: PreparedSubmitProofV1 = todo!();
 /// let _ = BuildSettlementPipelineFromPreparedProofRequestV1 {

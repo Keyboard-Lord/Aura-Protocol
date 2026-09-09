@@ -42,8 +42,8 @@ fn decode_nibble(byte: u8) -> u8 {
     }
 }
 
-fn canonical_prepared_submit_proof_v1() -> aura_sdk_v1::PreparedSubmitProofV1 {
-    aura_sdk_v1::prepare_submit_proof_flow_v1(
+fn canonical_prepared_submit_proof_v1() -> aura_sdk_v1::legacy::PreparedSubmitProofV1 {
+    aura_sdk_v1::legacy::prepare_submit_proof_flow_v1(
         decode_hex_32(&load_canonical_prepare_hex("subject_pubkey.hex")),
         decode_hex_32(&load_canonical_prepare_hex("challenge_account_pubkey.hex")),
         &fs::read(canonical_prepare_fixture_path("proof_blob.bin")).unwrap(),

@@ -1,3 +1,4 @@
+//! Versioned UDOT compatibility and fixed V2 wallet rendering. Canonical bundle: udot_bundle_v2.
 use crate::{AuraSdkErrorV1, UdotArtifactKind, UdotVersion};
 use aura_udot_v2::{
     aura_hash_from_wallet_visual_v1 as aura_hash_from_wallet_visual_inner,
@@ -8,7 +9,7 @@ use aura_udot_v2::{
 use serde::{Deserialize, Serialize};
 
 /// ```compile_fail
-/// use aura_sdk_v1::GenerateUdotArtifactsRequestV1;
+/// use aura_sdk_v1::legacy::GenerateUdotArtifactsRequestV1;
 ///
 /// let _ = GenerateUdotArtifactsRequestV1 {
 ///     aura_hash_hex: "0000000000000000000000000000000000000000000000000000000000000000",

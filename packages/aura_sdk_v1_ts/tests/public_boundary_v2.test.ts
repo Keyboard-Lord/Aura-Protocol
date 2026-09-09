@@ -12,4 +12,7 @@ test("canonical SDK entry exposes v2 authorization and isolates retired wires", 
   assert.equal(typeof sdk.signAuthorizationV2, "function");
   assert.equal(typeof sdk.verifyAuthorizationMaterialBindingV2, "function");
   assert.equal(typeof sdk.prepareBoundProofMaterialV1, "function");
+  assert.equal(typeof sdk.FractalKeyBindingErrorV1, "function");
+  assert.equal(Object.hasOwn(sdk, "SubmitProofIntegrationErrorV1"), false);
+  assert.equal(sdk.legacy.SubmitProofIntegrationErrorV1, sdk.FractalKeyBindingErrorV1);
 });

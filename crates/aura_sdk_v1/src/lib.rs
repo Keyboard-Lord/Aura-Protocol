@@ -1,32 +1,27 @@
-//! Rust SDK for the frozen Aura v1 proof-preparation flow.
+//! Chain-neutral proof preparation, canonical authorization and Aura presentation.
 
 pub mod authorization;
 pub mod legacy;
 mod udot;
+mod udot_bundle_v2;
 
-use aura_fractal_key_integration_v1::{prepare_submit_proof_v1, SubmitProofIntegrationErrorV1};
+use aura_fractal_key_integration_v1::{prepare_bound_proof_reference_v1, FractalKeyBindingErrorV1};
 use aura_fractal_key_v1::FractalKeyV1;
 use aura_proof_material_v1::{ProofMaterialV1, ProofMaterialV1Error};
 use core::fmt;
 
-pub use aura_udot_v2::{
-    UdotArtifactKind, UdotHashError, UdotParseError, UdotValidationError, UdotVersion,
-};
+use aura_udot_v2::{UdotArtifactKind, UdotVersion};
+pub use aura_udot_v2::{UdotHashError, UdotParseError, UdotValidationError};
 pub use udot::{
-    generate_udot_artifact_bundle_wire_v1, generate_udot_artifacts_v1,
-    generate_wallet_visual_v1,
-    parse_udot_artifact_bundle_wire_v1, parse_udot_artifact_v1, parse_udot_artifact_wire_v1,
-    parse_wallet_visual_v1, proof_hash_hex_from_wallet_visual_v1,
-    validate_udot_artifact_bundle_wire_v1, validate_udot_artifact_v1,
-    validate_udot_artifact_wire_v1, validate_wallet_visual_v1,
-    GenerateUdotArtifactBundleWireRequestV1,
-    GenerateUdotArtifactsRequestV1, GeneratedUdotArtifactsV1, ParseUdotArtifactRequestV1,
-    UdotArtifactBundleWireV1, UdotArtifactEnvelopeV1, UdotArtifactWireV1,
-    ValidateUdotArtifactRequestV1, ValidateUdotArtifactWireRequestV1,
+    generate_wallet_visual_v1, parse_wallet_visual_v1,
+    proof_hash_hex_from_wallet_visual_v1, validate_wallet_visual_v1,
+};
+pub use udot_bundle_v2::{
+    generate_udot_bundle_v2, validate_udot_bundle_v2, UdotBundleV2, UdotBundleV2Error,
 };
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub struct PreparedSubmitProofV1 {
+pub struct PreparedBoundProofMaterialV1 {
     pub proof_material: ProofMaterialV1,
     pub proof_material_hash: [u8; 32],
     pub fractal_key: FractalKeyV1,
@@ -36,7 +31,7 @@ pub struct PreparedSubmitProofV1 {
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum AuraSdkErrorV1 {
     ProofMaterialVerificationFailed(ProofMaterialV1Error),
-    SubmitProofPreparationFailed(SubmitProofIntegrationErrorV1),
+    SubmitProofPreparationFailed(FractalKeyBindingErrorV1),
     UdotHashNormalizationFailed(UdotHashError),
     UdotArtifactParseFailed(UdotParseError),
     UdotArtifactValidationFailed(UdotValidationError),
@@ -118,13 +113,20 @@ impl std::error::Error for AuraSdkErrorV1 {
     }
 }
 
-pub fn prepare_submit_proof_flow_v1(
-    subject_pubkey_bytes: [u8; 32],
-    challenge_account_pubkey_bytes: [u8; 32],
+/// Bind proof material using existing canonical bytes. This does not verify the
+/// Aura proof or authorize an action; canonical admission owns those checks.
+/// Historical account-oriented names are available only under `legacy`.
+///
+/// ```compile_fail
+/// use aura_sdk_v1::prepare_submit_proof_flow_v1;
+/// ```
+pub fn prepare_bound_proof_material_v1(
+    subject_binding_bytes: [u8; 32],
+    freshness_binding_bytes: [u8; 32],
     proof_blob_bytes: &[u8],
     public_inputs_bytes: &[u8],
     verification_key_bytes: &[u8],
-) -> Result<PreparedSubmitProofV1, AuraSdkErrorV1> {
+) -> Result<PreparedBoundProofMaterialV1, AuraSdkErrorV1> {
     let proof_material = ProofMaterialV1::build(
         proof_blob_bytes,
         public_inputs_bytes,
@@ -141,14 +143,14 @@ pub fn prepare_submit_proof_flow_v1(
         )
         .map_err(AuraSdkErrorV1::ProofMaterialVerificationFailed)?;
 
-    let preparation = prepare_submit_proof_v1(
-        subject_pubkey_bytes,
-        challenge_account_pubkey_bytes,
+    let preparation = prepare_bound_proof_reference_v1(
+        subject_binding_bytes,
+        freshness_binding_bytes,
         proof_material_hash,
     )
     .map_err(AuraSdkErrorV1::SubmitProofPreparationFailed)?;
 
-    Ok(PreparedSubmitProofV1 {
+    Ok(PreparedBoundProofMaterialV1 {
         proof_material,
         proof_material_hash,
         fractal_key: preparation.fractal_key,

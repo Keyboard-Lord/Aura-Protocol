@@ -1,380 +1,90 @@
 # AURA_SINGLE_PATH_COMMITMENT_SYSTEM_V2
 
-**Classification:** `ROOT AUTHORITY`  
-**Layer:** `L0-L5`  
-**Purpose:** Define the complete canonical protocol specification  
-**Status:** `ACTIVE`  
-**Canonical Reference:** AURA_PROTOCOL_LITEPAPER.pdf
-
-> **ACTIVE AUTHORITY — ROOT PROTOCOL DEFINITION**
-> This document is the single source of truth for Aura protocol semantics.
-> It defines the exclusive identity surface, STORM recurrence, trace commitment,
-> proof structure, and settlement semantics. When this document conflicts with
-> any other authoritative document, this document governs.
-
-## Classification Detail
-- Type: Protocol Specification
-- Layer: Canonical Core (L0-L5)
-- Status: Active Root Authority
-- Replaces: All prior multi-hash / multi-path identity surfaces
-
----
-
-## 0. Abstract
-
-Aura is a commitment-native cryptographic protocol that defines a single, deterministic pipeline for transforming arbitrary input data into a provable, verifiable, and settlement-ready artifact.
-
-The system enforces an **exclusive identity surface** through a single canonical hash function \( H_{521} \), eliminating all representational ambiguity at the lowest layer. All inputs are reduced to a unique message root, which seeds a deterministic nonlinear recurrence (“Storm”) over the finite field:
-
-\[
-\mathbb{F}_N, \quad N = 2^{521} - 1
-\]
-
-The system evolves state via a constrained pair-state recurrence with deterministic entropy injection, producing an ordered execution trace committed via a Merkle root. This trace is proven using a fixed AIR (Algebraic Intermediate Representation) under a STARK proof system.
-
-Each pipeline stage emits exactly one artifact. Any deviation results in a fail-closed rejection with full economic burn. The system guarantees:
-
-- One input → one identity → one trace → one proof → one settlement object  
-- No alternate paths, encodings, or equivalence classes  
-- Deterministic replay across all implementations  
-
----
-
-## 1. Exclusive Identity Surface
-
-### 1.1 Definition
-
-Aura defines a single canonical identity function:
-
-\[
-H_{521}(m) = \text{Reduce}_N\big(\text{SHA3-512}(m)\big)
-\]
-
-Where:
-
-- \( m \) = canonical input bytes  
-- SHA3-512 output is interpreted as a big-endian integer  
-- reduced into field \( \mathbb{F}_N \)
-
-\[
-\text{Reduce}_N(x) = x \bmod (2^{521} - 1)
-\]
-
----
-
-### 1.2 Canonical Message Root
-
-\[
-\text{MESSAGE\_ROOT} = H_{521}(\text{domain} \parallel \text{length} \parallel m)
-\]
-
----
-
-### 1.3 Identity Invariant
-
-The following is strictly enforced:
-
-- \( H_{521} \) is the **only permitted identity function**
-- no layer may:
-  - re-hash
-  - re-frame
-  - introduce alternate digests
-- any deviation results in immediate rejection
-
----
-
-## 2. Storm Initialization
-
-The Storm initial state is derived deterministically from the canonical message root:
-
-\[
-x_0 = \text{MESSAGE\_ROOT}
-\]
-
-\[
-y_0 = \text{Reduce}_N\big(\text{SHA3-512}(x_0 \parallel \text{"init"})\big)
-\]
-
-This initialization step binds canonical identity into the execution system without redefining the identity function itself.
-
----
-
-## 3. Storm Recurrence (Canonical Execution)
-
-### 3.1 Field
-
-\[
-\mathbb{F}_N, \quad N = 2^{521} - 1
-\]
-
-### 3.2 Recurrence
-
-For step \( n \):
-
-\[
-x_{n+1} = x_n^2 - y_n^2 + a + \phi_n \pmod{N}
-\]
-
-\[
-y_{n+1} = 2x_n y_n + b + \psi_n \pmod{N}
-\]
-
-### 3.3 Entropy Injection
-
-\[
-(\phi_n, \psi_n) = \text{StormV1}(seed, context, n)
-\]
-
-\[
-\phi_n = \text{Reduce}_N(H(D_\phi \parallel seed \parallel context \parallel n))
-\]
-
-\[
-\psi_n = \text{Reduce}_N(H(D_\psi \parallel seed \parallel context \parallel n))
-\]
-
-Where:
-
-- \( H = \) SHA3-512
-- \( D_\phi, D_\psi \) = domain separators
-
-### 3.4 Execution Invariant
-
-- Fully deterministic  
-- No randomness  
-- Entropy is reproducible  
-- Each state has exactly one successor for fixed execution inputs and step index.
-  A unique predecessor is not guaranteed; see the non-injectivity note in
-  [STORM_V1_1](AURA_STORM_RECURSION_V1_1.md#determinism).
-
----
-## 3.5 System Constants
-
-The system defines fixed global constants:
-
-- \( a \in \mathbb{F}_N \)
-- \( b \in \mathbb{F}_N \)
-- \( seed \in \mathbb{F}_N \)
-- \( context = \text{"AURA_V2_CANONICAL"} \)
-
-These values are constant across all implementations and MUST NOT be modified.
-
-Any deviation results in consensus failure.
-
-## 4. Trace Commitment
-
-The ordered trace:
-
-\[
-T = \{(x_0, y_0), (x_1, y_1), ..., (x_n, y_n)\}
-\]
-
-Is committed via:
-
-\[
-\text{TRACE\_ROOT} = \text{MerkleRoot}(T)
-\]
-
----
-
-## 5. AIR (Algebraic Intermediate Representation)
-
-### 5.1 Transition Constraints
-
-For all \( n \):
-
-\[
-x_{n+1} = x_n^2 - y_n^2 + a + \phi_n
-\]
-\[
-y_{n+1} = 2x_n y_n + b + \psi_n
-\]
-
----
-
-### 5.2 Boundary Constraints
-
-- Initial state:
-
-\[
-x_0 = \text{MESSAGE\_ROOT}
-\]
-
-\[
-y_0 = \text{Reduce}_N\big(\text{SHA3-512}(x_0 \parallel \text{"init"})\big)
-\]
-
-- Final commitment:
-
-\[
-\text{TRACE\_ROOT} = \text{MerkleRoot}(T)
-\]
-
----
-
-### 5.3 Consistency Constraints
-
-- Entropy must match:
-\[
-\phi_n, \psi_n = \text{StormV1}(seed, context, n)
-\]
-
-- No skipped steps  
-- No alternate transitions  
-
----
-
-## 6. STARK Proof
-
-The system generates:
-
-\[
-\pi = \text{STARK}(T, \text{AIR})
-\]
-
-Guarantees:
-
-- Completeness  
-- Soundness  
-- Zero-knowledge (optional configuration)  
-
----
-
-## 7. Artifact Derivation Chain
-
-The system enforces a single derivation chain:
-```text
-m
-→ MESSAGE_ROOT
-→ (x0, y0)
-→ STORM_TRACE T
-→ TRACE_ROOT
-→ STARK_PROOF π
-→ SETTLEMENT_OBJECT
-```
-
-Each step:
-
-- deterministic  
-- non-branching  
-- non-optional  
-
-
----
-
-## 8. Settlement Object
-
-The final settlement request is the Bitcoin proof-reference anchor owned by
-[AURA_REPORT_CONTRACT_V1](AURA_REPORT_CONTRACT_V1.md). It carries no embedded
-upstream proof, message, trace, burn, or authorization objects. The settlement
-adapter preserves the proof reference and does not redefine its derivation.
-
----
-
-## 9. Failure Classes and Enforcement
-
-| Failure | Layer | Condition | Result |
-|--------|------|----------|--------|
-| IdentityMismatch | L0 | Invalid hash | Reject |
-| StateDerivationFailure | L1 | Bad init | Reject |
-| TraceInvalid | L1 | Transition violation | Reject |
-| EntropyMismatch | L1 | Storm mismatch | Reject |
-| ProofInvalid | L2 | STARK fails | Reject |
-| SettlementMismatch | L3 | Output invalid | Reject |
-
----
-
-## 10. Economic Burn Enforcement
-
-For any failure:
-
-- Full burn is applied  
-- No partial settlement  
-- No recovery path  
-
-\[
-\text{burn} = f(\text{request size, trace length, proof type})
-\]
-
----
-
-## 11. System Invariants
-
-1. Single identity function \( H_{521} \)  
-2. Single execution path  
-3. Single valid trace  
-4. Single valid proof  
-5. Single settlement object  
-
----
-
-## 12. Security Properties
-
-- Collision resistance inherited from SHA3-512  
-- Field embedding prevents structural attacks  
-- Deterministic entropy prevents manipulation  
-- STARK ensures verifiable execution  
-- No alternate paths eliminates ambiguity attacks  
-
----
-
-## 13. Determinism Guarantee
-
-Given identical input:
-
-\[
-\text{Output} = \text{identical across all implementations}
-\]
-
----
-
-## 14. Conclusion
-
-Aura enforces a strict single-path commitment model in which identity, execution, proof, and settlement are bound into one deterministic pipeline.
-
-The system eliminates:
-
-- representational ambiguity  
-- multi-path execution  
-- identity drift  
-
-And replaces them with:
-
-- canonical identity  
-- constrained execution  
-- provable correctness  
-- fail-closed settlement  
-
-This establishes Aura as a deterministic, commitment-native, post-quantum-aligned system for verifiable computation and settlement.
-
-## 15. Canonical Path Theorem
-
-Given input \( m \), there exists exactly one valid execution path:
-
-\[
-m \rightarrow \text{MESSAGE\_ROOT} \rightarrow (x_0, y_0) \rightarrow T \rightarrow \pi \rightarrow S
-\]
-
-No alternate representation or execution path can produce a valid settlement object.
-
-## 16. Post-Proof Artifact Derivation
-
-Following proof generation, the system derives a canonical artifact identity:
-
-Let:
-
-P := STARK_PROOF
-
-M := SHA3-512(P)
-
-K := SHA3-512(M || context)
-
-H := SHA3-512(K)
-
-FINAL_ARTIFACT := Φ(H)
-
-### Invariant
-
-- FINAL_ARTIFACT is the only externally valid representation
-- STARK_PROOF alone is not a settlement identity
-- any mismatch between proof and derived artifact results in rejection
+**Classification:** `ROOT AUTHORITY`
+**Layer:** `L0-L5`
+**Purpose:** Define protocol boundaries and direct each concept to its single owner
+**Status:** `ACTIVE; IMPLEMENTATION LIMITS EXPLICIT BELOW`
+
+The [registry](AURA_BUILD_SOURCE_OF_TRUTH.md) owns document membership, precedence
+and concept ownership. This root establishes protocol invariants; the linked
+owners define the exact encodings and algorithms. Repository names and historical
+claims do not override implemented, tested cryptographic bytes.
+
+## Canonical execution and proof identity
+
+Aura preserves one deterministic execution path for fixed canonical Storm inputs.
+[Hash construction](AURA_HASH_V2.md), [field arithmetic](AURA_FIELD_ARITHMETIC_V1.md),
+[derivations](AURA_DERIVATION_FUNCTIONS_V1.md),
+[Storm recurrence](AURA_STORM_RECURSION_V1_1.md),
+[trace layout](AURA_TRACE_LAYOUT_V1.md) and
+[trace commitment](AURA_TRACE_COMMITMENT_V1.md) each have one owner.
+
+Storm's initial x coordinate is derived from side A and its initial y coordinate
+from side B using their existing domain-separated derivations. It is not initialized
+by assigning `x_0 = MESSAGE_ROOT` and hashing x to obtain y. No generic message-to-side
+adapter is implied by this root. Message identity and proof reference are different
+concepts; neither may silently substitute for the other.
+
+[Prover binding](AURA_PROVER_BINDING_V1.md) owns compact public inputs and their
+relationship to the claim. [The proof boundary](AURA_STARK_SPEC_V1.md) owns the
+existing serialized proof and verification requirements. [Artifact derivation](AURA_ARTIFACT_STRUCTURE_V1.md)
+owns ProofMaterial, FractalKey and `proof_hash`. Its existing SHA256 bindings remain
+unchanged; SHA3-based Storm derivations do not authorize replacing those hashes.
+[UDOT](AURA_UDOT_SPEC_V1.md) presents the same proof reference without introducing
+another identifier.
+
+Forward determinism does not imply an injective recurrence. A terminal state alone
+does not uniquely identify an arbitrary predecessor or trace. The complete input
+binding and ordered trace commitment remain necessary. Field size or deterministic
+forcing alone does not establish resistance to structural or quantum attacks.
+
+## Single pipeline and accepted action
+
+[The canonical pipeline](AURA_CANONICAL_PIPELINE_V1.md) owns stage dependencies.
+Actual proof bytes precede material hashing; authorization signs the resulting
+bound proof reference. A shape-valid envelope cannot replace actual proof verification.
+
+[Authorization](AURA_AUTHORIZATION_LINEAGE_V1.md) owns the approved BIP340 v2 envelope,
+subject/intent/nonce binding and durable replay acceptance. Same-action retry and
+reservation recovery follow that owner. Nonce uniqueness is scoped to a coordinated
+journal, not claimed globally across independent authorizers.
+
+[The report contract](AURA_REPORT_CONTRACT_V1.md) owns the approved Bitcoin OP_RETURN
+request, output validation and observation boundary. The anchor carries the proof
+reference. Bitcoin inclusion does not itself verify the off-chain Aura proof or
+guarantee its availability. A reorg changes confirmation, not nonce reservation.
+
+Canonical entry rejects unsupported versions, malformed encodings and unexpected
+fields. Downstream authorization and settlement wires reference upstream identity;
+they do not embed duplicate proof/claim/UDOT objects. Historical Solana wires and
+cat-map compatibility surfaces are explicit legacy material, never implicit
+successor authorization input.
+
+## Verification capabilities and limits
+
+The active nonlinear Storm backend transports a witness and verifies execution by
+replay. It is not currently a succinct zero-knowledge STARK. The retained Winterfell
+cat-map backend proves its own historical relation; it must not be represented as
+a proof of nonlinear Storm. This root does not authorize substituting that relation
+or modifying Storm to fit it. A future proof backend requires its own reviewed
+implementation and validation while preserving the approved semantic boundary.
+
+Core determinism applies to fixed canonical inputs and exact derivation bytes.
+Cryptographic nonce generation, signature auxiliary randomness, durable journal
+state, transaction funding and live chain observation are explicit operational
+steps. Their variability does not create new canonical proof identities.
+
+## Economics and completion boundary
+
+[Ledger and burn](AURA_LEDGER_AND_BURN_V1.md),
+[failure classes](AURA_FAILURE_CLASSES_V1.md) and
+[continuous settlement](AURA_CONTINUOUS_SETTLEMENT_V1.md) retain ownership of local
+economic/state rules. Bitcoin transaction fees are not Aura burn accounting.
+The implemented proof authorizer and Core transport do not themselves debit an
+Aura ledger. Local economic tests and authorization-to-Bitcoin tests establish
+separate evidence; their end-to-end integration remains an explicit discrepancy.
+No successful burn enforcement is inferred from signature verification or anchoring.
+
+The repository is complete only when its active implementation, fixtures, validation
+and owning documents agree. Unsupported security claims, historical fixture names
+and passing unrelated tests do not establish that agreement.

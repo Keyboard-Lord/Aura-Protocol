@@ -6,7 +6,7 @@ mod settle;
 mod submit;
 
 use aura_notarization_export_v1::AuraNotarizationExportErrorV1;
-use aura_sdk_v1::{prepare_submit_proof_flow_v1, AuraSdkErrorV1, PreparedSubmitProofV1, legacy::SolanaCommitmentConfigV1, UdotArtifactEnvelopeV1, UdotArtifactKind, UdotArtifactWireV1, UdotVersion};
+use aura_sdk_v1::{legacy::prepare_submit_proof_flow_v1, AuraSdkErrorV1, legacy::PreparedSubmitProofV1, legacy::SolanaCommitmentConfigV1, legacy::UdotArtifactEnvelopeV1, legacy::UdotArtifactKind, legacy::UdotArtifactWireV1, legacy::UdotVersion};
 use clap::{Args, Parser, Subcommand, ValueEnum};
 use core::fmt;
 use serde::{de::DeserializeOwned, Serialize};

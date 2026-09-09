@@ -2,7 +2,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 
-import { AuraSdkErrorV1, proofHashHexFromWalletVisualV1, type PreparedSubmitProofV1, type StormClaim521V1 } from "../src/index.ts";
+import { AuraSdkErrorV1, proofHashHexFromWalletVisualV1, type StormClaim521V1 } from "../src/index.ts";
+import type { PreparedSubmitProofV1 } from "../src/legacy/solana.ts";
 import { buildSettlementPipelineFromPreparedProofV1, prepareSubmitProofFlowV1 } from "../src/legacy/solana.ts";
 import {
   loadCanonicalPipelineFixtureJsonV1,

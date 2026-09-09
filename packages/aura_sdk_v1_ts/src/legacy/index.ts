@@ -27,3 +27,4 @@
 export * as auraHashV1 from "../auraHashV1.ts";
 
 export * from "./solana.ts";
+export * from "./udot.ts";

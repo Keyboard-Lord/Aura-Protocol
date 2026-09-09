@@ -18,23 +18,13 @@ Implementation:
 - TypeScript: `packages/aura_sdk_v1_ts/src/stormExecutionV1.ts`
 - TypeScript: `packages/aura_sdk_v1_ts/src/stormContextV1.ts`
 
-## `AURA_HASH521_V1` — Storm Parameter Derivation ONLY
+## Shared hash primitive
 
-**CRITICAL DISTINCTION:** This construction is for Storm parameter derivation ONLY, not for the canonical identity surface.
-
-For the **identity surface**, see ROOT AUTHORITY (AURA_SINGLE_PATH_COMMITMENT_SYSTEM_V2.md):
-- `H_521(m) = Reduce_N(SHA3-512(m))` — simple direct reduction
-
-For **Storm parameter derivation** (`AURA_HASH521_V1`), the construction is:
-
-- `h0 = SHA3-512(msg || 0x00)`
-- `h1 = SHA3-512(msg || 0x01)`
-- take 512 bits from `h0`
-- take the first 9 bits of `h1`, MSB first
-- pack 521 bits into a 66-byte big-endian field element
-- if the packed value equals `2^521 - 1`, map to zero
-
-**Rationale:** Storm parameter derivation requires 521 bits of entropy from domain-separated inputs. The identity surface uses the simpler direct reduction. Both use SHA3-512 exclusively.
+`AURA_HASH521_V1` uses the single SHA3-512 reduction defined by
+[AURA_HASH_V2](AURA_HASH_V2.md). Its Rust/TypeScript API suffix is retained; there
+is no second parameter-only hash algorithm. Earlier text describing two hashes,
+512+9-bit packing and suffix bytes `0x00`/`0x01` does not match the existing
+implementation or frozen vectors and is superseded. No implementation bytes change.
 
 ## Storm Derivations
 
