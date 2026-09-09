@@ -15,7 +15,7 @@ Read the [document registry](docs/authoritative/AURA_BUILD_SOURCE_OF_TRUTH.md)
 first. It owns document membership, precedence, and concept ownership. The canonical documentation set is exactly the 25 files under `docs/authoritative/`.
 
 There is exactly one canonical pipeline. This is the protocol requirement;
-remaining artifact and economic requirements still need implementation alignment. The live source and
+remaining economic requirements still need implementation alignment. The live source and
 tests establish implementation state, while the registry defines intended
 authority. Passing a fixture test alone does not establish protocol conformance.
 
@@ -30,7 +30,7 @@ authority. Passing a fixture test alone does not establish protocol conformance.
 | Authorization | [Rust acceptance](crates/aura_sdk_v1/src/authorization.rs), [TypeScript signing](packages/aura_sdk_v1_ts/src/authorizationV2.ts) | BIP340 v2, actual proof/material/lineage verification, durable journal and idempotent retry. |
 | Legacy settlement transport | [Rust client](crates/aura_submission_client_v1/src/lib.rs), [TypeScript client](packages/aura_submission_client_v1_ts/src/index.ts), [retired program](legacy/solana/program/src/lib.rs) | Historical Solana publication, excluded from the active Cargo workspace and validation gate. |
 | Local execution and settlement | [local chain](crates/aura_l2_local_chain_v0/src/lib.rs), [local verifier](crates/aura_l2_verifier_v1/src/lib.rs) | Local foundation; local acceptance is not Bitcoin inclusion or confirmation. |
-| Presentation | [UDOT](crates/aura_udot_v2/src/lib.rs) | Artifact presentation, separate from settlement transport. |
+| Presentation | [UDOT derivation](crates/aura_udot_v2/src/lib.rs), [canonical bundle](crates/aura_sdk_v1/src/udot_bundle_v2.rs) | Fixed four-field V2 bundle and strict proof-reference validation; existing glyph bytes preserved. Versioned wrappers require `legacy` imports. |
 
 ## Authorizer entry point
 

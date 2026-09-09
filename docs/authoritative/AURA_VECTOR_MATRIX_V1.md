@@ -31,14 +31,25 @@
 
 ## L3-L5
 
-- `fixtures/v1/canonical_prepare/*`
-- `fixtures/v1/canonical_pipeline_v1/*`
-- `fixtures/v1/udot_v1/test_vectors.json`
-- Rust: `crates/aura_sdk_v1/tests/prepared_proof_pipeline_v1.rs`
-- Rust: `crates/aura_sdk_v1/tests/authorization_intent_v1.rs`
-- TypeScript: `tests/canonical_pipeline_v1.test.ts`
-- TypeScript: `tests/prepared_proof_pipeline_v1.test.ts`
-- TypeScript: `tests/udot_sdk_v1_ts.test.ts`
+- Unchanged material/binding vectors: `fixtures/v1/canonical_prepare/*`.
+  Rust: `crates/aura_sdk_v1/tests/aura_sdk_v1.rs`;
+  TypeScript: `packages/aura_sdk_v1_ts/tests/aura_sdk_v1_ts.test.ts`.
+- Canonical authorization and actual proof/material binding:
+  `fixtures/authorization_v2/authorization_vector_v2.json`,
+  `crates/aura_sdk_v1/tests/authorization_v2.rs`,
+  `packages/aura_sdk_v1_ts/tests/authorization_v2.test.ts`.
+- Canonical UDOT bundles: `fixtures/udot_v2/bundles.json`,
+  `crates/aura_sdk_v1/tests/udot_bundle_v2.rs`,
+  `packages/aura_sdk_v1_ts/tests/udot_bundle_v2.test.ts`.
+- SDK export isolation: Rust compilation/doc tests and
+  `packages/aura_sdk_v1_ts/tests/public_boundary_v2.test.ts`.
+
+Historical SDK proof/authorization/settlement envelopes in
+`fixtures/v1/canonical_pipeline_v1/*` test explicit `legacy` APIs only. Their
+passing tests do not establish canonical authorization conformance. The unchanged
+`fixtures/v1/udot_v1/test_vectors.json` retains both V2 glyph regression evidence
+and the explicitly classified legacy V1 case; `scripts/test_udot_parity.sh` checks
+the canonical bundle and preserved compatibility vectors separately.
 
 ## Local Settlement
 
@@ -53,4 +64,6 @@
 - Shared Rust/TypeScript vectors: `fixtures/bitcoin_v1/anchor_vectors_v1.json`
 - Focused gate: `scripts/verify_bitcoin_foundation_v1.sh`
 - Core transport integration: `scripts/verify_bitcoin_regtest_v1.mjs`
-- Regtest coverage establishes transport behavior, not end-to-end Aura proof acceptance.
+- Regtest invokes actual Rust proof/authorization admission before Core publication,
+  and checks failed admission, confirmation, reorg and durable idempotent retry.
+  It does not establish economic ledger/burn integration.

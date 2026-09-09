@@ -78,19 +78,8 @@ binds the nonce under the approved authorization contract.
 
 ## Canonical UDOT Bundle
 
-`UdotBundleV2` is:
-
-- `proof_hash_hex`
-- `seal_line`
-- `crest`
-- `matrix_sequence`
-
-`matrix_form` is a presentation rendering derived from `matrix_sequence` and is not canonical
-wire data.
-
-`aura_hash_hex` is not a canonical field.
-
-`udot_version` is not a canonical discriminator inside the active pipeline because canonical UDOT
-is fixed to v2 by construction.
+The fixed `UdotBundleV2` representation, derivation and validation rules are owned
+once by [the UDOT specification](AURA_UDOT_SPEC_V1.md). This layer supplies the
+canonical proof reference to that owner.
 
 `PROOF_MATERIAL_V2` is outside the active artifact chain.

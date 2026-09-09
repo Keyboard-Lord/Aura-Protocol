@@ -44,13 +44,18 @@ fixtures, and executed tests establish implementation state. A specification's
 Implementation metadata may describe that evidence and identify discrepancies;
 it must not introduce alternate normative definitions.
 
-The Bitcoin OP_RETURN architecture is approved and its codec and Core transport
-are implemented. End-to-end Aura integration remains incomplete: the root crate
-and older submission clients still target Solana. The SDK proof and settlement
-wires currently differ from their owning documents, and the Rust and TypeScript
-proof envelopes differ from each other. These are unresolved conformance defects,
-not sanctioned alternate canonical pipelines. Preserve cryptographic bytes while
-repairing the affected boundaries; do not infer new hash semantics from migration.
+The approved Bitcoin OP_RETURN codec, Core transport, BIP340 authorization and
+durable nonce journal are implemented. The active workspace excludes the Solana
+program and submission clients, retained in a separate explicit legacy workspace.
+Rust and TypeScript share neutral bound-material preparation and the fixed V2
+UDOT bundle. Historical nested proof and settlement envelopes remain legacy
+evidence rather than alternate canonical wires.
+
+End-to-end economic integration remains incomplete: the local ledger/burn runner
+and the Storm authorization/Bitcoin path have no approved common economic
+admission contract. Their separate passing checks do not establish one completed
+economic pipeline. Preserve existing cryptographic and economic behavior while
+resolving that boundary; do not infer new hash or charging semantics from migration.
 
 Research, historical evidence, and unapproved proposals do not acquire authority
 through titles such as "final", "canonical", or "source of truth". Proposals remain
