@@ -53,7 +53,9 @@ evidence rather than alternate canonical wires.
 
 End-to-end economic integration remains incomplete: the local ledger/burn runner
 and the Storm authorization/Bitcoin path have no approved common economic
-admission contract. Their separate passing checks do not establish one completed
+admission contract. Authenticated economic admission has approval for detailed
+contract design; that approval does not establish implementation or approve
+unspecified consent bytes. Their separate passing checks do not establish one completed
 economic pipeline. Preserve existing cryptographic and economic behavior while
 resolving that boundary; do not infer new hash or charging semantics from migration.
 

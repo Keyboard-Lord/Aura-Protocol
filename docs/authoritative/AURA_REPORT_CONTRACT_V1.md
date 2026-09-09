@@ -54,7 +54,7 @@ transaction output is not sufficient evidence of those checks. The current Core
 transport is a low-level implementation; its functions do not perform Aura proof
 verification or authorization. The [authorization owner](AURA_AUTHORIZATION_LINEAGE_V1.md)
 performs those checks and durably reserves the nonce before producing this request.
-Retiring the older Solana SDK pipeline remains required migration work.
+The older Solana SDK pipeline is isolated under explicit legacy entry points.
 
 Operational configuration supplies the Core endpoint/wallet, explicit fee rate,
 maximum fee in satoshis, and confirmation threshold. Funding and signing use
@@ -99,5 +99,6 @@ that enforcement belongs at the authorization boundary, not in output decoding.
 Regtest verifies an actual Aura proof, material and BIP340 authorization through
 the Rust journal before anchoring its reference, then checks persistent retry after
 a reorg. Solana SDK wires and `fixtures/v1/canonical_pipeline_v1/` remain legacy
-migration surfaces; they no longer define the canonical settlement wire. Their
-active callers/dependencies must still be retired before migration completion.
+evidence; they no longer define the canonical settlement wire. The active Cargo
+workspace excludes the Solana program and submission clients. Economic integration
+remains a separate migration requirement owned by the ledger and pipeline documents.
