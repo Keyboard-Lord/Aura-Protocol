@@ -74,13 +74,21 @@ across independent journals. Backup restoration must preserve all accepted histo
 Iteration and input-size limits are explicit admission resource policy, not new
 cryptographic protocol limits.
 
+Production economic admission composes this same reservation owner inside the
+terminal head/outbox transaction defined by [the economic owner](AURA_LEDGER_AND_BURN_V1.md).
+Economic attempts and successful authorizations remain separate tables. Early
+verification of both signatures grants no proof authorization; full verification
+still precedes reservation. A failed economic attempt can consume its consented
+burn without creating an authorization row. Standalone `AuthorizerJournalV2::accept`
+remains a proof-authorization primitive, not an alternative economic pipeline.
+
 ## Implementation and evidence
 
 - Rust owner: `crates/aura_sdk_v1/src/authorization.rs`.
 - TypeScript signing, signature and material checks: `packages/aura_sdk_v1_ts/src/authorizationV2.ts`.
   Actual proof verification and durable acceptance are owned by Rust.
 - Shared vector: `fixtures/authorization_v2/authorization_vector_v2.json` (public test-only secret and nonce).
-- Admission command (`cargo run -p aura_sdk_v1 --bin aura-authorizer --`): `crates/aura_sdk_v1/src/bin/aura-authorizer.rs`.
+- Standalone proof-authorization command (`cargo run -p aura_sdk_v1 --bin aura-authorizer --`): `crates/aura_sdk_v1/src/bin/aura-authorizer.rs`.
   `init JOURNAL` creates a journal; `accept JOURNAL NETWORK AUTHORIZATION_JSON PROOF_BYTES MAX_ITERATIONS MAX_PROOF_BYTES`
   emits only the canonical anchor request after successful acceptance. Decoding proof
   metadata is not verification; the command invokes the full acceptance owner.

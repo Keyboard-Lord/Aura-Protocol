@@ -235,6 +235,7 @@ dependencies = [
  "aura_fractal_key_integration_v1",
  "aura_fractal_key_v1",
  "aura_intent_lineage_v1",
+ "aura_l2_local_chain_v0",
  "aura_proof_material_v1",
  "aura_udot_v2",
  "getrandom 0.2.17",

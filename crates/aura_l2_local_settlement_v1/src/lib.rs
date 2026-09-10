@@ -112,13 +112,12 @@ impl LocalSettlementStateV1 {
     }
 }
 
-pub fn accept_transition_v1(
-    settlement_state: &mut LocalSettlementStateV1,
-    public_inputs_bytes: &[u8],
-    proof_artifact: &LocalProofArtifactV1,
-) -> Result<AcceptedTransitionV1, LocalSettlementErrorV1> {
-    let envelope = TransitionEnvelopeV1::decode_exact(public_inputs_bytes)?;
-
+/// Validate local execution lineage independently of any proof backend. This
+/// does not verify a proof or mutate settlement; admission must do both separately.
+pub fn validate_transition_context_v1(
+    settlement_state: &LocalSettlementStateV1,
+    envelope: &TransitionEnvelopeV1,
+) -> Result<(), LocalSettlementErrorV1> {
     if envelope.rollup_id != settlement_state.rollup_id {
         return Err(LocalSettlementErrorV1::RollupIdMismatch {
             expected: settlement_state.rollup_id,
@@ -157,6 +156,18 @@ pub fn accept_transition_v1(
             actual: envelope.pre_state_root,
         });
     }
+
+    Ok(())
+}
+
+pub fn accept_transition_v1(
+    settlement_state: &mut LocalSettlementStateV1,
+    public_inputs_bytes: &[u8],
+    proof_artifact: &LocalProofArtifactV1,
+) -> Result<AcceptedTransitionV1, LocalSettlementErrorV1> {
+    let envelope = TransitionEnvelopeV1::decode_exact(public_inputs_bytes)?;
+
+    validate_transition_context_v1(settlement_state, &envelope)?;
 
     let verified = verify_proof_artifact_v1(public_inputs_bytes, proof_artifact)
         .map_err(LocalSettlementErrorV1::VerificationFailed)?;

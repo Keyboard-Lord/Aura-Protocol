@@ -1,0 +1,12 @@
+# Merge into Aura repo `.codex/config.toml`.
+# Active V4 baseline.
+service_tier = "default"
+
+[notice]
+fast_default_opt_out = true
+
+[agents]
+enabled = false
+
+[features.multi_agent_v2]
+enabled = false

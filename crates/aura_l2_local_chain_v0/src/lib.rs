@@ -18,6 +18,8 @@
 //! repository navigation, see `AURA_ENGINEERING_START_HERE_V1.md` and
 //! `AURA_ACTIVE_SYSTEM_MAP_V1.md` at the repo root.
 
+pub mod economic_meter;
+
 use core::fmt;
 use std::{collections::BTreeSet, fs, path::Path};
 
@@ -1974,7 +1976,7 @@ fn run_canonical_pipeline_request_with_options(
             &LocalFeeSummaryV1::new(tx_count),
         ),
     };
-    if canonical_pipeline_pre_execution_rejection_reason_v1(request, prepared_attestation.as_ref())
+    if canonical_pipeline_pre_execution_rejection_reason_v1(prepared_attestation.as_ref())
         .is_some()
     {
         let actual = ScenarioResultV1::ExecutionRejected;
@@ -3060,20 +3062,26 @@ fn canonical_pipeline_ledger_circulating_supply_v1(
 fn validate_canonical_pipeline_ledger_policy_v1(
     request: &CanonicalPipelineRequestV1,
 ) -> Result<(), LocalChainErrorV1> {
-    if request.ledger.ledger_policy_version != CANONICAL_PIPELINE_LEDGER_POLICY_VERSION_V1 {
+    validate_ledger_policy_fields_v1(&request.ledger)
+}
+
+fn validate_ledger_policy_fields_v1(
+    ledger: &CanonicalPipelineLedgerPolicyV1,
+) -> Result<(), LocalChainErrorV1> {
+    if ledger.ledger_policy_version != CANONICAL_PIPELINE_LEDGER_POLICY_VERSION_V1 {
         return Err(LocalChainErrorV1::InvalidFixture(format!(
             "unsupported canonical pipeline ledger_policy_version: expected {}, got {}",
-            CANONICAL_PIPELINE_LEDGER_POLICY_VERSION_V1, request.ledger.ledger_policy_version
+            CANONICAL_PIPELINE_LEDGER_POLICY_VERSION_V1, ledger.ledger_policy_version
         )));
     }
-    if request.ledger.accounts.is_empty() {
+    if ledger.accounts.is_empty() {
         return Err(LocalChainErrorV1::InvalidFixture(
             "canonical pipeline ledger.accounts must not be empty".to_string(),
         ));
     }
     let mut previous_account_id = None;
     let mut payer_found = false;
-    for (index, account) in request.ledger.accounts.iter().enumerate() {
+    for (index, account) in ledger.accounts.iter().enumerate() {
         if let Some(previous) = previous_account_id {
             if account.account_id <= previous {
                 return Err(LocalChainErrorV1::InvalidFixture(format!(
@@ -3081,7 +3089,7 @@ fn validate_canonical_pipeline_ledger_policy_v1(
                 )));
             }
         }
-        if account.account_id == request.ledger.payer_account_id {
+        if account.account_id == ledger.payer_account_id {
             payer_found = true;
         }
         previous_account_id = Some(account.account_id);
@@ -3092,23 +3100,23 @@ fn validate_canonical_pipeline_ledger_policy_v1(
         ));
     }
     let total_account_balances =
-        canonical_pipeline_ledger_total_balance_v1(&request.ledger.accounts)?;
+        canonical_pipeline_ledger_total_balance_v1(&ledger.accounts)?;
     let expected_total_supply = total_account_balances
-        .checked_add(request.ledger.burned_supply)
+        .checked_add(ledger.burned_supply)
         .ok_or_else(|| {
             LocalChainErrorV1::InvalidFixture(
                 "canonical pipeline ledger total_supply overflowed".to_string(),
             )
         })?;
-    if request.ledger.total_supply != expected_total_supply {
+    if ledger.total_supply != expected_total_supply {
         return Err(LocalChainErrorV1::InvalidFixture(format!(
             "canonical pipeline ledger total_supply must equal sum(accounts.balance) + burned_supply: expected {}, got {}",
-            expected_total_supply, request.ledger.total_supply
+            expected_total_supply, ledger.total_supply
         )));
     }
     let _ = canonical_pipeline_ledger_circulating_supply_v1(
-        request.ledger.total_supply,
-        request.ledger.burned_supply,
+        ledger.total_supply,
+        ledger.burned_supply,
     )?;
     Ok(())
 }
@@ -3149,15 +3157,21 @@ fn validate_canonical_pipeline_head_request_v1(
 fn validate_canonical_pipeline_wallet_binding_v1(
     request: &CanonicalPipelineRequestV1,
 ) -> Result<(), LocalChainErrorV1> {
-    if request.wallet_binding.wallet_binding_version != CANONICAL_PIPELINE_WALLET_BINDING_VERSION_V1
+    validate_wallet_binding_fields_v1(&request.wallet_binding)
+}
+
+fn validate_wallet_binding_fields_v1(
+    wallet_binding: &CanonicalPipelineWalletBindingV1,
+) -> Result<(), LocalChainErrorV1> {
+    if wallet_binding.wallet_binding_version != CANONICAL_PIPELINE_WALLET_BINDING_VERSION_V1
     {
         return Err(LocalChainErrorV1::InvalidFixture(format!(
             "unsupported canonical pipeline wallet_binding_version: expected {}, got {}",
             CANONICAL_PIPELINE_WALLET_BINDING_VERSION_V1,
-            request.wallet_binding.wallet_binding_version
+            wallet_binding.wallet_binding_version
         )));
     }
-    if !wallet_address_is_base58_v1(&request.wallet_binding.wallet_address) {
+    if !wallet_address_is_base58_v1(&wallet_binding.wallet_address) {
         return Err(LocalChainErrorV1::InvalidFixture(
             "canonical pipeline wallet_binding.wallet_address must be a non-empty base58 string"
                 .to_string(),
@@ -3169,14 +3183,20 @@ fn validate_canonical_pipeline_wallet_binding_v1(
 fn validate_canonical_pipeline_token_anchor_v1(
     request: &CanonicalPipelineRequestV1,
 ) -> Result<(), LocalChainErrorV1> {
-    if request.token_anchor.token_policy_version != CANONICAL_PIPELINE_TOKEN_POLICY_VERSION_V1 {
+    validate_token_anchor_fields_v1(&request.token_anchor)
+}
+
+fn validate_token_anchor_fields_v1(
+    token_anchor: &CanonicalPipelineTokenAnchorV1,
+) -> Result<(), LocalChainErrorV1> {
+    if token_anchor.token_policy_version != CANONICAL_PIPELINE_TOKEN_POLICY_VERSION_V1 {
         return Err(LocalChainErrorV1::InvalidFixture(format!(
             "unsupported canonical pipeline token_policy_version: expected {}, got {}",
-            CANONICAL_PIPELINE_TOKEN_POLICY_VERSION_V1, request.token_anchor.token_policy_version
+            CANONICAL_PIPELINE_TOKEN_POLICY_VERSION_V1, token_anchor.token_policy_version
         )));
     }
-    if request.token_anchor.network_mode == CanonicalPipelineNetworkModeV1::Local
-        && request.token_anchor.settlement_anchor_type
+    if token_anchor.network_mode == CanonicalPipelineNetworkModeV1::Local
+        && token_anchor.settlement_anchor_type
             != CanonicalPipelineSettlementAnchorTypeV1::Local
     {
         return Err(LocalChainErrorV1::InvalidFixture(
@@ -3184,8 +3204,8 @@ fn validate_canonical_pipeline_token_anchor_v1(
                 .to_string(),
         ));
     }
-    if request.token_anchor.network_mode == CanonicalPipelineNetworkModeV1::Bridged
-        && request.token_anchor.settlement_anchor_type
+    if token_anchor.network_mode == CanonicalPipelineNetworkModeV1::Bridged
+        && token_anchor.settlement_anchor_type
             == CanonicalPipelineSettlementAnchorTypeV1::Local
     {
         return Err(LocalChainErrorV1::InvalidFixture(
@@ -3193,8 +3213,8 @@ fn validate_canonical_pipeline_token_anchor_v1(
                 .to_string(),
         ));
     }
-    if request.token_anchor.enforce_external_match
-        && request.token_anchor.expected_external_balance.is_none()
+    if token_anchor.enforce_external_match
+        && token_anchor.expected_external_balance.is_none()
     {
         return Err(LocalChainErrorV1::InvalidFixture(
             "canonical pipeline token_anchor expected_external_balance is required when enforce_external_match is true"
@@ -4098,6 +4118,12 @@ fn canonical_pipeline_attestation_extract_json_field_v1(
 fn canonical_pipeline_prepare_attestation_v1(
     attestation: &CanonicalPipelineAttestationRequestV1,
 ) -> Result<CanonicalPipelinePreparedAttestationV1, LocalChainErrorV1> {
+    prepare_metered_attestation_v1(&economic_meter::MeteredAttestationV1::from_legacy(attestation))
+}
+
+fn prepare_metered_attestation_v1(
+    attestation: &economic_meter::MeteredAttestationV1,
+) -> Result<CanonicalPipelinePreparedAttestationV1, LocalChainErrorV1> {
     let supported_constraints = canonical_pipeline_supported_attestation_constraints_v1();
     if attestation.attestation_schema_version != CANONICAL_PIPELINE_ATTESTATION_SCHEMA_VERSION_V2 {
         return Err(LocalChainErrorV1::InvalidFixture(format!(
@@ -4522,7 +4548,6 @@ fn canonical_pipeline_attestation_proof_summary_v1(
 }
 
 fn canonical_pipeline_pre_execution_rejection_reason_v1(
-    _request: &CanonicalPipelineRequestV1,
     prepared_attestation: Option<&CanonicalPipelinePreparedAttestationV1>,
 ) -> Option<(CanonicalPipelineFailureReasonCodeV1, String)> {
     if let Some(prepared) = prepared_attestation {
@@ -4544,12 +4569,12 @@ fn canonical_pipeline_pre_execution_rejection_reason_v1(
 }
 
 fn canonical_pipeline_execution_rejection_reason_v1(
-    request: &CanonicalPipelineRequestV1,
+    _request: &CanonicalPipelineRequestV1,
     prepared_attestation: Option<&CanonicalPipelinePreparedAttestationV1>,
     execution_error: Option<&LocalExecutionErrorV1>,
 ) -> (CanonicalPipelineFailureReasonCodeV1, String) {
     if let Some(reason) =
-        canonical_pipeline_pre_execution_rejection_reason_v1(request, prepared_attestation)
+        canonical_pipeline_pre_execution_rejection_reason_v1(prepared_attestation)
     {
         return reason;
     }
@@ -4783,32 +4808,16 @@ fn extend_canonical_pipeline_burn_metering_payload_v1(
     request: &CanonicalPipelineRequestV1,
     ordered_accounts: &[LocalAccountV1],
 ) {
-    bytes.extend_from_slice(&CANONICAL_PIPELINE_SCHEMA_VERSION_V1.to_le_bytes());
-    extend_len_prefixed_bytes_v1(bytes, request.pipeline_id.as_bytes());
-    extend_len_prefixed_bytes_v1(bytes, request.proof_system.as_fixture_str().as_bytes());
-    bytes.extend_from_slice(&request.economic.economic_policy_version.to_le_bytes());
-    extend_len_prefixed_bytes_v1(bytes, request.economic.request_kind.as_str().as_bytes());
-    extend_len_prefixed_bytes_v1(bytes, request.economic.burn_intent.as_str().as_bytes());
-    bytes.extend_from_slice(&request.accounting.accounting_policy_version.to_le_bytes());
-    extend_len_prefixed_bytes_v1(bytes, request.accounting.payment_intent.as_str().as_bytes());
-    extend_len_prefixed_bytes_v1(
+    let meter = economic_meter::EconomicMeterV1::from_legacy_request(request, ordered_accounts);
+    let tamper = request.attestation.as_ref();
+    economic_meter::extend_payload(
         bytes,
-        request.accounting.settlement_intent.as_str().as_bytes(),
+        &meter,
+        [
+            tamper.and_then(|a| a.tamper_stark_public_inputs_digest.as_ref()),
+            tamper.and_then(|a| a.tamper_stark_proof_bytes.as_ref()),
+        ],
     );
-    bytes.extend_from_slice(&request.ledger.ledger_policy_version.to_le_bytes());
-    bytes.extend_from_slice(&request.ledger.payer_account_id);
-    bytes.extend_from_slice(&request.ledger.total_supply.to_le_bytes());
-    bytes.extend_from_slice(&request.ledger.burned_supply.to_le_bytes());
-    extend_canonical_pipeline_ledger_accounts_bytes_v1(bytes, &request.ledger.accounts);
-    extend_canonical_pipeline_head_bytes_v1(bytes, &request.head);
-    extend_canonical_pipeline_wallet_binding_bytes_v1(bytes, &request.wallet_binding);
-    extend_canonical_pipeline_token_anchor_bytes_v1(bytes, &request.token_anchor);
-    extend_optional_canonical_pipeline_attestation_bytes_v1(bytes, request.attestation.as_ref());
-    bytes.extend_from_slice(&request.rollup_id);
-    extend_canonical_pipeline_genesis_accounts_bytes_v1(bytes, ordered_accounts);
-    bytes.extend_from_slice(&request.batch_number.to_le_bytes());
-    bytes.extend_from_slice(&request.parent_batch_commitment);
-    extend_canonical_pipeline_transactions_bytes_v1(bytes, &request.transactions);
 }
 
 fn canonical_pipeline_genesis_accounts_digest_v1(ordered_accounts: &[LocalAccountV1]) -> [u8; 32] {
@@ -4902,6 +4911,42 @@ fn canonical_pipeline_ledger_state_commitment_digest_v1(
     sha256_digest_v1(&bytes)
 }
 
+fn debit_ledger_fields_v1(
+    ledger: &CanonicalPipelineLedgerPolicyV1,
+    pre_balance: u64,
+    burned_amount: u64,
+) -> Result<CanonicalPipelineLedgerPolicyV1, LocalChainErrorV1> {
+    let post_balance = pre_balance.checked_sub(burned_amount).ok_or_else(|| {
+        LocalChainErrorV1::InvalidFixture(
+            "canonical pipeline ledger payer balance underflowed during burn".to_string(),
+        )
+    })?;
+    let mut post_accounts = ledger.accounts.clone();
+    let payer_index = post_accounts
+        .iter()
+        .position(|account| account.account_id == ledger.payer_account_id)
+        .ok_or_else(|| {
+            LocalChainErrorV1::InvalidFixture(
+                "canonical pipeline ledger payer_account_id must exist in ledger.accounts"
+                    .to_string(),
+            )
+        })?;
+    post_accounts[payer_index].balance = post_balance;
+    let burned_supply_after = ledger
+        .burned_supply
+        .checked_add(burned_amount)
+        .ok_or_else(|| {
+            LocalChainErrorV1::InvalidFixture(
+                "canonical pipeline ledger burned_supply overflowed".to_string(),
+            )
+        })?;
+    Ok(CanonicalPipelineLedgerPolicyV1 {
+        burned_supply: burned_supply_after,
+        accounts: post_accounts,
+        ..ledger.clone()
+    })
+}
+
 fn canonical_pipeline_ledger_transition_v1(
     request: &CanonicalPipelineRequestV1,
     burn_summary: &CanonicalPipelineBurnSummaryV1,
@@ -4916,31 +4961,10 @@ fn canonical_pipeline_ledger_transition_v1(
     let payer = canonical_pipeline_ledger_payer_account_v1(request)?;
     let pre_balance = payer.balance;
     let burned_amount = burn_summary.consumed_burn_units;
-    let post_balance = pre_balance.checked_sub(burned_amount).ok_or_else(|| {
-        LocalChainErrorV1::InvalidFixture(
-            "canonical pipeline ledger payer balance underflowed during burn".to_string(),
-        )
-    })?;
-    let mut post_accounts = request.ledger.accounts.clone();
-    let payer_index = post_accounts
-        .iter()
-        .position(|account| account.account_id == request.ledger.payer_account_id)
-        .ok_or_else(|| {
-            LocalChainErrorV1::InvalidFixture(
-                "canonical pipeline ledger payer_account_id must exist in ledger.accounts"
-                    .to_string(),
-            )
-        })?;
-    post_accounts[payer_index].balance = post_balance;
-    let burned_supply_after = request
-        .ledger
-        .burned_supply
-        .checked_add(burned_amount)
-        .ok_or_else(|| {
-            LocalChainErrorV1::InvalidFixture(
-                "canonical pipeline ledger burned_supply overflowed".to_string(),
-            )
-        })?;
+    let post_ledger = debit_ledger_fields_v1(&request.ledger, pre_balance, burned_amount)?;
+    let post_balance = pre_balance - burned_amount; // checked by the shared debit owner
+    let post_accounts = post_ledger.accounts;
+    let burned_supply_after = post_ledger.burned_supply;
     let circulating_supply_before = canonical_pipeline_ledger_circulating_supply_v1(
         request.ledger.total_supply,
         request.ledger.burned_supply,
@@ -5057,13 +5081,11 @@ fn canonical_pipeline_token_anchor_digest_v1(
     sha256_digest_v1(&bytes)
 }
 
-fn canonical_pipeline_token_anchor_summary_v1(
-    request: &CanonicalPipelineRequestV1,
-) -> CanonicalPipelineTokenAnchorSummaryV1 {
-    let anchor_verification_status = match (
-        request.token_anchor.external_balance_reference.as_ref(),
-        request.token_anchor.enforce_external_match,
-        request.token_anchor.expected_external_balance,
+fn token_anchor_status_v1(token_anchor: &CanonicalPipelineTokenAnchorV1) -> CanonicalPipelineExternalAnchorVerificationStatusV1 {
+    match (
+        token_anchor.external_balance_reference.as_ref(),
+        token_anchor.enforce_external_match,
+        token_anchor.expected_external_balance,
     ) {
         (None, _, _) => CanonicalPipelineExternalAnchorVerificationStatusV1::NotRequested,
         (Some(reference), _, _) if !reference.connected => {
@@ -5076,7 +5098,13 @@ fn canonical_pipeline_token_anchor_summary_v1(
             CanonicalPipelineExternalAnchorVerificationStatusV1::Accepted
         }
         (Some(_), true, None) => CanonicalPipelineExternalAnchorVerificationStatusV1::Rejected,
-    };
+    }
+}
+
+fn canonical_pipeline_token_anchor_summary_v1(
+    request: &CanonicalPipelineRequestV1,
+) -> CanonicalPipelineTokenAnchorSummaryV1 {
+    let anchor_verification_status = token_anchor_status_v1(&request.token_anchor);
     CanonicalPipelineTokenAnchorSummaryV1 {
         token_policy_version: request.token_anchor.token_policy_version,
         network_mode: request.token_anchor.network_mode,
@@ -5752,57 +5780,6 @@ fn extend_canonical_pipeline_token_anchor_bytes_v1(
     }
 }
 
-fn extend_optional_canonical_pipeline_attestation_bytes_v1(
-    bytes: &mut Vec<u8>,
-    attestation: Option<&CanonicalPipelineAttestationRequestV1>,
-) {
-    match attestation {
-        Some(attestation) => {
-            bytes.push(1);
-            bytes.extend_from_slice(&attestation.attestation_schema_version.to_le_bytes());
-            extend_len_prefixed_bytes_v1(bytes, attestation.attestation_scope.as_str().as_bytes());
-            extend_len_prefixed_bytes_v1(
-                bytes,
-                attestation
-                    .attestation_proof_kind
-                    .as_fixture_str()
-                    .as_bytes(),
-            );
-            bytes.extend_from_slice(&attestation.normalization_policy_version.to_le_bytes());
-            bytes.push(u8::from(
-                attestation.attestation_constraints.require_unique_labels,
-            ));
-            bytes.extend_from_slice(
-                &attestation
-                    .attestation_constraints
-                    .max_evidence_items
-                    .to_le_bytes(),
-            );
-            bytes.extend_from_slice(
-                &attestation
-                    .attestation_constraints
-                    .max_total_normalized_bytes
-                    .to_le_bytes(),
-            );
-            extend_canonical_pipeline_attestation_claim_bytes_v1(bytes, &attestation.claim);
-            bytes.extend_from_slice(
-                &u64::try_from(attestation.evidence_items.len())
-                    .expect("attestation evidence count fits in u64")
-                    .to_le_bytes(),
-            );
-            for item in &attestation.evidence_items {
-                extend_canonical_pipeline_attestation_evidence_item_bytes_v1(bytes, item);
-            }
-            extend_optional_tamper_bytes_v1(
-                bytes,
-                attestation.tamper_stark_public_inputs_digest.as_ref(),
-            );
-            extend_optional_tamper_bytes_v1(bytes, attestation.tamper_stark_proof_bytes.as_ref());
-        }
-        None => bytes.push(0),
-    }
-}
-
 fn sha256_digest_v1(bytes: &[u8]) -> [u8; 32] {
     let mut hasher = Sha256::new();
     hasher.update(bytes);
@@ -6296,7 +6273,6 @@ pub fn validate_canonical_pipeline_report_v1(
     let pre_state_root = pre_state.state_root();
     if let Some((failure_reason_code, detail)) =
         canonical_pipeline_pre_execution_rejection_reason_v1(
-            &request,
             prepared_attestation.as_ref(),
         )
     {

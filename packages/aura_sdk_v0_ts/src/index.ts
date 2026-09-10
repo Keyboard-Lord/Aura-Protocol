@@ -6897,7 +6897,238 @@ function canonicalPipelineRequestBindingPayloadChunksV0(
   ];
 }
 
-function canonicalPipelineBurnMeteredBytesV0(
+/** Typed M contains metered work only; production head linkage is explicitly V2. */
+export type MeteredAttestationV1 = Omit<CanonicalPipelineAttestationRequestV0,
+  "tamperStarkPublicInputsDigest" | "tamperStarkProofBytes">;
+type MeteringFieldsV1 = Pick<CanonicalPipelineRequestV0,
+  "pipelineSchemaVersion" | "pipelineId" | "proofSystem" | "accounting" | "ledger" |
+  "head" | "walletBinding" | "tokenAnchor" | "rollupId" | "batch"> & {
+    economic: Omit<CanonicalPipelineEconomicPolicyV0, "declaredFeeUnits">;
+    attestation: MeteredAttestationV1 | null;
+  };
+export type EconomicMeterV1 = MeteringFieldsV1 & { accounts: AccountV0[] };
+
+function requireMeterV1(ok: boolean, message: string): asserts ok {
+  if (!ok) throw new AuraTypescriptSdkErrorV0("InvalidFixture", `economic meter: ${message}`);
+}
+
+// The decoder bounds every allocation by remaining bytes, without coercion or sorting.
+class EconomicMeterReaderV1 {
+  bytes: Uint8Array;
+  offset = 0;
+  constructor(bytes: Uint8Array) { this.bytes = bytes; }
+  take(n: number): Uint8Array {
+    requireMeterV1(Number.isSafeInteger(n) && n >= 0 && n <= this.bytes.length - this.offset, "truncated input");
+    const value = this.bytes.slice(this.offset, this.offset + n);
+    this.offset += n;
+    return value;
+  }
+  u32(): number { const b = this.take(4); return new DataView(b.buffer, b.byteOffset, 4).getUint32(0, true); }
+  u64(): bigint { const b = this.take(8); return new DataView(b.buffer, b.byteOffset, 8).getBigUint64(0, true); }
+  flag(): boolean {
+    const flag = this.take(1)[0];
+    requireMeterV1(flag === 0 || flag === 1, "noncanonical flag");
+    return flag === 1;
+  }
+  count(minimumSize: number): number {
+    const n = this.u64();
+    requireMeterV1(n <= BigInt(Math.floor((this.bytes.length - this.offset) / minimumSize)), "count exceeds remaining input");
+    return Number(n);
+  }
+  text(): string {
+    // ignoreBOM preserves U+FEFF as text instead of silently removing it.
+    return new TextDecoder("utf-8", { fatal: true, ignoreBOM: true }).decode(this.take(this.count(1)));
+  }
+  choice<T extends string>(values: readonly T[]): T {
+    const value = this.text();
+    requireMeterV1(values.includes(value as T), "unsupported enum");
+    return value as T;
+  }
+  list<T>(min: number, read: () => T): T[] { return Array.from({ length: this.count(min) }, read); }
+  optional<T>(read: () => T): T | null { return this.flag() ? read() : null; }
+  token(): CanonicalPipelineTokenAnchorV0 {
+    return {
+      tokenPolicyVersion: this.u32(), networkMode: this.choice(["local", "bridged"]),
+      settlementAnchorType: this.choice(["local", "simulated", "external"]),
+      externalBalanceReference: this.optional(() => ({ referenceId: this.text(),
+        observedBalance: this.optional(() => this.u64()), observedSlot: this.optional(() => this.u64()), connected: this.flag() })),
+      enforceExternalMatch: this.flag(), expectedExternalBalance: this.optional(() => this.u64()),
+    };
+  }
+  claim(): CanonicalPipelineAttestationClaimV0 {
+    const claimKind = this.choice(Object.values(CanonicalPipelineAttestationClaimKindV0));
+    let claimPayload: CanonicalPipelineAttestationClaimPayloadV0;
+    switch (claimKind) {
+      case "evidence_root_digest": claimPayload = { expectedEvidenceRootDigest: this.take(32) }; break;
+      case "normalized_evidence_digest": claimPayload = { targetLabel: this.text(), expectedEvidenceDigest: this.take(32) }; break;
+      case "normalized_text_contains_utf8": claimPayload = { targetLabel: this.text(), expectedSubstringUtf8: this.text() }; break;
+      case "normalized_json_field_equals_utf8": claimPayload = {
+        targetLabel: this.text(), fieldPath: this.list(8, () => this.text()), expectedValueUtf8: this.text(),
+      }; break;
+    }
+    return { claimKind, claimPayload };
+  }
+  evidence(): CanonicalPipelineAttestationEvidenceItemV0 {
+    return {
+      label: this.text(), evidenceKind: this.choice(["inline_utf8", "inline_json_utf8"]),
+      evidencePayload: { payloadUtf8: this.text() },
+      provenance: {
+        provenancePolicyVersion: this.u32(), provenanceType: this.choice(Object.values(CanonicalPipelineEvidenceProvenanceTypeV0)),
+        sourceType: this.text(), sourceIdentifier: this.text(),
+        signature: this.optional(() => ({ signerPublicKey: this.take(32), signature: this.take(64) })),
+        timestampUnixSeconds: this.optional(() => this.u64()),
+      },
+    };
+  }
+  attestation(): MeteredAttestationV1 {
+    const a: MeteredAttestationV1 = {
+      attestationSchemaVersion: this.u32(), attestationScope: this.choice(["claim_consistency_with_provided_evidence_only"]),
+      attestationProofKind: this.choice(["MOCK", "STARK"]), normalizationPolicyVersion: this.u32(),
+      attestationConstraints: { requireUniqueLabels: this.flag(), maxEvidenceItems: this.u64(), maxTotalNormalizedBytes: this.u64() },
+      claim: this.claim(), evidenceItems: this.list(54, () => this.evidence()),
+    };
+    requireMeterV1(!this.flag() && !this.flag(), "legacy tamper controls forbidden");
+    return a;
+  }
+}
+
+function economicMeterBytesUncheckedV1(m: EconomicMeterV1): Uint8Array {
+  return concatBytesV0(D_CANONICAL_PIPELINE_BURN_METERING_V1,
+    ...economicMeterPayloadChunksV1(m, m.accounts, [null, null]));
+}
+
+/** Decode exact binary M. Caller supplies its operator byte bound explicitly. */
+export function decodeEconomicMeterV1(bytes: Uint8Array, maxBytes: number): EconomicMeterV1 {
+  requireMeterV1(bytes instanceof Uint8Array && Number.isSafeInteger(maxBytes) && maxBytes >= 0 && bytes.length <= maxBytes, "byte limit exceeded");
+  const r = new EconomicMeterReaderV1(Uint8Array.from(bytes));
+  requireMeterV1(bytesEqualV0(r.take(D_CANONICAL_PIPELINE_BURN_METERING_V1.length), D_CANONICAL_PIPELINE_BURN_METERING_V1), "wrong domain");
+  const pipelineSchemaVersion = r.u32(), pipelineId = r.text();
+  const tariff = r.choice(["STARK", "MOCK"]);
+  const m: EconomicMeterV1 = {
+    pipelineSchemaVersion, pipelineId, proofSystem: tariff === "STARK" ? ProofSystemV0.Stark : ProofSystemV0.Mock,
+    economic: { economicPolicyVersion: r.u32(), requestKind: r.choice(["execution", "attestation"]), burnIntent: r.choice(["canonical_report"]) },
+    accounting: { accountingPolicyVersion: r.u32(), paymentIntent: r.choice(["burn_to_produce_canonical_truth"]), settlementIntent: r.choice(["record_canonical_outcome"]) },
+    ledger: { ledgerPolicyVersion: r.u32(), payerAccountId: r.take(32), totalSupply: r.u64(), burnedSupply: r.u64(),
+      accounts: r.list(40, () => ({ accountId: r.take(32), balance: r.u64() })) },
+    head: { settlementHeadVersion: r.u32(), previousHeadHash: r.take(32), headSequenceNumber: r.u64() },
+    walletBinding: { walletBindingVersion: r.u32(), accountId: r.take(32), walletAddress: r.text() },
+    tokenAnchor: r.token(), attestation: r.optional(() => r.attestation()),
+    rollupId: r.take(32), accounts: r.list(48, () => ({ accountId: r.take(32), balance: r.u64(), nonce: r.u64() })),
+    batch: { batchNumber: r.u64(), parentBatchCommitment: r.take(32), transactions: r.list(84, () => ({
+      txVersion: r.u32(), senderAccountId: r.take(32), recipientAccountId: r.take(32), senderNonce: r.u64(), amount: r.u64(),
+    })) },
+  };
+  requireMeterV1(r.offset === bytes.length, "trailing bytes");
+  validateEconomicMeterStructureV1(m);
+  requireMeterV1(bytesEqualV0(economicMeterBytesUncheckedV1(m), bytes), "noncanonical bytes");
+  return m;
+}
+
+// Match Rust char::is_whitespace exactly; JS trim treats BOM/NEL differently.
+function economicTextNonBlankV1(text: string): boolean {
+  return /[^\u0009-\u000d\u0020\u0085\u00a0\u1680\u2000-\u200a\u2028\u2029\u202f\u205f\u3000]/u.test(text);
+}
+
+function validateEconomicLedgerFieldsV1(l: CanonicalPipelineLedgerPolicyV0): void {
+  copyBytes32V0("ledger.payerAccountId", l.payerAccountId);
+  for (const amount of [l.totalSupply, l.burnedSupply, ...l.accounts.map(a => a.balance)])
+    requireMeterV1(typeof amount === "bigint" && amount >= 0n && amount <= 0xffffffffffffffffn, "ledger amount must be u64 bigint");
+  for (const account of l.accounts) copyBytes32V0("ledger.accountId", account.accountId);
+  requireMeterV1(l.ledgerPolicyVersion === LOCAL_CHAIN_CANONICAL_LEDGER_POLICY_VERSION_V0 && l.accounts.length > 0, "unsupported or empty ledger");
+  requireMeterV1(l.accounts.every((a, i) => i === 0 || compareBytesV0(l.accounts[i - 1].accountId, a.accountId) < 0), "ledger accounts must be strictly ordered and unique");
+  requireMeterV1(l.accounts.some(a => bytesEqualV0(a.accountId, l.payerAccountId)), "payer missing from ledger");
+  requireMeterV1(canonicalPipelineLedgerTotalBalanceV0(l.accounts) + l.burnedSupply === l.totalSupply, "invalid supply");
+  canonicalPipelineLedgerCirculatingSupplyV0(l.totalSupply, l.burnedSupply);
+}
+
+export function economicLedgerCommitmentV1(l: CanonicalPipelineLedgerPolicyV0): Uint8Array {
+  validateEconomicLedgerFieldsV1(l);
+  return canonicalPipelineLedgerStateCommitmentV0(l.ledgerPolicyVersion, l.payerAccountId, l.totalSupply, l.burnedSupply, l.accounts);
+}
+
+export function debitEconomicLedgerV1(l: CanonicalPipelineLedgerPolicyV0, burn: bigint): CanonicalPipelineLedgerPolicyV0 {
+  validateEconomicLedgerFieldsV1(l);
+  requireMeterV1(typeof burn === "bigint" && burn >= 0n && burn <= 0xffffffffffffffffn, "burn must be u64 bigint");
+  const payer = l.accounts.find(a => bytesEqualV0(a.accountId, l.payerAccountId))!;
+  requireMeterV1(payer.balance >= burn, "insufficient payer balance");
+  const post = debitLedgerFieldsV1(l, payer.balance, burn);
+  validateEconomicLedgerFieldsV1(post);
+  return post;
+}
+
+function validateEconomicMeterStructureV1(m: EconomicMeterV1): void {
+  requireMeterV1(m.pipelineSchemaVersion === LOCAL_CHAIN_CANONICAL_PIPELINE_SCHEMA_V0 && m.pipelineId === LOCAL_CHAIN_CANONICAL_PIPELINE_ID_V0, "unsupported pipeline");
+  requireMeterV1(m.proofSystem === ProofSystemV0.Stark, "production requires full verification tariff");
+  requireMeterV1(m.economic.economicPolicyVersion === LOCAL_CHAIN_CANONICAL_ECONOMIC_POLICY_VERSION_V0
+    && m.accounting.accountingPolicyVersion === LOCAL_CHAIN_CANONICAL_ACCOUNTING_POLICY_VERSION_V0, "unsupported policy");
+  validateEconomicLedgerFieldsV1(m.ledger);
+  requireMeterV1(m.head.settlementHeadVersion === 2 && m.head.headSequenceNumber > 0n, "production requires head V2 linkage with nonzero sequence");
+  requireMeterV1(m.walletBinding.walletBindingVersion === LOCAL_CHAIN_CANONICAL_WALLET_BINDING_VERSION_V0 && walletAddressIsBase58V0(m.walletBinding.walletAddress), "invalid wallet binding");
+  const t = m.tokenAnchor;
+  requireMeterV1(t.tokenPolicyVersion === LOCAL_CHAIN_CANONICAL_TOKEN_POLICY_VERSION_V0, "unsupported token policy");
+  requireMeterV1((t.networkMode === "local") === (t.settlementAnchorType === "local"), "inconsistent token anchor mode");
+  requireMeterV1(!t.enforceExternalMatch || t.expectedExternalBalance !== null, "external match requires expected balance");
+  requireMeterV1(m.accounts.every((a, i) => i === 0 || compareBytesV0(m.accounts[i - 1].accountId, a.accountId) < 0), "execution accounts must be strictly ordered and unique");
+  requireMeterV1(m.batch.transactions.every(tx => tx.txVersion === TRANSFER_TX_VERSION_V0), "unsupported transaction version");
+  if (m.economic.requestKind === "execution") {
+    requireMeterV1(m.attestation === null && m.batch.transactions.length > 0, "execution requires transactions and no attestation");
+    return;
+  }
+  const a = m.attestation;
+  requireMeterV1(a !== null && m.batch.transactions.length === 0, "attestation requires evidence and no transactions");
+  const c = canonicalPipelineSupportedAttestationConstraintsV0();
+  requireMeterV1(a.attestationSchemaVersion === LOCAL_CHAIN_CANONICAL_ATTESTATION_SCHEMA_VERSION_V0
+    && a.normalizationPolicyVersion === LOCAL_CHAIN_CANONICAL_ATTESTATION_NORMALIZATION_POLICY_VERSION_V0
+    && a.attestationConstraints.requireUniqueLabels === c.requireUniqueLabels
+    && a.attestationConstraints.maxEvidenceItems === c.maxEvidenceItems
+    && a.attestationConstraints.maxTotalNormalizedBytes === c.maxTotalNormalizedBytes, "unsupported attestation policy");
+  requireMeterV1(a.attestationProofKind === "STARK", "mock attestation is legacy only");
+  requireMeterV1(a.evidenceItems.length > 0 && BigInt(a.evidenceItems.length) <= c.maxEvidenceItems, "invalid evidence count");
+  const labels = new Set<string>();
+  for (const e of a.evidenceItems) {
+    requireMeterV1(economicTextNonBlankV1(e.label) && !labels.has(e.label), "empty or duplicate evidence label");
+    labels.add(e.label);
+    const p = e.provenance;
+    requireMeterV1(p.provenancePolicyVersion === LOCAL_CHAIN_CANONICAL_PROVENANCE_POLICY_VERSION_V0
+      && economicTextNonBlankV1(p.sourceType) && economicTextNonBlankV1(p.sourceIdentifier), "invalid provenance structure");
+    requireMeterV1(p.provenanceType !== "signed_blob" || p.signature !== null, "signed blob requires signature");
+  }
+  // No evidence normalization, truth or provenance-signature verification here.
+}
+
+// Equality to the decoded typed value rejects omitted/extra fields and all coercion
+// (including malformed UTF-16 -> replacement characters), without a second codec.
+function sameMeterValueV1(a: unknown, b: unknown): boolean {
+  if (a instanceof Uint8Array || b instanceof Uint8Array)
+    return a instanceof Uint8Array && b instanceof Uint8Array && bytesEqualV0(a, b);
+  if (a === null || b === null || typeof a !== "object" || typeof b !== "object") return a === b;
+  if (Array.isArray(a) !== Array.isArray(b)) return false;
+  const ak = Reflect.ownKeys(a), bk = Reflect.ownKeys(b);
+  return ak.length === bk.length && ak.every(k => bk.includes(k)
+    && sameMeterValueV1((a as Record<PropertyKey, unknown>)[k], (b as Record<PropertyKey, unknown>)[k]));
+}
+
+export function encodeEconomicMeterV1(m: EconomicMeterV1): Uint8Array {
+  const bytes = economicMeterBytesUncheckedV1(m);
+  requireMeterV1(sameMeterValueV1(m, decodeEconomicMeterV1(bytes, bytes.length)), "noncanonical typed value");
+  return bytes;
+}
+
+export function computeEconomicMeterBurnV1(m: EconomicMeterV1): bigint {
+  const bytes = encodeEconomicMeterV1(m), a = m.attestation;
+  const charge = computeCanonicalPipelineBurnUnitsFromInputsV0({
+    txCount: BigInt(m.batch.transactions.length), meteredRequestSizeBytes: BigInt(bytes.length),
+    requestKind: m.economic.requestKind, proofSystem: m.proofSystem,
+    attestationEvidenceItems: BigInt(a?.evidenceItems.length ?? 0),
+    attestationClaimBytes: a === null ? 0n : BigInt(canonicalPipelineAttestationClaimBytesV0(a.claim).length),
+    attestationEvidenceBytes: a === null ? 0n : BigInt(a.evidenceItems.reduce((n, e) => n + canonicalPipelineAttestationEvidenceItemBytesV0(e).length, 0)),
+  });
+  requireMeterV1(charge <= 0xffffffffffffffffn, "burn overflow");
+  return charge;
+}
+
+/** Explicit fixture adapter: preserves historical M; never upgrades it for admission. */
+export function legacyCanonicalPipelineMeterBytesV1(
   request: CanonicalPipelineRequestV0,
 ): Uint8Array {
   return concatBytesV0(
@@ -6909,6 +7140,17 @@ function canonicalPipelineBurnMeteredBytesV0(
 function canonicalPipelineBurnMeteringPayloadChunksV0(
   request: CanonicalPipelineRequestV0,
   orderedAccounts: AccountV0[],
+): Uint8Array[] {
+  return economicMeterPayloadChunksV1(request, orderedAccounts, [
+    request.attestation?.tamperStarkPublicInputsDigest ?? null,
+    request.attestation?.tamperStarkProofBytes ?? null,
+  ]);
+}
+
+function economicMeterPayloadChunksV1(
+  request: MeteringFieldsV1,
+  orderedAccounts: AccountV0[],
+  legacyTamper: [CanonicalPipelineTamperAuditV0 | null, CanonicalPipelineTamperAuditV0 | null],
 ): Uint8Array[] {
   return [
     u32ToLeBytesV0(request.pipelineSchemaVersion),
@@ -6959,7 +7201,7 @@ function canonicalPipelineBurnMeteringPayloadChunksV0(
     request.tokenAnchor.expectedExternalBalance === null
       ? Uint8Array.of(0)
       : concatBytesV0(Uint8Array.of(1), u64ToLeBytesV0(request.tokenAnchor.expectedExternalBalance)),
-    optionalCanonicalPipelineAttestationBytesV0(request.attestation),
+    meteredAttestationBytesV1(request.attestation, legacyTamper),
     copyBytes32V0("rollupId", request.rollupId),
     canonicalPipelineOrderedAccountBytesV0(orderedAccounts),
     u64ToLeBytesV0(request.batch.batchNumber),
@@ -7119,8 +7361,9 @@ function canonicalPipelineAttestationEvidenceItemBytesV0(
   );
 }
 
-function optionalCanonicalPipelineAttestationBytesV0(
-  attestation: CanonicalPipelineAttestationRequestV0 | null,
+function meteredAttestationBytesV1(
+  attestation: MeteredAttestationV1 | null,
+  legacyTamper: [CanonicalPipelineTamperAuditV0 | null, CanonicalPipelineTamperAuditV0 | null],
 ): Uint8Array {
   if (attestation === null) {
     return Uint8Array.of(0);
@@ -7137,8 +7380,8 @@ function optionalCanonicalPipelineAttestationBytesV0(
     canonicalPipelineAttestationClaimBytesV0(attestation.claim),
     u64ToLeBytesV0(BigInt(attestation.evidenceItems.length)),
     ...attestation.evidenceItems.map(canonicalPipelineAttestationEvidenceItemBytesV0),
-    optionalTamperBytesV0(attestation.tamperStarkPublicInputsDigest),
-    optionalTamperBytesV0(attestation.tamperStarkProofBytes),
+    optionalTamperBytesV0(legacyTamper[0]),
+    optionalTamperBytesV0(legacyTamper[1]),
   );
 }
 
@@ -7163,7 +7406,7 @@ function canonicalPipelineBurnDerivationInputsFromRequestV0(
         );
   return {
     txCount: BigInt(request.batch.transactions.length),
-    meteredRequestSizeBytes: BigInt(canonicalPipelineBurnMeteredBytesV0(request).length),
+    meteredRequestSizeBytes: BigInt(legacyCanonicalPipelineMeterBytesV1(request).length),
     requestKind: request.economic.requestKind,
     proofSystem: request.proofSystem,
     attestationEvidenceItems,
@@ -8499,6 +8742,17 @@ function canonicalPipelineLedgerPayerAccountV0(
   return payer;
 }
 
+function debitLedgerFieldsV1(ledger: CanonicalPipelineLedgerPolicyV0, preBalance: bigint, burn: bigint): CanonicalPipelineLedgerPolicyV0 {
+  const postBalance = preBalance - burn;
+  const postAccounts = ledger.accounts.map((account) =>
+    bytesEqualV0(account.accountId, ledger.payerAccountId)
+      ? { accountId: copyBytesV0(account.accountId), balance: postBalance }
+      : { accountId: copyBytesV0(account.accountId), balance: account.balance },
+  );
+  const burnedSupplyAfter = ledger.burnedSupply + burn;
+  return { ...ledger, accounts: postAccounts, burnedSupply: burnedSupplyAfter };
+}
+
 function canonicalPipelineLedgerTransitionFromRequestV0(
   request: CanonicalPipelineRequestV0,
   burnSummary: CanonicalPipelineBurnSummaryV0,
@@ -8515,13 +8769,10 @@ function canonicalPipelineLedgerTransitionFromRequestV0(
     );
   }
   const preBalance = payer.balance;
+  const post = debitLedgerFieldsV1(request.ledger, preBalance, burnSummary.consumedBurnUnits);
   const postBalance = preBalance - burnSummary.consumedBurnUnits;
-  const postAccounts = request.ledger.accounts.map((account) =>
-    bytesEqualV0(account.accountId, request.ledger.payerAccountId)
-      ? { accountId: copyBytesV0(account.accountId), balance: postBalance }
-      : { accountId: copyBytesV0(account.accountId), balance: account.balance },
-  );
-  const burnedSupplyAfter = request.ledger.burnedSupply + burnSummary.consumedBurnUnits;
+  const postAccounts = post.accounts;
+  const burnedSupplyAfter = post.burnedSupply;
   const circulatingSupplyBefore = canonicalPipelineLedgerCirculatingSupplyV0(
     request.ledger.totalSupply,
     request.ledger.burnedSupply,

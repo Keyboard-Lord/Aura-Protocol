@@ -9,6 +9,7 @@ aura_proof_material_v1 = { path = "../aura_proof_material_v1" }
 aura_fractal_key_v1 = { path = "../aura_fractal_key_v1" }
 aura_fractal_key_integration_v1 = { path = "../aura_fractal_key_integration_v1" }
 aura_intent_lineage_v1 = { path = "../aura_intent_lineage_v1" }
+aura_l2_local_chain_v0 = { path = "../aura_l2_local_chain_v0" }
 aura_udot_v2 = { path = "../aura_udot_v2" }
 serde = { version = "1", features = ["derive"] }
 

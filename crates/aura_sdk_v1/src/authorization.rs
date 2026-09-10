@@ -82,7 +82,7 @@ pub fn fresh_nonce_v2() -> AuthorizationResultV2<[u8; 32]> {
 /// Actual Storm witness-backend verification, without changing that backend's semantics.
 /// This backend has no external verification key: material commits the empty key bytes.
 /// The resource limit is explicit authorizer policy, not a new Storm protocol limit.
-fn verify_bound_proof(
+pub(crate) fn verify_bound_proof(
     envelope: &AuthorizationEnvelopeV2, claim: &StormClaim521V1,
     artifact: &StormAirRealProofArtifactV1, max_iterations: u64,
 ) -> AuthorizationResultV2<()> {
@@ -123,8 +123,40 @@ impl AuthorizedAnchorV2 {
     pub fn disposition(&self) -> AuthorizationDispositionV2 { self.disposition }
 }
 
-/// The only durable acceptance path. No reset, delete-reservation, or implicit-create API.
-pub struct AuthorizerJournalV2 { connection: Connection }
+#[derive(Debug)]
+pub(crate) struct AuthorizationNonceConflictV2;
+impl std::fmt::Display for AuthorizationNonceConflictV2 {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str("nonce already reserved for a different action")
+    }
+}
+impl std::error::Error for AuthorizationNonceConflictV2 {}
+
+// Call only after signature, actual proof, material and lineage verification.
+// The caller owns the surrounding atomic transaction and publication outbox.
+pub(crate) fn reserve_in_transaction(
+    tx: &rusqlite::Transaction<'_>, network: BitcoinNetworkV1, envelope: &AuthorizationEnvelopeV2,
+) -> AuthorizationResultV2<AuthorizationDispositionV2> {
+    let l = &envelope.authorization_lineage;
+        let existing: Option<(String, String)> = tx.query_row(
+            "SELECT proof_hash,intent FROM authorizations WHERE network=?1 AND subject=?2 AND nonce=?3",
+            params![network.tag(), l.subject_binding, l.freshness_binding], |r| Ok((r.get(0)?, r.get(1)?)),
+        ).optional()?;
+        let disposition = match existing {
+            Some((proof_hash, intent)) if proof_hash == envelope.proof_hash_hex && intent == l.intent_commitment_hex => AuthorizationDispositionV2::SameActionRetry,
+            Some(_) => return Err(AuthorizationNonceConflictV2.into()),
+            None => {
+                tx.execute("INSERT INTO authorizations VALUES (?1,?2,?3,?4,?5)",
+                    params![network.tag(), l.subject_binding, l.freshness_binding, envelope.proof_hash_hex, l.intent_commitment_hex])?;
+                AuthorizationDispositionV2::Reserved
+            }
+        };
+    Ok(disposition)
+}
+
+/// Durable proof-authorization primitive. Economic admission composes the same
+/// reservation owner into its finalization transaction. No implicit-create/reset API.
+pub struct AuthorizerJournalV2 { pub(crate) connection: Connection }
 impl AuthorizerJournalV2 {
     pub fn create(path: &Path) -> AuthorizationResultV2<Self> {
         let mut options = OpenOptions::new(); options.write(true).create_new(true);
@@ -159,21 +191,8 @@ impl AuthorizerJournalV2 {
     ) -> AuthorizationResultV2<AuthorizedAnchorV2> {
         envelope.verify_signature(network)?;
         verify_bound_proof(envelope, claim, proof, max_iterations)?;
-        let l = &envelope.authorization_lineage;
         let tx = self.connection.transaction_with_behavior(TransactionBehavior::Immediate)?;
-        let existing: Option<(String, String)> = tx.query_row(
-            "SELECT proof_hash,intent FROM authorizations WHERE network=?1 AND subject=?2 AND nonce=?3",
-            params![network.tag(), l.subject_binding, l.freshness_binding], |r| Ok((r.get(0)?, r.get(1)?)),
-        ).optional()?;
-        let disposition = match existing {
-            Some((proof_hash, intent)) if proof_hash == envelope.proof_hash_hex && intent == l.intent_commitment_hex => AuthorizationDispositionV2::SameActionRetry,
-            Some(_) => return Err("nonce already reserved for a different action".into()),
-            None => {
-                tx.execute("INSERT INTO authorizations VALUES (?1,?2,?3,?4,?5)",
-                    params![network.tag(), l.subject_binding, l.freshness_binding, envelope.proof_hash_hex, l.intent_commitment_hex])?;
-                AuthorizationDispositionV2::Reserved
-            }
-        };
+        let disposition = reserve_in_transaction(&tx, network, envelope)?;
         tx.commit()?;
         Ok(AuthorizedAnchorV2 { request: BitcoinAnchorRequestV1::new(network, envelope.proof_hash_hex.clone())?, disposition })
     }

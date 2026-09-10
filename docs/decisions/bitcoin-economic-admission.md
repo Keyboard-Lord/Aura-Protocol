@@ -1,15 +1,17 @@
 # Bitcoin migration: economic admission boundary
 
-**Status: DIRECTION APPROVED; DETAILED CONTRACT PROPOSED.** On 2026-09-09 the user
-approved authenticated economic admission for detailed contract design, preserving
-burn constants/invariants, Authorization V2 acceptance order, Storm/proof semantics,
-FractalKey/proof identity and the Bitcoin anchor wire. Economic consent must be
-distinct authenticated consent and must not imply successful proof authorization.
-The exact contract below is a review proposal, not implemented protocol authority.
-Existing authoritative owners continue to govern. No economic code is changed by
-this document.
+**Status: APPROVED FOR IMPLEMENTATION.** Following the direction approval on
+2026-09-09, the user explicitly approved the complete contract below, including
+EconomicConsentV1, W, payer/signature binding, tariffs, attempt identity, atomic
+charging/finalization, recovery and settlement head V2 with explicit V1 migration.
+Preserve burn invariants, Authorization V2 acceptance order, Storm/proof semantics,
+FractalKey/proof identity and the Bitcoin anchor wire. Economic consent remains
+distinct from successful proof authorization. Approval is not evidence that the
+coordinator is implemented; implementation status is tracked in
+`aura-runtime/SLICE.md`. Existing authoritative owners receive each implemented
+definition once. This decision retains the approved design and rationale.
 
-## Decision required
+## Original decision
 
 Choose the charging authority and admission lifecycle that connects the existing
 local ledger/burn rules to Storm proof verification, BIP340 authorization and
@@ -61,14 +63,14 @@ are needed; distinguish economic records from authorization records, not separat
 uncoordinated writers. Reorgs must not reopen either completed economic attempts
 or authorization reservations, and retrying the same attempt must not burn twice.
 
-The following sections specify that contract for review. They do not replace the
+The following sections record the approved contract. They do not replace the
 existing canonical authorization or claim objects, or introduce another proof hash.
 
-After approval, the ledger, authorization, pipeline and continuous-settlement
-owners must each describe their own portion once. This proposal must not become
+During implementation, the ledger, authorization, pipeline and continuous-settlement
+owners must each describe their own portion once. This decision must not become
 a parallel authoritative specification.
 
-## Proposed ownership and inputs
+## Approved ownership and inputs
 
 Economic admission is the single production coordinator around the existing
 execution, ledger, Storm, authorization and publication owners. It uses one durable
@@ -83,27 +85,11 @@ proof reference and both signatures before submission; service admission precede
 service execution and proof verification. Receiving those signatures is not
 successful authorization.
 
-`EconomicConsentV1` contains exactly two required fields:
-
-| Field | Encoding |
-| --- | --- |
-| `economic_consent_version` | Literal `v1` |
-| `signature_hex` | Exactly 64 BIP340 signature bytes, lowercase hexadecimal |
-
-No unknown, missing, null or aliased fields are accepted. JSON member order is not
-a signing input. There is no duplicated subject, nonce, intent or proof reference
-inside this envelope.
+The exact consent envelope is now owned by [the economic owner](../authoritative/AURA_LEDGER_AND_BURN_V1.md#economic-consent-v1).
 
 ### Work bytes and preserved metering
 
-Define `W` as exactly:
-
-```text
-ASCII("AURA_ECONOMIC_WORK_REQUEST_V1")
-|| u64_le(len(M)) || M
-|| side_a_110 || side_b_110 || context_bytes_v1_209
-|| u64_le(iteration_count)
-```
+The exact W framing is now owned by [the canonical pipeline](../authoritative/AURA_CANONICAL_PIPELINE_V1.md#approved-economic-work-boundary).
 
 `M` is the existing canonical burn-metering byte string emitted by
 `canonical_pipeline_burn_metered_bytes_v1`, including its existing domain. Its
@@ -127,7 +113,7 @@ length instead. The canonical production proof always receives actual Storm
 verification. The retained full-verification tariff is 3 units; the historical
 `STARK` metering selector denotes that tariff here, not a claim that witness replay
 is a succinct STARK. `MOCK` remains a historical test tariff and is rejected at this
-production boundary. This explicit tariff mapping is part of the proposed contract.
+production boundary. This explicit tariff mapping is part of the approved contract.
 
 This preserves existing economic metering rather than inventing an iteration-based
 fee. Explicit operator iteration, byte and work limits apply before admission;
@@ -145,18 +131,7 @@ it cryptographically at random under the existing authorization requirement. The
 context's intent remains opaque application identity. This contract introduces no
 second intent commitment, economic proof hash, or inferred intent preimage.
 
-Let `T = SHA256(ASCII("AURA_ECONOMIC_CONSENT_V1"))`. Sign the BIP340 message:
-
-```text
-SHA256(T || T || network_byte || u64_le(B) || W || target_proof_hash32)
-```
-
-`network_byte` uses the existing Bitcoin report-contract mapping. Verify using the
-context controller key. `target_proof_hash32` is read from the separately supplied
-Authorization V2 envelope; it is not duplicated in the consent wire. This signature
-is separate from Authorization V2 and authenticates exact work, target reference
-and exact charge, including consumption on a terminal failure. Its digest is an
-internal signing message, not a new canonical identifier.
+The economic owner now defines the exact tagged signing message and payer binding. Consent authenticates work, target and charge separately from successful authorization.
 Authorization V2 keeps its existing tag and message bytes unchanged.
 
 ## Admission, retry and outcomes
@@ -248,59 +223,14 @@ Compare them with linkage derived by the head owner from the durable prior head;
 never use them as caller-selected inputs to settlement construction. Canonical
 construction consumes the durable prior head and the finalized economic outcome.
 
-There is an additional explicit head-format decision in this proposal. The old
+The approved contract includes an explicit successor head format. The old
 local head preimage includes a fixture-oriented request digest and report digest;
 the request digest includes fixture name, tamper knobs and expected-result fields
 that are deliberately absent from `W`. It cannot be reused unchanged by inventing
 hidden fixture defaults. Preserve its historical vectors and classify that format
-as legacy when the successor below is approved and implemented.
+as legacy alongside the approved successor.
 
-Proposed successor: `settlement_head_version = 2`. Preserve the single prior-head
-chain and advancement on every admitted terminal outcome. Use the existing ledger
-owner to compute payer-bound pre/post debit ledger commitments. Define:
-
-```text
-outcome_byte = Accepted:0 | ExecutionRejected:1 | VerificationRejected:2 | SettlementRejected:3
-n = prior_head.head_sequence_number + 1       // checked u64 addition
-C = SHA256(
-  "AURA_ECONOMIC_HEAD_COMMITMENT_V1" || u32_le(2) || network_byte
-  || prior_head.current_head_hash32 || u64_le(n)
-  || u64_le(len(W)) || W || outcome_byte
-  || pre_ledger_commitment32 || post_ledger_commitment32 || u64_le(B)
-)
-H = SHA256("AURA_ECONOMIC_HEAD_V1" || u32_le(2) || u64_le(n) || C)
-```
-
-The complete head has exactly these fields:
-
-| Field | Transport encoding |
-| --- | --- |
-| `settlement_head_version` | JSON integer `2` |
-| `head_sequence_number` | Canonical unsigned decimal u64 string; no sign or leading zero except `0` |
-| `previous_head_hash_hex` | The prior head's 32-byte hash, lowercase hexadecimal |
-| `canonical_head_commitment_hex` | `C`, 32 bytes, lowercase hexadecimal |
-| `current_head_hash_hex` | `H`, 32 bytes, lowercase hexadecimal |
-
-The decimal sequence representation avoids JavaScript integer truncation; the
-hash preimages use the u64 binary representation above. Previous hash and sequence
-are derived outputs, never independent input options. The existing metering encoder retains
-its field layout; the active profile carries the explicit head version 2 and the
-derived linkage, without changing meter length or burn constants.
-
-An explicitly initialized new journal pins its starting ledger and uses version 2,
-sequence `0` and all three zero hash fields as the declared genesis head. This is
-an initialization rule, not recovery from missing data. An existing journal/head
-cannot be silently reset or converted. Explicit migration imports the exact prior
-head's sequence and current hash as a trusted predecessor checkpoint, together with
-its matching ledger snapshot and complete authorization history. The first V2
-transition uses that sequence plus one and that unchanged hash as predecessor.
-The checkpoint is migration input outside canonical admission; never relabel a V1
-head as V2 or recompute historical head bytes. Persist completion of this explicit
-initialization so reopening cannot apply the checkpoint twice.
-
-`C` and `H` are local economic head commitments, not proof references or Bitcoin
-wire fields. This proposed local head change requires review approval separately
-from the already approved preservation of Storm/FractalKey/proof and anchor bytes.
+The approved successor is `settlement_head_version = 2`. Its formulas, exact fields, genesis and explicit predecessor migration are now owned by [continuous settlement](../authoritative/AURA_CONTINUOUS_SETTLEMENT_V1.md). These local head values are not proof references or Bitcoin wire fields. Historical head bytes remain unchanged.
 
 ## Recovery and publication
 
@@ -324,10 +254,8 @@ from the already approved preservation of Storm/FractalKey/proof and anchor byte
 
 ## Review and implementation acceptance
 
-Review approval must cover the exact consent message, work framing, payer mapping,
-tariff mapping, local head successor, pre-admission boundary and lifecycle above
-before implementation.
-Then update the existing owning authoritative documents; keep this file as the
+The user approved the exact consent message, work framing, payer mapping, tariff,
+head successor and admission lifecycle. Update the existing owning authoritative documents; keep this file as the
 decision record rather than a second protocol definition.
 
 Required evidence before calling the economic migration implemented:

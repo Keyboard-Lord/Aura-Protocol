@@ -4,7 +4,7 @@
 **Layer:** `L3`  
 **Purpose:** Own the Bitcoin anchor request and publication contract
 
-**Status:** `ACTIVE — PIPELINE INTEGRATION INCOMPLETE`
+**Status:** `ACTIVE — ECONOMIC PIPELINE INTEGRATED`
 
 Bitcoin OP_RETURN reference anchoring was explicitly approved in this task.
 This document owns the wire; the [decision record](../decisions/bitcoin-anchoring.md)
@@ -53,7 +53,9 @@ reference, and authorize the operation before publication. A valid request or
 transaction output is not sufficient evidence of those checks. The current Core
 transport is a low-level implementation; its functions do not perform Aura proof
 verification or authorization. The [authorization owner](AURA_AUTHORIZATION_LINEAGE_V1.md)
-performs those checks and durably reserves the nonce before producing this request.
+performs those checks. The economic coordinator atomically reserves successful
+authorization and writes this request to its publication outbox with the terminal
+economic result and head. Publication consumes that durable intent.
 The older Solana SDK pipeline is isolated under explicit legacy entry points.
 
 Operational configuration supplies the Core endpoint/wallet, explicit fee rate,
@@ -96,9 +98,10 @@ that enforcement belongs at the authorization boundary, not in output decoding.
 - Focused gate: `bash scripts/verify_bitcoin_foundation_v1.sh`
 - Regtest: `BITCOIND=/path/to/bitcoind node scripts/verify_bitcoin_regtest_v1.mjs`
 
-Regtest verifies an actual Aura proof, material and BIP340 authorization through
-the Rust journal before anchoring its reference, then checks persistent retry after
-a reorg. Solana SDK wires and `fixtures/v1/canonical_pipeline_v1/` remain legacy
+Regtest verifies economic consent and debit, restart recovery, actual Aura proof,
+material and BIP340 authorization, then anchors the durable outbox reference and
+checks retry after a reorg without reburn or nonce release. Solana SDK wires and `fixtures/v1/canonical_pipeline_v1/` remain legacy
 evidence; they no longer define the canonical settlement wire. The active Cargo
-workspace excludes the Solana program and submission clients. Economic integration
-remains a separate migration requirement owned by the ledger and pipeline documents.
+workspace excludes the Solana program and submission clients. Ledger and pipeline
+owners define economic admission; this document only owns the unchanged Bitcoin wire
+and publication/observation semantics.
