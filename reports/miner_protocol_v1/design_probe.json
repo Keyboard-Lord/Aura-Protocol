@@ -1,0 +1,22 @@
+{
+  "classification": "RESEARCH EVIDENCE; NOT A MINER IMPLEMENTATION",
+  "job_bytes": 471,
+  "job_commitment_hex": "cbd41fe475ad8d73bf999c81589d435c352863f33c953ff195f8f7849b7ab21f",
+  "intent_commitment_hex": "5994eae5caeffc538a06181638cb7e34482a88e4c5688499ca7d6b8d675486de",
+  "iterations": 64,
+  "nonce_0_trace_root": "ee6c8a09cfae529d4e85e6d3b0553fdad69c4ad8fcd3690ef93ba6ff31db049d",
+  "nonce_1_trace_root": "800a4c1c30cfe48bcafca4039b4a92847c63be314b7f3ad8eb6b5adaac4334e3",
+  "all_64_forcing_pairs_changed": true,
+  "deterministic": true,
+  "exact_W_roundtrip": true,
+  "changed_M_changes_trace": true,
+  "every_job_byte_bound": true,
+  "zero_steps_share_trace": true,
+  "target_hex": "0fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+  "assumed_expected_trials": "16",
+  "cheap_rebinding_trials": 34,
+  "cheap_rebinding_hash": "02e8354202dac2404b279c9388311df562122c6765278676aa81729e34228334",
+  "signature_and_material_only_accept": true,
+  "full_Rust_authorizer_rejection": "Error: \"proof context and authorization lineage mismatch\"",
+  "limits": "Does not establish sequential hardness, non-amortization, economic viability, useful demand, miner consensus or new Rust/TS miner parity."
+}

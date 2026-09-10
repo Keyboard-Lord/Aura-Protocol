@@ -2,6 +2,7 @@
 
 pub mod authorization;
 pub mod economic;
+pub mod miner;
 pub mod legacy;
 mod udot;
 mod udot_bundle_v2;

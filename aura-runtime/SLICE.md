@@ -2,88 +2,93 @@
 
 Classification: TOOLING / IMPLEMENTATION EVIDENCE; not protocol authority.
 Runtime: AURA Runtime V4
-State: COMPLETE
+State: COMPLETE — DESIGN ONLY
 Last updated: 2026-09-10
 
 ## Outer mission
 
-Complete the approved Bitcoin economic-integration milestone from the current worktree, including durable admission, finalization, recovery, parity, owning documentation, and real Bitcoin validation. Local node completion does not complete this outer mission.
+Design and validate AURA_MINER_PROTOCOL_V1 above the completed Bitcoin migration.
+Deliver a coherent Storm PoC/PoW design, explicit security/economic boundaries,
+approval of protocol-changing decisions and a bounded implementation DAG. Miner
+network implementation is not required for this design goal.
 
-The current detailed `docs/decisions/bitcoin-economic-admission.md` contract is APPROVED FOR IMPLEMENTATION by the user. Implement it exactly. Any semantic deviation returns USER_DECISION.
+## Frozen baseline and retained evidence
 
-Approval covers consent/W/metering, payer mapping, BIP340 signing, tariffs, tuple-scoped attempt identity, retries/no double burn, pre-admission versus chargeable failures, atomic debit and durable attempt, separate authorization records, material/FractalKey binding, atomic terminal finalization/outbox, recovery/reorgs, head V2 formulas/genesis and explicit V1 predecessor migration. The decision records approval and historical design rationale; active definitions have been promoted to their existing owners. No further approval is needed for this exact contract.
+- Current baseline: `f64fb4f`, completed Bitcoin economic integration.
+- Prior completion record: `reports/AURA_BITCOIN_ECONOMIC_MILESTONE_COMPLETION_V1.md`.
+- Existing W, burn, Storm/trace/proof/material/FractalKey, Authorization V2,
+  Head V2, UDOT and Bitcoin OP_RETURN semantics remain unchanged.
+- No re-audit or rerun of the completed migration gate. The miner dependencies
+  were inspected narrowly; all proposal/probe work is outside active protocol code.
+- Root-local execution. No delegated workers or runtime/profile changes.
 
-## Frozen invariants
+## Design owner and DAG
 
-- Storm remains the active public execution/proof interface.
-- Historical cat-map, old authorization/state, and mixed-session paths remain explicit legacy imports.
-- Existing hash/field, Storm recurrence, proof material, FractalKey, Authorization V2, UDOT, burn constants/meter bytes, and Bitcoin anchor wire do not change except where the approved economic-admission/head-V2 contract explicitly requires integration.
-- One concept -> one canonical owner -> one canonical representation.
-- No parallel authoritative specification.
-- Fail closed.
+`reports/AURA_MINER_PROTOCOL_V1.md` records the approved design, its exact candidate
+formulas, threat review, alternatives and D1–D6 decisions. The user replied
+“yes approved” to the explicit D1–D6 design-contract question on 2026-09-10.
+It is not active protocol authority; the existing authoritative owners remain frozen.
 
-## Primary authority references
+| ID | State | Dependency | Scope / stop criterion |
+| --- | --- | --- | --- |
+| M0 | DONE | Frozen baseline | Current owner map, coherent recommendation, bounded probe and internal threat review. |
+| M1 | DONE | M0 | User approved D1–D6: coordinated rounds, workload/input profile, difficulty policy, accounting, rewards, atomic integration. |
+| M2 | READY | M1 | Future job/profile Rust/TS codec and negative parity vectors. |
+| M3 | BLOCKED | M2 | Future miner computation through existing owners, resource and attack measurements. |
+| M4 | BLOCKED | M2 | Future atomic round scheduling/winner/reward records in the existing coordinator. |
+| M5 | BLOCKED | M4 | Future reward-aware Bitcoin publication and recovery. |
+| M6 | BLOCKED | M3, M5 | Future adversarial full integration and frozen-output regression. |
+| M7 | BLOCKED | M6 | Future owner promotion and measured activation limits; monetary deployment separately approved. |
 
-- `docs/decisions/bitcoin-economic-admission.md`
-- `docs/authoritative/AURA_LEDGER_AND_BURN_V1.md`
-- `docs/authoritative/AURA_AUTHORIZATION_LINEAGE_V1.md`
-- `docs/authoritative/AURA_CANONICAL_PIPELINE_V1.md`
-- `docs/authoritative/AURA_CONTINUOUS_SETTLEMENT_V1.md`
-- `docs/authoritative/AURA_REPORT_CONTRACT_V1.md`
+M2–M7 are the implementation DAG for a subsequent milestone. M2 is dependency-ready;
+the design-only goal does not require implementing it. Approval establishes the
+contract without changing active protocol behavior or authorizing monetary deployment.
 
-Registry: `docs/authoritative/AURA_BUILD_SOURCE_OF_TRUTH.md`.
+## Current evidence
 
-## DAG
+- `cargo build -p aura_sdk_v1 --offline --bin aura-authorizer`: passed.
+- `node reports/miner_protocol_v1/design_probe.mjs`: passed; captured result in
+  `reports/miner_protocol_v1/design_probe.json`.
+- Probe verifies deterministic N=64 execution, all forcing pairs changing with a
+  nonce, exact existing W round-trip, M/job binding, target endpoints and the
+  zero-step trace-reuse counterexample using existing owners.
+- Concrete attack evidence: 34 cheap outer-nonce rebindings of one frozen proof
+  found a low hash. TS signature/material checks accept it; the full Rust authorizer
+  rejects `proof context and authorization lineage mismatch` and emits no anchor.
+- This does not prove sequential hardness, non-amortization, commercial utility,
+  production difficulty, miner consensus, or parity for an unimplemented miner layer.
+- No active implementation, old frozen vector, canonical document or Bitcoin wire
+  was modified. Only proposal/evidence and this mission register were added/updated.
 
-Use only these states: READY | ACTIVE | DONE | BLOCKED | DECISION
+## Completion audit
 
-| ID | State | Depends on | Objective | Acceptance / evidence |
-|---|---|---|---|---|
-| S6.0 | DONE | — | Establish approval, current work and V4 tooling | Full contract approved; V4 installed. |
-| S6.1 | DONE | S6.0 | Extract existing M owner and strict typed decoder | Rust/TS parity, unchanged metering/burn fixtures; structural validation separate from chargeable failures. |
-| S6.2 | DONE | S6.1 | W, consent, head V2, durable economic coordinator and atomic authorization/outbox | Exact approved bytes, all four outcomes, replay/concurrency/crash recovery; 12 durable journal tests pass. |
-| S6.3 | DONE | S6.2 | Complete owner alignment and economic-to-Bitcoin acceptance evidence | Owner alignment, full milestone gate, actual regtest and acceptance audit passed. |
+The live design and captured executable evidence were checked against all requested
+deliverables. Section references below are to the single design document; they do
+not duplicate its definitions.
 
-Meter owner: `crates/aura_l2_local_chain_v0/src/economic_meter.rs`, shared by the historical writer in `lib.rs`; matching TS owner: `packages/aura_sdk_v0_ts/src/index.ts`. Old request/head digests include fixture/tamper/expected-result metadata and do not define head V2.
+| Requested deliverable | Evidence / result |
+| --- | --- |
+| 1. Current-state dependency map | Section 2 maps the relevant frozen owners and their miner implications. |
+| 2. AURA_MINER_PROTOCOL_V1 proposal | The named document now records the approved design and implementation boundary. |
+| 3. Exact PoC definition | Section 4 requires full input-bound witness verification and existing material/FractalKey binding. |
+| 4. Exact PoW predicate | Sections 3–4 fix all inputs and require big-endian proof_hash <= T after PoC. Probe covers target endpoints and cheap-rebinding rejection. |
+| 5. Candidate lifecycle | Section 7 covers admission, every terminal outcome, retry, expiry and crash recovery. |
+| 6. Difficulty / adjustment | Section 6 defines fixed per-epoch parameters and explicit operator epoch changes; no automatic retarget. |
+| 7. Rewards / economics | Sections 7–8 preserve burn rules and select pre-funded sponsor BTC, eligibility and replay-safe payout. |
+| 8. Head / fork choice | Sections 7 and 9 define one coordinated contender, no rollback, and explicit rejection of independent fork merging. |
+| 9. Bitcoin interaction | Sections 8–9 retain OP_RETURN, specify payout/replacement/reorg behavior and distinguish on/off-chain commitments. |
+| 10. Threat model | Section 10 reviews grinding, precomputation, bypass, nonce reuse, manipulation, withholding, duplicate work, state splits and reorgs with residual assumptions. |
+| 11. Frozen components | Section 12 enumerates preserved primitives, encodings and state invariants. |
+| 12. Minimal additions | Section 12 limits changes to miner profile/search, atomic metadata/guards and reward-aware transport. |
+| 13. Implementation DAG | Section 12 gives eight dependency-ordered slices with concrete stop criteria; M2 is next. |
+| 14. Unresolved approval decisions | Section 13 records explicit user approval of D1–D6; none remain within the approved V1 scope. |
 
-Existing actual proof/material/lineage verification and nonce journal: `crates/aura_sdk_v1/src/authorization.rs`. Its unchanged verifier and shared reservation compose into `economic/journal.rs`; `economic.rs` and `economic/head.rs` own the new contract. Work remains root-local.
-
-## Evidence
-
-- Current observed HEAD: `2d4f239` (`slice 6`), containing economic implementation. Final documentation and focused test corrections remain in the worktree. Do not reset unrelated state.
-- Historical authorization implementation moved byte-for-byte into `crates/aura_intent_lineage_v1/src/legacy_authorization_v1.rs`; canonical hash/field/Storm/proof implementations and frozen fixtures stayed unchanged.
-- Prior targeted checks passed: active workspace all-target compilation, 57 Storm/proof tests, 19 core/SDK documentation tests, BIP340 acceptance, six TS parity/boundary tests and 60 local economic regressions.
-- Earlier pre-integration broad run passed active-foundation and UDOT parity but stopped at sandbox `listen EPERM 127.0.0.1`. Superseded by the successful economic regtest with normal loopback escalation below; never treated as an end-to-end pass.
-- V4 archive checksum verified once; seven skill payload files, TOML profile and twenty preserved explicit-only specialists verified. External rollback identity: `.codex/.aura_runtime_v4_state.json`. Model and reasoning settings unchanged.
-
-- S6.1: strict Rust/TS M codecs and shared legacy payload writers implemented. Six focused tests in each language passed; eight new frozen production vectors agree; eight pre-extraction legacy byte/charge vectors remain identical. Rust `cargo test -p aura_l2_local_chain_v0 --lib canonical_pipeline_`: 60 passed. TS targeted canonical/attestation/burn regression: 24 passed (`/tmp/aura-meter-ts-regression.log`). Inner attestation tamper flags are fixed zero in canonical M; legacy bytes remain intact.
-
-- S6.2: Rust economic contract tests 5 passed; combined TS meter/contract tests 11 passed. Every signed W byte is mutation-tested. All four head outcomes, strict envelopes, wrong network/lineage/target, u64 overflow and stale head/debit are covered. Authorization V2 shared vector remains identical. Eight Rust meter/local-work tests and eight Authorization V2 tests passed.
-- Durable journal: 12 tests pass (`/tmp/aura-economic-journal-final.log`), covering all outcomes, consent/admission failures, idempotent re-signing/retries, nonce conflicts, competing writers, process exit, rollback after debit/outbox/terminal updates, corruption, local attestation/settlement context and explicit V1 checkpoint migration preserving authorization history.
-- Actual Bitcoin Core 29 regtest passed: authenticated consent, atomic debit, restart, actual Storm proof/material/lineage verification, atomic authorization/head/outbox, publication, fees/network rejection, confirmations and reorg retry without reburn or nonce release.
-- Final expanded gate passed (exit 0): `BITCOIND=/tmp/aura-bitcoin-runtime/bitcoin-29.0/bin/bitcoind bash scripts/verify_repo_truth.sh`, log `/tmp/aura-economic-final-gate.log`. It includes the 23-package Solana boundary, active foundation, shared economic/auth/Bitcoin vectors, UDOT parity and actual economic-to-Bitcoin regtest with normal loopback escalation.
-- Final concurrency audit corrected retry/observation attempt reads to use one database snapshot, preventing mixed pre/post-finalization views. The 12 journal tests passed again with eight competing retry workers; the final regtest binary was rebuilt after this correction.
-
-## Final acceptance audit
-
-- Canonical W/M and consent have strict single encodings, explicit limits and shared Rust/TypeScript vectors. Economic consent is distinct from proof authorization; no external completion/proof argument can replace stored work.
-- Atomic debit/attempt ownership precedes chargeable work. All four outcomes retain exactly one burn; only Accepted reserves authorization and writes the unchanged Bitcoin request. Head V2 and slot release share that finalization transaction.
-- Existing local transfer/attestation/settlement checks, full proof/material/FractalKey/lineage verification and Authorization V2 replay order remain composed through their owning implementations.
-- Restart, rollback, concurrent retry, nonce conflict, explicit V1 predecessor migration, outbox publication and Bitcoin reorg behavior passed focused and integration validation.
-- Compared with pre-economic baseline `04e6e9a`, canonical hash/field/Storm/proof, material, FractalKey, UDOT and Bitcoin codec/transport sources are unchanged. Existing frozen fixtures are unchanged; only `fixtures/economic_admission_v1/` is new. Shared old metering bytes and burn outputs pass Rust/TypeScript regression checks.
-- Existing authoritative owners agree with implementation. The decision is classified as approved historical design evidence; legacy fixture/head formats and standalone authorization primitives are not presented as the production coordinator. README documents the operator and developer entry paths.
-- Remaining limits are explicit architectural boundaries: witness replay rather than succinct/ZK proof, coordinated local economic ledger and journal-scoped uniqueness, serialized admission, trusted V1 checkpoint/consistent backups, and operator-managed Bitcoin publication/confirmation. They are not unresolved economic integration work.
-
-## Blockers / decisions
-
-No semantic approval or implementation blocker is outstanding. Regtest loopback escalation was approved and the real integration run passed.
-
-Project root-only/default-tier profile is installed; effective host settings remain unobserved until reload. No V4 usage benchmark has been measured. Tooling guidance remains subordinate to host system/developer instructions.
-
-## Next READY node
-
-None. The approved economic-integration milestone is complete. Further protocol work requires its own bounded objective; do not continue polishing this milestone.
+The internal security review and bounded probe support design completion, not a
+hardness theorem, independent audit or runtime miner certification. Deployment
+calibration, full new-layer parity, adversarial integration and monetary activation
+remain explicit implementation gates. The completed Bitcoin baseline is untouched.
 
 ## Stop condition
 
-Stop only when the outer economic milestone is satisfied, USER_DECISION is required, TRUE_BLOCK/AUTHORITY_CONFLICT prevents safe progress, or the runtime/allowance forces termination. A local test, node, slice or commit is not global completion.
+Design goal satisfied. Stop here; the next implementation slice is M2 under the
+approved contract. No further design polishing or migration re-audit is required.
