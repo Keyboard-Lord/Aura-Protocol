@@ -1,6 +1,6 @@
 mod support;
 
-use aura_intent_lineage_v1::{
+use aura_intent_lineage_v1::legacy::proof_pipeline_v1::{
     AccountUpdateOperationV1, AuraLayer4AccountV1, AuraLayer4ControllerBindingV1,
     AuraLayer4FeePolicyKindV1, AuraLayer4IntentBodyV1, AuraLayer4OperationBodyV1,
     AuraLayer4PrototypeStateV1, AuraLayer4StateTransitionErrorV1, AuraLayer4TxKindV1,

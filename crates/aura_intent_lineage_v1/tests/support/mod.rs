@@ -6,20 +6,25 @@
 use std::{fs, path::PathBuf};
 
 use aura_intent_lineage_v1::{
-    assemble_layer3_proof_claim_v1, build_storm_claim_v1,
-    produce_native_layer2_authorization_lineage_object_521_v1,
-    run_native_layer1_layer2_bridge_521_v1, run_native_layer1_layer2_bridge_v1,
+    build_storm_claim_v1, StormContextV1, StormExecutionInputsV1, STORM_CONTEXT_V1_VERSION,
+};
+use aura_intent_lineage_v1::legacy::proof_pipeline_v1::{
     AuraLayer4FeePolicyKindV1, AuraLayer4IntentBodyV1, AuraLayer4OperationBodyV1,
     AuraLayer4TxKindV1, AuthorizationEnvelopeAuthKindV1,
     AuthorizationEnvelopeLineageTransportKindV1, AuthorizationEnvelopeV1,
     AuthorizationEnvelopeValidityBoundsV1, AuthorizationLineageV1, DcmCommitmentKindV1,
+    FreshnessModeV1, IntentTypeV1, SubjectBindingTypeV1, ValueTransferOperationV1,
+};
+use aura_intent_lineage_v1::legacy::catmap_v1::{
     DcmConfig521V1, DcmConfigV1, DcmInput521V1, DcmInputV1, DcmState521V1, DcmStateV1,
-    FreshnessModeV1, IntentTypeV1, Layer1Layer2BridgeErrorV1, Layer1Layer2BridgeFreshnessV1,
-    Layer1Layer2BridgeIntentSourceV1, Layer1Layer2BridgeSubjectBindingV1,
-    Layer1Layer2BridgeSuccess521V1, Layer1Layer2BridgeSuccessV1, Layer3ClaimConstructionInputV1,
-    NativeLayer2AuthorizationLineageObjectV1, ProofClaimAssemblyV1, StormContextV1,
-    StormExecutionInputsV1, SubjectBindingTypeV1, ValueTransferOperationV1,
-    STORM_CONTEXT_V1_VERSION,
+};
+use aura_intent_lineage_v1::legacy::proof_pipeline_v1::{
+    assemble_layer3_proof_claim_v1, produce_native_layer2_authorization_lineage_object_521_v1,
+    run_native_layer1_layer2_bridge_521_v1, run_native_layer1_layer2_bridge_v1,
+    Layer1Layer2BridgeErrorV1, Layer1Layer2BridgeFreshnessV1, Layer1Layer2BridgeIntentSourceV1,
+    Layer1Layer2BridgeSubjectBindingV1, Layer1Layer2BridgeSuccess521V1,
+    Layer1Layer2BridgeSuccessV1, Layer3ClaimConstructionInputV1,
+    NativeLayer2AuthorizationLineageObjectV1, ProofClaimAssemblyV1,
 };
 use serde::{de::DeserializeOwned, Deserialize};
 

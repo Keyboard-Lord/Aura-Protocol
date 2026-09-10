@@ -2,10 +2,12 @@
 // Matrix: [[1,1],[1,2]] mod (2^521-1)
 // Date: 2026-03-26
 use aura_intent_lineage_v1::{
+    FieldElement521V1, FIELD_ELEMENT_521_BYTE_LEN_V1, FIELD_MODULUS_521_V1,
+};
+use aura_intent_lineage_v1::legacy::catmap_v1::{
     coordinate_recurrence_next_521_v1, derive_trace_commitment_521_v1,
-    fast_forward_dcm_state_521_v1, fast_rewind_dcm_state_521_v1, DcmConfig521V1, DcmExecution521V1,
-    DcmInput521V1, DcmState521V1, DcmTraceCommitment521ErrorV1, FieldElement521V1,
-    FIELD_ELEMENT_521_BYTE_LEN_V1, FIELD_MODULUS_521_V1,
+    fast_forward_dcm_state_521_v1, fast_rewind_dcm_state_521_v1, DcmConfig521V1,
+    DcmExecution521V1, DcmInput521V1, DcmState521V1, DcmTraceCommitment521ErrorV1,
 };
 
 const PINNED_TRACE_COMMITMENT_HEX: &str =

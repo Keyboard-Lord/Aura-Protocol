@@ -50,6 +50,9 @@ program and submission clients, retained in a separate explicit legacy workspace
 Rust and TypeScript share neutral bound-material preparation and the fixed V2
 UDOT bundle. Historical nested proof and settlement envelopes remain legacy
 evidence rather than alternate canonical wires.
+The core's public root exposes Storm; historical cat-map proofs and former layered
+authorization/session APIs require explicit `legacy` namespaces. Their retained
+tests establish compatibility evidence, not canonical authorization acceptance.
 
 End-to-end economic integration remains incomplete: the local ledger/burn runner
 and the Storm authorization/Bitcoin path have no approved common economic

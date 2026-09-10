@@ -2,11 +2,14 @@
 // Matrix: [[1,1],[1,2]] mod (2^521-1)
 // Date: 2026-03-26
 use aura_intent_lineage_v1::{
+    FieldElement521V1, FIELD_ELEMENT_521_BYTE_LEN_V1, FIELD_MODULUS_521_V1,
+};
+use aura_intent_lineage_v1::legacy::catmap_v1::{
     build_dcm_claim_521_v1, dcm_air_public_inputs_from_claim_521_v1,
     package_dcm_air_proof_session_v1, DcmAirAdapterErrorV1, DcmAirErrorV1, DcmAirPublicInputsV1,
     DcmAirTraceV1, DcmConfig521V1, DcmExecution521V1, DcmInput521V1, DcmState521V1,
-    FieldElement521V1, DCM_AIR_ADAPTER_PACKAGING_VERSION_V1, DCM_AIR_TRACE_WIDTH_V1,
-    DCM_AIR_TRANSITION_CONSTRAINT_COUNT_V1, FIELD_ELEMENT_521_BYTE_LEN_V1, FIELD_MODULUS_521_V1,
+    DCM_AIR_ADAPTER_PACKAGING_VERSION_V1, DCM_AIR_TRACE_WIDTH_V1,
+    DCM_AIR_TRANSITION_CONSTRAINT_COUNT_V1,
 };
 
 const PINNED_TRACE_DIGEST_HEX: &str =

@@ -14,7 +14,7 @@ compile_error!(
     "RESEARCH / SUPPORTING crate aura_proof_material_v2 does not modify active protocol and cannot compile into the single authoritative pipeline without explicit protocol upgrade."
 );
 
-use aura_intent_lineage_v1::{
+use aura_intent_lineage_v1::legacy::proof_pipeline_v1::{
     NativeLayer2AuthorizationLineageObjectV1, NativeLayer2AuthorizationLineageObjectV1Error,
 };
 use core::fmt;

@@ -3,10 +3,12 @@
 // Date: 2026-03-26
 mod support;
 
-use aura_intent_lineage_v1::{
-    construct_proof_transcript_from_assembly_v1, construct_proof_transcript_v1, DcmInput521V1,
-    DcmState521V1, Layer3ClaimConstructionInputV1, ProofTranscriptErrorV1,
-    RecurrenceConstraintErrorV1, PROOF_TRANSCRIPT_VERSION_V1,
+use aura_intent_lineage_v1::legacy::catmap_v1::{
+    DcmInput521V1, DcmState521V1, RecurrenceConstraintErrorV1,
+};
+use aura_intent_lineage_v1::legacy::proof_pipeline_v1::{
+    construct_proof_transcript_from_assembly_v1, construct_proof_transcript_v1,
+    Layer3ClaimConstructionInputV1, ProofTranscriptErrorV1, PROOF_TRANSCRIPT_VERSION_V1,
 };
 
 use support::{
@@ -153,13 +155,13 @@ fn pinned_transcript_vector_is_stable() {
     );
 }
 
-fn canonical_assembly() -> aura_intent_lineage_v1::ProofClaimAssemblyV1 {
+fn canonical_assembly() -> aura_intent_lineage_v1::legacy::proof_pipeline_v1::ProofClaimAssemblyV1 {
     canonical_layer3_assembly()
 }
 
 fn assembly_for_dcm_input(
     dcm_input: DcmInput521V1,
-) -> aura_intent_lineage_v1::ProofClaimAssemblyV1 {
+) -> aura_intent_lineage_v1::legacy::proof_pipeline_v1::ProofClaimAssemblyV1 {
     layer3_assembly_for_dcm_input(dcm_input)
 }
 

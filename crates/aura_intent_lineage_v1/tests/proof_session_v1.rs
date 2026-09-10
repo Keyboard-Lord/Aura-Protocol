@@ -4,14 +4,19 @@
 mod support;
 
 use aura_intent_lineage_v1::{
+    FieldElement521V1, StormClaim521V1, StormState521V1,
+};
+use aura_intent_lineage_v1::legacy::catmap_v1::{
+    dcm_air_public_inputs_from_claim_521_v1, prove_dcm_air_with_mock_proof_v1, DcmAirTraceV1,
+    DcmState521V1, RecurrenceConstraintErrorV1,
+};
+use aura_intent_lineage_v1::legacy::proof_pipeline_v1::{
     accept_lower_layer_mock_session_v1, accept_lower_layer_real_stark_session_v1,
-    dcm_air_public_inputs_from_claim_521_v1, package_proof_session_from_assembly_v1,
-    package_proof_session_v1, prove_dcm_air_with_mock_proof_v1,
-    prove_lower_layer_real_stark_session_v1, DcmAirTraceV1, DcmState521V1,
-    FieldElement521V1, Layer3ClaimConstructionInputV1, LowerLayerRealStarkAcceptanceErrorV1,
-    LowerLayerRealStarkProofSessionV1, ProofSessionAcceptanceErrorV1, ProofSessionErrorV1,
-    ProofSessionPackageV1, ProofTranscriptErrorV1, ProverInputBundleV1,
-    RecurrenceConstraintErrorV1, StormClaim521V1, StormState521V1, VerifierInputBundleV1,
+    package_proof_session_from_assembly_v1, package_proof_session_v1,
+    prove_lower_layer_real_stark_session_v1, Layer3ClaimConstructionInputV1,
+    LowerLayerRealStarkAcceptanceErrorV1, LowerLayerRealStarkProofSessionV1,
+    ProofSessionAcceptanceErrorV1, ProofSessionErrorV1, ProofSessionPackageV1,
+    ProofTranscriptErrorV1, ProverInputBundleV1, VerifierInputBundleV1,
     LAYER3_PROOF_CLAIM_ASSEMBLY_VERSION_V1, PROOF_SESSION_PACKAGING_VERSION_V1,
     PROOF_TRANSCRIPT_VERSION_V1,
 };
@@ -362,14 +367,14 @@ fn canonical_input() -> Layer3ClaimConstructionInputV1 {
 }
 
 fn input_for_dcm_input(
-    dcm_input: aura_intent_lineage_v1::DcmInput521V1,
+    dcm_input: aura_intent_lineage_v1::legacy::catmap_v1::DcmInput521V1,
 ) -> Layer3ClaimConstructionInputV1 {
     layer3_input_for_dcm_input(dcm_input)
 }
 
 fn canonical_mock_session() -> (
     ProofSessionPackageV1,
-    aura_intent_lineage_v1::DcmAirMockProverOutputV1,
+    aura_intent_lineage_v1::legacy::catmap_v1::DcmAirMockProverOutputV1,
 ) {
     let package = package_proof_session_v1(&canonical_input()).unwrap();
     let public_inputs =

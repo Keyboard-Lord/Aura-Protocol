@@ -1,9 +1,12 @@
-use aura_intent_lineage_v1::{
-    produce_native_layer2_authorization_lineage_object_521_v1, AuraLayer4FeePolicyKindV1,
-    AuraLayer4IntentBodyV1, AuraLayer4OperationBodyV1, AuraLayer4TxKindV1, DcmConfig521V1,
-    DcmInput521V1, FreshnessModeV1, Layer1Layer2BridgeFreshnessV1,
+use aura_intent_lineage_v1::legacy::catmap_v1::{DcmConfig521V1, DcmInput521V1};
+use aura_intent_lineage_v1::legacy::proof_pipeline_v1::{
+    produce_native_layer2_authorization_lineage_object_521_v1, Layer1Layer2BridgeFreshnessV1,
     Layer1Layer2BridgeIntentSourceV1, Layer1Layer2BridgeSubjectBindingV1,
-    NativeLayer2AuthorizationLineageObjectV1, SubjectBindingTypeV1, ValueTransferOperationV1,
+    NativeLayer2AuthorizationLineageObjectV1,
+};
+use aura_intent_lineage_v1::legacy::proof_pipeline_v1::{
+    AuraLayer4FeePolicyKindV1, AuraLayer4IntentBodyV1, AuraLayer4OperationBodyV1,
+    AuraLayer4TxKindV1, FreshnessModeV1, SubjectBindingTypeV1, ValueTransferOperationV1,
     AURA_AUTHORIZATION_LINEAGE_DOMAIN_SEPARATOR_V1,
 };
 use aura_proof_material_v2::{

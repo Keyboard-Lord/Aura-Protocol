@@ -4,12 +4,18 @@
 mod support;
 
 use aura_intent_lineage_v1::{
+    FieldElement521V1, FIELD_ELEMENT_521_BYTE_LEN_V1, FIELD_MODULUS_521_V1,
+};
+use aura_intent_lineage_v1::legacy::proof_pipeline_v1::{
+    AuthorizationEnvelopeV1Decision, DcmCommitmentKindV1, FreshnessModeV1, IntentTypeV1,
+    SubjectBindingTypeV1,
+};
+use aura_intent_lineage_v1::legacy::catmap_v1::{
+    DcmConfig521V1, DcmConfigV1, DcmExecutionErrorV1, DcmInput521V1, DcmState521V1, DcmStateV1,
+};
+use aura_intent_lineage_v1::legacy::proof_pipeline_v1::{
     run_native_layer1_layer2_bridge_521_v1, run_native_layer1_layer2_bridge_v1,
-    AuthorizationEnvelopeV1Decision, DcmCommitmentKindV1, DcmConfig521V1, DcmConfigV1,
-    DcmExecutionErrorV1, DcmInput521V1, DcmState521V1, DcmStateV1, FieldElement521V1,
-    FreshnessModeV1, IntentTypeV1, Layer1Layer2BridgeErrorV1, Layer1Layer2BridgeFreshnessV1,
-    Layer1Layer2BridgeIntentSourceV1, SubjectBindingTypeV1, FIELD_ELEMENT_521_BYTE_LEN_V1,
-    FIELD_MODULUS_521_V1,
+    Layer1Layer2BridgeErrorV1, Layer1Layer2BridgeFreshnessV1, Layer1Layer2BridgeIntentSourceV1,
 };
 
 use support::{

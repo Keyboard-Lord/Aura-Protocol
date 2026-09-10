@@ -21,12 +21,12 @@
 use core::fmt;
 use std::{collections::BTreeSet, fs, path::Path};
 
-use aura_intent_lineage_v1::{
+use aura_intent_lineage_v1::legacy::catmap_v1::{
     dcm_air_public_inputs_from_claim_521_v1, derive_dcm_air_stark_public_input_digest_v1,
     prove_dcm_air_real_stark_v1, verify_dcm_air_real_stark_v1, DcmAirPublicInputsV1,
     DcmAirRealStarkProofArtifactV1, DcmConfig521V1, DcmExecution521V1, DcmInput521V1,
-    HASH_LEN_V1 as DCM_HASH_LEN_V1,
 };
+use aura_intent_lineage_v1::HASH_LEN_V1 as DCM_HASH_LEN_V1;
 use aura_l2_execution_v1::{
     derive_outcomes_commitment_v1, derive_touched_accounts_commitment_v1,
     derive_transactions_commitment_v1, derive_transfer_result_commitment_v1,
@@ -3892,12 +3892,12 @@ fn canonical_pipeline_build_attestation_stark_material_v1(
     };
     let execution = DcmExecution521V1::run(&config, &input)
         .map_err(|error| LocalChainErrorV1::InvalidFixture(error.to_string()))?;
-    let claim = aura_intent_lineage_v1::build_dcm_claim_521_v1(&config, &input, &execution);
+    let claim = aura_intent_lineage_v1::legacy::catmap_v1::build_dcm_claim_521_v1(&config, &input, &execution);
     let public_inputs = dcm_air_public_inputs_from_claim_521_v1(&claim);
     let public_inputs_digest = derive_dcm_air_stark_public_input_digest_v1(&public_inputs);
     let proof_artifact = prove_dcm_air_real_stark_v1(
         &public_inputs,
-        &aura_intent_lineage_v1::DcmAirTraceV1::new(execution.states),
+        &aura_intent_lineage_v1::legacy::catmap_v1::DcmAirTraceV1::new(execution.states),
     )
     .map_err(|error| LocalChainErrorV1::InvalidFixture(error.to_string()))?;
     Ok(CanonicalPipelineAttestationStarkMaterialV1 {

@@ -4,14 +4,16 @@
 use std::sync::OnceLock;
 
 use aura_intent_lineage_v1::{
+    FieldElement521V1, FIELD_ELEMENT_521_BYTE_LEN_V1, FIELD_MODULUS_521_V1,
+};
+use aura_intent_lineage_v1::legacy::catmap_v1::{
     build_dcm_claim_521_v1, dcm_air_public_inputs_from_claim_521_v1,
     derive_dcm_air_stark_public_input_digest_v1, prove_dcm_air_real_stark_v1,
     verify_dcm_air_real_stark_v1, DcmAirPublicInputsV1, DcmAirRealStarkProofArtifactV1,
     DcmAirRealStarkVerifierErrorV1, DcmAirTraceV1, DcmConfig521V1, DcmExecution521V1,
-    DcmInput521V1, DcmState521V1, FieldElement521V1,
-    DCM_AIR_REAL_STARK_BACKEND_CONSTRAINT_COUNT_V1, DCM_AIR_REAL_STARK_BACKEND_WINTERFELL_V1,
-    DCM_AIR_REAL_STARK_PROOF_VERSION_V1, DCM_AIR_REAL_STARK_TRACE_WIDTH_V1,
-    FIELD_ELEMENT_521_BYTE_LEN_V1, FIELD_MODULUS_521_V1,
+    DcmInput521V1, DcmState521V1, DCM_AIR_REAL_STARK_BACKEND_CONSTRAINT_COUNT_V1,
+    DCM_AIR_REAL_STARK_BACKEND_WINTERFELL_V1, DCM_AIR_REAL_STARK_PROOF_VERSION_V1,
+    DCM_AIR_REAL_STARK_TRACE_WIDTH_V1,
 };
 
 static CANONICAL_PROOF: OnceLock<DcmAirRealStarkProofArtifactV1> = OnceLock::new();

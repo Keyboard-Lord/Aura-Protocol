@@ -1,11 +1,8 @@
-# Upgraded from dissipative quadratic map to Arnold cat map (Fibonacci-log structure)
-# Matrix: [[1,1],[1,2]] mod (2^521-1)
-# Date: 2026-03-26
 [package]
 name = "aura_intent_lineage_v1"
 version = "0.1.0"
 edition = "2021"
-description = "Thin deterministic Aura v1 intent and authorization-lineage serialization/hash slice"
+description = "Aura Storm execution, canonical claims and witness verification with explicit legacy boundaries"
 
 [dependencies]
 curve25519-dalek = "3.2.1"

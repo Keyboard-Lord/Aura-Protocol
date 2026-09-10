@@ -2,12 +2,15 @@
 // Matrix: [[1,1],[1,2]] mod (2^521-1)
 // Date: 2026-03-26
 use aura_intent_lineage_v1::{
+    FieldElement521V1, FIELD_ELEMENT_521_BYTE_LEN_V1, FIELD_MODULUS_521_V1,
+};
+use aura_intent_lineage_v1::legacy::catmap_v1::{
     build_dcm_claim_521_v1, dcm_air_public_inputs_from_claim_521_v1,
-    evaluate_dcm_air_transition_constraints_v1, evaluate_dcm_air_v1, expected_next_dcm_air_row_v1,
-    validate_dcm_air_v1, DcmAirErrorV1, DcmAirEvaluationResultV1, DcmAirEvaluationSummaryV1,
-    DcmAirFrameV1, DcmAirPublicInputsV1, DcmAirTraceV1, DcmConfig521V1, DcmExecution521V1,
-    DcmInput521V1, DcmState521V1, FieldElement521V1, DCM_AIR_TRACE_WIDTH_V1,
-    DCM_AIR_TRANSITION_CONSTRAINT_COUNT_V1, FIELD_ELEMENT_521_BYTE_LEN_V1, FIELD_MODULUS_521_V1,
+    evaluate_dcm_air_transition_constraints_v1, evaluate_dcm_air_v1,
+    expected_next_dcm_air_row_v1, validate_dcm_air_v1, DcmAirErrorV1, DcmAirEvaluationResultV1,
+    DcmAirEvaluationSummaryV1, DcmAirFrameV1, DcmAirPublicInputsV1, DcmAirTraceV1,
+    DcmConfig521V1, DcmExecution521V1, DcmInput521V1, DcmState521V1, DCM_AIR_TRACE_WIDTH_V1,
+    DCM_AIR_TRANSITION_CONSTRAINT_COUNT_V1,
 };
 
 #[test]

@@ -3,15 +3,23 @@ mod support;
 use std::collections::BTreeSet;
 
 use aura_intent_lineage_v1::{
-    build_dcm_claim_521_v1, derive_deterministic_commitment_521_v1,
+    FieldElement521V1, HASH_LEN_V1,
+};
+use aura_intent_lineage_v1::legacy::proof_pipeline_v1::{
+    AURA_AUTHORIZATION_LINEAGE_DOMAIN_SEPARATOR_V1,
+};
+use aura_intent_lineage_v1::legacy::catmap_v1::{
+    build_dcm_claim_521_v1, derive_deterministic_commitment_521_v1, DcmExecution521V1,
+    DETERMINISTIC_COMMITMENT_521_BYTE_LEN_V1,
+};
+use aura_intent_lineage_v1::legacy::proof_pipeline_v1::{
     produce_layer3_authorization_lineage_consumer_object_v1,
     produce_layer3_layer4_verified_authorization_ingress_v1,
     produce_native_layer2_authorization_lineage_object_521_v1,
-    prove_layer3_authorization_lineage_real_stark_v1, DcmExecution521V1,
-    FieldElement521V1, Layer1Layer2BridgeIntentSourceV1, Layer1Layer2BridgeSubjectBindingV1,
-    Layer3AuthorizationLineageConsumerObjectV1, Layer3AuthorizationLineageProvingInputV1,
-    Layer3AuthorizationLineageRealStarkProofV1, Layer3Layer4VerifiedAuthorizationIngressV1,
-    AURA_AUTHORIZATION_LINEAGE_DOMAIN_SEPARATOR_V1,
+    prove_layer3_authorization_lineage_real_stark_v1, Layer1Layer2BridgeIntentSourceV1,
+    Layer1Layer2BridgeSubjectBindingV1, Layer3AuthorizationLineageConsumerObjectV1,
+    Layer3AuthorizationLineageProvingInputV1, Layer3AuthorizationLineageRealStarkProofV1,
+    Layer3Layer4VerifiedAuthorizationIngressV1,
     AURA_LAYER3_AUTHORIZATION_LINEAGE_CONSUMER_OBJECT_COMMITMENT_DOMAIN_SEPARATOR_V1,
     AURA_LAYER3_AUTHORIZATION_LINEAGE_CONSUMER_RESULT_COMMITMENT_DOMAIN_SEPARATOR_V1,
     AURA_LAYER3_AUTHORIZATION_LINEAGE_V1_CONSTRAINTS_DOMAIN_SEPARATOR,
@@ -22,7 +30,6 @@ use aura_intent_lineage_v1::{
     AURA_LAYER3_LAYER4_VERIFIED_AUTHORIZATION_INGRESS_COMMITMENT_DOMAIN_SEPARATOR_V1,
     AURA_LAYER4_VERIFIED_AUTHORIZATION_PUBLIC_STATEMENT_COMMITMENT_DOMAIN_SEPARATOR_V1,
     AURA_NATIVE_LAYER2_AUTHORIZATION_LINEAGE_OBJECT_COMMITMENT_DOMAIN_SEPARATOR_V1,
-    DETERMINISTIC_COMMITMENT_521_BYTE_LEN_V1, HASH_LEN_V1,
     LAYER3_AUTHORIZATION_LINEAGE_PROOF_TRANSCRIPT_VERSION_V1,
 };
 use sha2::{Digest, Sha256};
@@ -46,7 +53,7 @@ const LEGACY_FINAL_SCALE_V1: u64 = 131_071;
 
 #[derive(Clone)]
 struct CanonicalFlowFixtureV1 {
-    layer2_object: aura_intent_lineage_v1::NativeLayer2AuthorizationLineageObjectV1,
+    layer2_object: aura_intent_lineage_v1::legacy::proof_pipeline_v1::NativeLayer2AuthorizationLineageObjectV1,
     proof: Layer3AuthorizationLineageRealStarkProofV1,
     consumer_object: Layer3AuthorizationLineageConsumerObjectV1,
     ingress_object: Layer3Layer4VerifiedAuthorizationIngressV1,
@@ -671,7 +678,7 @@ fn canonical_ingress_primary_material_bytes_v1(
 
 fn canonical_layer4_verified_authorization_public_statement_primary_material_bytes_v1(
     ingress_object: &Layer3Layer4VerifiedAuthorizationIngressV1,
-    statement: &aura_intent_lineage_v1::Layer4VerifiedAuthorizationPublicStatementV1,
+    statement: &aura_intent_lineage_v1::legacy::proof_pipeline_v1::Layer4VerifiedAuthorizationPublicStatementV1,
 ) -> Vec<u8> {
     canonical_public_statement_primary_material_bytes_from_parts_v1(
         statement.version,

@@ -11,10 +11,10 @@ pub use super::settlement::{
 use crate::udot::normalize_udot_hash;
 use crate::{AuraSdkErrorV1};
 use super::{generate_authorization_intent_v1};
-use aura_intent_lineage_v1::{
-    DcmConfig521V1, DcmState521V1, FieldElement521V1, DCM_STATE_521_CANONICAL_BYTE_LEN_V1,
-    FIELD_ELEMENT_521_BYTE_LEN_V1,
+use aura_intent_lineage_v1::legacy::catmap_v1::{
+    DcmConfig521V1, DcmState521V1, DCM_STATE_521_CANONICAL_BYTE_LEN_V1,
 };
+use aura_intent_lineage_v1::{FieldElement521V1, FIELD_ELEMENT_521_BYTE_LEN_V1};
 use serde::{Deserialize, Serialize};
 
 /// ```compile_fail

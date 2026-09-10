@@ -3,7 +3,7 @@
 // Date: 2026-03-26
 mod support;
 
-use aura_intent_lineage_v1::{
+use aura_intent_lineage_v1::legacy::catmap_v1::{
     DcmConfigV1, DcmExecutionErrorV1, DcmExecutionV1, DcmInputV1, DcmStateV1,
 };
 

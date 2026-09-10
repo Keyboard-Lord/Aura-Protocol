@@ -1,6 +1,6 @@
 mod support;
 
-use aura_intent_lineage_v1::{
+use aura_intent_lineage_v1::legacy::proof_pipeline_v1::{
     NativeLayer2AuthorizationLineageObjectV1, NativeLayer2AuthorizationLineageObjectV1Error,
     NATIVE_LAYER2_AUTHORIZATION_LINEAGE_OBJECT_SERIALIZED_LEN_V1,
 };

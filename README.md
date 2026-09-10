@@ -23,7 +23,7 @@ authority. Passing a fixture test alone does not establish protocol conformance.
 
 | Surface | Owner / entry point | Current role |
 | --- | --- | --- |
-| Hash, field, Storm, trace and proof machinery | [aura_intent_lineage_v1](crates/aura_intent_lineage_v1/src/lib.rs) | Preserve cryptographic semantics. The [Storm prover](crates/aura_intent_lineage_v1/src/stark_prover_v1.rs) transports a witness for replay; its retained cat-map STARK is a separate legacy path. |
+| Hash, field, Storm, trace and proof machinery | [aura_intent_lineage_v1](crates/aura_intent_lineage_v1/src/lib.rs) | Root exports expose Storm and its witness verifier. Historical cat-map/Winterfell APIs require `legacy::catmap_v1`; old layered authorization and mixed claim/session APIs require `legacy::proof_pipeline_v1`. |
 | Proof material and bound proof reference | [proof material](crates/aura_proof_material_v1/src/lib.rs), [FractalKey](crates/aura_fractal_key_v1/src/lib.rs) | Preserved byte-level construction. Rust and TypeScript expose neutral bound-material preparation. Canonical authorization binds x-only subject keys and nonces; account-oriented helper names are isolated under `legacy`. |
 | SDK objects | [Rust SDK](crates/aura_sdk_v1/src/lib.rs), [TypeScript SDK](packages/aura_sdk_v1_ts/src/index.ts) | Canonical v2 authorization and proof material; old nested submission/proof/settlement wires require explicit `legacy` imports. |
 | Bitcoin anchoring | [Rust codec](crates/aura_bitcoin_v1/src/lib.rs), [TypeScript codec](packages/aura_bitcoin_v1_ts/src/index.ts), [Core transport](packages/aura_bitcoin_v1_ts/src/coreRpc.ts) | Approved OP_RETURN anchor, PSBT funding/signing, output checks, and reorg-aware observation. |

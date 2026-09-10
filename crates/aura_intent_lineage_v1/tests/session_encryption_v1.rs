@@ -3,16 +3,19 @@ mod support;
 use std::{fs, path::PathBuf};
 
 use aura_intent_lineage_v1::{
-    build_encrypted_envelope_v1, build_storm_encryption_binding_from_proof_session_v1,
-    decrypt_payload_v1, derive_aad_context_hash_v1, derive_session_key_id_v1,
-    derive_session_public_key_v1, derive_session_symmetric_key_v1, derive_shared_secret_v1,
-    encode_session_encryption_context_v1, encode_storm_encryption_binding_v1,
-    extract_storm_session_encryption_fields_v1, package_proof_session_v1,
+    build_encrypted_envelope_v1, decrypt_payload_v1, derive_aad_context_hash_v1,
+    derive_session_key_id_v1, derive_session_public_key_v1, derive_session_symmetric_key_v1,
+    derive_shared_secret_v1, encode_session_encryption_context_v1,
+    encode_storm_encryption_binding_v1, extract_storm_session_encryption_fields_v1,
     validate_encrypted_envelope_v1, AuraEncryptedEnvelopeV1, AuraSessionEncryptionContextV1,
     SessionKeyDerivationInputV1, SessionPublicKeyV1, SessionSecretKeyV1,
     StormEncryptionBindingV1, SymmetricEnvelopeErrorV1, ENCRYPTED_ENVELOPE_V1_ALGORITHM_ID,
-    ENCRYPTED_ENVELOPE_V1_NONCE_LEN, ENCRYPTED_ENVELOPE_V1_TAG_LEN, ENCRYPTED_ENVELOPE_V1_VERSION,
-    FIELD_ELEMENT_521_BYTE_LEN_V1, HASH_LEN_V1, SESSION_ENCRYPTION_CONTEXT_V1_VERSION,
+    ENCRYPTED_ENVELOPE_V1_NONCE_LEN, ENCRYPTED_ENVELOPE_V1_TAG_LEN,
+    ENCRYPTED_ENVELOPE_V1_VERSION, FIELD_ELEMENT_521_BYTE_LEN_V1, HASH_LEN_V1,
+    SESSION_ENCRYPTION_CONTEXT_V1_VERSION,
+};
+use aura_intent_lineage_v1::legacy::proof_pipeline_v1::{
+    build_storm_encryption_binding_from_proof_session_v1, package_proof_session_v1,
 };
 use serde::Deserialize;
 

@@ -8,19 +8,23 @@ use std::{
 };
 
 use aura_intent_lineage_v1::{
+    FieldElement521V1, FIELD_ELEMENT_521_BYTE_LEN_V1, FIELD_MODULUS_521_V1,
+};
+use aura_intent_lineage_v1::legacy::catmap_v1::{
     advance_dcm_state_521_v1, advance_dcm_state_v1, build_dcm_claim_521_v1,
     canonical_dcm_air_trace_bytes_v1, coordinate_recurrence_next_521_v1,
     dcm_air_public_inputs_from_claim_521_v1, dcm_cat_map_inverse_matrix_521_v1,
     dcm_cat_map_matrix_521_v1, derive_dcm_air_stark_public_input_digest_v1,
-    derive_dcm_layer1_commitments_521_v1, fast_forward_dcm_state_521_v1, fast_forward_dcm_state_v1,
-    fast_rewind_dcm_state_521_v1, package_dcm_air_proof_session_v1,
-    prove_dcm_air_with_mock_proof_v1, rewind_dcm_state_521_v1, rewind_dcm_state_v1,
-    DcmAirMockVerifierBindingsV1, DcmAirPublicInputsV1, DcmAirTraceV1, DcmConfig521V1,
-    DcmExecution521V1, DcmInput521V1, DcmMatrix521V1, DcmState521V1, DcmStateV1, FieldElement521V1,
+    fast_forward_dcm_state_521_v1, fast_forward_dcm_state_v1, fast_rewind_dcm_state_521_v1,
+    package_dcm_air_proof_session_v1, prove_dcm_air_with_mock_proof_v1, rewind_dcm_state_521_v1,
+    rewind_dcm_state_v1, DcmAirMockVerifierBindingsV1, DcmAirPublicInputsV1, DcmAirTraceV1,
+    DcmConfig521V1, DcmExecution521V1, DcmInput521V1, DcmMatrix521V1, DcmState521V1, DcmStateV1,
     AURA_DCM_AIR_MOCK_PROOF_V1_PUBLIC_INPUT_DOMAIN_SEPARATOR,
     AURA_DCM_STARK_TRANSCRIPT_V1_PUBLIC_INPUT_DOMAIN_SEPARATOR,
     DCM_AIR_PUBLIC_INPUTS_521_CANONICAL_BYTE_LEN_V1, DCM_STATE_521_CANONICAL_BYTE_LEN_V1,
-    FIELD_ELEMENT_521_BYTE_LEN_V1, FIELD_MODULUS_521_V1,
+};
+use aura_intent_lineage_v1::legacy::proof_pipeline_v1::{
+    derive_dcm_layer1_commitments_521_v1,
 };
 use num_bigint::BigUint;
 use serde::Deserialize;

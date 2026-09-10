@@ -9,28 +9,23 @@
 //!
 //! Run with: cargo test -p aura_intent_lineage_v1 --test adversarial_audit_v1 -- --nocapture
 
+// Active Storm interfaces and shared field arithmetic.
 use aura_intent_lineage_v1::{
-    // STORM layer - these are the active interfaces
-    build_storm_public_inputs_v1, build_storm_trace, compute_storm_trace_root,
-    derive_a, derive_b, derive_phi_n, derive_psi_n, derive_x0, derive_y0,
-    execute_storm_v1, storm_step, validate_trace_against_claim,
-    validate_trace_witness_against_claim, validate_context_bytes_v1,
-    StormAirPublicInputsV1, StormClaim521V1, StormClaimErrorV1,
-    StormContextErrorV1, StormExecutionErrorV1, StormExecutionInputsV1,
-    StormExecutionResultV1, StormState521V1, StormTraceStepWitnessV1,
-    StormTraceWitnessV1, StormTraceWitnessEncodingErrorV1,
-    StormAirValidationErrorV1, StormPublicInputs521V1,
-    // Field arithmetic
-    FieldElement521V1, FieldElementErrorV1,
-    FIELD_ELEMENT_521_BYTE_LEN_V1, FIELD_MODULUS_521_V1,
-    // Constants
-    HASH_LEN_V1, STORM_CONTEXT_V1_LEN, STORM_SIDE_INPUT_LEN_V1,
-    STORM_STATE_521_ROW_BYTE_LEN_V1, STORM_CLAIM_521_V1_VERSION,
-    STORM_MODULUS_ID_521_V1,
-    // DCM interfaces for comparison tests (legacy but still exported)
-    DcmState521V1, DcmInput521V1, DcmConfig521V1, DcmExecution521V1,
-    advance_dcm_state_521_v1, rewind_dcm_state_521_v1,
-    fast_forward_dcm_state_521_v1, fast_rewind_dcm_state_521_v1,
+    build_storm_public_inputs_v1, build_storm_trace, compute_storm_trace_root, derive_a,
+    derive_b, derive_phi_n, derive_psi_n, derive_x0, derive_y0, execute_storm_v1, storm_step,
+    validate_trace_against_claim, validate_trace_witness_against_claim,
+    validate_context_bytes_v1, StormAirPublicInputsV1, StormClaim521V1, StormClaimErrorV1,
+    StormContextErrorV1, StormExecutionErrorV1, StormExecutionInputsV1, StormExecutionResultV1,
+    StormState521V1, StormTraceStepWitnessV1, StormTraceWitnessV1,
+    StormTraceWitnessEncodingErrorV1, StormAirValidationErrorV1, StormPublicInputs521V1,
+    FieldElement521V1, FieldElementErrorV1, FIELD_ELEMENT_521_BYTE_LEN_V1, FIELD_MODULUS_521_V1,
+    HASH_LEN_V1, STORM_CONTEXT_V1_LEN, STORM_SIDE_INPUT_LEN_V1, STORM_STATE_521_ROW_BYTE_LEN_V1,
+    STORM_CLAIM_521_V1_VERSION, STORM_MODULUS_ID_521_V1,
+};
+// Historical DCM interfaces retained for explicit comparison tests.
+use aura_intent_lineage_v1::legacy::catmap_v1::{
+    DcmState521V1, DcmInput521V1, DcmConfig521V1, DcmExecution521V1, advance_dcm_state_521_v1,
+    rewind_dcm_state_521_v1, fast_forward_dcm_state_521_v1, fast_rewind_dcm_state_521_v1,
 };
 
 use sha2::{Digest, Sha256};

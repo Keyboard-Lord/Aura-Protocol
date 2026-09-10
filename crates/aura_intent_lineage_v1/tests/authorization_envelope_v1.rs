@@ -1,6 +1,6 @@
 mod support;
 
-use aura_intent_lineage_v1::{
+use aura_intent_lineage_v1::legacy::proof_pipeline_v1::{
     AuthorizationEnvelopeFreshnessContextV1, AuthorizationEnvelopeV1Decision,
     AuthorizationEnvelopeV1Error, AuthorizationLineageV1, DcmCommitmentKindV1, FreshnessModeV1,
     IntentTypeV1, SubjectBindingTypeV1,

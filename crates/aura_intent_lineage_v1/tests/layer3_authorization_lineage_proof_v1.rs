@@ -1,13 +1,18 @@
 mod support;
 
-use aura_intent_lineage_v1::{
-    build_dcm_claim_521_v1, produce_native_layer2_authorization_lineage_object_521_v1,
+use aura_intent_lineage_v1::legacy::proof_pipeline_v1::{
+    SubjectBindingTypeV1,
+};
+use aura_intent_lineage_v1::legacy::catmap_v1::{
+    build_dcm_claim_521_v1, DcmExecution521V1, DcmInput521V1,
+};
+use aura_intent_lineage_v1::legacy::proof_pipeline_v1::{
+    produce_native_layer2_authorization_lineage_object_521_v1,
     prove_layer3_authorization_lineage_real_stark_v1,
-    verify_layer3_authorization_lineage_real_stark_v1, DcmExecution521V1, DcmInput521V1,
-    Layer1Layer2BridgeFreshnessV1, Layer1Layer2BridgeIntentSourceV1,
-    Layer1Layer2BridgeSubjectBindingV1, Layer3AuthorizationLineageBoundaryErrorV1,
-    Layer3AuthorizationLineageProverErrorV1, Layer3AuthorizationLineageProvingInputV1,
-    Layer3AuthorizationLineageVerifierErrorV1, SubjectBindingTypeV1,
+    verify_layer3_authorization_lineage_real_stark_v1, Layer1Layer2BridgeFreshnessV1,
+    Layer1Layer2BridgeIntentSourceV1, Layer1Layer2BridgeSubjectBindingV1,
+    Layer3AuthorizationLineageBoundaryErrorV1, Layer3AuthorizationLineageProverErrorV1,
+    Layer3AuthorizationLineageProvingInputV1, Layer3AuthorizationLineageVerifierErrorV1,
 };
 use sha2::Digest;
 
@@ -128,7 +133,7 @@ fn verify_rejects_tampered_layer2_trace_commitment() {
     let mut lineage = proof.public_claim.layer2_object.lineage;
     lineage.dcm_trace_commitment[0] ^= 0x01;
     proof.public_claim.layer2_object =
-        aura_intent_lineage_v1::NativeLayer2AuthorizationLineageObjectV1::new(lineage)
+        aura_intent_lineage_v1::legacy::proof_pipeline_v1::NativeLayer2AuthorizationLineageObjectV1::new(lineage)
             .expect("tampered lineage remains structurally valid");
 
     let error = verify_layer3_authorization_lineage_real_stark_v1(&proof).unwrap_err();
@@ -203,7 +208,7 @@ fn input_for_dcm_input(dcm_input: DcmInput521V1) -> Layer3AuthorizationLineagePr
 
 fn layer2_object_for_input(
     dcm_input: DcmInput521V1,
-) -> aura_intent_lineage_v1::NativeLayer2AuthorizationLineageObjectV1 {
+) -> aura_intent_lineage_v1::legacy::proof_pipeline_v1::NativeLayer2AuthorizationLineageObjectV1 {
     produce_native_layer2_authorization_lineage_object_521_v1(
         &canonical_dcm_config(),
         &dcm_input,

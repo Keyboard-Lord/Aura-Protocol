@@ -19,9 +19,9 @@ compile_error!(
 
 use sha2::{Digest, Sha256};
 
+pub use aura_intent_lineage_v1::legacy::catmap_v1::DcmInput521V1;
 pub use aura_intent_lineage_v1::{
-    DcmInput521V1, FieldElement521V1, FIELD_ELEMENT_521_BYTE_LEN_V1, FIELD_MODULUS_521_V1,
-    HASH_LEN_V1,
+    FieldElement521V1, FIELD_ELEMENT_521_BYTE_LEN_V1, FIELD_MODULUS_521_V1, HASH_LEN_V1,
 };
 
 mod research_dodecahedral_graph_v1;

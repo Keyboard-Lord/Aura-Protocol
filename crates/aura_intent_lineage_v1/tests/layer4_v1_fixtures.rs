@@ -1,6 +1,8 @@
 mod support;
 
-use aura_intent_lineage_v1::{AuraLayer4IntentHashV1Error, AuthorizationLineageV1Error};
+use aura_intent_lineage_v1::legacy::proof_pipeline_v1::{
+    AuraLayer4IntentHashV1Error, AuthorizationLineageV1Error,
+};
 
 use support::{
     build_intent, build_lineage, encode_hex, load_fixture, IntentFixtureFile,

@@ -1,21 +1,25 @@
 use std::{env, f64::consts::PI, time::Instant};
 
-use aura_intent_lineage_v1::{
+use aura_intent_lineage_v1::legacy::catmap_v1::{
+    DcmConfig521V1, DcmExecution521V1, DcmInput521V1,
+};
+use aura_intent_lineage_v1::legacy::proof_pipeline_v1::{
     produce_layer3_authorization_lineage_consumer_object_v1,
     produce_native_layer2_authorization_lineage_object_521_v1,
-    prove_layer3_authorization_lineage_real_stark_v1, AuraLayer4FeePolicyKindV1,
-    AuraLayer4IntentBodyV1, AuraLayer4OperationBodyV1, AuraLayer4TxKindV1, DcmConfig521V1,
-    DcmExecution521V1, DcmInput521V1, FreshnessModeV1,
+    prove_layer3_authorization_lineage_real_stark_v1,
     Layer1Layer2BridgeFreshnessV1, Layer1Layer2BridgeIntentSourceV1,
     Layer1Layer2BridgeSubjectBindingV1, Layer3AuthorizationLineageProvingInputV1,
-    SubjectBindingTypeV1,
-    ValueTransferOperationV1, AURA_LAYER3_AUTHORIZATION_LINEAGE_CONSUMER_RESULT_DOMAIN_SEPARATOR_V1,
+    AURA_LAYER3_AUTHORIZATION_LINEAGE_CONSUMER_RESULT_DOMAIN_SEPARATOR_V1,
     AURA_LAYER3_AUTHORIZATION_LINEAGE_V1_CONSTRAINTS_DOMAIN_SEPARATOR,
     AURA_LAYER3_AUTHORIZATION_LINEAGE_V1_PUBLIC_DOMAIN_SEPARATOR,
     AURA_LAYER3_AUTHORIZATION_LINEAGE_V1_REAL_STARK_BINDING_DOMAIN_SEPARATOR,
     AURA_LAYER3_AUTHORIZATION_LINEAGE_V1_TRANSCRIPT_DOMAIN_SEPARATOR,
     AURA_LAYER3_AUTHORIZATION_LINEAGE_V1_WITNESS_DOMAIN_SEPARATOR,
     LAYER3_AUTHORIZATION_LINEAGE_PROOF_TRANSCRIPT_VERSION_V1,
+};
+use aura_intent_lineage_v1::legacy::proof_pipeline_v1::{
+    AuraLayer4FeePolicyKindV1, AuraLayer4IntentBodyV1, AuraLayer4OperationBodyV1,
+    AuraLayer4TxKindV1, FreshnessModeV1, SubjectBindingTypeV1, ValueTransferOperationV1,
 };
 use sha2::{Digest, Sha256};
 
@@ -347,7 +351,7 @@ fn canonical_freshness_v1() -> Layer1Layer2BridgeFreshnessV1 {
     }
 }
 
-fn canonical_layer2_object_v1() -> aura_intent_lineage_v1::NativeLayer2AuthorizationLineageObjectV1 {
+fn canonical_layer2_object_v1() -> aura_intent_lineage_v1::legacy::proof_pipeline_v1::NativeLayer2AuthorizationLineageObjectV1 {
     produce_native_layer2_authorization_lineage_object_521_v1(
         &canonical_dcm_config_v1(),
         &canonical_dcm_input_v1(),
@@ -360,14 +364,14 @@ fn canonical_layer2_object_v1() -> aura_intent_lineage_v1::NativeLayer2Authoriza
 
 fn canonical_layer3_consumer_v1(
 ) -> (
-    aura_intent_lineage_v1::Layer3AuthorizationLineageRealStarkProofV1,
-    aura_intent_lineage_v1::Layer3AuthorizationLineageConsumerObjectV1,
+    aura_intent_lineage_v1::legacy::proof_pipeline_v1::Layer3AuthorizationLineageRealStarkProofV1,
+    aura_intent_lineage_v1::legacy::proof_pipeline_v1::Layer3AuthorizationLineageConsumerObjectV1,
 ) {
     let config = canonical_dcm_config_v1();
     let dcm_input = canonical_dcm_input_v1();
     let execution = DcmExecution521V1::run(&config, &dcm_input)
         .expect("canonical DCM execution should succeed");
-    let claim = aura_intent_lineage_v1::build_dcm_claim_521_v1(&config, &dcm_input, &execution);
+    let claim = aura_intent_lineage_v1::legacy::catmap_v1::build_dcm_claim_521_v1(&config, &dcm_input, &execution);
     let layer2_object = canonical_layer2_object_v1();
     let intent = canonical_intent_v1();
     let proving_input = Layer3AuthorizationLineageProvingInputV1::new(claim, layer2_object, intent);
@@ -379,7 +383,7 @@ fn canonical_layer3_consumer_v1(
 }
 
 fn canonical_consumer_result_preimage_bytes_v1(
-    consumer: &aura_intent_lineage_v1::Layer3AuthorizationLineageConsumerObjectV1,
+    consumer: &aura_intent_lineage_v1::legacy::proof_pipeline_v1::Layer3AuthorizationLineageConsumerObjectV1,
 ) -> Vec<u8> {
     let mut bytes = Vec::with_capacity(1 + (32 * 8));
     bytes.push(consumer.decision.as_u8());
@@ -529,7 +533,7 @@ fn report_request_binding_preimage_bytes_v1(
 }
 
 fn layer2_oracle_template_v1(
-    layer2_object: &aura_intent_lineage_v1::NativeLayer2AuthorizationLineageObjectV1,
+    layer2_object: &aura_intent_lineage_v1::legacy::proof_pipeline_v1::NativeLayer2AuthorizationLineageObjectV1,
 ) -> Layer2OracleTemplateV1 {
     Layer2OracleTemplateV1 {
         lineage_preimage: layer2_object
@@ -558,8 +562,8 @@ fn report_oracle_template_v1(report: &CanonicalPipelineReportV1) -> ReportOracle
 }
 
 fn consumer_result_oracle_template_v1(
-    canonical_proof: &aura_intent_lineage_v1::Layer3AuthorizationLineageRealStarkProofV1,
-    canonical_consumer: &aura_intent_lineage_v1::Layer3AuthorizationLineageConsumerObjectV1,
+    canonical_proof: &aura_intent_lineage_v1::legacy::proof_pipeline_v1::Layer3AuthorizationLineageRealStarkProofV1,
+    canonical_consumer: &aura_intent_lineage_v1::legacy::proof_pipeline_v1::Layer3AuthorizationLineageConsumerObjectV1,
 ) -> ConsumerResultOracleTemplateV1 {
     let lineage_preimage = canonical_proof
         .public_claim

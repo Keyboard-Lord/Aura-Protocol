@@ -3,11 +3,17 @@
 // Date: 2026-03-26
 mod support;
 
-use aura_intent_lineage_v1::{
-    evaluate_recurrence_constraints_v1, validate_recurrence_constraints_v1, DcmCommitmentKindV1,
-    DcmExecution521ErrorV1, DcmState521V1, FreshnessModeV1, IntentTypeV1, ProofClaimAssemblyV1,
-    RecurrenceConstraintDecisionV1, RecurrenceConstraintErrorV1, RecurrenceConstraintSummaryV1,
-    SubjectBindingTypeV1, LINEAGE_FLAG_HAS_PROOF_MATERIAL_V1_HASH,
+use aura_intent_lineage_v1::legacy::proof_pipeline_v1::{
+    DcmCommitmentKindV1, FreshnessModeV1, IntentTypeV1, SubjectBindingTypeV1,
+    LINEAGE_FLAG_HAS_PROOF_MATERIAL_V1_HASH,
+};
+use aura_intent_lineage_v1::legacy::catmap_v1::{
+    evaluate_recurrence_constraints_v1, validate_recurrence_constraints_v1,
+    DcmExecution521ErrorV1, DcmState521V1, RecurrenceConstraintDecisionV1,
+    RecurrenceConstraintErrorV1, RecurrenceConstraintSummaryV1,
+};
+use aura_intent_lineage_v1::legacy::proof_pipeline_v1::{
+    ProofClaimAssemblyV1,
 };
 
 use support::{
@@ -330,7 +336,7 @@ fn pinned_constraint_check_vector_is_stable() {
     );
 }
 
-fn canonical_assembly() -> aura_intent_lineage_v1::ProofClaimAssemblyV1 {
+fn canonical_assembly() -> aura_intent_lineage_v1::legacy::proof_pipeline_v1::ProofClaimAssemblyV1 {
     canonical_layer3_assembly()
 }
 

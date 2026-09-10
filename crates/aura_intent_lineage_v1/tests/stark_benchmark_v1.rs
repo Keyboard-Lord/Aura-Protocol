@@ -3,9 +3,10 @@
 // Date: 2026-03-26
 use std::time::Instant;
 
-use aura_intent_lineage_v1::{
+use aura_intent_lineage_v1::legacy::catmap_v1::{
     build_dcm_claim_521_v1, dcm_air_public_inputs_from_claim_521_v1, prove_dcm_air_real_stark_v1,
-    verify_dcm_air_real_stark_v1, DcmAirTraceV1, DcmConfig521V1, DcmExecution521V1, DcmInput521V1,
+    verify_dcm_air_real_stark_v1, DcmAirTraceV1, DcmConfig521V1, DcmExecution521V1,
+    DcmInput521V1,
 };
 
 #[test]

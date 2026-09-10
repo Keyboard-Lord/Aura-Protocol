@@ -13,11 +13,12 @@ use aura_intent_lineage_research_v1::{
     RESEARCH_EMA_NETWORK_STATE_CANONICAL_BYTE_LEN_V1,
     RESEARCH_EMA_NETWORK_STATE_HEADER_BYTE_LEN_V1, RESEARCH_EMA_NODE_CANONICAL_BYTE_LEN_V1,
 };
-use aura_intent_lineage_v1::{
+use aura_intent_lineage_v1::legacy::catmap_v1::{
     build_dcm_claim_521_v1, dcm_air_public_inputs_from_claim_521_v1,
     package_dcm_air_proof_session_v1, validate_dcm_air_v1, DcmAirTraceV1, DcmConfig521V1,
-    DcmExecution521V1, HASH_LEN_V1,
+    DcmExecution521V1,
 };
+use aura_intent_lineage_v1::HASH_LEN_V1;
 
 #[test]
 fn same_rounds_and_alpha_produce_the_same_seed() {

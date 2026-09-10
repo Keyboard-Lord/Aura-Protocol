@@ -3,11 +3,15 @@
 // Date: 2026-03-26
 mod support;
 
-use aura_intent_lineage_v1::{
-    assemble_layer3_proof_claim_v1, AuthorizationEnvelopeFreshnessContextV1,
-    AuthorizationEnvelopeV1Decision, AuthorizationEnvelopeV1Error, DcmCommitmentKindV1,
-    DcmExecution521ErrorV1, DcmInput521V1, DcmState521V1, FreshnessModeV1, IntentTypeV1,
-    Layer3ClaimConstructionInputV1, Layer3ClaimErrorV1,
+use aura_intent_lineage_v1::legacy::proof_pipeline_v1::{
+    AuthorizationEnvelopeFreshnessContextV1, AuthorizationEnvelopeV1Decision,
+    AuthorizationEnvelopeV1Error, DcmCommitmentKindV1, FreshnessModeV1, IntentTypeV1,
+};
+use aura_intent_lineage_v1::legacy::catmap_v1::{
+    DcmExecution521ErrorV1, DcmInput521V1, DcmState521V1,
+};
+use aura_intent_lineage_v1::legacy::proof_pipeline_v1::{
+    assemble_layer3_proof_claim_v1, Layer3ClaimConstructionInputV1, Layer3ClaimErrorV1,
     LAYER3_PROOF_CLAIM_ASSEMBLY_VERSION_V1, LAYER3_PUBLIC_INPUT_CATEGORY_COUNT_V1,
     LAYER3_WITNESS_CATEGORY_COUNT_V1,
 };
@@ -293,14 +297,14 @@ fn pinned_proof_claim_vector_is_stable() {
     assert_eq!(assembly.witness_bundle.intent_hash_preimage.len(), 217);
 }
 
-fn canonical_assembly() -> Result<aura_intent_lineage_v1::ProofClaimAssemblyV1, Layer3ClaimErrorV1>
+fn canonical_assembly() -> Result<aura_intent_lineage_v1::legacy::proof_pipeline_v1::ProofClaimAssemblyV1, Layer3ClaimErrorV1>
 {
     assemble_layer3_proof_claim_v1(&canonical_input())
 }
 
 fn assembly_for_input(
     dcm_input: DcmInput521V1,
-) -> Result<aura_intent_lineage_v1::ProofClaimAssemblyV1, Layer3ClaimErrorV1> {
+) -> Result<aura_intent_lineage_v1::legacy::proof_pipeline_v1::ProofClaimAssemblyV1, Layer3ClaimErrorV1> {
     assemble_layer3_proof_claim_v1(&layer3_input_for_dcm_input(dcm_input))
 }
 

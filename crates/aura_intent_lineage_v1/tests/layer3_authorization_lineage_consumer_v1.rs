@@ -1,14 +1,19 @@
 mod support;
 
-use aura_intent_lineage_v1::{
-    build_dcm_claim_521_v1, consume_layer3_authorization_lineage_consumer_object_v1,
+use aura_intent_lineage_v1::legacy::proof_pipeline_v1::{
+    SubjectBindingTypeV1,
+};
+use aura_intent_lineage_v1::legacy::catmap_v1::{
+    build_dcm_claim_521_v1, DcmExecution521V1, DcmInput521V1,
+};
+use aura_intent_lineage_v1::legacy::proof_pipeline_v1::{
+    consume_layer3_authorization_lineage_consumer_object_v1,
     produce_layer3_authorization_lineage_consumer_object_v1,
     produce_native_layer2_authorization_lineage_object_521_v1,
-    prove_layer3_authorization_lineage_real_stark_v1, DcmExecution521V1, DcmInput521V1,
-    Layer1Layer2BridgeFreshnessV1, Layer1Layer2BridgeIntentSourceV1,
-    Layer1Layer2BridgeSubjectBindingV1, Layer3AuthorizationLineageConsumerDecisionV1,
-    Layer3AuthorizationLineageConsumerErrorV1, Layer3AuthorizationLineageProvingInputV1,
-    NativeLayer2AuthorizationLineageObjectV1, SubjectBindingTypeV1,
+    prove_layer3_authorization_lineage_real_stark_v1, Layer1Layer2BridgeFreshnessV1,
+    Layer1Layer2BridgeIntentSourceV1, Layer1Layer2BridgeSubjectBindingV1,
+    Layer3AuthorizationLineageConsumerDecisionV1, Layer3AuthorizationLineageConsumerErrorV1,
+    Layer3AuthorizationLineageProvingInputV1, NativeLayer2AuthorizationLineageObjectV1,
     AURA_LAYER3_AUTHORIZATION_LINEAGE_CONSUMER_RESULT_DOMAIN_SEPARATOR_V1,
 };
 use sha2::Digest;
@@ -287,7 +292,7 @@ fn layer2_proof_material_hash_from_lineage_hash(lineage_hash: [u8; 32]) -> [u8; 
 
 fn canonical_consumer_result_digest(
     decision: Layer3AuthorizationLineageConsumerDecisionV1,
-    proof_result: &aura_intent_lineage_v1::Layer3AuthorizationLineageConsumerProofResultV1,
+    proof_result: &aura_intent_lineage_v1::legacy::proof_pipeline_v1::Layer3AuthorizationLineageConsumerProofResultV1,
 ) -> [u8; 32] {
     let mut bytes = Vec::new();
     bytes.push(decision.as_u8());

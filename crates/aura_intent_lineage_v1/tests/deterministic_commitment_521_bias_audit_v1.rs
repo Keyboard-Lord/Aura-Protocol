@@ -3,10 +3,16 @@ mod support;
 use std::{collections::BTreeMap, fs, path::PathBuf};
 
 use aura_intent_lineage_v1::{
-    derive_deterministic_commitment_521_v1, FieldElement521V1,
+    FieldElement521V1,
+};
+use aura_intent_lineage_v1::legacy::proof_pipeline_v1::{
     AURA_AUTHORIZATION_LINEAGE_DOMAIN_SEPARATOR_V1,
+};
+use aura_intent_lineage_v1::legacy::catmap_v1::{
+    derive_deterministic_commitment_521_v1, DETERMINISTIC_COMMITMENT_521_BYTE_LEN_V1,
+};
+use aura_intent_lineage_v1::legacy::proof_pipeline_v1::{
     AURA_NATIVE_LAYER2_AUTHORIZATION_LINEAGE_OBJECT_COMMITMENT_DOMAIN_SEPARATOR_V1,
-    DETERMINISTIC_COMMITMENT_521_BYTE_LEN_V1,
 };
 use serde::Serialize;
 use sha2::{Digest, Sha256, Sha512};

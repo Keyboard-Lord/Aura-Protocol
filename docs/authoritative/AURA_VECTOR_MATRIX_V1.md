@@ -28,6 +28,9 @@
 - TypeScript: `src/stormClaimV1.test.ts`
 - TypeScript: `tests/storm_parity_v1.test.ts`
 - TypeScript: `tests/storm_hash_quantum_hardening_v1.test.ts`
+- Core export isolation: `cargo test -p aura_intent_lineage_v1 --doc --offline`
+  checks canonical Storm imports, explicit legacy imports, and rejection of retired
+  cat-map, mixed-session and former authorization/state APIs at the crate root.
 
 ## L3-L5
 

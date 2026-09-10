@@ -1,19 +1,23 @@
 mod support;
 
-use aura_intent_lineage_v1::{
+use aura_intent_lineage_v1::legacy::proof_pipeline_v1::{
+    AuthorizationEnvelopeAuthKindV1, AuthorizationEnvelopeFreshnessContextV1,
+    AuthorizationEnvelopeLineageTransportKindV1, AuthorizationEnvelopeV1,
+    AuthorizationEnvelopeV1Decision, AuthorizationEnvelopeV1Error, SubjectBindingTypeV1,
+};
+use aura_intent_lineage_v1::legacy::catmap_v1::{
+    build_dcm_claim_521_v1, derive_deterministic_commitment_521_v1, DcmExecution521V1,
+    DcmInput521V1,
+};
+use aura_intent_lineage_v1::legacy::proof_pipeline_v1::{
     accept_layer3_layer4_verified_authorization_ingress_v1,
-    build_dcm_claim_521_v1, produce_layer3_authorization_lineage_consumer_object_v1,
+    produce_layer3_authorization_lineage_consumer_object_v1,
     produce_layer3_layer4_verified_authorization_ingress_v1,
     produce_native_layer2_authorization_lineage_object_521_v1,
-    prove_layer3_authorization_lineage_real_stark_v1, AuthorizationEnvelopeAuthKindV1,
-    AuthorizationEnvelopeFreshnessContextV1, AuthorizationEnvelopeLineageTransportKindV1,
-    AuthorizationEnvelopeV1, AuthorizationEnvelopeV1Decision, AuthorizationEnvelopeV1Error,
-    consume_layer3_authorization_lineage_consumer_object_v1,
-    derive_deterministic_commitment_521_v1, DcmExecution521V1, DcmInput521V1,
-    Layer1Layer2BridgeFreshnessV1,
+    prove_layer3_authorization_lineage_real_stark_v1,
+    consume_layer3_authorization_lineage_consumer_object_v1, Layer1Layer2BridgeFreshnessV1,
     Layer1Layer2BridgeIntentSourceV1, Layer1Layer2BridgeSubjectBindingV1,
     Layer3AuthorizationLineageProvingInputV1, Layer3Layer4VerifiedAuthorizationIngressErrorV1,
-    SubjectBindingTypeV1,
     AURA_LAYER3_AUTHORIZATION_LINEAGE_CONSUMER_RESULT_COMMITMENT_DOMAIN_SEPARATOR_V1,
     AURA_LAYER3_AUTHORIZATION_LINEAGE_CONSUMER_RESULT_DOMAIN_SEPARATOR_V1,
 };
@@ -176,7 +180,7 @@ fn construction_rejects_tampered_consumer_object_binding() {
     let mut lineage = consumer.public_claim.layer2_object.lineage;
     lineage.dcm_trace_commitment[0] ^= 0x01;
     consumer.public_claim.layer2_object =
-        aura_intent_lineage_v1::NativeLayer2AuthorizationLineageObjectV1::new(lineage)
+        aura_intent_lineage_v1::legacy::proof_pipeline_v1::NativeLayer2AuthorizationLineageObjectV1::new(lineage)
             .expect("tampered lineage remains structurally valid");
 
     let error =
@@ -185,7 +189,7 @@ fn construction_rejects_tampered_consumer_object_binding() {
     assert!(matches!(
         error,
         Layer3Layer4VerifiedAuthorizationIngressErrorV1::Layer3ConsumerRejected(
-            aura_intent_lineage_v1::Layer3AuthorizationLineageConsumerErrorV1::HashMismatch {
+            aura_intent_lineage_v1::legacy::proof_pipeline_v1::Layer3AuthorizationLineageConsumerErrorV1::HashMismatch {
                 field: "public_claim.layer2_object.dcm_trace_commitment",
                 ..
             }
@@ -206,8 +210,8 @@ fn validation_rejects_tampered_intent_context() {
     assert!(matches!(
         error,
         Layer3Layer4VerifiedAuthorizationIngressErrorV1::Layer3VerificationRejected(
-            aura_intent_lineage_v1::Layer3AuthorizationLineageVerifierErrorV1::BoundaryValidationFailed(
-                aura_intent_lineage_v1::Layer3AuthorizationLineageBoundaryErrorV1::HashMismatch {
+            aura_intent_lineage_v1::legacy::proof_pipeline_v1::Layer3AuthorizationLineageVerifierErrorV1::BoundaryValidationFailed(
+                aura_intent_lineage_v1::legacy::proof_pipeline_v1::Layer3AuthorizationLineageBoundaryErrorV1::HashMismatch {
                     field: "public_claim.layer2_object.intent_hash",
                     ..
                 }
@@ -332,7 +336,7 @@ fn active_envelope_path_still_rejects_proof_mediated_transport() {
     );
 }
 
-fn canonical_consumer_object() -> aura_intent_lineage_v1::Layer3AuthorizationLineageConsumerObjectV1
+fn canonical_consumer_object() -> aura_intent_lineage_v1::legacy::proof_pipeline_v1::Layer3AuthorizationLineageConsumerObjectV1
 {
     let proof = prove_layer3_authorization_lineage_real_stark_v1(&canonical_input())
         .expect("canonical layer3 proof should succeed");
@@ -369,8 +373,8 @@ fn canonical_input() -> Layer3AuthorizationLineageProvingInputV1 {
 }
 
 fn canonical_consumer_result_commitment(
-    consumer_object: &aura_intent_lineage_v1::Layer3AuthorizationLineageConsumerObjectV1,
-) -> aura_intent_lineage_v1::DeterministicCommitment521V1 {
+    consumer_object: &aura_intent_lineage_v1::legacy::proof_pipeline_v1::Layer3AuthorizationLineageConsumerObjectV1,
+) -> aura_intent_lineage_v1::legacy::catmap_v1::DeterministicCommitment521V1 {
     derive_deterministic_commitment_521_v1(
         AURA_LAYER3_AUTHORIZATION_LINEAGE_CONSUMER_RESULT_COMMITMENT_DOMAIN_SEPARATOR_V1,
         &canonical_consumer_result_material_bytes(consumer_object),
@@ -378,7 +382,7 @@ fn canonical_consumer_result_commitment(
 }
 
 fn canonical_consumer_result_digest(
-    consumer_object: &aura_intent_lineage_v1::Layer3AuthorizationLineageConsumerObjectV1,
+    consumer_object: &aura_intent_lineage_v1::legacy::proof_pipeline_v1::Layer3AuthorizationLineageConsumerObjectV1,
 ) -> [u8; 32] {
     let digest = sha2::Sha256::digest(
         [
@@ -393,7 +397,7 @@ fn canonical_consumer_result_digest(
 }
 
 fn canonical_consumer_result_material_bytes(
-    consumer_object: &aura_intent_lineage_v1::Layer3AuthorizationLineageConsumerObjectV1,
+    consumer_object: &aura_intent_lineage_v1::legacy::proof_pipeline_v1::Layer3AuthorizationLineageConsumerObjectV1,
 ) -> Vec<u8> {
     let layer2_preimage = consumer_object
         .public_claim
