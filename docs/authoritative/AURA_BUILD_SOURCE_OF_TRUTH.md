@@ -54,13 +54,14 @@ The core's public root exposes Storm; historical cat-map proofs and former layer
 authorization/session APIs require explicit `legacy` namespaces. Their retained
 tests establish compatibility evidence, not canonical authorization acceptance.
 
-End-to-end economic integration remains incomplete: the local ledger/burn runner
-and the Storm authorization/Bitcoin path have no approved common economic
-admission contract. Authenticated economic admission has approval for detailed
-contract design; that approval does not establish implementation or approve
-unspecified consent bytes. Their separate passing checks do not establish one completed
-economic pipeline. Preserve existing cryptographic and economic behavior while
-resolving that boundary; do not infer new hash or charging semantics from migration.
+The user explicitly approved EconomicConsentV1, W, the preserved tariffs and
+settlement head V2. `aura_sdk_v1::economic` now connects the existing meter/local-work
+owners to durable debit, actual Storm verification, Authorization V2 and the Bitcoin
+outbox. Shared Rust/TypeScript vectors, durable failure/restart/concurrency tests and
+the economic-to-Bitcoin regtest cover that integration. Exact definitions live in
+the ledger, pipeline and continuous-settlement owners; the decision record retains
+rationale and approval history. This does not change hash/field, Storm/proof,
+FractalKey, authorization message, UDOT or Bitcoin output bytes.
 
 Research, historical evidence, and unapproved proposals do not acquire authority
 through titles such as "final", "canonical", or "source of truth". Proposals remain

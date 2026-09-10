@@ -1,5 +1,15 @@
 # Bitcoin migration: economic admission boundary
 
+**Classification: APPROVED DECISION / HISTORICAL DESIGN RECORD.** The approval is
+binding; the design narrative below records the reviewed proposal and its original
+constraints, not a second active specification. Implemented definitions now live
+in the [pipeline](../authoritative/AURA_CANONICAL_PIPELINE_V1.md),
+[ledger/burn](../authoritative/AURA_LEDGER_AND_BURN_V1.md),
+[authorization](../authoritative/AURA_AUTHORIZATION_LINEAGE_V1.md), and
+[continuous-settlement](../authoritative/AURA_CONTINUOUS_SETTLEMENT_V1.md) owners.
+The live implementation is `aura_sdk_v1::economic`; validation evidence is recorded
+in the existing [vector matrix](../authoritative/AURA_VECTOR_MATRIX_V1.md).
+
 **Status: APPROVED FOR IMPLEMENTATION.** Following the direction approval on
 2026-09-09, the user explicitly approved the complete contract below, including
 EconomicConsentV1, W, payer/signature binding, tariffs, attempt identity, atomic

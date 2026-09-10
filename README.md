@@ -2,21 +2,19 @@
 
 **Classification:** `IMPLEMENTATION METADATA`
 
-Aura's active Cargo workspace now uses Bitcoin anchoring and BIP340 authorization.
-The old Solana program, CLI and clients belong to a separate
-[legacy workspace](legacy/solana/README.md). Authorization verifies the actual Storm
-proof and material binding, durably reserves its nonce, and produces the Bitcoin
-anchor request. Repository-wide authority and economic integration cleanup remains
-unfinished; this is not a claim of full production readiness.
+Aura's active Cargo workspace uses Bitcoin anchoring and BIP340 identities. Its
+economic coordinator authenticates consent, durably charges admitted work, verifies
+the actual Storm proof and material binding, and atomically records authorization,
+settlement head V2 and a Bitcoin publication outbox. The old Solana program, CLI
+and clients belong to a separate [legacy workspace](legacy/solana/README.md).
 
 ## Start here
 
 Read the [document registry](docs/authoritative/AURA_BUILD_SOURCE_OF_TRUTH.md)
 first. It owns document membership, precedence, and concept ownership. The canonical documentation set is exactly the 25 files under `docs/authoritative/`.
 
-There is exactly one canonical pipeline. This is the protocol requirement;
-remaining economic requirements still need implementation alignment. The live source and
-tests establish implementation state, while the registry defines intended
+There is exactly one canonical pipeline. The live source and tests establish
+implementation state, while the registry defines intended
 authority. Passing a fixture test alone does not establish protocol conformance.
 
 ## Implementation map
@@ -28,20 +26,29 @@ authority. Passing a fixture test alone does not establish protocol conformance.
 | SDK objects | [Rust SDK](crates/aura_sdk_v1/src/lib.rs), [TypeScript SDK](packages/aura_sdk_v1_ts/src/index.ts) | Canonical v2 authorization and proof material; old nested submission/proof/settlement wires require explicit `legacy` imports. |
 | Bitcoin anchoring | [Rust codec](crates/aura_bitcoin_v1/src/lib.rs), [TypeScript codec](packages/aura_bitcoin_v1_ts/src/index.ts), [Core transport](packages/aura_bitcoin_v1_ts/src/coreRpc.ts) | Approved OP_RETURN anchor, PSBT funding/signing, output checks, and reorg-aware observation. |
 | Authorization | [Rust acceptance](crates/aura_sdk_v1/src/authorization.rs), [TypeScript signing](packages/aura_sdk_v1_ts/src/authorizationV2.ts) | BIP340 v2, actual proof/material/lineage verification, durable journal and idempotent retry. |
+| Economic admission and head V2 | [Rust coordinator](crates/aura_sdk_v1/src/economic/journal.rs), [meter owner](crates/aura_l2_local_chain_v0/src/economic_meter.rs), [TypeScript codecs/signing](packages/aura_sdk_v1_ts/src/economicV1.ts) | One production coordinator; authenticated W, unchanged burn tariff, separate economic and authorization records, atomic finalization and outbox. |
 | Legacy settlement transport | [Rust client](crates/aura_submission_client_v1/src/lib.rs), [TypeScript client](packages/aura_submission_client_v1_ts/src/index.ts), [retired program](legacy/solana/program/src/lib.rs) | Historical Solana publication, excluded from the active Cargo workspace and validation gate. |
 | Local execution and settlement | [local chain](crates/aura_l2_local_chain_v0/src/lib.rs), [local verifier](crates/aura_l2_verifier_v1/src/lib.rs) | Local foundation; local acceptance is not Bitcoin inclusion or confirmation. |
 | Presentation | [UDOT derivation](crates/aura_udot_v2/src/lib.rs), [canonical bundle](crates/aura_sdk_v1/src/udot_bundle_v2.rs) | Fixed four-field V2 bundle and strict proof-reference validation; existing glyph bytes preserved. Versioned wrappers require `legacy` imports. |
 
-## Authorizer entry point
+## Production entry point
 
-Build with `cargo build -p aura_sdk_v1 --bin aura-authorizer`.
-`target/debug/aura-authorizer init JOURNAL` explicitly creates replay state.
-`target/debug/aura-authorizer accept JOURNAL NETWORK AUTHORIZATION_JSON PROOF_BYTES MAX_ITERATIONS MAX_PROOF_BYTES`
-verifies and reserves the action, then prints the canonical anchor request. Failure
-prints no request. Resource limits and Bitcoin network are explicit operator inputs.
-The [authorization owner](docs/authoritative/AURA_AUTHORIZATION_LINEAGE_V1.md)
-defines acceptance and recovery rules; the [regtest runner](scripts/verify_bitcoin_regtest_v1.mjs)
-provides an executable example through Core funding, broadcast and reorg recovery.
+Build with `cargo build -p aura_sdk_v1 --bin aura-economic`. Commands have the form
+`aura-economic COMMAND JOURNAL NETWORK MAX_ITERATIONS MAX_WORK_BYTES [INPUTS]`.
+
+- `init WORK_BYTES` explicitly initializes the ledger and V2 genesis.
+- `submit WORK_BYTES CONSENT_JSON AUTHORIZATION_JSON` admits and completes signed work.
+- `admit WORK_BYTES CONSENT_JSON AUTHORIZATION_JSON`, then `resume ATTEMPT_ID`, separates durable admission from execution and supports restart recovery.
+- `outbox` returns publication intents; `record-publication ATTEMPT_ID TXID` records an observation without changing burn, head or authorization.
+- `status PAYER_HEX` reads durable state. `migrate-v1 WORK_BYTES CHECKPOINT_JSON` explicitly imports a trusted V1 predecessor into an existing BIP340 journal.
+
+`WORK_BYTES` is the exact binary W, with framing owned by the
+[pipeline specification](docs/authoritative/AURA_CANONICAL_PIPELINE_V1.md).
+The [ledger owner](docs/authoritative/AURA_LEDGER_AND_BURN_V1.md) defines admission
+and recovery; the [regtest runner](scripts/verify_bitcoin_regtest_v1.mjs) supplies
+an executable consent-to-Bitcoin example, including Core funding and reorg recovery.
+`aura-authorizer` remains a standalone proof-authorization primitive. It does not
+perform economic admission or present a complete production pipeline.
 
 ## Making a change
 
@@ -62,15 +69,25 @@ the crate or TypeScript test affected by a change.
 | `cargo test -p <affected-crate> --offline` | Selected Rust crate |
 | `node --test packages/aura_sdk_v1_ts/tests/<test>.test.ts` | Selected TypeScript regression |
 | `node scripts/verify_bitcoin_boundary_v1.mjs` | Active workspace, dependency tree and lockfile exclude Solana |
-| `bash scripts/verify_bitcoin_foundation_v1.sh` | Shared anchor/authorization vectors, durable replay and Core transport unit tests |
-| `BITCOIND=/path/to/bitcoind node scripts/verify_bitcoin_regtest_v1.mjs` | Actual Aura authorization through Bitcoin anchoring, reorg revocation and persistent nonce retry |
+| `bash scripts/verify_bitcoin_foundation_v1.sh` | Shared meter/consent/head/anchor/authorization vectors, durable charging/replay/recovery and Core transport unit tests |
+| `BITCOIND=/path/to/bitcoind node scripts/verify_bitcoin_regtest_v1.mjs` | Economic admission through actual Aura proof verification and Bitcoin anchoring; restart, fees and reorg retry without reburn or nonce release |
 | `bash scripts/verify_active_foundation.sh` | Local execution/economic checks plus canonical authorization, SDK boundary and Bitcoin checks |
 | `bash scripts/test_udot_parity.sh` | Frozen UDOT core and Rust/TypeScript SDK parity |
-| `BITCOIND=/path/to/bitcoind bash scripts/verify_repo_truth.sh` | Active milestone checks plus real authorization-to-Bitcoin regtest |
+| `BITCOIND=/path/to/bitcoind bash scripts/verify_repo_truth.sh` | Active milestone checks plus real economic-admission-to-Bitcoin regtest |
 
 The verifier scripts' names describe their intended scope, not certification that
 all authoritative requirements are satisfied. The active-foundation script does
 not run every Rust SDK wire test.
+
+## Operational limits
+
+The current Storm verifier replays its witness; it is not a succinct or zero-knowledge
+STARK for local ledger transitions. Local burn units are distinct from Bitcoin fees
+and are not a Bitcoin-enforced balance ledger. Replay uniqueness covers one coordinated
+journal, which serializes admitted work. Operators must preserve consistent backups,
+publish the durable outbox through their Bitcoin wallet, and monitor confirmations;
+Bitcoin reorganizations can revoke confirmation but cannot refund a burn or release
+an authorization nonce. Importing a V1 head requires a trusted explicit checkpoint.
 
 ## Supporting material
 

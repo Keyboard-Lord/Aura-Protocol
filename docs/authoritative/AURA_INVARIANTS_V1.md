@@ -10,9 +10,10 @@
 
 ## Core
 
-- `HASH_V2` is the sole active canonical identity function (521-bit SHA3-512-based).
-- `HASH_V1` is FROZEN LEGACY, maintained for historical reference only.
-- The active protocol uses `H_521(m) = Reduce_N(SHA3-512(m))` exclusively.
+- `AURA_HASH_V2` owns the existing SHA3-512-based H_521 field derivation; each
+  purpose-specific message, trace, material, proof, signature and head hash retains
+  its own algorithm/framing. H_521 does not replace their SHA256/SHA3-256 bindings.
+- Frozen HASH_V1 message encodings and outputs remain unchanged under their owner.
 - `MESSAGE_ROOT` uses exactly one `u64_le` length prefix.
 - text mode is NFC + LF with BOM rejection only.
 
@@ -26,20 +27,25 @@
 
 ## Pipeline
 
-- `proof_hash_hex`, `intent_id_hex`, and `proof_session_id_hex` are canonical lowercase 64-hex
+- `proof_hash_hex` is canonical lowercase 64-hex; intent identity lives only in
+  Authorization V2 lineage. Retired envelope-level intent/session aliases are not
+  canonical entry fields.
 - each canonical object owns exactly one representation of each concept
 - downstream canonical objects reference upstream artifacts by `proof_hash_hex`; they do not embed
   exact nested copies of upstream canonical objects
 - canonical UDOT is v2-only, derived from `proof_hash_hex`, and carries no `aura_hash_hex` alias
   or canonical `matrix_form`
 - canonical authorization lineage has exactly one six-field encoding
-- legacy normalization and version selection happen before canonical pipeline entry
+- legacy adapters remain outside canonical entry; no implicit upgrade or normalization
 - unknown wire fields are rejected
 
 ## Ledger And Settlement
 
 - `sum(account.balance) + burned_supply = total_supply`
 - the payer account exists before burn
-- full burn is consumed on every terminal outcome
+- separately authenticated economic consent binds exact work, reference and charge
+- full burn is consumed on every admitted terminal outcome; pre-admission errors do not debit
+- one nonterminal economic attempt owns a coordinated ledger/head; retry does not reburn
+- successful authorization, terminal Accepted, head and outbox commit atomically
 - settlement head sequence is derived from the prior head
 - previous head hash is derived from the prior head

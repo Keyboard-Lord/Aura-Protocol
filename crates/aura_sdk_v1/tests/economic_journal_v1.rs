@@ -331,8 +331,8 @@ fn competing_connections_retry_one_admission_and_one_finalization() {
     let (work, consent, auth, _, _) = support::sample();
     let file = File::new();
     drop(EconomicJournalV1::create(&file.0, N, &work.meter.ledger, limits()).unwrap());
-    let barrier = Arc::new(Barrier::new(2));
-    let workers: Vec<_> = (0..2)
+    let barrier = Arc::new(Barrier::new(8));
+    let workers: Vec<_> = (0..8)
         .map(|_| {
             let path = file.0.clone();
             let barrier = barrier.clone();
@@ -342,13 +342,16 @@ fn competing_connections_retry_one_admission_and_one_finalization() {
             std::thread::spawn(move || {
                 let mut j = EconomicJournalV1::open(&path, N, limits()).unwrap();
                 barrier.wait();
-                j.submit(&work.canonical_bytes().unwrap(), &consent, &auth)
-                    .unwrap()
+                let receipt = j
+                    .submit(&work.canonical_bytes().unwrap(), &consent, &auth)
+                    .unwrap();
+                assert_eq!(j.resume(receipt.attempt_id).unwrap(), receipt);
+                receipt
             })
         })
         .collect();
     let receipts: Vec<_> = workers.into_iter().map(|t| t.join().unwrap()).collect();
-    assert_eq!(receipts[0], receipts[1]);
+    assert!(receipts.iter().all(|r| r == &receipts[0]));
     assert_eq!(counts(&file), (1, 1, 1));
     let j = EconomicJournalV1::open(&file.0, N, limits()).unwrap();
     assert_eq!(
@@ -481,6 +484,7 @@ fn attestation_truth_and_local_batch_lineage_keep_their_chargeable_outcomes() {
                 .unwrap();
         meter.ledger = work.meter.ledger.clone();
         meter.wallet_binding = work.meter.wallet_binding.clone();
+        meter.head = work.meter.head.clone();
         work.meter = meter;
         let consent = support::sign(&work, &auth);
         let file = File::new();

@@ -312,7 +312,7 @@ impl EconomicJournalV1 {
     }
 
     pub fn resume(&mut self, id: i64) -> AuthorizationResultV2<EconomicReceiptV1> {
-        let attempt = Self::attempt(&self.authorizer.connection, self.network, id)?;
+        let attempt = self.read_attempt(id)?;
         if let Some(receipt) = attempt.terminal {
             return Ok(receipt);
         }
@@ -458,7 +458,7 @@ impl EconomicJournalV1 {
     /// history even if the transaction later disappears in a reorganization.
     pub fn record_publication(&mut self, id: i64, txid: &str) -> AuthorizationResultV2<()> {
         decode_hex_v2::<32>(txid)?;
-        let attempt = Self::attempt(&self.authorizer.connection, self.network, id)?;
+        let attempt = self.read_attempt(id)?;
         if attempt.terminal.as_ref().map(|r| r.outcome) != Some(EconomicOutcomeV1::Accepted) {
             return Err("publication requires an accepted attempt".into());
         }
@@ -470,6 +470,15 @@ impl EconomicJournalV1 {
             return Err("publication requires an accepted outbox entry".into());
         }
         Ok(())
+    }
+
+    fn read_attempt(&self, id: i64) -> AuthorizationResultV2<Attempt> {
+        // Another finalizer may commit between the attempt and outbox queries.
+        // Read one snapshot so an idempotent retry never sees a mixed lifecycle.
+        let read = self.authorizer.connection.unchecked_transaction()?;
+        let attempt = Self::attempt(&read, self.network, id)?;
+        read.commit()?;
+        Ok(attempt)
     }
 
     fn state(c: &Connection, network: BitcoinNetworkV1) -> AuthorizationResultV2<State> {

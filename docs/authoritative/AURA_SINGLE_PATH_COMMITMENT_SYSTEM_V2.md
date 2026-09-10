@@ -80,10 +80,13 @@ steps. Their variability does not create new canonical proof identities.
 [failure classes](AURA_FAILURE_CLASSES_V1.md) and
 [continuous settlement](AURA_CONTINUOUS_SETTLEMENT_V1.md) retain ownership of local
 economic/state rules. Bitcoin transaction fees are not Aura burn accounting.
-The implemented proof authorizer and Core transport do not themselves debit an
-Aura ledger. Local economic tests and authorization-to-Bitcoin tests establish
-separate evidence; their end-to-end integration remains an explicit discrepancy.
-No successful burn enforcement is inferred from signature verification or anchoring.
+EconomicConsentV1 separately authenticates exact work and charge. The implemented
+economic coordinator durably debits before chargeable work, then verifies the actual
+Storm proof and bound reference before atomic authorization/head/outbox finalization.
+Failed admitted work retains its charge without becoming successful authorization.
+The proof authorizer and Core transport remain primitives; neither alone grants
+spending consent. The economic regtest covers their coordinated path. No successful
+burn enforcement is inferred merely from signature verification or anchoring.
 
 The repository is complete only when its active implementation, fixtures, validation
 and owning documents agree. Unsupported security claims, historical fixture names

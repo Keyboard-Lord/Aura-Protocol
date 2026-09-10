@@ -11,16 +11,17 @@
 
 ## Locks
 
-- `LOCK-01`: `HASH_V2` is the sole active canonical identity function (521-bit SHA3-512-based). `HASH_V1` is FROZEN LEGACY.
+- `LOCK-01`: Preserve the purpose-specific hash owners and frozen message/field encodings. H_521 does not replace SHA256 proof/material/signature/head bindings.
 - `LOCK-02`: Text normalization is NFC + LF with BOM rejection only.
 - `LOCK-03`: `STORM_V1_1` uses fixed side lengths, fixed context length, and the fixed execution-domain bytes.
 - `LOCK-04`: `TRACE_ROOT` uses ordered SHA3-256 Merkle reduction with duplicate-last odd-level handling.
 - `LOCK-05`: Storm proof binding uses side hashes, context hash, boundary states, and `TRACE_ROOT`.
-- `LOCK-06`: The canonical proof wire carries exactly one claim representation and no legacy compatibility fields.
+- `LOCK-06`: The canonical proof wire carries one fixed V1 claim and witness encoding. Its historical trailing commitment slots retain their existing bytes; no alternate claim or compatibility alias is added.
 - `LOCK-07`: The canonical final object carries only `proof_hash_hex` as its upstream proof reference.
 - `LOCK-08`: Canonical UDOT is v2-only, derived directly from `proof_hash_hex`, and carries no `aura_hash_hex` alias or canonical `matrix_form`.
-- `LOCK-09`: Local settlement burns the full amount on every terminal outcome.
-- `LOCK-10`: Continuous settlement head linkage is derived from the prior head, so previous-head and sequence mismatches are unrepresentable in canonical construction.
+- `LOCK-09`: Every admitted terminal economic outcome retains its full authenticated burn. Pre-admission failures do not charge; idempotent retry never burns again.
+- `LOCK-10`: Head V2 construction derives linkage from durable prior state. Stale metered linkage is rejected before charging; callers cannot construct an independent successor.
+- `LOCK-11`: Economic debit/attempt ownership and terminal authorization/head/outbox updates are atomic. Reorgs change Bitcoin confirmation, never economic or authorization reservations.
 
 ## Verified implementation hardening
 
