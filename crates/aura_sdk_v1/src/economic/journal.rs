@@ -315,6 +315,8 @@ impl EconomicJournalV1 {
         let post = debit_economic_ledger_v1(&current, burn)?;
         let pre_bytes = economic_ledger_bytes_v1(&current)?;
         let post_bytes = economic_ledger_bytes_v1(&post)?;
+        #[cfg(test)]
+        miner::crash_probe("before_debit");
         tx.execute("INSERT INTO economic_attempts(network,subject,nonce,work,consent,authorization,burn,pre_ledger,post_ledger,prior,outcome,head,detail)
             VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,NULL,NULL,'')",
             params![self.network.tag(), l.subject_binding, l.freshness_binding, bytes,
@@ -325,6 +327,8 @@ impl EconomicJournalV1 {
             params![post_bytes, id],
         )?;
         miner::claim_round(&tx, round, id)?;
+        #[cfg(test)]
+        miner::crash_probe("admission_before_commit");
         tx.commit()?;
         Ok(EconomicAttemptStateV1::Admitted { attempt_id: id })
     }
@@ -359,6 +363,8 @@ impl EconomicJournalV1 {
                 let verified = prove_storm_air_real_v1(&claim, &inputs)
                     .map_err(|e| e.to_string())
                     .and_then(|proof| {
+                        #[cfg(test)]
+                        miner::crash_probe("during_verification");
                         attempt
                             .auth
                             .verify_signature(self.network)
@@ -421,6 +427,8 @@ impl EconomicJournalV1 {
         let head = attempt
             .prior
             .advance(self.network, &attempt.work, outcome, &attempt.post)?;
+        #[cfg(test)]
+        miner::crash_probe("after_authorization");
         if outcome == EconomicOutcomeV1::Accepted {
             let request =
                 BitcoinAnchorRequestV1::new(self.network, attempt.auth.proof_hash_hex.clone())?;
@@ -437,7 +445,11 @@ impl EconomicJournalV1 {
                 head.clone()
             ))?],
         )?;
+        #[cfg(test)]
+        miner::crash_probe("after_head");
         miner::finish_round(&tx, &attempt, outcome)?;
+        #[cfg(test)]
+        miner::crash_probe("after_reward_obligation");
         tx.commit()?;
         Ok(EconomicReceiptV1 {
             attempt_id: attempt.id,

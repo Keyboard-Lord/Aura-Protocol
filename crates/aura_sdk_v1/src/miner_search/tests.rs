@@ -4,6 +4,15 @@ use aura_intent_lineage_v1::{derive_phi_n, derive_psi_n, execute_storm_v1};
 use secp256k1::{Secp256k1, SecretKey};
 use serde_json::Value;
 
+#[test]
+fn active_hash_v2_retains_exact_empty_input_bytes() {
+    // Independent SHA3-512 empty-message vector, padded to the existing 66-byte
+    // big-endian field. AURA_HASH_V2 names this preserved hash521_v1 API.
+    assert_eq!(encode_hex_v2(&aura_intent_lineage_v1::aura_hash521_v1(b"").to_bytes()),
+        concat!("0000","a69f73cca23a9ac5c8b567dc185a756e97c982164fe25859e0d1dcc1475c80a615",
+        "b2123af1f5f94c11e3e9402c3ac558f500199d95b6d3e301758586281dcd26"));
+}
+
 fn unhex(s: &str) -> Vec<u8> {
     (0..s.len())
         .step_by(2)

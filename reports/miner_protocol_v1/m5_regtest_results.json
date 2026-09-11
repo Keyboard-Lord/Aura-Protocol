@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "core_version": 290000,
+  "iteration_count": 8,
+  "target": "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+  "reward_satoshis": 10000,
+  "initial_fee_satoshis": 428,
+  "replacement_fee_satoshis": 2140,
+  "payment_vsize": 214,
+  "accepted_winners": 1,
+  "reward_obligations": 1,
+  "payment_versions": 2,
+  "burn_units": 48,
+  "confirmed_after_reorg": true,
+  "broadcast_crash_recovered": true,
+  "core_restart_lock_restored": true,
+  "pre_open_dust_funding_fee_rejections": 3
+}

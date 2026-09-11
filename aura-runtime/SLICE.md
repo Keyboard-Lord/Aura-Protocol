@@ -3,9 +3,9 @@
 Classification: TOOLING / IMPLEMENTATION EVIDENCE; not protocol authority.
 Runtime: AURA Runtime V4
 Program: approved Aura Miner Protocol V1, master goal M3–M7
-Current milestone: M4 COMPLETE
+Current milestone: M6 IN PROGRESS
 Last updated: 2026-09-11
-Next READY node: M5 (not started)
+Next node: M7 (BLOCKED until M6 closes)
 
 ## Mission and frozen baseline
 
@@ -32,48 +32,47 @@ D1–D6, not yet active protocol authority. Prior Bitcoin completion evidence:
 | M2 | DONE | M1 | Frozen 471-byte job/profile Rust/TS parity and negative coverage. |
 | M3 | DONE | M2 | Bounded local verified mining, deterministic search, security experiments and measured N scaling. |
 | M4 | DONE | M3 | One durable round owner composed into the existing economic coordinator; atomic contender/debit/authorization/head/winner/reward-obligation state and recovery tests. |
-| M5 | READY | M4 | Sponsor-funded reward plus unchanged Bitcoin anchor; regtest publication/replacement/reorg recovery. |
-| M6 | BLOCKED | M5 | Reproducible adversarial full-system acceptance gate and frozen-output regressions. |
+| M5 | DONE | M4 | Sponsor-funded reward plus unchanged Bitcoin anchor; regtest publication/replacement/reorg recovery. |
+| M6 | IN PROGRESS | M5 | Reproducible adversarial full-system acceptance gate and frozen-output regressions. |
 | M7 | BLOCKED | M6 | Existing-owner promotion, measured operational limits and activation readiness; live monetary deployment separately approved. |
 
 This order follows the user's master goal. M4 composes round ownership into the existing economic transaction owner.
 
 ## Current evidence
 
-[M4 implementation and validation](../reports/AURA_MINER_M4_EVIDENCE.md).
-[M3 closure and measurements](../reports/AURA_MINER_M3_EVIDENCE.md).
+[M5 implementation / Core evidence](../reports/AURA_MINER_M5_EVIDENCE.md).
+[Captured regtest result](../reports/miner_protocol_v1/m5_regtest_results.json).
+Prior: [M4](../reports/AURA_MINER_M4_EVIDENCE.md), [M3 measurements](../reports/AURA_MINER_M3_EVIDENCE.md).
 
-- Existing economic journal owns policy epochs, signed funded jobs, pinned
-  snapshots, one contender, terminal rounds and unique reward obligations.
-- Round acquisition/debit and authorization/Head V2/winner/reward/outbox commit
-  atomically. Server regenerates and verifies the existing canonical proof.
-- 19 focused M4 test entries passed, including process-exit recovery, races,
-  retries, fake-low/rebound proof references, expiry, all existing failure burns,
-  injected transaction failures, corruption and guarded funding-lock release.
-- Existing regressions passed: journal 12, economic contract 5, authorization 8,
-  Rust M2 9, Rust M3 13, TS M2/M3 11. SDK library/binary/example check passed.
-- Frozen M2/M3 fixtures and existing cryptographic/economic/Bitcoin owners are
-  unchanged. No canonical bytes or authoritative documents changed.
-- Core funding adapter was validated with deterministic RPC mocks. No payout,
-  transaction construction, broadcast or regtest work was performed in M4.
+- Existing journal owns signed payment history and fresh observations. Every
+  version spends the reserved outpoint and preserves the exact reward and anchor.
+- Core preflight rejects dust, insufficient funding and excessive fee before open.
+  Signed payment persists before send; fee replacement is explicit and conflicting.
+- Core 29 regtest passed: local mining/admission, exact combined payout, process/Core
+  restart, lock restoration, broadcast-crash recovery, replacement, confirmation,
+  reorg/reconfirmation and retry without another burn/winner/obligation.
+- Fixture result: 214 vbytes; fees 428/2140 sat at 2/10 sat/vB; 10,000 sat reward;
+  one winner, one obligation, two payment versions, unchanged 48-unit Aura burn.
+- 21 miner journal/publication, 34 Rust M2/economic/auth and 19 TS miner/Bitcoin
+  test entries passed; SDK library/binary/example compile passed.
+- Frozen Aura owners, M2/M3 fixtures, Bitcoin anchor and authoritative docs unchanged.
 
 ## Decisions and limitations
 
 Section 8 clarification is explicitly APPROVED: signed target remains in J/I/Storm
 binding. Diagnostic thresholds only compare already-computed hashes and never
 replace the signed target. The original decision evidence is retained in the M3
-report. No unresolved semantic decision blocks M4.
+report. No unresolved semantic decision blocks M6.
 
 The current system is coordinated witness-backed PoC plus a target predicate,
 not production-ready mining, permissionless consensus, succinct/ZK proving,
 physical/sequential hardness or calibrated economic security. Funding is custodial;
-wallet restart/re-lock and ambiguous external-lock reconciliation require operator
-care. Policy N/T, reward, duration and fee budget are explicit, uncalibrated inputs.
+wallet locks are restored on publication recovery, while ambiguous locks/spends
+require operator reconciliation. Policy N/T, reward, duration and fee budget are explicit, uncalibrated inputs.
 No monetary activation is authorized.
 
 ## Stop condition
 
-M4 acceptance is satisfied. M5 is READY; M6 and M7 remain BLOCKED. Report M4 and
-stop before Bitcoin reward transaction construction/publication. M5 must consume
-this journal's obligation/reserved outpoint and prove combined payout/anchor
-retry/replacement/reorg behavior on Core regtest.
+M5 acceptance is satisfied. M6 adversarial validation is in progress; M7 remains BLOCKED.
+M6 must extend the reproducible miner regtest into the approved adversarial
+full-system gate; do not claim M6 completion from M5's bounded acceptance evidence.

@@ -10,6 +10,8 @@ use std::{
     path::PathBuf,
     sync::{Arc, Barrier},
 };
+
+mod adversarial;
 const TIME: u64 = 2_000_000_000;
 const NETWORK: BitcoinNetworkV1 = BitcoinNetworkV1::Regtest;
 
@@ -97,6 +99,11 @@ fn reserve(job: &MinerJobV1) -> AuthorizationResultV2<MinerFundingReservationV1>
                 "gettxout" => {
                     json!({"value":0.0002,"confirmations":6,"scriptPubKey":{"hex":"5120"}})
                 }
+                "decodescript" => json!({"address":"test-payout"}),
+                "validateaddress" => {
+                    json!({"scriptPubKey":"5120".to_owned()+&encode_hex_v2(&job.operator_key)})
+                }
+                "walletcreatefundedpsbt" => json!({"psbt":"unsigned-test-template","fee":0.00001}),
                 "lockunspent" => json!(true),
                 _ => panic!("unexpected RPC"),
             })
@@ -105,6 +112,7 @@ fn reserve(job: &MinerJobV1) -> AuthorizationResultV2<MinerFundingReservationV1>
         &"77".repeat(32),
         0,
         5000,
+        2,
     )
 }
 fn setup() -> (File, EconomicJournalV1, MinerRoundV1) {
@@ -580,6 +588,13 @@ fn core_funding_rejects_network_unspendable_underfunded_and_failed_locks() {
                             json!({"value":if case==5{0.0003}else{0.0002},"confirmations":6,"scriptPubKey":{"hex":"5120"}})
                         }
                     }
+                    "decodescript" => json!({"address":"test-payout"}),
+                    "validateaddress" => {
+                        json!({"scriptPubKey":"5120".to_owned()+&encode_hex_v2(&job.operator_key)})
+                    }
+                    "walletcreatefundedpsbt" => {
+                        json!({"psbt":"unsigned-test-template","fee":0.00001})
+                    }
                     "lockunspent" => {
                         lock_called = true;
                         json!(false)
@@ -591,6 +606,7 @@ fn core_funding_rejects_network_unspendable_underfunded_and_failed_locks() {
             &"77".repeat(32),
             0,
             5000,
+            2,
         );
         assert!(result.is_err(), "case {case}");
         assert_eq!(lock_called, case == 6);

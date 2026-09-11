@@ -1,6 +1,6 @@
 //! Trusted Bitcoin Core wallet adapter for reserving one explicitly selected
 //! sponsor outpoint. RPC transport/authentication stays with the host service.
-//! No transaction construction or payout; M5 owns publication.
+//! M5 adds an unsigned wallet-policy preflight. Publication owns actual payments.
 use super::*;
 use serde_json::{json, Value};
 
@@ -146,6 +146,7 @@ pub fn reserve_miner_funding_v1(
     txid: &str,
     vout: u32,
     fee_budget_satoshis: u64,
+    fee_rate_sat_vb: u64,
 ) -> AuthorizationResultV2<MinerFundingReservationV1> {
     job.validate_shape()?;
     decode_hex_v2::<32>(txid)?;
@@ -192,6 +193,14 @@ pub fn reserve_miner_funding_v1(
     {
         return Err("funding coin spent or inconsistent".into());
     }
+    super::publication::funding_preflight(
+        &mut rpc,
+        job,
+        txid,
+        vout,
+        fee_rate_sat_vb,
+        fee_budget_satoshis,
+    )?;
     if rpc("lockunspent", json!([false,[{"txid":txid,"vout":vout}]]))? != true {
         return Err("Core funding reservation failed".into());
     }

@@ -7,6 +7,12 @@ import {
   FIELD_ELEMENT_521_BYTE_LEN_V1,
 } from "./stormHash521V1.ts";
 
+test("active HASH_V2 retains the exact independent empty-message SHA3-512 vector", () => {
+  assert.equal(Buffer.from(auraHash521V1(new Uint8Array())).toString("hex"),
+    "0000a69f73cca23a9ac5c8b567dc185a756e97c982164fe25859e0d1dcc1475c80a615" +
+    "b2123af1f5f94c11e3e9402c3ac558f500199d95b6d3e301758586281dcd26");
+});
+
 test("AURA_HASH521_V1 is deterministic and 66 bytes wide", () => {
   const first = auraHash521V1(new TextEncoder().encode("AURA_TEST_VECTOR"));
   const second = auraHash521V1(new TextEncoder().encode("AURA_TEST_VECTOR"));

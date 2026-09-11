@@ -702,3 +702,13 @@ pub(super) fn audit(c: &Connection, network: BitcoinNetworkV1) -> AuthorizationR
 
 #[cfg(test)]
 mod tests;
+
+// Fault injection is absent from production builds. The child-test process exits
+// with SQLite transactions live so recovery exercises its durable rollback path.
+#[cfg(test)]
+pub(super) fn crash_probe(phase: &str) {
+    if std::env::var("AURA_M6_CRASH_PHASE").as_deref()==Ok(phase)
+        && std::env::var_os("AURA_M6_CRASH_DB").is_some() {
+        std::process::exit(86);
+    }
+}
