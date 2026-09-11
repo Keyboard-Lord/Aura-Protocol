@@ -2,15 +2,44 @@
 
 Classification: TOOLING / IMPLEMENTATION EVIDENCE; not protocol authority.
 Runtime: AURA Runtime V4
-State: COMPLETE — SLICE 8 / M2 ONLY
+State: IN PROGRESS — SLICE 9 / M3 ONLY
 Last updated: 2026-09-10
 
 ## Outer mission
 
-Close the approved miner job/profile codec boundary (M2) above the completed
-Bitcoin migration. Freeze exact Rust/TS bytes and negative parity, pin target
-comparison, and reconcile implementation metadata. Do not start M3 execution,
-benchmarking, round coordination, rewards or consensus work.
+Implement bounded local Storm mining (M3) using existing proof/material owners,
+measure its cost and test nonce/proof reuse. M2 remains complete and frozen.
+The section 8 clarification below is explicitly APPROVED; implementation resumed
+with all frozen job/context bindings unchanged.
+Do not begin M4 coordination, rewards, Bitcoin payout or consensus work.
+
+## M3 section 8 clarification — APPROVED
+
+Slice 9 section 8 requests that "target does not influence Storm execution itself."
+Frozen M2 includes target in J; `SHA256(J)` enters I, which enters the Storm context
+and forcing. Thus changing a signed job's target changes its prescribed computation.
+Removing that dependency would change approved semantics and frozen M2 vectors.
+
+A bounded read-only probe used the frozen M2 job/M/nonce at N=64 and changed only
+target byte 31 with XOR 1 (target suffix `ff` to `fe`). Existing TS owners produced:
+
+| Observation | Original target | Changed target |
+| --- | --- | --- |
+| Intent | `5994eae5caeffc538a06181638cb7e34482a88e4c5688499ca7d6b8d675486de` | `b84e3de4cbac449ca5e9db8545c6870b0f3f5501f092b119072eb7ca0d8ad79d` |
+| TRACE_ROOT | `ee6c8a09cfae529d4e85e6d3b0553fdad69c4ad8fcd3690ef93ba6ff31db049d` | `4d5d90e331490b48cf6616bb7c15237d3cbc1bbb652edd0ddfab22bae42dfc54` |
+
+The first forcing value also changed. This compares prescribed computations; the
+modified job was not submitted as signed/authorized work. No production code,
+canonical document or frozen fixture was changed, and no M3 implementation or
+benchmark has been completed.
+
+The user explicitly approved this clarification: preserve all frozen bindings. Test that applying a
+comparison threshold to an already completed proof does not alter that proof or
+execution; evaluate multiple diagnostic thresholds over the same fixed-job sample.
+Only the signed job's own target establishes qualification. A differently signed
+target defines a different job/computation. Diagnostic thresholds never replace
+the signed job target for local qualification. This resolves USER_DECISION without
+changing M2 or the miner protocol.
 
 ## Frozen baseline and retained evidence
 
@@ -36,17 +65,17 @@ It is not active protocol authority; the existing authoritative owners remain fr
 | M0 | DONE | Frozen baseline | Current owner map, coherent recommendation, bounded probe and internal threat review. |
 | M1 | DONE | M0 | User approved D1–D6: coordinated rounds, workload/input profile, difficulty policy, accounting, rewards, atomic integration. |
 | M2 | DONE | M1 | Exact Rust/TS job/profile bytes, negative parity and target cases frozen; SDK and regression checks passed. |
-| M3 | READY | M2 | Not started. Future miner computation through existing owners, resource and attack measurements. |
+| M3 | IN PROGRESS | M2 | Approved section 8 clarification; bounded local execution, verification and measurements only. |
 | M4 | BLOCKED | M2 | Future atomic round scheduling/winner/reward records in the existing coordinator. |
 | M5 | BLOCKED | M4 | Future reward-aware Bitcoin publication and recovery. |
 | M6 | BLOCKED | M3, M5 | Future adversarial full integration and frozen-output regression. |
 | M7 | BLOCKED | M6 | Future owner promotion and measured activation limits; monetary deployment separately approved. |
 
-M3 is the sole next scheduled node. M4 is held for a later slice in this execution
+M3 is the sole active node. M4 is held for a later slice in this execution
 plan even though its technical M2 dependency is complete. The approved dependency
 graph is unchanged. No miner design promotion or monetary activation is implied.
 
-## Current evidence
+## Retained M2 closure evidence
 
 - [M2 frozen vectors and reproduction commands](../fixtures/miner_v1/README.md):
   471-byte J, job/signing/intent commitments, detached signature, route, context,
@@ -105,6 +134,6 @@ remain explicit implementation gates. The completed Bitcoin baseline is untouche
 
 ## Stop condition
 
-M2 is DONE: exact codec/profile parity, negative coverage, target semantics, SDK
-checks and metadata reconciliation passed. Stop here. M3 is READY and unstarted;
-M4–M7 remain BLOCKED. No additional cleanup or migration re-audit is required.
+M2 is DONE. Complete M3's bounded search, actual PoC, security experiments,
+measurements and targeted regressions, then mark M3 DONE / M4 READY and stop.
+M4–M7 remain unimplemented. No migration re-audit or change to frozen M2 is needed.
