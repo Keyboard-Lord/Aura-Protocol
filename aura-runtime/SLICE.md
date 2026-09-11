@@ -2,138 +2,78 @@
 
 Classification: TOOLING / IMPLEMENTATION EVIDENCE; not protocol authority.
 Runtime: AURA Runtime V4
-State: IN PROGRESS — SLICE 9 / M3 ONLY
-Last updated: 2026-09-10
+Program: approved Aura Miner Protocol V1, master goal M3–M7
+Current milestone: M4 COMPLETE
+Last updated: 2026-09-11
+Next READY node: M5 (not started)
 
-## Outer mission
+## Mission and frozen baseline
 
-Implement bounded local Storm mining (M3) using existing proof/material owners,
-measure its cost and test nonce/proof reuse. M2 remains complete and frozen.
-The section 8 clarification below is explicitly APPROVED; implementation resumed
-with all frozen job/context bindings unchanged.
-Do not begin M4 coordination, rewards, Bitcoin payout or consensus work.
+Finish the miner program one dependency-ordered milestone at a time. Report and
+stop at each node boundary. The master goal completes only after M7. No monetary
+activation is authorized by implementation completion.
 
-## M3 section 8 clarification — APPROVED
+Completed Bitcoin migration/economic baseline: `f64fb4f`. Preserve existing HASH_V2,
+field arithmetic, Storm initialization/recurrence, TRACE_ROOT, proof bytes,
+ProofMaterial/FractalKey/proof_hash, Authorization V2, W/M, burn, Head V2, UDOT,
+Bitcoin OP_RETURN and frozen M2 codecs/vectors. No migration re-audit without a
+concrete dependency defect. Root-local execution; no runtime/profile changes.
 
-Slice 9 section 8 requests that "target does not influence Storm execution itself."
-Frozen M2 includes target in J; `SHA256(J)` enters I, which enters the Storm context
-and forcing. Thus changing a signed job's target changes its prescribed computation.
-Removing that dependency would change approved semantics and frozen M2 vectors.
+Design owner: [AURA_MINER_PROTOCOL_V1](../reports/AURA_MINER_PROTOCOL_V1.md), approved
+D1–D6, not yet active protocol authority. Prior Bitcoin completion evidence:
+[completion record](../reports/AURA_BITCOIN_ECONOMIC_MILESTONE_COMPLETION_V1.md).
 
-A bounded read-only probe used the frozen M2 job/M/nonce at N=64 and changed only
-target byte 31 with XOR 1 (target suffix `ff` to `fe`). Existing TS owners produced:
+## DAG
 
-| Observation | Original target | Changed target |
-| --- | --- | --- |
-| Intent | `5994eae5caeffc538a06181638cb7e34482a88e4c5688499ca7d6b8d675486de` | `b84e3de4cbac449ca5e9db8545c6870b0f3f5501f092b119072eb7ca0d8ad79d` |
-| TRACE_ROOT | `ee6c8a09cfae529d4e85e6d3b0553fdad69c4ad8fcd3690ef93ba6ff31db049d` | `4d5d90e331490b48cf6616bb7c15237d3cbc1bbb652edd0ddfab22bae42dfc54` |
-
-The first forcing value also changed. This compares prescribed computations; the
-modified job was not submitted as signed/authorized work. No production code,
-canonical document or frozen fixture was changed, and no M3 implementation or
-benchmark has been completed.
-
-The user explicitly approved this clarification: preserve all frozen bindings. Test that applying a
-comparison threshold to an already completed proof does not alter that proof or
-execution; evaluate multiple diagnostic thresholds over the same fixed-job sample.
-Only the signed job's own target establishes qualification. A differently signed
-target defines a different job/computation. Diagnostic thresholds never replace
-the signed job target for local qualification. This resolves USER_DECISION without
-changing M2 or the miner protocol.
-
-## Frozen baseline and retained evidence
-
-- Frozen Bitcoin baseline: `f64fb4f`, completed economic integration. Slice 7 already
-  contained the Rust/TS miner codec/profile implementations; M2 closure verified
-  those implementations and required no production code changes.
-- Prior completion record: `reports/AURA_BITCOIN_ECONOMIC_MILESTONE_COMPLETION_V1.md`.
-- Existing W, burn, Storm/trace/proof/material/FractalKey, Authorization V2,
-  Head V2, UDOT and Bitcoin OP_RETURN semantics remain unchanged.
-- No re-audit or rerun of the completed migration gate. The miner dependencies
-  were inspected narrowly. New M2 test fixtures/evidence do not replace old fixtures.
-- Root-local execution. No delegated workers or runtime/profile changes.
-
-## Design owner and DAG
-
-`reports/AURA_MINER_PROTOCOL_V1.md` records the approved design, its exact candidate
-formulas, threat review, alternatives and D1–D6 decisions. The user replied
-“yes approved” to the explicit D1–D6 design-contract question on 2026-09-10.
-It is not active protocol authority; the existing authoritative owners remain frozen.
-
-| ID | State | Dependency | Scope / stop criterion |
+| ID | State | Execution dependency | Scope / stop criterion |
 | --- | --- | --- | --- |
-| M0 | DONE | Frozen baseline | Current owner map, coherent recommendation, bounded probe and internal threat review. |
-| M1 | DONE | M0 | User approved D1–D6: coordinated rounds, workload/input profile, difficulty policy, accounting, rewards, atomic integration. |
-| M2 | DONE | M1 | Exact Rust/TS job/profile bytes, negative parity and target cases frozen; SDK and regression checks passed. |
-| M3 | IN PROGRESS | M2 | Approved section 8 clarification; bounded local execution, verification and measurements only. |
-| M4 | BLOCKED | M2 | Future atomic round scheduling/winner/reward records in the existing coordinator. |
-| M5 | BLOCKED | M4 | Future reward-aware Bitcoin publication and recovery. |
-| M6 | BLOCKED | M3, M5 | Future adversarial full integration and frozen-output regression. |
-| M7 | BLOCKED | M6 | Future owner promotion and measured activation limits; monetary deployment separately approved. |
+| M0 | DONE | Bitcoin baseline | Approved design foundation and bounded threat probe. |
+| M1 | DONE | M0 | D1–D6 explicitly approved. |
+| M2 | DONE | M1 | Frozen 471-byte job/profile Rust/TS parity and negative coverage. |
+| M3 | DONE | M2 | Bounded local verified mining, deterministic search, security experiments and measured N scaling. |
+| M4 | DONE | M3 | One durable round owner composed into the existing economic coordinator; atomic contender/debit/authorization/head/winner/reward-obligation state and recovery tests. |
+| M5 | READY | M4 | Sponsor-funded reward plus unchanged Bitcoin anchor; regtest publication/replacement/reorg recovery. |
+| M6 | BLOCKED | M5 | Reproducible adversarial full-system acceptance gate and frozen-output regressions. |
+| M7 | BLOCKED | M6 | Existing-owner promotion, measured operational limits and activation readiness; live monetary deployment separately approved. |
 
-M3 is the sole active node. M4 is held for a later slice in this execution
-plan even though its technical M2 dependency is complete. The approved dependency
-graph is unchanged. No miner design promotion or monetary activation is implied.
+This order follows the user's master goal. M4 composes round ownership into the existing economic transaction owner.
 
-## Retained M2 closure evidence
+## Current evidence
 
-- [M2 frozen vectors and reproduction commands](../fixtures/miner_v1/README.md):
-  471-byte J, job/signing/intent commitments, detached signature, route, context,
-  exact M/W; all 471 job-byte and 64 signature-byte mutations, every W byte,
-  strict framing, six valid variants, eleven malformed patches, eight target cases,
-  trusted policy/limits, stale-head, payer/intent/nonce/route and claim-profile tests.
-- `cargo test -p aura_sdk_v1 --offline --test miner_v1`: 9 passed.
-- `node --test packages/aura_sdk_v1_ts/src/minerV1.test.ts`: 10 passed.
-- `cargo check -p aura_sdk_v1 --offline --lib`: passed. Native TypeScript syntax and
-  package-root module compilation/import checks passed; no separate TS build is configured.
-- Existing `economic_contract_v1` / `authorization_v2`: 13 Rust tests passed.
-  Existing `economicV1.test.ts` / `stormClaimV1.test.ts`: 7 TS tests passed.
-- `cargo build -p aura_sdk_v1 --offline --bin aura-authorizer`: passed.
-- `node reports/miner_protocol_v1/design_probe.mjs`: passed; output matched the
-  existing `reports/miner_protocol_v1/design_probe.json` byte-for-byte.
-- Probe verifies deterministic N=64 execution, all forcing pairs changing with a
-  nonce, exact existing W round-trip, M/job binding, target endpoints and the
-  zero-step trace-reuse counterexample using existing owners.
-- Concrete attack evidence: 34 cheap outer-nonce rebindings of one frozen proof
-  found a low hash. TS signature/material checks accept it; the full Rust authorizer
-  rejects `proof context and authorization lineage mismatch` and emits no anchor.
-- This does not prove sequential hardness, non-amortization, commercial utility,
-  production difficulty or miner consensus. M2 codec/profile parity is frozen;
-  runtime candidate/proof parity and measurements remain M3 work.
-- No production implementation, old frozen vector, authoritative document or Bitcoin
-  wire was modified in M2 closure. Changes are focused tests, new fixture evidence,
-  SDK implementation metadata, design status and this register.
+[M4 implementation and validation](../reports/AURA_MINER_M4_EVIDENCE.md).
+[M3 closure and measurements](../reports/AURA_MINER_M3_EVIDENCE.md).
 
-## Retained design completion audit (M0/M1)
+- Existing economic journal owns policy epochs, signed funded jobs, pinned
+  snapshots, one contender, terminal rounds and unique reward obligations.
+- Round acquisition/debit and authorization/Head V2/winner/reward/outbox commit
+  atomically. Server regenerates and verifies the existing canonical proof.
+- 19 focused M4 test entries passed, including process-exit recovery, races,
+  retries, fake-low/rebound proof references, expiry, all existing failure burns,
+  injected transaction failures, corruption and guarded funding-lock release.
+- Existing regressions passed: journal 12, economic contract 5, authorization 8,
+  Rust M2 9, Rust M3 13, TS M2/M3 11. SDK library/binary/example check passed.
+- Frozen M2/M3 fixtures and existing cryptographic/economic/Bitcoin owners are
+  unchanged. No canonical bytes or authoritative documents changed.
+- Core funding adapter was validated with deterministic RPC mocks. No payout,
+  transaction construction, broadcast or regtest work was performed in M4.
 
-The live design and captured executable evidence were checked against all requested
-deliverables. Section references below are to the single design document; they do
-not duplicate its definitions.
+## Decisions and limitations
 
-| Requested deliverable | Evidence / result |
-| --- | --- |
-| 1. Current-state dependency map | Section 2 maps the relevant frozen owners and their miner implications. |
-| 2. AURA_MINER_PROTOCOL_V1 proposal | The named document now records the approved design and implementation boundary. |
-| 3. Exact PoC definition | Section 4 requires full input-bound witness verification and existing material/FractalKey binding. |
-| 4. Exact PoW predicate | Sections 3–4 fix all inputs and require big-endian proof_hash <= T after PoC. Probe covers target endpoints and cheap-rebinding rejection. |
-| 5. Candidate lifecycle | Section 7 covers admission, every terminal outcome, retry, expiry and crash recovery. |
-| 6. Difficulty / adjustment | Section 6 defines fixed per-epoch parameters and explicit operator epoch changes; no automatic retarget. |
-| 7. Rewards / economics | Sections 7–8 preserve burn rules and select pre-funded sponsor BTC, eligibility and replay-safe payout. |
-| 8. Head / fork choice | Sections 7 and 9 define one coordinated contender, no rollback, and explicit rejection of independent fork merging. |
-| 9. Bitcoin interaction | Sections 8–9 retain OP_RETURN, specify payout/replacement/reorg behavior and distinguish on/off-chain commitments. |
-| 10. Threat model | Section 10 reviews grinding, precomputation, bypass, nonce reuse, manipulation, withholding, duplicate work, state splits and reorgs with residual assumptions. |
-| 11. Frozen components | Section 12 enumerates preserved primitives, encodings and state invariants. |
-| 12. Minimal additions | Section 12 limits changes to miner profile/search, atomic metadata/guards and reward-aware transport. |
-| 13. Implementation DAG | Section 12 gives eight dependency-ordered slices; M2 is now DONE and M3 is next. |
-| 14. Unresolved approval decisions | Section 13 records explicit user approval of D1–D6; none remain within the approved V1 scope. |
+Section 8 clarification is explicitly APPROVED: signed target remains in J/I/Storm
+binding. Diagnostic thresholds only compare already-computed hashes and never
+replace the signed target. The original decision evidence is retained in the M3
+report. No unresolved semantic decision blocks M4.
 
-The internal security review and bounded probe support design completion, not a
-hardness theorem, independent audit or runtime miner certification. Deployment
-calibration, runtime candidate/proof parity, adversarial integration and monetary activation
-remain explicit implementation gates. The completed Bitcoin baseline is untouched.
+The current system is coordinated witness-backed PoC plus a target predicate,
+not production-ready mining, permissionless consensus, succinct/ZK proving,
+physical/sequential hardness or calibrated economic security. Funding is custodial;
+wallet restart/re-lock and ambiguous external-lock reconciliation require operator
+care. Policy N/T, reward, duration and fee budget are explicit, uncalibrated inputs.
+No monetary activation is authorized.
 
 ## Stop condition
 
-M2 is DONE. Complete M3's bounded search, actual PoC, security experiments,
-measurements and targeted regressions, then mark M3 DONE / M4 READY and stop.
-M4–M7 remain unimplemented. No migration re-audit or change to frozen M2 is needed.
+M4 acceptance is satisfied. M5 is READY; M6 and M7 remain BLOCKED. Report M4 and
+stop before Bitcoin reward transaction construction/publication. M5 must consume
+this journal's obligation/reserved outpoint and prove combined payout/anchor
+retry/replacement/reorg behavior on Core regtest.

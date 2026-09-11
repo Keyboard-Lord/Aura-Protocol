@@ -68,5 +68,7 @@ Node; it has no separate `tsc` build configuration. The design probe output exac
 matched its existing captured JSON bytes. Existing production implementations,
 authoritative documents and previously frozen fixtures were unchanged in M2 closure.
 
-M2 is DONE. Runtime candidate/proof generation and measurements belong to M3;
-round ownership, funding, rewards and durable coordination remain later slices.
+M2 is DONE. M3 is also complete; [its evidence](../../reports/AURA_MINER_M3_EVIDENCE.md)
+describes `trial_vector_v1.json`, which freezes existing canonical objects from one
+local trial without changing this M2 vector. Round ownership, funding, rewards and
+durable coordination remain later slices.

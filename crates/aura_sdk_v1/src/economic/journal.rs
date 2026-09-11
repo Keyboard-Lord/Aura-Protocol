@@ -20,6 +20,8 @@ use aura_l2_local_chain_v0::{
 use rusqlite::{params, Connection, OptionalExtension, TransactionBehavior};
 use std::path::Path;
 
+pub mod miner;
+
 /// Trusted migration input, never a successor admission object or relabeled V2 head.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -249,6 +251,29 @@ impl EconomicJournalV1 {
         consent: &EconomicConsentV1,
         auth: &AuthorizationEnvelopeV2,
     ) -> AuthorizationResultV2<EconomicAttemptStateV1> {
+        self.admit_with_clock(bytes, consent, auth, miner::now)
+    }
+
+    // Server clock only. Tests can exercise expiry without sleeping or changing
+    // signed jobs. This is not a client-supplied admission timestamp.
+    #[cfg(test)]
+    fn admit_at(
+        &mut self,
+        bytes: &[u8],
+        consent: &EconomicConsentV1,
+        auth: &AuthorizationEnvelopeV2,
+        now: u64,
+    ) -> AuthorizationResultV2<EconomicAttemptStateV1> {
+        self.admit_with_clock(bytes, consent, auth, || Ok(now))
+    }
+
+    fn admit_with_clock(
+        &mut self,
+        bytes: &[u8],
+        consent: &EconomicConsentV1,
+        auth: &AuthorizationEnvelopeV2,
+        clock: impl FnOnce() -> AuthorizationResultV2<u64>,
+    ) -> AuthorizationResultV2<EconomicAttemptStateV1> {
         let work = EconomicWorkV1::decode(bytes, self.limits)?;
         consent.verify_admission_signatures(self.network, &work, auth)?;
         let tx = self
@@ -265,6 +290,7 @@ impl EconomicJournalV1 {
             .optional()?;
         if let Some(id) = existing {
             let a = Self::attempt(&tx, self.network, id)?;
+            miner::check_attempt(&tx, self.network, &a)?;
             if a.work_bytes != bytes || a.auth.proof_hash_hex != auth.proof_hash_hex {
                 return Err("economic nonce conflicts with different work or target".into());
             }
@@ -274,6 +300,9 @@ impl EconomicJournalV1 {
             });
         }
         let state = Self::state(&tx, self.network)?;
+        // Sample time after acquiring the write transaction, not before waiting
+        // for another contender. Existing retries above do not consult expiry.
+        let round = miner::admission_at(&tx, self.network, self.limits, &work, auth, clock()?)?;
         if state.active.is_some() {
             return Err("economic ledger busy; no charge".into());
         }
@@ -295,6 +324,7 @@ impl EconomicJournalV1 {
             "UPDATE economic_state SET ledger=?1,active=?2 WHERE id=1",
             params![post_bytes, id],
         )?;
+        miner::claim_round(&tx, round, id)?;
         tx.commit()?;
         Ok(EconomicAttemptStateV1::Admitted { attempt_id: id })
     }
@@ -377,6 +407,7 @@ impl EconomicJournalV1 {
         {
             return Err("economic finalization ownership or predecessor mismatch".into());
         }
+        miner::check_attempt(&tx, self.network, &current_attempt)?;
         if outcome == EconomicOutcomeV1::Accepted {
             match reserve_in_transaction(&tx, self.network, &attempt.auth) {
                 Ok(_) => (),
@@ -406,6 +437,7 @@ impl EconomicJournalV1 {
                 head.clone()
             ))?],
         )?;
+        miner::finish_round(&tx, &attempt, outcome)?;
         tx.commit()?;
         Ok(EconomicReceiptV1 {
             attempt_id: attempt.id,
@@ -459,6 +491,9 @@ impl EconomicJournalV1 {
     pub fn record_publication(&mut self, id: i64, txid: &str) -> AuthorizationResultV2<()> {
         decode_hex_v2::<32>(txid)?;
         let attempt = self.read_attempt(id)?;
+        if miner::is_miner_work(&attempt.work) {
+            return Err("miner publication requires the combined reward publisher".into());
+        }
         if attempt.terminal.as_ref().map(|r| r.outcome) != Some(EconomicOutcomeV1::Accepted) {
             return Err("publication requires an accepted attempt".into());
         }
@@ -477,6 +512,7 @@ impl EconomicJournalV1 {
         // Read one snapshot so an idempotent retry never sees a mixed lifecycle.
         let read = self.authorizer.connection.unchecked_transaction()?;
         let attempt = Self::attempt(&read, self.network, id)?;
+        miner::check_attempt(&read, self.network, &attempt)?;
         read.commit()?;
         Ok(attempt)
     }
@@ -638,6 +674,7 @@ impl EconomicJournalV1 {
                 return Err("attempt follows nonterminal economic work".into());
             }
             let a = Self::attempt(c, self.network, id)?;
+            miner::check_attempt(c, self.network, &a)?;
             ledger.payer_account_id = a.work.subject();
             if ledger != a.work.meter.ledger || prior != a.prior {
                 return Err("economic journal chain mismatch".into());
@@ -653,6 +690,7 @@ impl EconomicJournalV1 {
             return Err("economic durable state mismatch".into());
         }
         self.outbox()?; // Also checks orphaned outbox entries and observation shape.
+        miner::audit(&read, self.network)?;
         read.commit()?;
         Ok(())
     }

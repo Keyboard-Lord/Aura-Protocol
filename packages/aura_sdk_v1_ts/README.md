@@ -22,7 +22,9 @@ The root also exports the approved miner **M2 codec/profile boundary** from
 Job signature/policy checks, structural work/claim checks and the low-hash filter
 do not grant PoC acceptance, admission, round ownership or rewards. The
 [miner design](../../reports/AURA_MINER_PROTOCOL_V1.md) remains approved design
-metadata rather than active protocol authority; miner execution is the next slice.
+metadata rather than active protocol authority. [Rust M3 local mining](../../reports/AURA_MINER_M3_EVIDENCE.md)
+is now implemented; TypeScript tests its existing work/material/reference boundary
+without duplicating the prover. Durable miner coordination remains M4 work.
 
 Versioned UDOT wrappers, old authorization intents, nested proof/settlement
 envelopes and account-oriented preparation aliases require the explicit `legacy`
