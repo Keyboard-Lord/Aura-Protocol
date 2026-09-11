@@ -1,10 +1,11 @@
 # AURA_MINER_PROTOCOL_V1
 
 **Classification: APPROVED DESIGN DECISION / NOT ACTIVE PROTOCOL AUTHORITY.**
-**Status: DESIGN COMPLETE — D1–D6 APPROVED; IMPLEMENTATION PENDING.**
+**Status: DESIGN COMPLETE — D1–D6 APPROVED; M2 DONE, M3 READY.**
 Baseline: completed Bitcoin migration at `f64fb4f`, including its economic integration.
-Date: 2026-09-10. No production code, frozen fixture or authoritative specification
-is changed by this proposal. The review below is an internal design review, not an
+Date: 2026-09-10. The Rust/TS job/profile codec boundary is implemented and frozen;
+miner runtime/coordination remain later work. Existing canonical outputs and
+authoritative specifications are unchanged. The review below is an internal design review, not an
 independent cryptographic audit or proof of economic security.
 
 ## 1. Approved architecture and decision boundary
@@ -31,8 +32,9 @@ of the intended Storm work. That alternative is not this proposal.
 
 On 2026-09-10 the user replied **“yes approved”** to the explicit request to approve
 decisions D1–D6 as the V1 design contract. Section 13 records that approval. These
-requirements define the approved implementation design; they do not claim that
-miner behavior is already implemented or supersede the active protocol owners.
+requirements define the approved implementation design and do not supersede the
+active protocol owners. Only M2's codec/profile boundary is implemented; section 11
+records its evidence separately from the future miner runtime and coordination.
 
 ## 2. Current-state dependency map
 
@@ -383,12 +385,20 @@ checks; and a concrete cheap outer-nonce rebinding that passes TS signature/mate
 checks but is rejected by the full existing Rust authorizer. It reproduces the
 existing frozen authorization proof_hash before attempting that attack.
 
-This is executable design evidence, not a new miner parity vector or full miner
-security validation. It does not implement the proposed job signature/parser,
-production winner state machine, reward publisher or automatic consensus. The
-multi-language candidate vectors, atomic integration/reward tests and performance
-calibration below are required implementation work. Baseline verification is reused
-from the completed migration; no unrelated suite rerun is needed for this proposal.
+The probe is executable design evidence, not full miner security validation or a
+production winner state machine. It remains unchanged and reproduced byte-identical
+output during M2 closure. Runtime candidate/proof vectors, atomic integration/reward
+tests and performance calibration remain later work.
+
+M2 is implemented in [Rust](../crates/aura_sdk_v1/src/miner.rs) and
+[TypeScript](../packages/aura_sdk_v1_ts/src/minerV1.ts). The
+[shared frozen codec/profile evidence](../fixtures/miner_v1/README.md) pins J,
+decoding, commitments, signature digest/signature, I, route, context, W and target
+comparison using exact bytes. Focused tests cover every job/signature/work byte,
+malformed inputs, trusted policy, limits, stale heads and profile bindings. Nine
+Rust and ten TypeScript miner tests pass, together with targeted SDK checks and
+existing authorization/economic/claim regressions. Profile and low-hash filters
+remain distinct from actual PoC verification and durable authorization acceptance.
 
 ## 12. Frozen components and minimal implementation DAG
 
@@ -398,8 +408,8 @@ FractalKey, proof_hash, Authorization V2 envelope/signing, economic consent/W/M
 encodings, burn constants/supply invariant, Head V2 formula/genesis, UDOT or Bitcoin
 OP_RETURN. No hierarchical/macro Storm change is required.
 
-Required additions are the proposed job/profile codec and validator, private miner
-search orchestration, transactional round/winner/reward records, guards composed
+The job/profile codec and validator are complete (M2). Remaining additions are
+private miner search orchestration, transactional round/winner/reward records, guards composed
 into the **existing** economic coordinator, and a reward-aware publisher using the
 existing Bitcoin transport. Transaction composition may require private refactoring;
 it must not create bypass entry points or alternative settlement APIs.
@@ -408,12 +418,15 @@ it must not create bypass entry points or alternative settlement APIs.
 | --- | --- | --- |
 | M0 — design evidence | Baseline | This proposal and probe; frozen dependency map established. DONE. |
 | M1 — semantic approval | M0 | User explicitly approved D1–D6 on 2026-09-10. DONE. |
-| M2 — job/profile parity | M1 | Narrow Rust/TS job codec/signature, context binding and strict limits; one shared vector, every-byte mutations, target endianness/endpoints, zero-N/slot/VK/route rejection. |
-| M3 — miner computation | M2 | Existing Storm/proof/material owners only; CSPRNG trial nonce, cancellation at job expiry, exact score, no settlement side effects. Deterministic candidate/proof vectors; optimized-reuse attack and resource measurements. |
-| M4 — coordinator composition | M2 | Same SQLite admission/finalization owner plus job lock/round/reward records; preserve all four existing outcomes. Race, retry, failed-head staling, expiry, restart and injected rollback tests. Original non-mining regressions unchanged. |
-| M5 — reward publication | M4 | Reserved outpoint, exact payout + unchanged anchor, persisted transaction, conflicting fee replacements; no duplicate entitlement/payment. Core regtest with broadcast-crash, fee rejection and reorg. |
-| M6 — adversarial integration | M3, M5 | Actual candidate → debit → full proof → winner/head/outbox → payout/anchor; fake low hashes, copied work, competing miners, wrong-job/nonce, publication recovery. Confirm baseline outputs unchanged. |
-| M7 — authority and activation | M6 | Promote approved definitions into existing owners; archive conflicting Aurafarming research without losing evidence. Publish measured N/target/bounds and funded limits, review unresolved attacks, then explicitly authorize monetary deployment. |
+| M2 — job/profile parity | M1 | DONE. Rust/TS job codec/signature, context binding and strict limits; shared frozen bytes, every-byte mutations, target endianness/endpoints, zero-N/slot/VK/route rejection. |
+| M3 — miner computation | M2 | READY, not started. Existing Storm/proof/material owners only; CSPRNG trial nonce, cancellation at job expiry, exact score, no settlement side effects. Deterministic candidate/proof vectors; optimized-reuse attack and resource measurements. |
+| M4 — coordinator composition | M2 | BLOCKED in the current execution plan. Same SQLite admission/finalization owner plus job lock/round/reward records; preserve all four existing outcomes. Race, retry, failed-head staling, expiry, restart and injected rollback tests. Original non-mining regressions unchanged. |
+| M5 — reward publication | M4 | BLOCKED. Reserved outpoint, exact payout + unchanged anchor, persisted transaction, conflicting fee replacements; no duplicate entitlement/payment. Core regtest with broadcast-crash, fee rejection and reorg. |
+| M6 — adversarial integration | M3, M5 | BLOCKED. Actual candidate → debit → full proof → winner/head/outbox → payout/anchor; fake low hashes, copied work, competing miners, wrong-job/nonce, publication recovery. Confirm baseline outputs unchanged. |
+| M7 — authority and activation | M6 | BLOCKED. Promote approved definitions into existing owners; archive conflicting Aurafarming research without losing evidence. Publish measured N/target/bounds and funded limits, review unresolved attacks, then explicitly authorize monetary deployment. |
+
+M3 is the sole next scheduled node. M4 is held for a later slice; the approved
+technical dependency graph above is unchanged. M2 closure does not start M3–M7.
 
 During implementation, the existing Aurafarming document can own miner job/competition
 semantics; pipeline/ledger/authorization/head/report owners reference it for their
@@ -436,13 +449,14 @@ alternatives remain unselected; they are not optional modes within this contract
 | D6 | Add atomic miner scheduling/winner/reward metadata and route enforcement to the existing coordinator; preserve formats; implement/test on regtest before separately approving monetary activation. | A standalone miner settlement endpoint would create a competing canonical path and is rejected. |
 
 Approval of D1–D6 establishes the bounded implementation design, not proof of Storm
-hardness, customer utility, fair ordering or funded mainnet readiness. No code
-presently enforces the new miner semantics. There are no unresolved semantic
+hardness, customer utility, fair ordering or funded mainnet readiness. M2 enforces
+the job/profile codec boundary; runtime and coordination are not yet implemented.
+There are no unresolved semantic
 decisions within the approved coordinated V1 scope. Numerical deployment policy
 must be measured and explicitly configured under D3; monetary activation remains
 separately gated by D6. A change to these approved semantics requires a new decision.
 
 The design-only goal is complete: dependencies, exact predicates, lifecycle,
 economics, head/Bitcoin boundaries, threat review and implementation DAG are ready.
-Implementation validation and activation are future work explicitly identified in
-M2–M7, not claims made by this design approval.
+M2 implementation validation is complete. Runtime implementation and activation
+remain work explicitly identified in M3–M7, not claims made by this design approval.
