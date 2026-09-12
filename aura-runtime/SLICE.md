@@ -2,86 +2,75 @@
 
 Classification: TOOLING / IMPLEMENTATION EVIDENCE; not protocol authority.
 Runtime: AURA Runtime V4
-Program: approved Aura Miner Protocol V1, master goal M3–M7
-Current milestone: M7 DONE — MASTER PROGRAM COMPLETE
-Last updated: 2026-09-11
-Next node: none
+Program: Aura Compute Network V1, master goal C0–C10
+Current milestone: C0 — AWAITING USER_DECISION
+Last updated: 2026-09-12
+Next node: C1, blocked on C0 approval
 
 ## Mission and frozen baseline
 
-Finish the miner program one dependency-ordered milestone at a time. Report and
-stop at each node boundary. The master goal completes only after M7. No monetary
-activation is authorized by implementation completion.
+Extend completed Miner V1 with useful customer-requested computation. Valid useful
+work earns customer-funded compensation independently of optional sponsor-funded
+mining rewards. Execute one current node, validate, record evidence and stop.
 
-Completed Bitcoin migration/economic baseline: `f64fb4f`. Preserve existing HASH_V2,
-field arithmetic, Storm initialization/recurrence, TRACE_ROOT, proof bytes,
+Completed Miner baseline: `97ff01f`; M0–M7 DONE. The
+[completed miner register](MINER_M7_SLICE.md) is preserved verbatim, with
+[M7 evidence](../reports/AURA_MINER_M7_READINESS.md) and the
+[active miner owner](../docs/authoritative/AURA_AURAFARMING_NODES.md).
+
+Preserve HASH_V2, field arithmetic, Storm, TRACE_ROOT, proof format,
 ProofMaterial/FractalKey/proof_hash, Authorization V2, W/M, burn, Head V2, UDOT,
-Bitcoin OP_RETURN and frozen M2 codecs/vectors. No migration re-audit without a
-concrete dependency defect. Root-local execution; no runtime/profile changes.
-
-Protocol owner: [coordinated Miner V1](../docs/authoritative/AURA_AURAFARMING_NODES.md).
-[Design decision history](../reports/AURA_MINER_PROTOCOL_V1.md) retains approved
-D1–D6 and evidence, not duplicate authority. Prior Bitcoin completion evidence:
-[completion record](../reports/AURA_BITCOIN_ECONOMIC_MILESTONE_COMPLETION_V1.md).
+Bitcoin OP_RETURN, Miner V1 eligibility and frozen job/profile bytes including the
+signed-target dependency. One existing journal and Bitcoin publication path.
+No public worker execution or live monetary activation is authorized.
 
 ## DAG
 
-| ID | State | Execution dependency | Scope / stop criterion |
-| --- | --- | --- | --- |
-| M0 | DONE | Bitcoin baseline | Approved design foundation and bounded threat probe. |
-| M1 | DONE | M0 | D1–D6 explicitly approved. |
-| M2 | DONE | M1 | Frozen 471-byte job/profile Rust/TS parity and negative coverage. |
-| M3 | DONE | M2 | Bounded local verified mining, deterministic search, security experiments and measured N scaling. |
-| M4 | DONE | M3 | One durable round owner composed into the existing economic coordinator; atomic contender/debit/authorization/head/winner/reward-obligation state and recovery tests. |
-| M5 | DONE | M4 | Sponsor-funded reward plus unchanged Bitcoin anchor; regtest publication/replacement/reorg recovery. |
-| M6 | DONE | M5 | Reproducible adversarial full-system acceptance gate and frozen-output regressions. |
-| M7 | DONE | M6 | Existing-owner promotion, measured operational limits and activation readiness; live monetary deployment separately approved. |
-
-This order follows the user's master goal. M4 composes round ownership into the existing economic transaction owner.
+| ID | State | Dependency / bounded output |
+| --- | --- | --- |
+| C0 | AWAITING USER_DECISION | Owner map and architecture prepared; D1–D4 approval required. |
+| C1 | BLOCKED | C0: canonical compute job framing, identity, signatures, limits and Rust/TS vectors. |
+| C2 | BLOCKED | C1: worker/result contracts and independent compute-payment state machine. |
+| C3 | BLOCKED | C2: real GPU-oriented ZK proving, verification, delivery, payment and optional mining binding; minimal isolation required. |
+| C4 | BLOCKED | C3: deterministic/open-model inference. |
+| C5 | BLOCKED | C4: molecular, media and Monte Carlo adapters, one at a time. |
+| C6 | BLOCKED | C5: generic sandboxed CPU/GPU worker. |
+| C7 | BLOCKED | C6: justified confidential/TEE/locality support. |
+| C8 | BLOCKED | C7 plus measured proving kernels: Proof ASIC production interface. |
+| C9 | BLOCKED | C8: capability discovery, routing, reliability and market. |
+| C10 | BLOCKED | C9: adversarial network and activation-readiness evidence. |
 
 ## Current evidence
 
-[M7 completion audit](../reports/AURA_MINER_M7_READINESS.md),
-[operations guide](../docs/AURA_MINER_OPERATIONS_V1.md),
-[full acceptance gate](../scripts/verify_miner_program_v1.mjs),
-[captured final result](../reports/miner_protocol_v1/m7_acceptance_results.json).
-Prior: [M6](../reports/AURA_MINER_M6_EVIDENCE.md), [M5](../reports/AURA_MINER_M5_EVIDENCE.md),
-[M4](../reports/AURA_MINER_M4_EVIDENCE.md), [M3 measurements](../reports/AURA_MINER_M3_EVIDENCE.md).
+[C0 architecture and owner map](../reports/AURA_COMPUTE_NETWORK_V1.md) is a
+non-authoritative proposal. No compute codec, adapter or payment implementation
+exists as a result of C0. No authoritative document was added or changed.
 
-- All 11 final gate stages passed: 186 top-level Rust test entries (including child
-  helpers), 58 TS tests, affected SDK compile and 17 explicit Core attack cases.
-- M7 reconciled approved epoch-zero/consecutive rotation and post-snapshot challenge
-  generation; two focused tests and the complete adversarial gate passed afterward.
-- The existing Aurafarming owner now defines Miner V1. Prior network research is
-  preserved verbatim outside authority; the design report cross-references the owner.
-- Operations guide covers API ownership, measured limits, funding, journal/backup
-  requirements, monitoring, recovery, security assumptions and activation boundary.
-- Main Core scenario: 214 vbytes, fees 428/2140 sat, reward 10,000 sat, one winner,
-  one obligation, two conflicting versions, unchanged 48-unit Aura burn.
-- Frozen cryptographic outputs, M2/M3 vectors and Bitcoin anchor unchanged.
-  Authoritative changes promote only the already-approved miner integration.
+- Existing miner intent commits exact J and M; M can carry a result reference,
+  but its current attestation checks do not verify an external workload.
+- Existing reward publication requires an Accepted miner winner. Independent
+  compute compensation needs an approved extension of that same payment owner.
+- Existing economic consent and Authorization V2 bind completed Aura references;
+  a pre-execution customer job signature cannot stand in for either envelope.
+- C0 validation is documentation-only: local links, archive preservation, diff
+  whitespace and changed-file scope. Completed Miner/Bitcoin gates were not rerun.
 
-## Decisions and limitations
+## Decisions
 
-Section 8 clarification is explicitly APPROVED: signed target remains in J/I/Storm
-binding. Diagnostic thresholds only compare already-computed hashes and never
-replace the signed target. The original decision evidence is retained in the M3
-report. No unresolved implementation decision remains in M0–M7. Deployment
-parameters and monetary activation remain separate explicit decisions.
+See the proposal's decision table for alternatives, tradeoffs and exact boundaries.
 
-A complete internally consistent old database cannot detect its own rollback.
-The explicit simulation records this limit: latest-backup provenance and external
-publication reconciliation are required before restore. The operations guide
-records those requirements; no external anti-rollback authority was introduced.
+| ID | Recommended architecture awaiting approval |
+| --- | --- |
+| D1 | Fixed customer-prefunded custodial BTC compensation through the existing journal/publisher, independent of mining. |
+| D2 | Coordinator account signs ordinary Aura compute finalization and pays the unchanged Aura burn; customer/worker signatures remain distinct. |
+| D3 | Final verified-result reference binds through a strict existing-M evidence profile; normal unlinked Miner V1 remains unchanged. |
+| D4 | One neutral compute authority owner, registered only after approval and implementation evidence; existing owners retain their concepts. |
 
-The implementation-ready system is coordinated witness-backed PoC plus a target
-predicate, not permissionless consensus, succinct/ZK proving, physical/sequential
-hardness or calibrated economic security. Funding is custodial;
-wallet locks are restored on publication recovery, while ambiguous locks/spends
-require operator reconciliation. Policy N/T, reward, duration and fee budget are explicit, uncalibrated inputs.
-No monetary activation is authorized.
+These are new compute architecture choices, not covered by prior Miner V1 approval.
+Exact bytes, backend selection and lifecycle details belong to subsequent nodes.
+Approval does not authorize unspecified tariffs, confidential execution or live funds.
 
 ## Stop condition
 
-M0–M7 acceptance is satisfied. Stop the master program. No next node, live monetary
-deployment, automatic retarget or permissionless-consensus work is authorized.
+Stop for D1–D4 review. After approval, record C0 DONE and C1 READY; do not silently
+start C1 in this execution. No runtime implementation or authority promotion at C0.
