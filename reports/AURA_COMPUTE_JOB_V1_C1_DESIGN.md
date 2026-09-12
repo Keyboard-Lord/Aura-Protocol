@@ -1,17 +1,20 @@
-# AuraComputeJobV1 — C1 contract design candidate
+# AuraComputeJobV1 — C1 contract and freeze evidence
 
-Classification: DESIGN CANDIDATE / NON-AUTHORITATIVE; DOC > CODE.
-Date: 2026-09-12. State: C1 READY for design; contract choices below are UNAPPROVED.
+Classification: APPROVED IMPLEMENTATION DIRECTION / NON-AUTHORITATIVE; NOT YET FROZEN.
+Date: 2026-09-12. C1-D1–D3 APPROVED by the user; C1 IN PROGRESS.
+DOC = CODE for the request codec/profile; referenced core policy semantics remain pending.
 C0 approval: [controlling D1–D4](AURA_COMPUTE_NETWORK_V1.md#9-controlling-approval-record--d1d4-approved).
-No SDK codec, adapter, journal migration or payment implementation is added here.
-The byte layout and derivation below are review candidates, NOT frozen fixtures.
+Rust/TS request codec/profile implementations and shared regression vectors now exist.
+No adapter, journal migration, useful-result verdict or payment implementation is added.
+Canonical freeze requires the test evidence AND complete referenced core contracts below.
 
 ## 1. Existing boundary and design obligations
 
 The approved C0 decisions establish independent prefunded compensation, one
 EconomicJournalV1, no automatic useful-work burn/head transition, requester data
-rights, hardware neutrality and signed-job result binding. This candidate supplies
-concrete C1 choices for review; it does not change those decisions.
+rights, hardware neutrality and signed-job result binding. The user approved
+C1-D1–D3 for contract design and Rust/TS parity work, explicitly withholding canonical
+freeze until the required checks pass. This implementation preserves those decisions.
 
 Direct owners inspected:
 
@@ -31,9 +34,9 @@ must not contain a future compute_result_commitment or signed MinerJobV1 commitm
 that would create a job → result → job dependency cycle. Optional mining is a mode;
 its actual signed job is created after the verified result exists.
 
-## 2. Proposed job encoding — C1-D1
+## 2. Approved job encoding — C1-D1 (freeze pending)
 
-Propose exactly **546 bytes**, fixed order below. Offsets are zero-based. All u64
+Exactly **546 bytes**, fixed order below. Offsets are zero-based. All u64
 and u16 values use unsigned little-endian bytes. Fixed fields have no length prefix.
 No signature is embedded in job bytes. No JSON wire, optional fields, normalization,
 implicit defaults, missing/null mining values or alternate encodings.
@@ -77,7 +80,7 @@ Every commitment denotes exact content; retrieval failure is not permission to
 substitute a default. Any 32-byte digest is structurally representable, but admission
 requires matching available content and supported reviewed contracts.
 
-Proposed fixed registry tags (candidate assignments, not active registration):
+Approved codec tags (decoding is not active adapter registration):
 
 - Workload class u16: 0 proving/crypto, 1 inference, 2 molecular, 3 media,
   4 Monte Carlo, 5 general science, 6 genomics, 7 optimization, 8 builds/CI,
@@ -93,7 +96,7 @@ must be checked before admission, assignment or release of data. PUBLIC requires
 isolation too; SANDBOXED is not confidentiality from the worker.
 
 Limits must bound host allocation and verifier input, not just worker claims.
-Propose positive output/evidence/memory/execution bounds and `0 < accept_until <
+Require positive output/evidence/memory/execution bounds and `0 < accept_until <
 complete_by`; zero input/scratch may be legitimate exact bounds, not unlimited.
 Resource limits must satisfy adapter minimums and local caps without arithmetic
 wraparound. Admission time must be before accept_until; an assignment must leave
@@ -102,7 +105,7 @@ timing, leases, retries and cancellation; worker clocks never establish acceptan
 
 ## 3. Commitment, authentication and replay — C1-D1
 
-For job bytes B, propose:
+For job bytes B:
 
 ```text
 compute_job_commitment = SHA256(B)
@@ -115,7 +118,7 @@ coordinator_key and namespace scope the request to one configured service/journa
 the request does not assert that coordinator acceptance or funding already occurred.
 Different valid signatures over the same B do not change job identity.
 
-Proposed separate compute replay scope within EconomicJournalV1:
+Approved separate compute replay scope within EconomicJournalV1:
 `(network, coordinator_key, journal_namespace, requester_key, job_nonce)`.
 An authenticated retry with exactly the same B is idempotent; different B in the
 same scope fails, even after expiry/cancellation. No global uniqueness claim, no
@@ -123,7 +126,7 @@ implicit reservation of a mining freshness_nonce and no Authorization V2 convers
 Signature validity grants no worker assignment, result acceptance, compensation
 payment or Aura proof authorization by itself. C2 defines durable transitions.
 
-For each referenced object X, propose one content commitment:
+For each referenced object X, use one content commitment:
 
 ```text
 C_X = SHA256(ASCII(domain_X) || u64_le(payload_length) || exact_payload_bytes)
@@ -135,7 +138,7 @@ Domains are exactly `AURA_COMPUTE_` plus one of
 `DATA_RIGHTS`, followed by `_V1`. No null terminator. Commit raw canonical artifact
 bytes, not a hex string or an unpinned URI. The domain maps to exactly one job field.
 Locators/transport mirrors are operational metadata and cannot change the content.
-This is a proposed upstream content-addressing rule, not a change to HASH_V2.
+This is the approved upstream content-addressing rule, not a change to HASH_V2.
 
 Adapter contracts must specify one canonical encoding for each workload-owned
 payload and the exact relation between input, program, parameters, output and
@@ -147,7 +150,7 @@ unfinished semantics behind a 32-byte digest.
 
 ## 4. Funding and hardware invariants — C1-D2
 
-Propose fixed net BTC compensation per accepted requested unit, positive integer
+Use fixed net BTC compensation per accepted requested unit, positive integer
 satoshis. No resource-claim-based pricing, token balance or automatic mining burn.
 The customer must prefund that compensation and the approved fee policy before an
 assignment can earn. A funding/fee shortage may prevent assignment; it cannot
@@ -177,7 +180,7 @@ Execution grants the worker no ownership rights. data_rights_commitment must res
 to the requester-control/minimum-temporary-rights policy or an explicitly selected
 open-license policy, as required by approved C0-D4.
 
-## 5. Exact proposed result-to-signed-input derivation — C1-D3
+## 5. Approved result-to-signed-input derivation — C1-D3 (freeze pending)
 
 Input R is the single 32-byte compute_result_commitment from an accepted verified
 result. C2 owns R's full preimage, including all C0-D3 bindings. Synthetic values
@@ -224,11 +227,12 @@ Why this candidate: SHA256 is already used by the miner job/intent owners; fixed
 counter/lane framing uses both existing fields without changing J or selecting a
 new hash primitive. A SHAKE/XOF expansion or direct digest-plus-padding would also
 be possible, but choosing multiple permitted encodings would violate canonicality.
-Recommend this single expansion subject to approval and cross-language vectors.
+C1-D3 approves this single expansion; cross-language vectors now pass. No alternate
+expansion is accepted by the implemented profile.
 
-## 6. Required freeze evidence — not yet satisfied
+## 6. Required freeze evidence — core contract gate still open
 
-After approval of C1-D1/D2/D3, before adapters depend on this boundary:
+Before adapters depend on this boundary:
 
 1. Freeze complete job and referenced core contract semantics/encodings, including
    policy commitments, supported versions, explicit deadlines and hard limits.
@@ -247,28 +251,30 @@ After approval of C1-D1/D2/D3, before adapters depend on this boundary:
 7. Distinguish structural validity, signature authentication, funded admission,
    verified result, compute entitlement and existing mining PoC/PoW in test names.
 
-C1 is NOT DONE. No production tests, Rust/TS parity or canonical freeze is claimed
-for this design candidate. No workload adapter or live monetary path is started.
+C1 is NOT DONE and no canonical freeze is claimed. Items 2–7 have executable
+codec/profile evidence (section 10); item 1 still needs the core policy contracts
+in section 9. Pure replay comparison is not a durable admission test; that state
+owner remains C2. No workload adapter or live monetary path is started.
 
-## 7. USER_DECISION — C1 contract choices
+## 7. C1-D1–D3 approval record
 
-Existing approved behavior: C0-D1–D4 and every frozen Miner/Aura byte and rule.
-Conflict to avoid: treating architecture approval as approval of new canonical
-compute bytes, a requester-signing/replay contract, fixed payment terms or the
-exact cryptographic expansion. Those meanings are not specified by C0.
+The user explicitly APPROVED C1-D1–D3 for continued contract design and Rust/TS
+parity/vector work. The approval is NOT the canonical freeze. Freeze only after
+exact byte layout, signing/replay vectors, compensation vectors, side-expansion
+vectors, mutation/negative coverage and independent Rust/TS parity pass.
 
-| ID | Recommended exact decision | Tradeoff / alternative |
-| --- | --- | --- |
-| C1-D1 | Adopt the proposed 546-byte fixed envelope, domain-separated SHA256 object/job commitments, detached BIP340 requester signature and journal-scoped replay direction. | Inline variable manifests reduce resolution dependencies but require more framing/limits; a different customer identity/signature scheme adds new key handling. Referenced core contracts must still be fully specified before freeze. |
-| C1-D2 | Fixed positive net BTC compensation in job bytes; immutable terms committed, actual funding/payment transport excluded from identity. | Metered/performance pricing requires independently verifiable usage and a different entitlement contract; no such pricing is approved yet. |
-| C1-D3 | Freeze the proposed SHA256 four-block/two-lane expansion into both signed 110-byte sides, after Rust/TS vectors and existing-J regression pass. | Another single expansion could work but would produce different canonical inputs. M-only/post-proof binding is ruled out by approved D3. |
+- C1-D1: the 546-byte envelope, SHA256 commitments, detached BIP340 requester
+  signature and journal-scoped replay direction are approved.
+- C1-D2: fixed positive net BTC compensation and exclusion of funding/payment
+  transport from job identity are approved.
+- C1-D3: the four-block/two-lane SHA256 derivation into existing signed 110-byte
+  MinerJobV1 sides is approved.
 
-Smallest decision needed: approve or amend these three proposed contract directions
-before canonical freeze or SDK implementation. This is not an approval of missing
-policy schemas, payout semantics, a proof backend, a new winner restriction, public
-execution or live funds. Remaining C1 policy details stay explicit design work.
+Prior alternatives remain design history, not permitted additional encodings.
+No approval is inferred for unspecified core policy schemas, payout behavior,
+a new winner restriction, a proof backend, live funds or public execution.
 
-## 8. Design-check evidence
+## 8. Historical design-check evidence (before implementation)
 
 - Layout arithmetic: 30 fields with contiguous offsets, 546 bytes including the
   exact 19-byte domain. No implemented encoder/decoder is claimed.
@@ -282,3 +288,93 @@ execution or live funds. Remaining C1 policy details stay explicit design work.
   M7 register remains byte-identical to `97ff01f`.
 - No Aura runtime, mining, Bitcoin, adapter or live monetary tests were run for
   this design-only change. The C1 freeze checklist above remains outstanding.
+
+## 9. USER_DECISION — first supported core contracts
+
+The approved envelope commits privacy, hardware, payment and rights payloads, but
+those payloads have no approved exact schemas yet. The executable vectors use
+clearly marked synthetic content, not an alleged supported policy. Freezing these
+placeholders would leave job meaning undefined; passing hash tests cannot fix that.
+
+Recommended smallest initial profile set, for review only:
+
+| Job reference | Proposed exact payload before existing content-hash framing | Proposed meaning |
+| --- | --- | --- |
+| privacy_policy_commitment | Single byte `01` | Isolated PUBLIC/SANDBOXED work; no host secrets or outbound network; no confidentiality claim. Other privacy classes remain unsupported until separately specified. |
+| hardware_requirements_commitment | Single byte `01` | Any measured/supported backend satisfying the committed adapter relation and job limits; no device/vendor identity in job meaning. Adapter minimum capabilities remain mandatory. |
+| data_rights_commitment | Single byte `01` | Approved requester-control/minimum-temporary-execution-rights policy. No automatic reuse, ownership transfer or publication; evidence retention only for verification/accounting. An alternate open-license policy needs its own explicit supported profile. |
+| payment_terms_commitment | `01 || u64_le(max_payment_fee_satoshis) || u64_le(result_availability_seconds)` (17 bytes) | Fixed net compensation owned solely by the job; customer-funded fee ceiling separate from that net amount; positive committed result availability duration. No outpoints/transaction IDs in these bytes. |
+
+These bytes would be interpreted only by the respective content kind and wrapped
+in its already-approved domain/length commitment. They are not implemented or
+frozen by this checkpoint. No concrete fee ceiling or availability duration is
+selected as a deployment default. Zero fee budget would be an exact limit, not
+unlimited fees; runtime funding/fee policy must be satisfiable before assignment.
+
+Payment lifecycle meaning needed before this profile is safe to freeze:
+
+- Recommend requester cancellation/refund eligibility before assignment only;
+  after assignment, reserve funds until a valid timely result or terminal failure.
+- A timely durable receipt pending verification retains its reservation. Customer
+  acknowledgement is not a veto over valid, available contracted output.
+- An accepted result earns the full fixed amount; failures/expiry without a valid
+  timely receipt earn none, with no automatic Miner burn or Head V2 transition.
+- Customer funds publication fees up to the signed ceiling; they never reduce net
+  compensation. A shortfall cannot erase an already-earned entitlement.
+- Retain the output at least for the signed availability duration after acceptance
+  and while compensation remains pending. Detailed atomic transitions/recovery
+  stay in C2; this defines the promise they must implement.
+
+Existing approved behavior: prefunding, separate obligations, one journal, fixed
+net compensation, requester rights and no automatic useful-work burn/head advance.
+New meaning requiring a decision: the supported policy payloads, cancellation
+boundary, fee responsibility and result-availability promise above.
+Smallest decision: approve or amend this initial profile set and those promises.
+Alternative: design richer capability/privacy/licensing and cancellation contracts
+now; that expands the initial contract surface. Do not silently move missing core
+meaning to adapter-controlled JSON or mark the entire C1 node complete without it.
+
+## 10. Current implementation and validation evidence
+
+Owners:
+
+- [Rust codec/profile](../crates/aura_sdk_v1/src/compute_job.rs), exported from the
+  existing SDK. No serde job wire, journal, balance or proof implementation.
+- [TypeScript codec/profile](../packages/aura_sdk_v1_ts/src/computeJobV1.ts), using
+  Node SHA256 and Noble BIP340 independently of Rust sha2/libsecp256k1.
+- [Shared vectors](../fixtures/compute_job_v1/job_vectors_v1.json), generated by
+  explicit [Rust test-vector producer](../crates/aura_sdk_v1/examples/compute_job_vectors_v1.rs).
+  [Independent TS construction](../packages/aura_sdk_v1_ts/tests/support/computeJobVectorsV1.ts)
+  produces the same exact job/signature/content/side/miner-profile bytes.
+
+Validation:
+
+- `cargo test -p aura_sdk_v1 --offline --test compute_job_v1`: 7 tests passed.
+- `node --test packages/aura_sdk_v1_ts/src/computeJobV1.test.ts`: 9 tests passed.
+- Existing M2 regression: `cargo test -p aura_sdk_v1 --offline --test miner_v1`
+  (9 passed) and `node --test packages/aura_sdk_v1_ts/src/minerV1.test.ts`
+  (10 passed as part of the 19-test combined C1/M2 run).
+- `cargo check -p aura_sdk_v1 --offline --lib --examples`: passed.
+- `node --check packages/aura_sdk_v1_ts/src/computeJobV1.ts` and dynamic import of
+  the public SDK: passed. No standalone TypeScript compiler is installed; Node's
+  native TS runtime checks are not represented as a tsc typecheck.
+
+The suite checks every offset/width; 546 byte mutations and 64 signature mutations;
+all truncation lengths; unsupported tags, keys, zero bounds, zero compensation,
+strict deadlines, all five networks, amount 1 / 2^53+1 / u64::MAX, distinct
+coordinator/requester/namespace/nonce scopes, same-byte/different-signature retry,
+expiry-independent retry classification, exact content domain/length hashing,
+four result expansions and their existing J/signature/intent/context/work bytes.
+Wrong/swapped/padded sides, alternative counters, R hex/width mistakes, old signed J,
+disabled compute mining mode and post-proof/M-only attachment are rejected.
+
+Assignment budget arithmetic is exact: `max_execution_ms + delivery_budget_ms <
+(complete_by - now) * 1000`, after `now < accept_until`. Rust uses u128 internally;
+TS uses bigint. This is a local preflight, not proof of delivery time or enforcement.
+Retry comparison authenticates incoming bytes and never mutates replay state.
+Content matching is not supported-policy validation; miner-side matching is not
+external result verification or Aura PoC. Those distinctions remain explicit.
+
+No existing fixture or cryptographic/economic/Bitcoin owner is changed. C1 does
+not execute a workload, debit a balance, advance a head or construct a Bitcoin
+transaction. The core contract decision above is the remaining freeze blocker.

@@ -1,6 +1,7 @@
 //! Chain-neutral proof preparation, canonical authorization and Aura presentation.
 
 pub mod authorization;
+pub mod compute_job;
 pub mod economic;
 pub mod miner;
 pub mod miner_search;
