@@ -1,0 +1,292 @@
+{
+  "classification": "M7 TEST EVIDENCE; NOT PROTOCOL AUTHORITY",
+  "status": "PASS",
+  "environment": {
+    "node": "v22.22.2",
+    "platform": "darwin",
+    "arch": "arm64",
+    "rust": "rustc 1.88.0 (6b00bc388 2025-06-23)"
+  },
+  "stages": [
+    {
+      "name": "miner_search_coordination_publication_attacks",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "aura_sdk_v1",
+        "--offline",
+        "--lib"
+      ],
+      "exit_code": 0,
+      "elapsed_ms": 7924,
+      "rust_test_summaries": [
+        46
+      ],
+      "node_test_summaries": [],
+      "status": "PASS"
+    },
+    {
+      "name": "frozen_m2_authorization_economics_head",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "aura_sdk_v1",
+        "--offline",
+        "--test",
+        "miner_v1",
+        "--test",
+        "authorization_v2",
+        "--test",
+        "economic_contract_v1",
+        "--test",
+        "economic_journal_v1"
+      ],
+      "exit_code": 0,
+      "elapsed_ms": 9050,
+      "rust_test_summaries": [
+        1,
+        8,
+        5,
+        12,
+        9
+      ],
+      "node_test_summaries": [],
+      "status": "PASS"
+    },
+    {
+      "name": "active_hash_v2_owner",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "aura_intent_lineage_v1",
+        "--offline",
+        "--lib",
+        "storm_hash521_v1"
+      ],
+      "exit_code": 0,
+      "elapsed_ms": 92,
+      "rust_test_summaries": [
+        5
+      ],
+      "node_test_summaries": [],
+      "status": "PASS"
+    },
+    {
+      "name": "canonical_field_owner",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "aura_intent_lineage_v1",
+        "--offline",
+        "--lib",
+        "field_521_v1"
+      ],
+      "exit_code": 0,
+      "elapsed_ms": 78,
+      "rust_test_summaries": [
+        28
+      ],
+      "node_test_summaries": [],
+      "status": "PASS"
+    },
+    {
+      "name": "storm_trace_claim_frozen_parity",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "aura_intent_lineage_v1",
+        "--offline",
+        "--test",
+        "storm_hash521_v1",
+        "--test",
+        "storm_execution_v1",
+        "--test",
+        "storm_trace_commitment_v1",
+        "--test",
+        "storm_claim_v1",
+        "--test",
+        "storm_parity_v1",
+        "--test",
+        "storm_hash_quantum_hardening_v1"
+      ],
+      "exit_code": 0,
+      "elapsed_ms": 15075,
+      "rust_test_summaries": [
+        1,
+        1,
+        1,
+        8,
+        1,
+        1
+      ],
+      "node_test_summaries": [],
+      "status": "PASS"
+    },
+    {
+      "name": "actual_storm_verifier",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "aura_intent_lineage_v1",
+        "--offline",
+        "--lib",
+        "stark_verifier_v1::tests::storm_real"
+      ],
+      "exit_code": 0,
+      "elapsed_ms": 218,
+      "rust_test_summaries": [
+        3
+      ],
+      "node_test_summaries": [],
+      "status": "PASS"
+    },
+    {
+      "name": "material_fractal_key_bitcoin_wire",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "aura_proof_material_v1",
+        "-p",
+        "aura_fractal_key_v1",
+        "-p",
+        "aura_bitcoin_v1",
+        "--offline"
+      ],
+      "exit_code": 0,
+      "elapsed_ms": 1381,
+      "rust_test_summaries": [
+        0,
+        4,
+        0,
+        13,
+        1,
+        12,
+        0,
+        0,
+        0
+      ],
+      "node_test_summaries": [],
+      "status": "PASS"
+    },
+    {
+      "name": "udot_rust_typescript_parity",
+      "command": [
+        "bash",
+        "scripts/test_udot_parity.sh"
+      ],
+      "exit_code": 0,
+      "elapsed_ms": 3165,
+      "rust_test_summaries": [
+        11,
+        4,
+        12
+      ],
+      "node_test_summaries": [
+        20
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "typescript_frozen_crypto_miner_economic_bitcoin",
+      "command": [
+        "node",
+        "--test",
+        "packages/aura_sdk_v1_ts/src/stormHash521V1.test.ts",
+        "packages/aura_sdk_v1_ts/src/stormExecutionV1.test.ts",
+        "packages/aura_sdk_v1_ts/src/stormClaimV1.test.ts",
+        "packages/aura_sdk_v1_ts/tests/storm_parity_v1.test.ts",
+        "packages/aura_sdk_v1_ts/src/minerV1.test.ts",
+        "packages/aura_sdk_v1_ts/src/minerSearchV1.test.ts",
+        "packages/aura_sdk_v1_ts/tests/authorization_v2.test.ts",
+        "packages/aura_sdk_v1_ts/src/economicV1.test.ts",
+        "packages/aura_bitcoin_v1_ts/tests/anchor_v1.test.ts",
+        "packages/aura_bitcoin_v1_ts/tests/core_rpc_v1.test.ts"
+      ],
+      "exit_code": 0,
+      "elapsed_ms": 1819,
+      "rust_test_summaries": [],
+      "node_test_summaries": [
+        38
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "sdk_production_compile",
+      "command": [
+        "cargo",
+        "check",
+        "-p",
+        "aura_sdk_v1",
+        "--offline",
+        "--lib",
+        "--bins",
+        "--examples"
+      ],
+      "exit_code": 0,
+      "elapsed_ms": 1379,
+      "rust_test_summaries": [],
+      "node_test_summaries": [],
+      "status": "PASS"
+    },
+    {
+      "name": "bitcoin_adversarial_end_to_end",
+      "command": [
+        "node",
+        "scripts/verify_miner_regtest_v1.mjs",
+        "--adversarial"
+      ],
+      "exit_code": 0,
+      "elapsed_ms": 14692,
+      "rust_test_summaries": [],
+      "node_test_summaries": [],
+      "status": "PASS",
+      "core_result": {
+        "status": "PASS",
+        "core_version": 290000,
+        "iteration_count": 8,
+        "target": "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        "reward_satoshis": 10000,
+        "initial_fee_satoshis": 428,
+        "replacement_fee_satoshis": 2140,
+        "payment_vsize": 214,
+        "accepted_winners": 1,
+        "reward_obligations": 1,
+        "payment_versions": 2,
+        "burn_units": 48,
+        "confirmed_after_reorg": true,
+        "broadcast_crash_recovered": true,
+        "core_restart_lock_restored": true,
+        "pre_open_dust_funding_fee_rejections": 3,
+        "adversarial_cases": [
+          "wrong_bitcoin_network",
+          "crash_after_transaction_creation",
+          "fee_metadata",
+          "changed_anchor",
+          "changed_reward",
+          "removed_reserved_input",
+          "simultaneous_publication_retries",
+          "delayed_confirmation",
+          "duplicate_observation",
+          "delete_history",
+          "partial_snapshot",
+          "outbox",
+          "observation",
+          "observation_outbox_split",
+          "older_version_confirmed",
+          "unknown_spend",
+          "stale_snapshot_contradicted_by_bitcoin"
+        ]
+      }
+    }
+  ],
+  "limitations": [
+    "An internally consistent whole-journal rollback requires external backup provenance; SQLite alone cannot identify its own old snapshot."
+  ]
+}

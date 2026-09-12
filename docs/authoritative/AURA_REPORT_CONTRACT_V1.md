@@ -105,3 +105,15 @@ evidence; they no longer define the canonical settlement wire. The active Cargo
 workspace excludes the Solana program and submission clients. Ledger and pipeline
 owners define economic admission; this document only owns the unchanged Bitcoin wire
 and publication/observation semantics.
+
+## Coordinated miner publication
+
+The [miner owner](AURA_AURAFARMING_NODES.md) defines the sponsor-funded payout and
+required conflict between transaction revisions. Those additional output checks
+compose with this unchanged anchor decoder in
+`crates/aura_sdk_v1/src/economic/journal/miner/publication.rs`. The same journal
+persists signed payment history before sending and atomically records observations
+with the outbox reference. Use that combined publisher for miner attempts; the
+generic anchor acknowledgement cannot discharge a reward obligation. No miner
+field enters the canonical request or OP_RETURN. Txid/payment/observation values
+are operational records, not new Aura identities.

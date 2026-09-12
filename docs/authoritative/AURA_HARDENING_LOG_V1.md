@@ -32,3 +32,10 @@
   coverage lives in `packages/aura_sdk_v1_ts/src/stormExecutionV1.test.ts` and
   `src/stormClaimV1.test.ts`, included in the Storm hardening script. Existing
   Rust/TypeScript Storm parity vectors remain unchanged and pass.
+
+- Coordinated Miner V1 hardening and evidence are mapped in the
+  [vector registry](AURA_VECTOR_MATRIX_V1.md#coordinated-miner-v1). M6 rejects
+  missing payment history and inconsistent stored observations. M7 enforces the
+  already-approved zero/consecutive policy epochs, audits missing history, and
+  draws the production challenge after locking the pinned round state. These
+  scheduling/storage fixes change no frozen job, proof or Bitcoin wire bytes.

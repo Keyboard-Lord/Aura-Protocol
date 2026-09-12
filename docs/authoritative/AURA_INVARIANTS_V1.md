@@ -49,3 +49,11 @@
 - successful authorization, terminal Accepted, head and outbox commit atomically
 - settlement head sequence is derived from the prior head
 - previous head hash is derived from the prior head
+
+## Coordinated mining
+
+Derived from [the miner owner](AURA_AURAFARMING_NODES.md): exact signed-job profile
+and actual PoC verification precede winner eligibility; a low reference is only a
+filter. One journal owns admission, winner and reward obligation without a second
+economic path. Frozen crypto/head/anchor identities remain unchanged. Replay,
+publication and reorg tests must preserve the same charge and entitlement.

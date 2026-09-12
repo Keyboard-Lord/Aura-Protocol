@@ -1,9 +1,12 @@
 #[path = "support/authorization_v2.rs"] mod support;
 use aura_sdk_v1::authorization::{AuthorizerJournalV2, AuthorizationEnvelopeV2, AuthorizationDispositionV2, encode_hex_v2};
 use aura_bitcoin_v1::BitcoinNetworkV1;
-use std::{path::PathBuf, time::{SystemTime, UNIX_EPOCH}, process::Command};
+use std::{path::PathBuf, time::{SystemTime, UNIX_EPOCH}, process::Command, sync::atomic::{AtomicU64, Ordering}};
 const NETWORK: BitcoinNetworkV1 = BitcoinNetworkV1::Regtest;
-fn path() -> PathBuf { std::env::temp_dir().join(format!("aura-authorizer-{}-{}.db", std::process::id(), SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_nanos())) }
+fn path() -> PathBuf {
+    static NEXT_FILE: AtomicU64 = AtomicU64::new(0);
+    std::env::temp_dir().join(format!("aura-authorizer-{}-{}-{}.db", std::process::id(), SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_nanos(), NEXT_FILE.fetch_add(1, Ordering::Relaxed)))
+}
 fn resign(envelope: &mut AuthorizationEnvelopeV2) {
     use secp256k1::{Secp256k1, SecretKey, Keypair};
     let secp = Secp256k1::new(); let mut key = [0;32]; key[31] = 3;

@@ -90,6 +90,18 @@ economic admission. Success requires local execution/attestation validation,
 actual Storm proof/material/lineage validation and local settlement context checks.
 Only the Accepted finalization transaction writes a Bitcoin outbox request.
 
+## Coordinated miner entry
+
+[The miner owner](AURA_AURAFARMING_NODES.md) defines the signed job, exact context
+profile and additional eligibility predicate. Local `miner_search` builds and
+verifies the same W/claim/proof/material objects before submission. Its result is
+not economic admission. Submission remains W plus the existing two envelopes;
+the same `EconomicJournalV1` independently reconstructs and verifies the proof.
+No client proof verdict, alternative proof identifier or miner-only settlement
+endpoint is accepted. TypeScript owns codec/signing interoperability, not a second
+Storm prover. The miner route requires installed coordinated policy and an owned
+round; ordinary work uses the same pipeline between rounds.
+
 ## Verification and scope
 
 `scripts/verify_bitcoin_foundation_v1.sh` covers shared anchor/authorization vectors,

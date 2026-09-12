@@ -1,7 +1,7 @@
 # Miner M2 frozen codec/profile evidence
 
 Classification: IMPLEMENTATION EVIDENCE, not protocol authority.
-Contract: [approved miner design, sections 3–4](../../reports/AURA_MINER_PROTOCOL_V1.md).
+Contract: [miner owner, inputs and predicates](../../docs/authoritative/AURA_AURAFARMING_NODES.md#2-exact-approved-mining-inputs).
 Owners: [Rust](../../crates/aura_sdk_v1/src/miner.rs) and
 [TypeScript](../../packages/aura_sdk_v1_ts/src/minerV1.ts).
 
@@ -71,4 +71,6 @@ authoritative documents and previously frozen fixtures were unchanged in M2 clos
 M2 is DONE. M3 is also complete; [its evidence](../../reports/AURA_MINER_M3_EVIDENCE.md)
 describes `trial_vector_v1.json`, which freezes existing canonical objects from one
 local trial without changing this M2 vector. Round ownership, funding, rewards and
-durable coordination remain later slices.
+durable coordination are implemented and covered by the
+[miner acceptance gate](../../scripts/verify_miner_program_v1.mjs).
+Current operational boundaries are in [the operations guide](../../docs/AURA_MINER_OPERATIONS_V1.md).

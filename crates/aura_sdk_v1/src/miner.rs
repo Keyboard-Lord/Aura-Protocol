@@ -40,7 +40,7 @@ pub struct MinerJobV1 {
 }
 
 /// Trusted local epoch configuration, not a protocol wire or a value to infer
-/// from an untrusted job. The coordinator will own its persistence/history.
+/// from an untrusted job. The economic coordinator owns its persistence/history.
 #[derive(Clone, Debug)]
 pub struct MinerJobPolicyV1 {
     pub network: BitcoinNetworkV1,

@@ -8,6 +8,14 @@ the actual Storm proof and material binding, and atomically records authorizatio
 settlement head V2 and a Bitcoin publication outbox. The old Solana program, CLI
 and clients belong to a separate [legacy workspace](legacy/solana/README.md).
 
+Coordinated Miner V1 adds signed funded jobs, nonce-conditioned local Storm search,
+one durable contender/winner and sponsor-funded Bitcoin rewards through that same
+coordinator. Its [canonical owner](docs/authoritative/AURA_AURAFARMING_NODES.md) and
+[operations guide](docs/AURA_MINER_OPERATIONS_V1.md) define the developer path.
+Implementation readiness does not authorize live monetary activation.
+[M0–M7 completion evidence](reports/AURA_MINER_M7_READINESS.md) records the final
+acceptance gate and explicit deployment limitations.
+
 ## Start here
 
 Read the [document registry](docs/authoritative/AURA_BUILD_SOURCE_OF_TRUTH.md)
@@ -27,6 +35,8 @@ authority. Passing a fixture test alone does not establish protocol conformance.
 | Bitcoin anchoring | [Rust codec](crates/aura_bitcoin_v1/src/lib.rs), [TypeScript codec](packages/aura_bitcoin_v1_ts/src/index.ts), [Core transport](packages/aura_bitcoin_v1_ts/src/coreRpc.ts) | Approved OP_RETURN anchor, PSBT funding/signing, output checks, and reorg-aware observation. |
 | Authorization | [Rust acceptance](crates/aura_sdk_v1/src/authorization.rs), [TypeScript signing](packages/aura_sdk_v1_ts/src/authorizationV2.ts) | BIP340 v2, actual proof/material/lineage verification, durable journal and idempotent retry. |
 | Economic admission and head V2 | [Rust coordinator](crates/aura_sdk_v1/src/economic/journal.rs), [meter owner](crates/aura_l2_local_chain_v0/src/economic_meter.rs), [TypeScript codecs/signing](packages/aura_sdk_v1_ts/src/economicV1.ts) | One production coordinator; authenticated W, unchanged burn tariff, separate economic and authorization records, atomic finalization and outbox. |
+| Miner profile and local computation | [Rust profile](crates/aura_sdk_v1/src/miner.rs), [TS profile](packages/aura_sdk_v1_ts/src/minerV1.ts), [Rust search](crates/aura_sdk_v1/src/miner_search.rs) | Frozen signed job/profile bytes; real canonical PoC then target filter. A local hit is not admission or a winner. |
+| Miner coordination and reward publication | [Journal extension](crates/aura_sdk_v1/src/economic/journal/miner.rs), [combined publisher](crates/aura_sdk_v1/src/economic/journal/miner/publication.rs) | Same debit/finalization owner, one winner/obligation, persisted sponsor-funded payment plus unchanged anchor, restart/reorg recovery. |
 | Legacy settlement transport | [Rust client](crates/aura_submission_client_v1/src/lib.rs), [TypeScript client](packages/aura_submission_client_v1_ts/src/index.ts), [retired program](legacy/solana/program/src/lib.rs) | Historical Solana publication, excluded from the active Cargo workspace and validation gate. |
 | Local execution and settlement | [local chain](crates/aura_l2_local_chain_v0/src/lib.rs), [local verifier](crates/aura_l2_verifier_v1/src/lib.rs) | Local foundation; local acceptance is not Bitcoin inclusion or confirmation. |
 | Presentation | [UDOT derivation](crates/aura_udot_v2/src/lib.rs), [canonical bundle](crates/aura_sdk_v1/src/udot_bundle_v2.rs) | Fixed four-field V2 bundle and strict proof-reference validation; existing glyph bytes preserved. Versioned wrappers require `legacy` imports. |
@@ -39,7 +49,7 @@ Build with `cargo build -p aura_sdk_v1 --bin aura-economic`. Commands have the f
 - `init WORK_BYTES` explicitly initializes the ledger and V2 genesis.
 - `submit WORK_BYTES CONSENT_JSON AUTHORIZATION_JSON` admits and completes signed work.
 - `admit WORK_BYTES CONSENT_JSON AUTHORIZATION_JSON`, then `resume ATTEMPT_ID`, separates durable admission from execution and supports restart recovery.
-- `outbox` returns publication intents; `record-publication ATTEMPT_ID TXID` records an observation without changing burn, head or authorization.
+- `outbox` returns publication intents; `record-publication ATTEMPT_ID TXID` records a non-miner observation without changing burn, head or authorization. Miner attempts require the combined reward publisher.
 - `status PAYER_HEX` reads durable state. `migrate-v1 WORK_BYTES CHECKPOINT_JSON` explicitly imports a trusted V1 predecessor into an existing BIP340 journal.
 
 `WORK_BYTES` is the exact binary W, with framing owned by the
@@ -49,6 +59,11 @@ and recovery; the [regtest runner](scripts/verify_bitcoin_regtest_v1.mjs) suppli
 an executable consent-to-Bitcoin example, including Core funding and reorg recovery.
 `aura-authorizer` remains a standalone proof-authorization primitive. It does not
 perform economic admission or present a complete production pipeline.
+
+Miner policy/round control and combined payments use the Rust library APIs mapped
+in the operations guide. `examples/miner_m5_regtest.rs` is a test adapter with public
+fixture keys, not a live miner daemon. Job transport, supervision and ingress limits
+belong to the host integration; the canonical job and work bytes remain unchanged.
 
 ## Making a change
 
@@ -73,6 +88,7 @@ the crate or TypeScript test affected by a change.
 | `BITCOIND=/path/to/bitcoind node scripts/verify_bitcoin_regtest_v1.mjs` | Economic admission through actual Aura proof verification and Bitcoin anchoring; restart, fees and reorg retry without reburn or nonce release |
 | `bash scripts/verify_active_foundation.sh` | Local execution/economic checks plus canonical authorization, SDK boundary and Bitcoin checks |
 | `bash scripts/test_udot_parity.sh` | Frozen UDOT core and Rust/TypeScript SDK parity |
+| `BITCOIND=/path/to/bitcoind BITCOINCLI=/path/to/bitcoin-cli node scripts/verify_miner_program_v1.mjs --m7` | Complete miner owner regressions and adversarial coordinated job-to-reward/anchor regtest; M7 acceptance evidence |
 | `BITCOIND=/path/to/bitcoind bash scripts/verify_repo_truth.sh` | Active milestone checks plus real economic-admission-to-Bitcoin regtest |
 
 The verifier scripts' names describe their intended scope, not certification that
@@ -88,6 +104,12 @@ journal, which serializes admitted work. Operators must preserve consistent back
 publish the durable outbox through their Bitcoin wallet, and monitor confirmations;
 Bitcoin reorganizations can revoke confirmation but cannot refund a burn or release
 an authorization nonce. Importing a V1 head requires a trusted explicit checkpoint.
+
+Miner operations require a funded sponsor wallet and one coordinated journal.
+Measured N=8–128 local-search results and bounded regtest cases are recorded in the
+operations guide. They do not establish production difficulty or sustained service
+capacity. A complete consistent old database cannot detect its own rollback;
+latest-backup provenance and external payment reconciliation are required.
 
 ## Supporting material
 

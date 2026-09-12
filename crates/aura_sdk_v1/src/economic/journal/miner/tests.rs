@@ -12,6 +12,7 @@ use std::{
 };
 
 mod adversarial;
+mod promotion;
 const TIME: u64 = 2_000_000_000;
 const NETWORK: BitcoinNetworkV1 = BitcoinNetworkV1::Regtest;
 

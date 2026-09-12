@@ -71,9 +71,12 @@ fn rpc(method: &str, params: Value) -> AuthorizationResultV2<Value> {
         return Err(MinerCoreRpcErrorV1 { code, message }.into());
     }
     let result = String::from_utf8(output.stdout)?;
-    // bitcoin-cli prints string results unquoted, JSON arrays/objects/numbers as JSON.
-    let value =
-        serde_json::from_str(result.trim()).unwrap_or_else(|_| Value::String(result.trim().into()));
+    // bitcoin-cli prints null as empty output, strings unquoted, and other values as JSON.
+    let value = if result.trim().is_empty() {
+        Value::Null
+    } else {
+        serde_json::from_str(result.trim()).unwrap_or_else(|_| Value::String(result.trim().into()))
+    };
     if method == "sendrawtransaction"
         && std::env::var("AURA_M5_CRASH_AFTER_BROADCAST").as_deref() == Ok("1")
     {

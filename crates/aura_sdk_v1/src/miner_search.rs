@@ -1,6 +1,6 @@
 //! Local M3 computation only. No admission, authorization reservation, journal,
 //! winner, head, reward or Bitcoin effects. All objects below are local API values,
-//! not a new wire. M4 must revalidate inputs at its own trust/admission boundary.
+//! not a new wire. The economic coordinator revalidates at its admission boundary.
 use crate::{
     authorization::{fresh_nonce_v2, AuthorizationResultV2},
     economic::{EconomicLimitsV1, EconomicWorkV1},

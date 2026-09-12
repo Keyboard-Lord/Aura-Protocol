@@ -63,6 +63,14 @@ the ledger, pipeline and continuous-settlement owners; the decision record retai
 rationale and approval history. This does not change hash/field, Storm/proof,
 FractalKey, authorization message, UDOT or Bitcoin output bytes.
 
+The approved coordinated Miner V1 is implemented through the same economic journal.
+M7 promotes its tested job/profile, eligibility, scheduling and sponsor-reward
+definitions into the existing `AURA_AURAFARMING_NODES.md` owner. Its previous
+20-node/EMA document is archived outside this set as historical research. The
+miner design report retains approval history and evidence, not parallel normative
+definitions. Monetary activation remains a separate explicit decision; promotion
+does not calibrate production difficulty or assert permissionless consensus.
+
 Research, historical evidence, and unapproved proposals do not acquire authority
 through titles such as "final", "canonical", or "source of truth". Proposals remain
 non-authoritative until explicitly approved and incorporated into the owning
@@ -97,7 +105,7 @@ The 25 authoritative documents are fixed in this order:
 20. `AURA_HARDENING_LOG_V1.md` — **VALIDATION**
 21. `AURA_HASH_V1.md` — **FROZEN LEGACY**
 22. `AURA_UDOT_UNICODE_LAYER_V3.md` — **SUPPORTING**
-23. `AURA_AURAFARMING_NODES.md` — **RESEARCH / SUPPORTING**
+23. `AURA_AURAFARMING_NODES.md` — **ACTIVE AUTHORITY** (coordinated Miner V1; prior network research archived)
 24. `AURA_BUILD_SOURCE_OF_TRUTH.md` — **ROOT AUTHORITY / META**
 
 **Resolution Rule:** When documents conflict, the lower-numbered document governs.
@@ -118,6 +126,9 @@ In particular:
 - continuous head derivation is owned by `AURA_CONTINUOUS_SETTLEMENT_V1.md`
 - UDOT canonical form is owned by `AURA_UDOT_SPEC_V1.md`
 - artifact derivation ownership is defined by `AURA_ARTIFACT_STRUCTURE_V1.md`
+- miner job/profile, PoC/PoW eligibility, round scheduling and sponsor-reward policy
+  are owned by `AURA_AURAFARMING_NODES.md`; generic economic, head, authorization
+  and Bitcoin wire definitions retain their existing owners
 
 Other documents may reference these concepts, but they MUST NOT restate alternate field lists,
 parallel representations, or compatibility forms.
@@ -133,6 +144,8 @@ Active behavior is limited to:
 - the existing canonical Storm witness-backend proof bytes owned by `AURA_STARK_SPEC_V1.md`
 - the canonical BIP340 `AuthorizationEnvelopeV2` boundary
 - the canonical `BitcoinAnchorRequestV1` wire
+- the approved `MinerJobV1` profile and coordinated miner lifecycle through the
+  existing economic journal; local qualification alone is not a winner or payment
 - the local ledger, burn, and settlement fixtures still exercised by `scripts/verify_active_foundation.sh`
 
 `PROOF_MATERIAL_V2` is a repository name only.

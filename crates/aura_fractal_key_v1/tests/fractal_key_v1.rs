@@ -103,7 +103,7 @@ fn proof_hash_determinism() {
     let expected_digest = Sha256::digest(expected_bytes);
 
     assert_eq!(key.proof_hash(), key.proof_hash());
-    assert_eq!(key.proof_hash().as_slice(), expected_digest.as_slice());
+    assert_eq!(key.proof_hash().as_slice(), &expected_digest[..]);
 }
 
 #[test]

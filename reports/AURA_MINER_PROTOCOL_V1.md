@@ -1,12 +1,13 @@
 # AURA_MINER_PROTOCOL_V1
 
 **Classification: APPROVED DESIGN DECISION / NOT ACTIVE PROTOCOL AUTHORITY.**
-**Status: DESIGN COMPLETE — D1–D6 APPROVED; M5 DONE, M6 READY.**
+**Status: DESIGN AND IMPLEMENTATION COMPLETE — D1–D6 APPROVED; M0–M7 DONE.**
 Baseline: completed Bitcoin migration at `f64fb4f`, including its economic integration.
 Design approval: 2026-09-10. Implementation status updated: 2026-09-11.
 The Rust/TS job/profile boundary, Rust local mining, durable coordination and
-sponsor-funded Bitcoin publication are implemented and regtest-validated. Existing canonical outputs and
-authoritative specifications are unchanged. The review below is an internal design review, not an
+sponsor-funded Bitcoin publication are implemented and adversarially regtest-validated.
+Frozen cryptographic outputs are unchanged. M7 incorporates the approved miner
+definitions into their existing authoritative owner. The review below is internal, not an
 independent cryptographic audit or proof of economic security.
 
 ## 1. Approved architecture and decision boundary
@@ -34,8 +35,8 @@ of the intended Storm work. That alternative is not this proposal.
 On 2026-09-10 the user replied **“yes approved”** to the explicit request to approve
 decisions D1–D6 as the V1 design contract. Section 13 records that approval. These
 requirements define the approved implementation design and do not supersede the
-active protocol owners. M2–M5 are implemented; section 11 links their evidence
-separately from remaining adversarial validation and authority promotion.
+active protocol owners. M2–M5 are implemented and M6 acceptance has passed; section
+11 links their evidence and M7 owner/operational reconciliation.
 
 ## 2. Current-state dependency map
 
@@ -49,326 +50,30 @@ separately from remaining adversarial validation and authority promotion.
 | [Authorization](../docs/authoritative/AURA_AUTHORIZATION_LINEAGE_V1.md) | Miner is controller/payer/subject; both existing signatures required. Successful reservation follows actual proof/material/lineage verification. |
 | [Head V2](../docs/authoritative/AURA_CONTINUOUS_SETTLEMENT_V1.md) | Commits exact W, predecessor, outcome and debit snapshots. It is a durable linear economic history, not a PoW chain-selection mechanism. |
 | [Bitcoin publication](../docs/authoritative/AURA_REPORT_CONTRACT_V1.md) | OP_RETURN contains only the existing proof reference. Reorgs revoke confirmation, not economic or authorization history. |
-| [Aurafarming research](../docs/authoritative/AURA_AURAFARMING_NODES.md), [hierarchy experiment](AURA_STORM_HIERARCHY_V2_EXPERIMENT.md) | Research only. Twenty-node topology, EMA forgetting and proof-convergence claims do not establish consensus, proof soundness or rewards. Hierarchical V2 does not feed macro state back into micro execution and is not needed here. |
+| [Archived Aurafarming research](../docs/research_assets/AURA_AURAFARMING_NODES_RESEARCH_V0_2.md), [hierarchy experiment](AURA_STORM_HIERARCHY_V2_EXPERIMENT.md) | Research only. Twenty-node topology, EMA forgetting and proof-convergence claims do not establish consensus, proof soundness or rewards. Hierarchical V2 does not feed macro state back into micro execution and is not needed here. |
 
 The production path remains W → admission/debit → Storm → TRACE_ROOT → proof →
 material → proof_hash → Authorization V2 → Head V2/outbox → Bitcoin. Private miner
 evaluation uses these same computational primitives; it cannot settle, reserve
 authorization or create an alternate production path.
 
-## 3. Exact approved mining inputs
+## 3–10. Promoted contract
 
-### Signed job J
+The approved definitions were incorporated into the existing
+[Aurafarming / Miner V1 owner](../docs/authoritative/AURA_AURAFARMING_NODES.md)
+during M7. This decision record retains rationale, approval history and evidence;
+it no longer repeats the canonical job/profile or lifecycle definitions.
 
-One approved fixed binary job encoding, **471 bytes**, in this exact order:
-
-| Field | Bytes / encoding |
+| Definition | Single owning section |
 | --- | --- |
-| domain | ASCII `AURA_MINER_JOB_V1` |
-| job_version | u8 = 1 |
-| network | Existing Bitcoin network byte |
-| operator_key | Valid BIP340 x-only key, 32 bytes, pinned by deployment policy |
-| journal_namespace | 32 bytes, explicitly initialized once per coordinated journal |
-| policy_epoch, round_number | Two u64 little-endian integers |
-| prior_head_sequence | u64 little-endian |
-| prior_head_hash | Existing Head V2 current hash, 32 bytes |
-| challenge | Fresh CSPRNG 32 bytes, generated after prior state is fixed |
-| side_A, side_B | Two existing 110-byte inputs, supplied by the task customer |
-| iteration_count N | u64 little-endian; strictly positive and within configured resource limits |
-| target T | Exactly 32 bytes, unsigned big-endian; `1 <= T < 2^256 - 1` |
-| max_work_bytes, max_meter_bytes | Two u64 little-endian bounds, also bounded by the operator's host policy |
-| opened_at, expires_at | Two u64 little-endian Unix seconds; `opened_at < expires_at` |
-| reward_satoshis R | u64 little-endian, positive for a funded job; must satisfy wallet amount/output policy |
-
-No optional fields, extra nonce, alternate serialization, sorting or normalization.
-Reject unknown versions/networks, invalid keys, overflow and any other byte length.
-The job signature is a detached 64-byte BIP340 signature over
-`TaggedSHA256("AURA_MINER_JOB_SIGNATURE_V1", J)`. The operator is also the sponsor
-in V1; a multi-party job market is outside this contract. Its key is authenticated
-against deployment policy, not trusted merely because it appears inside J.
-
-`job_commitment = SHA256(J)` is an internal job binding, not another proof identifier.
-Its domain is already in J. Store the raw J once; downstream records reference it.
-Opening a round atomically pins the current ledger/head, reserves the sponsor's
-reward funding and records J before publication. No unpublished or replayed job is
-eligible. Round numbers increase without reuse within the namespace, including
-empty or failed rounds; overflow stops new work. Job expiry uses the trusted
-operator clock, not Bitcoin timestamps or a decentralized time oracle.
-
-### Candidate construction
-
-The miner supplies the existing canonical M, with its existing account as payer,
-matching the pinned ledger and next-head linkage. All existing structural rules,
-full-verification tariff and local execution/settlement rules apply. M may describe
-any work admitted by those existing rules; it is not interpreted as arbitrary
-computation proved by Storm. The separately purchased task is J's trajectory.
-
-Derive the existing context's intent, without a cycle through W or proof_hash:
-
-```text
-I = SHA256("AURA_MINER_INTENT_V1" || job_commitment || u64_le(len(M)) || M)
-```
-
-| Existing Storm context / input | Required mining profile value |
-| --- | --- |
-| context_version and execution domain | Existing V1 constants |
-| network_id | J.journal_namespace; this explicit miner profile mapping does not change generic Aura network semantics |
-| intent_hash | I; mirrored only in the existing authorization lineage owner |
-| freshness_nonce | Miner-generated CSPRNG 32 bytes; the sole mining nonce, also the existing authorization nonce |
-| valid_from, valid_until | Both zero; no new interpretation of generic context time fields |
-| controller_id | Miner x-only public key, equal to M's payer |
-| route_tag | `SHA256(ASCII("AURA_MINER_PROTOCOL_V1"))`, an explicit miner route discriminator |
-| side_A, side_B, iteration_count | Exactly J's values |
-
-Construct W using the existing owner. The miner never supplies an independently
-chosen intent, target, side input, work count or route field. A different valid M
-changes I and therefore Storm's parameters/forcing, preventing a cheap post-proof
-choice of economic work. Payer/key changes also change the context. Changing only
-signature randomness never changes mining eligibility.
-
-Build the existing deterministic claim/proof with both historical trailing claim
-commitments fixed to zero, derived compact public inputs and empty verification-key
-bytes, exactly as the completed economic coordinator already does. No alternate
-witness ordering, proof backend or mutable trailing slot is eligible. Sign the
-unchanged EconomicConsentV1 and Authorization V2 envelopes. Nonce generation is a
-producer requirement; a verifier cannot establish RNG quality from one nonce.
-The 32-byte mining nonce is distinct from a Schnorr signing nonce.
-
-Candidate identity is the existing `(network, subject, freshness_nonce)` plus the
-stored W/target equality rule. References use only `proof_hash`; there is no
-`mining_hash`, candidate-hash alias or second serialization of a proof.
-
-## 4. Exact PoC and PoW predicates
-
-Let `Inputs(J,M,key,r)` be the construction above, `C` its canonical Storm claim,
-`P` its existing witness-backend proof, and `PI(C)` its derived compact inputs.
-
-```text
-PoC(J, M, key, r, C, P) :=
-    exact_mining_profile(J, M, key, r, C)
-    AND existing_verify_storm_air_real_v1(P, PI(C)) succeeds
-    AND P's decoded claim equals C
-    AND existing_material_and_FractalKey_binding(P, PI(C), empty_VK, key, r)
-        equals the signed proof_hash
-
-s = OS2IP_BE(proof_hash[0..32])
-PoW_valid := PoC AND 0 <= s <= T
-eligible := PoW_valid AND existing_signatures_and_lineage_valid
-            AND current_job_and_ledger_admissible
-winner := eligible AND owned_admitted_round AND existing_terminal_outcome = Accepted
-```
-
-Comparison is inclusive; exactly T passes and T+1 fails. No reversed display hash,
-floating point, compact Bitcoin nBits interpretation, hash of a signature, extra
-post-trace nonce, or hashing of a claim that omits the full proof binding.
-
-PoC proves correctness of the prescribed input-bound trace: initialization,
-parameters, every forcing pair and recurrence step, state ordering, final state,
-TRACE_ROOT and canonical witness. It does not prove elapsed time, energy spent,
-which physical machine executed it, non-outsourcing or useful application semantics.
-PoW adds a probabilistic scarcity condition to a valid PoC; it does not strengthen
-PoC correctness. A failed difficulty test is not an invalid computation.
-
-The service does **not** accept an external replacement proof or completion verdict.
-It reconstructs and verifies the existing proof after admission. The supplied low
-`proof_hash` is only a cheap pre-admission filter until this verification finishes.
-Moving expensive chargeable proof checks into free admission would change the
-frozen burn boundary and is not proposed.
-
-## 5. Usefulness and computational scarcity
-
-The explicit customer contract is: receive the complete reproducible Storm
-trajectory/proof for the signed sides, job/intent, miner key, nonce and N. The
-customer accepts nonce-conditioned, threshold-selected samples for experiments,
-analysis or regression corpora about Storm itself. The selected sample is not
-advertised as unbiased randomness; a miner can withhold samples or grind identities.
-The coordinator must retain J and W so the exact proof/trajectory remains
-reconstructible. A future general-purpose compute market needs its own verified
-relation and an approved task-to-work reduction.
-
-Calling this **useful PoW** is conditional on independent customer demand for that
-specific output. A sponsor rewarding a meaningless hash search does not establish
-utility. Losing local trials need not be published or rewarded and may have no
-application value. A requirement that every trial solve the same externally fixed
-job would reject this profile; it is not resolved by renaming randomness as work.
-
-Under a random-output heuristic and independent eligible trial assumptions:
-
-```text
-q = (T + 1) / 2^256
-E[trials per qualifying PoC] = 1/q
-E[miner computation] ~= C_storm_and_canonical_material(N) / q
-```
-
-These are probabilistic expectations, not per-winner lower bounds: a miner can win
-on its first trial. N controls work per trial; T controls expected trials. A larger
-N is not additional chain weight, and the unchanged Aura burn does not scale with
-N. Verification currently replays O(N) work and the witness has O(N) size. Honest
-mining can evaluate many trials locally while the coordinator verifies only
-submitted contenders, but fabricated low references can still force costly admitted
-failures. Fixed limits, existing funded payer accounts, queue bounds and operator
-rate control are required; a signature alone is not anti-Sybil protection.
-
-No theorem currently establishes Storm's sequential hardness, non-amortization,
-ASIC resistance or minimum energy cost. The dependencies obstruct obvious
-trace-reuse attacks but are not such a theorem. The finite-field quadratic map is
-not injective; uniqueness must never be inferred from its final state alone.
-
-## 6. Difficulty and adjustment model
-
-**Approved V1: fixed N and T per explicitly configured policy epoch; no automatic
-retarget.** Within an epoch every job uses the same N, T and maximum byte bounds.
-Job expiry/reward/side inputs may vary; the target may not be selected by a miner.
-The operator can start the next consecutive epoch only after the previous round
-has closed and no attempt remains in flight. New parameters must be published and
-persisted before generating/releasing that epoch's first job challenge. Changing
-policy never changes existing candidate eligibility retroactively.
-
-The adjustment algorithm is therefore `T_next = T_current, N_next = N_current`
-unless an explicit operator epoch transition occurs. Epoch zero has explicit
-configuration, not inferred defaults. This deliberately accepts centralized target
-policy; it is not a permissionless difficulty algorithm. Wall-clock reports,
-self-reported hash rate and invalid/withheld candidates never automatically retarget.
-
-Calibrate deployment configuration from measured full trial and verification cost,
-memory, proof size, sustained request capacity and the sponsor budget. Production
-numbers are not guessed here. A benchmark selects explicit limits before activation;
-it may not change the approved equations or burn tariff. If the frozen tariff plus
-admission controls cannot bound attack costs, do not launch: changing that tariff
-requires a separate USER_DECISION. The probe uses N=64 and T=2^252−1 (q=1/16) only
-as reproducible research inputs, not as economically secure deployment settings.
-
-An automatic observed-time retarget or cumulative-work competition is a viable
-future alternative, but needs an agreed clock/history, manipulation analysis and
-fork semantics. It is not silently included as an optional V1 mode.
-
-## 7. Lifecycle, accounting and head competition
-
-The existing journal remains the sole state writer. New miner metadata is
-composed into its transactions, not committed in a second database afterward.
-
-| Stage / event | Economic and miner effect |
-| --- | --- |
-| Open funded job | Require no active attempt; pin head/ledger and reserve reward funding. No burn, authorization or Head V2 transition. |
-| Private trial / above-target result | Local compute only; no admission or Aura charge. Unpublished attempts cannot be metered by the service. |
-| Malformed, expired, stale, unsupported, underfunded or above-target submission | Reject before admission; no new attempt or burn. |
-| Candidate admission | Verify J/profile, canonical inputs and both signatures; apply the existing ledger/nonce checks. Atomically claim the round and perform the existing debit/attempt commit. |
-| In-flight contender | Run the unchanged work/proof pipeline. Job expiry does not cancel it or manufacture a failure. |
-| Accepted + verified target | Existing authorization/head/outbox finalization plus winner and reward-obligation records in the same transaction. One winner. |
-| ExecutionRejected / VerificationRejected / SettlementRejected | Existing full burn/head advance, no new authorization/anchor. Close the round without a winner; release the unused reward reservation. Other candidates are stale. |
-| Process death/storage failure | Existing admitted work stays pending. Resume from J/W and durable ownership, with no future signature or external completion message needed. |
-| Valid retry of an existing attempt | Existing tuple/W/target lookup takes precedence over closed/expired job or current-head checks. Same receipt/charge/reward obligation; re-signing is not new work. |
-| Open job expires with no admission | Close without head advance or Aura charge. Release funding; a new round must use a new challenge and number. |
-
-The first contender that passes pre-admission checks and acquires the journal's
-immediate transaction wins **admission**, not a reward. Its outcome determines
-whether there is a winner. A fabricated low target can acquire admission but cannot
-win authorization or reward; it pays the existing burn if admitted. This can also
-stale honest work, a material griefing risk, not a solved fairness problem.
-
-Opening a job locks new admissions against its pinned ledger/head until admission
-or expiry. Existing non-mining work can run between rounds through the same
-coordinator. This scheduling change is approved by D1; otherwise ordinary
-head advances would invalidate mining snapshots unpredictably. Round expiry must
-be bounded by deployment policy; clocks and job scheduling remain operator trust.
-
-There is no "lowest hash seen so far" replacement, late-winner override, uncle
-reward, cumulative chain work or rollback of an admitted failed head. Simultaneous
-submissions are ordered by durable journal acquisition; network arrival order is
-not globally observable. Audit records can show the chosen order but cannot prove
-the operator did not censor a candidate. Equivocating operators/independent
-journals are unsupported forks: fail closed and recover coordinated history rather
-than applying a newly invented merge or heaviest-chain rule.
-
-## 8. Reward model and Bitcoin interaction
-
-**Approved source: the job sponsor's pre-existing BTC.** No Aura issuance, burned
-unit recycling, reward credit to the frozen Aura ledger, or conversion of Bitcoin
-fees into Aura burn. The miner needs an existing funded Aura payer account and
-consents to its own admitted burn. Reward and fees are sponsor expenditures; R is
-not a promise of profitability and need not cover a miner's discarded trials.
-
-The sponsor reserves a dedicated spendable Bitcoin outpoint and sufficient fee
-budget before publishing J. This is custodial funding management, not a trustless
-escrow or Bitcoin enforcement of a mining predicate. A dishonest/insolvent sponsor
-can still withhold or double-spend its funds. The reward obligation becomes durable
-exactly when the economic contender is Accepted, regardless of later confirmation.
-
-Pay exactly R to `OP_1 PUSH32 <miner_xonly_key>` (`0x51 0x20 || key`) as a BIP341
-key-path output. The miner key is used as the output key, not interpreted as an
-internal key requiring an undeclared wallet tweak. The miner must control the
-corresponding key. This approved payout convention is a new miner policy, not a
-change to Aura's BIP340 signatures. [BIP341](https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki)
-defines these output/key-path rules.
-
-Approved publication puts that payout alongside the **unchanged** canonical
-Aura OP_RETURN in one Bitcoin transaction. The existing codec already permits
-unrelated outputs; an additive reward-output validator must require the exact
-script and amount. The canonical anchor request gains no fields. Wallet fee/dust
-policy must be checked before a job opens and again before broadcast.
-
-Before broadcasting, durably persist the signed transaction and reward-to-funding
-outpoint association. Retry rebroadcasts the same transaction. Any fee replacement
-must spend that same reserved outpoint and retain the exact reward and Aura output;
-all payment versions therefore conflict with each other and cannot both confirm
-in one chain. Never independently fund a second payout because the first observation
-is missing. Additional fee inputs do not remove the required conflicting input.
-Unknown spend or inconsistent recovery blocks payment for operator recovery.
-
-The existing anchor outbox and new reward obligation remain distinct records with
-one owning economic attempt. A miner-origin anchor must use the combined publisher;
-the generic publisher cannot acknowledge that reward obligation without checking
-its payout. Actual Bitcoin payment observations, txids and fee replacements are
-operational evidence, not new canonical Aura identifiers.
-
-Reorgs update confirmation of the payment/anchor and may require rebroadcast or
-fee replacement; they do not reopen the round, choose another miner, refund a burn,
-release a nonce or create another reward entitlement. A reward remains owed until
-its valid payment is observed; "confirmed" is always reversible chain evidence.
-
-## 9. What is committed, and what is not
-
-| Surface | Commitment / verification boundary |
-| --- | --- |
-| Existing proof_hash | Unchanged canonical proof/material/FractalKey path; binds miner, nonce, input-bound trace and compact inputs. Proposed context I additionally binds J and exact M, including prior head, difficulty and reward promise transitively. |
-| Existing Head V2 | Unchanged owner formula binds W, predecessor, terminal outcome, pre/post debit commitments and B. The completed service verifies the target reference before Accepted. No new head field or reward-balance term. |
-| Bitcoin OP_RETURN | Exactly the same network + proof_hash payload. No mining score, target, head, job, proof or reward object added. |
-| Proposed signed J / journal records | Job policy, chosen contender, winner and reward obligation remain available off-chain. The proof commits a job promise, not proof the sponsor funded or paid it. |
-| Bitcoin payout | Bitcoin enforces its actual spend/output rules, not Aura PoC, winner selection, local balances or the operator's honesty. |
-
-The current terminal Head V2 cannot be embedded into the proof that precedes it
-without creating a cycle. J binds the **prior** head; auditors with W, the terminal
-outcome and journal evidence can derive the successor. An anchor alone is not a
-certificate that a particular journal selected that successor or paid a reward.
-No new Bitcoin commitment mechanism is needed for the recommended coordinated V1.
-
-## 10. Threat review
-
-| Threat | Required defense / residual assumption |
-| --- | --- |
-| Cheap outer nonce/key grinding | Match FractalKey subject/nonce to the fully verified context. The probe demonstrates signature/material-only acceptance is insufficient. |
-| Signature, VK, historical-slot or encoding grinding | Exclude signatures from score; pin zero historical slots, empty VK, derived PI and the one deterministic proof encoding. Reject alternate backends/encodings. |
-| Work swapping after finding a proof | I binds exact canonical M and signed J; changing either changes Storm forcing. Verify this binding before charging. |
-| Precomputation / coordinator advantage | Fresh job challenge after state/policy fixation; bind round, namespace, head and sides. The trusted operator can leak/grind challenges; no unbiased beacon claim. |
-| N=0 or cheaper task selection | Positive epoch-fixed N, fixed sides and profile; no per-candidate lower N or difficulty. Exact full witness verification. |
-| Shortcuts / many-instance amortization | No proof currently excludes them. Benchmark optimized attacks; independent review before meaningful monetary exposure. Do not claim a VDF or sequential lower bound. |
-| Forged low hash / cheap verification bypass | A low supplied reference is a filter only. Existing paid service reconstruction, full verification and binding must succeed before winner/auth/reward. Bound N/bytes and ingress. |
-| Nonce reuse / copied work / front-running | Existing tuple journal and W/target retry rules. Copied candidate still pays/rewards its original signer; it cannot redirect identity without recomputation/signatures. |
-| Difficulty manipulation | Operator-signed fixed epoch policy, immutable job; no miner timestamps or reported throughput in a retarget. Malicious operator policy remains a trust risk. |
-| Withholding / selfish mining | Withheld work earns nothing; expiry or head advance stales it. There is no private heavier branch, but latency advantage, censorship and strategic round disruption remain. |
-| Duplicate work / Sybil keys | One claim/winner per round and one economic attempt key. Identical retries earn nothing extra. Extra keys do not prove extra humans and can evade per-key quotas. |
-| Failed-candidate griefing | An admitted lie can consume a burn and invalidate other work. Freeze existing fees, bound exposure/round duration and pause on overload; do not assert tariff adequacy without measurement. |
-| State split / rollback | One coordinated transactional writer and consistent backups. Competing independent histories are not resolved by Bitcoin anchor order. |
-| Reward replay / broadcast crash | One obligation per Accepted attempt, persisted signed tx, all replacements share its funding input. Never release nonce/entitlement on reorg. |
-| Consumer usefulness / sample bias | Explicit task demand and acceptance of nonce-conditioned threshold samples. No claim of generic useful computation or an unbiased randomness beacon. |
-| Data withholding | Persist J/W and enable deterministic reconstruction; an unavailable witness is not magically available from OP_RETURN. Operator liveness remains necessary. |
-
-The research literature distinguishes PoW correctness from proving many-instance
-non-amortization; Aura inherits no hardness theorem merely by using a recurrence.
-See Ball et al., [Proofs of Work from Worst-Case Assumptions](https://eprint.iacr.org/2018/559).
-BIP340 domain-separated signing uses the existing reviewed algorithm, with fresh
-signature nonce handling kept separate from the public mining nonce.
-[BIP340](https://github.com/bitcoin/bips/blob/master/bip-0340.mediawiki).
+| Exact J, signature, intent and context profile | [Mining inputs](../docs/authoritative/AURA_AURAFARMING_NODES.md#2-exact-approved-mining-inputs) |
+| PoC, PoW, eligibility and winner predicates | [Predicates](../docs/authoritative/AURA_AURAFARMING_NODES.md#3-exact-poc-and-pow-predicates) |
+| Useful task, scarcity and limits | [Usefulness](../docs/authoritative/AURA_AURAFARMING_NODES.md#4-usefulness-and-computational-scarcity) |
+| Explicit consecutive policy epochs | [Difficulty policy](../docs/authoritative/AURA_AURAFARMING_NODES.md#5-difficulty-and-adjustment-model) |
+| Round lifecycle and head competition | [Lifecycle](../docs/authoritative/AURA_AURAFARMING_NODES.md#6-lifecycle-accounting-and-head-competition) |
+| Sponsor reward and combined publication | [Reward policy](../docs/authoritative/AURA_AURAFARMING_NODES.md#7-reward-model-and-bitcoin-interaction) |
+| Existing commitment boundaries | [Commitments](../docs/authoritative/AURA_AURAFARMING_NODES.md#8-what-is-committed-and-what-is-not) |
+| Threat assumptions | [Threat review](../docs/authoritative/AURA_AURAFARMING_NODES.md#9-threat-review) |
 
 ## 11. Design evidence and limits
 
@@ -388,8 +93,8 @@ existing frozen authorization proof_hash before attempting that attack.
 
 The probe is executable design evidence, not full miner security validation or a
 production winner state machine. It remains unchanged and reproduced byte-identical
-output during M2 closure. Atomic integration/reward tests and deployment calibration
-remain later work.
+output during M2 closure. Atomic integration/reward tests are now covered by
+M4–M6 evidence below; deployment calibration is not established by that probe.
 
 M2 is implemented in [Rust](../crates/aura_sdk_v1/src/miner.rs) and
 [TypeScript](../packages/aura_sdk_v1_ts/src/minerV1.ts). The
@@ -420,6 +125,19 @@ records Core-backed funding preflight, exact reward/input/anchor checks, explici
 fee replacement, process/Core restart, broadcast-crash and regtest reorg recovery.
 No canonical Aura wire changed; no monetary activation is implied.
 
+M6's [adversarial evidence](AURA_MINER_M6_EVIDENCE.md) and
+[reproducible acceptance gate](../scripts/verify_miner_program_v1.mjs) cover actual
+proof/rebinding attacks, concurrent contenders/retries, economic and publication
+crashes, corrupt storage, replacement and reorg. All 11 stages passed, including
+frozen Rust/TS regressions and 17 explicit Core attack cases. Missing payment
+history and inconsistent observations now fail the owning journal's audit.
+A complete internally consistent journal rollback remains undetectable from that
+journal alone; M7 documents backup provenance and publication reconciliation.
+
+[M7 readiness](AURA_MINER_M7_READINESS.md) records owner promotion, the operations
+guide, two narrow approved-contract corrections and the final 11-stage acceptance
+run. Production monetary activation remains separately gated.
+
 ## 12. Frozen components and minimal implementation DAG
 
 No modification required to HASH_V2, field arithmetic, Storm initialization/
@@ -431,8 +149,8 @@ OP_RETURN. No hierarchical/macro Storm change is required.
 The job/profile codec (M2), local search (M3), and transactionally composed
 round/winner/reward records (M4), and reward publication (M5) are complete. Core
 retains transaction encoding/signing and the same journal owns payment history.
-No alternate settlement API was introduced; remaining milestones validate
-adversarial integration and activation readiness.
+No alternate settlement API was introduced. Adversarial acceptance, existing-owner
+reconciliation and operational documentation are complete through M7.
 
 | Slice | Dependencies | Bounded work and stop criterion |
 | --- | --- | --- |
@@ -442,17 +160,15 @@ adversarial integration and activation readiness.
 | M3 — miner computation | M2 | DONE. Existing Storm/proof/material owners; secure and deterministic research nonce modes, bounded search/cancellation/expiry, full local PoC and exact target predicate. Frozen existing-object vector, reuse/security tests and N=8–128 measurements. |
 | M4 — coordinator composition | M3 (master-goal execution order) | DONE. Same SQLite admission/finalization owner plus policy/job/snapshot/funding/round/reward records. All four outcomes, race/retry, expiry, process-exit recovery and injected rollback tests passed. Original non-mining regressions unchanged. |
 | M5 — reward publication | M4 | DONE. Core fee/dust/funding preflight; exact payout + unchanged anchor; persisted transactions and conflicting fee replacements. Regtest preparation/Core restart, broadcast-crash recovery, fee rejection and reorg passed without another entitlement or burn. |
-| M6 — adversarial integration | M3, M5 | READY. Actual candidate → debit → full proof → winner/head/outbox → payout/anchor; fake low hashes, copied work, competing miners, wrong-job/nonce, publication recovery. Confirm baseline outputs unchanged. |
-| M7 — authority and activation | M6 | BLOCKED. Promote approved definitions into existing owners; archive conflicting Aurafarming research without losing evidence. Publish measured N/target/bounds and funded limits, review unresolved attacks, then explicitly authorize monetary deployment. |
+| M6 — adversarial integration | M3, M5 | DONE. Full gate passed: real candidate/debit/proof/winner/head/outbox/payout/anchor, mutation/rebinding attacks, races/retries, seven economic crash boundaries, corrupt storage and 17 Core attack cases. Frozen outputs unchanged; consistent whole-journal rollback limitation explicit. |
+| M7 — authority and activation | M6 | DONE. Approved definitions promoted into the existing owner; old Aurafarming research archived; measured limits, funding, backup provenance, monitoring/recovery and deployment boundaries documented. Epoch/challenge reconciliation and final gate passed. Monetary deployment remains separately authorized. |
 
-M6 is the next READY node under the user's M3–M7 master goal. Stop after each
-milestone closure; M5 evidence does not substitute for M6 adversarial acceptance.
+M0–M7 are DONE. No next node remains in this program. Implementation and operational
+documentation readiness do not authorize live monetary activation.
 
-During implementation, the existing Aurafarming document can own miner job/competition
-semantics; pipeline/ledger/authorization/head/report owners reference it for their
-specific integration obligations. Do not add a parallel authoritative spec or copy
-the frozen owners' formulas into a new wire. M7 is gated on implementation evidence,
-not just renaming a research document.
+The existing Aurafarming document owns miner job/competition semantics; pipeline,
+ledger/head/report owners cross-reference it for their integration obligations.
+No parallel authoritative spec or duplicate frozen formula was introduced.
 
 ## 13. Approved decisions and remaining conditions
 
@@ -462,7 +178,7 @@ alternatives remain unselected; they are not optional modes within this contract
 | ID | Approved V1 decision | Unselected alternative and consequence |
 | --- | --- | --- |
 | D1 | Coordinated sponsored mining, one journal and first admitted contender; lock ordinary admissions during bounded open rounds; admitted failures close the round without rollback. | Permissionless cumulative-work consensus requires a new replicated economic state, fork/rollback and authorization-history contract. It cannot be slipped above frozen Head V2. |
-| D2 | Customer-requested nonce-conditioned Storm trajectories; exact J/I/context profile above; existing proof_hash is the sole difficulty value. | Fixed-answer application computation requires another verified task relation or separate hash work. Do not claim the present Storm trace proves it. |
+| D2 | Customer-requested nonce-conditioned Storm trajectories; exact J/I/context profile in the linked owner; existing proof_hash is the sole difficulty value. | Fixed-answer application computation requires another verified task relation or separate hash work. Do not claim the present Storm trace proves it. |
 | D3 | Epoch-fixed N/T and bounds, explicit operator adjustment between epochs, no automatic retarget. | Automatic adjustment needs agreed timing/history and manipulation rules. No arbitrary release parameters or security claims are approved by the probe's example. |
 | D4 | Private losing trials pay compute cost only; pre-admission rejects pay no Aura burn; every admitted outcome retains the unchanged burn; only Accepted wins. | Charging every private trial is unenforceable without metered admission per trial, which would serialize search and advance heads on losers. A subsidy/fee change needs a new economic decision. |
 | D5 | Positive pre-funded sponsor BTC rewards, custodial dedicated outpoint, exact miner-key payout alongside unchanged OP_RETURN; no Aura issuance or burn recycling. | Aura-denominated issuance/transfers require new reward/ledger conservation rules. Trustless Bitcoin escrow needs a separate reviewed construction. |
@@ -471,7 +187,8 @@ alternatives remain unselected; they are not optional modes within this contract
 Approval of D1–D6 establishes the bounded implementation design, not proof of Storm
 hardness, customer utility, fair ordering or funded mainnet readiness. M2 enforces
 the job/profile boundary, M3 performs local verified mining, M4 adds durable
-coordination and M5 publishes sponsor-funded rewards with the existing anchor.
+coordination, M5 publishes sponsor-funded rewards with the existing anchor, and M6
+validates the combined path against the recorded adversarial cases.
 There are no unresolved semantic
 decisions within the approved coordinated V1 scope. Numerical deployment policy
 must be measured and explicitly configured under D3; monetary activation remains
@@ -479,5 +196,5 @@ separately gated by D6. A change to these approved semantics requires a new deci
 
 The design-only goal is complete: dependencies, exact predicates, lifecycle,
 economics, head/Bitcoin boundaries, threat review and implementation DAG are ready.
-M2–M5 implementation validation is complete. Adversarial integration and activation
-readiness remain M6–M7 work.
+M2–M7 implementation validation and operational documentation are complete;
+live monetary activation still requires separate approval.

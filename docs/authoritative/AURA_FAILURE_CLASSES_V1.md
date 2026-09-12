@@ -39,6 +39,17 @@
 - `BITCOIN_PUBLICATION_UNAVAILABLE`: transport, fee or chain-observation failure;
   retry the durable outbox without changing the terminal outcome or nonce history
 
+## Miner failure mapping
+
+The [miner owner's lifecycle](AURA_AURAFARMING_NODES.md#6-lifecycle-accounting-and-head-competition)
+uses these existing classes. Invalid jobs/profiles, expired/stale rounds and
+above-target references are pre-admission failures. An admitted fabricated low
+reference becomes verification rejection and retains the charge. Round contention
+does not invent another terminal outcome. Corrupt round/payment state is journal
+unavailability; an unknown reserved-input spend produces operational
+`RecoveryRequired` under publication unavailability. It never authorizes replacement
+funding, a refund or another winner. No new canonical error wire is introduced.
+
 ## Excluded Classes
 
 Failure classes for duplicated representations, equivalence mismatch, or cross-representation drift

@@ -82,6 +82,12 @@ still precedes reservation. A failed economic attempt can consume its consented
 burn without creating an authorization row. Standalone `AuthorizerJournalV2::accept`
 remains a proof-authorization primitive, not an alternative economic pipeline.
 
+For the coordinated miner route, [the miner owner](AURA_AURAFARMING_NODES.md)
+defines the exact job-to-intent/context profile. This envelope, signing message,
+proof/material checks and replay key remain unchanged. A local target hit or
+economic consent never substitutes for successful authorization. Winner/reward
+metadata joins the existing economic finalization transaction, not this wire.
+
 ## Implementation and evidence
 
 - Rust owner: `crates/aura_sdk_v1/src/authorization.rs`.

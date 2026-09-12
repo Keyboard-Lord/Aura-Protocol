@@ -76,3 +76,9 @@ material. Its stateless and persistent modes remain historical compatibility in
 protects those old outputs. They do not define successor construction or prove
 V2 journal integration. Bitcoin publication failures and reorgs affect publication
 or confirmation, never the already terminal economic head or authorization history.
+
+Coordinated mining uses these same formulas and representation. The
+[miner owner](AURA_AURAFARMING_NODES.md) binds the prior head in its job and
+defines scheduling; the existing finalization transaction also records the winner
+and reward obligation. No mining score, reward balance, Bitcoin txid or fork-choice
+weight enters this head. Publication/reorg cannot replace its accepted winner.

@@ -192,6 +192,9 @@ impl EconomicJournalV1 {
     ) -> AuthorizationResultV2<()> {
         let p = Policy::from_public(value);
         p.validate(self.network, self.limits)?;
+        if p.epoch != 0 {
+            return Err("initial miner policy must be epoch zero".into());
+        }
         let tx = self
             .authorizer
             .connection
@@ -222,7 +225,7 @@ impl EconomicJournalV1 {
     }
 
     /// Policy rotation between rounds only. Keep the journal identity, preserve
-    /// every historic epoch, and require an explicit strictly increasing epoch.
+    /// every historic epoch, and require the next consecutive epoch.
     pub fn update_miner_policy(&mut self, value: &MinerRoundPolicyV1) -> AuthorizationResultV2<()> {
         let p = Policy::from_public(value);
         p.validate(self.network, self.limits)?;
@@ -235,12 +238,12 @@ impl EconomicJournalV1 {
         let old = policy(&tx, e, self.network)?;
         if active_round(&tx)?.is_some()
             || Self::state(&tx, self.network)?.active.is_some()
-            || p.epoch <= e
+            || Some(p.epoch) != e.checked_add(1)
             || p.operator != old.operator
             || p.namespace != old.namespace
         {
             return Err(
-                "miner policy rotation requires idle journal, same identity, newer epoch".into(),
+                "miner policy rotation requires idle journal, same identity, next epoch".into(),
             );
         }
         tx.execute(
@@ -264,8 +267,9 @@ impl EconomicJournalV1 {
         opening: MinerRoundOpeningV1,
         reserve: impl FnOnce(&MinerJobV1) -> AuthorizationResultV2<MinerFundingReservationV1>,
     ) -> AuthorizationResultV2<MinerRoundV1> {
-        self.open_round_at(operator, opening, reserve, now()?, fresh_nonce_v2()?)
+        self.open_round_with(operator, opening, reserve, || Ok((now()?, fresh_nonce_v2()?)))
     }
+    #[cfg(test)]
     fn open_round_at(
         &mut self,
         operator: &Keypair,
@@ -273,6 +277,15 @@ impl EconomicJournalV1 {
         reserve: impl FnOnce(&MinerJobV1) -> AuthorizationResultV2<MinerFundingReservationV1>,
         time: u64,
         challenge: [u8; 32],
+    ) -> AuthorizationResultV2<MinerRoundV1> {
+        self.open_round_with(operator, opening, reserve, || Ok((time, challenge)))
+    }
+    fn open_round_with(
+        &mut self,
+        operator: &Keypair,
+        opening: MinerRoundOpeningV1,
+        reserve: impl FnOnce(&MinerJobV1) -> AuthorizationResultV2<MinerFundingReservationV1>,
+        fresh: impl FnOnce() -> AuthorizationResultV2<(u64, [u8; 32])>,
     ) -> AuthorizationResultV2<MinerRoundV1> {
         let tx = self
             .authorizer
@@ -296,6 +309,9 @@ impl EconomicJournalV1 {
         {
             return Err("invalid round operator/window/reward".into());
         }
+        // Draw the challenge only after the immediate transaction pins policy,
+        // round number, ledger and Head V2. Time is sampled here for the same reason.
+        let (time, challenge) = fresh()?;
         let job = MinerJobV1 {
             job_version: 1,
             network: self.network,
@@ -647,9 +663,16 @@ pub(super) fn audit(c: &Connection, network: BitcoinNetworkV1) -> AuthorizationR
         .prepare("SELECT epoch FROM miner_policies")?
         .query_map([], |r| r.get::<_, String>(0))?
         .collect::<rusqlite::Result<Vec<_>>>()?;
-    for e in epochs {
-        let p = policy(c, super::super::head::canonical_sequence_v2(&e)?, network)?;
-        if p.epoch > epoch || p.operator != current.operator || p.namespace != current.namespace {
+    let mut epochs = epochs.iter()
+        .map(|e| super::super::head::canonical_sequence_v2(e))
+        .collect::<AuthorizationResultV2<Vec<_>>>()?;
+    epochs.sort_unstable();
+    if epochs.last() != Some(&epoch) {
+        return Err("miner current policy/history mismatch".into());
+    }
+    for (i, e) in epochs.into_iter().enumerate() {
+        let p = policy(c, e, network)?;
+        if e != u64::try_from(i)? || p.operator != current.operator || p.namespace != current.namespace {
             return Err("miner policy history mismatch".into());
         }
     }

@@ -85,3 +85,20 @@ Historical local-runner compatibility (unchanged bytes):
   another process, verifies the actual Storm proof/material/authorization, and
   publishes the atomic outbox. Fee failure and reorg retry retain the same charge,
   head, authorization and outbox request.
+
+## Coordinated Miner V1
+
+- `fixtures/miner_v1/job_profile_vector_v1.json`: frozen M2 job/profile/signature,
+  intent/route/work bytes and exact target boundaries; Rust `tests/miner_v1.rs`
+  and TS `src/minerV1.test.ts` compare the same bytes.
+- `fixtures/miner_v1/trial_vector_v1.json`: existing proof/claim/material/FractalKey
+  objects; Rust `src/miner_search/tests.rs` performs actual PoC; TS
+  `src/minerSearchV1.test.ts` checks its codec/material boundary only.
+- `crates/aura_sdk_v1/src/economic/journal/miner/tests.rs`, child `adversarial.rs`
+  and `promotion.rs`: atomic rounds, failures/retries, crashes/corruption, initial
+  and consecutive epochs, challenge generation under the pinned snapshot lock.
+- `scripts/verify_miner_program_v1.mjs`: reproducible owner regressions, SDK compile
+  and adversarial real Core regtest. M3 measurements and M6/M7 results are evidence
+  under `reports/miner_protocol_v1/`, not production parameter constants.
+- [Miner operations](../AURA_MINER_OPERATIONS_V1.md) describes reproduction and the
+  distinction between implementation readiness and separately approved activation.

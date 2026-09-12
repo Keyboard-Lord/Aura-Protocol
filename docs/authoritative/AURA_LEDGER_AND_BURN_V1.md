@@ -179,3 +179,19 @@ claimed beyond a coordinated journal.
 Local burn units and the retained wallet/external-reference metering descriptors
 do not create Bitcoin balances, a token bridge or Bitcoin-enforced ledger rules.
 The existing anchor wire and validating Core observer retain their own authority.
+
+## Coordinated miner integration
+
+[The miner owner](AURA_AURAFARMING_NODES.md) supplies scheduling and reward policy.
+Its round acquisition joins the existing debit/attempt transaction; Accepted
+winner and reward-obligation records join this owner's terminal authorization/
+head/outbox transaction. There is no independent economic writer or reward balance
+in this ledger. All existing admission/failure/retry rules above apply. Miner
+publication must consume the combined anchor/reward obligation through the owning
+journal publisher; the generic publication acknowledgement rejects miner attempts.
+
+The journal uses SQLite immediate writes, full synchronization and rollback-journal
+recovery. A whole, internally consistent older database can pass its internal audit;
+do not infer latest-history provenance from successful opening. Restore coordinated
+history from a verified backup and reconcile external publication before accepting
+work. Independent copies are not coordinated journals and cannot safely merge.

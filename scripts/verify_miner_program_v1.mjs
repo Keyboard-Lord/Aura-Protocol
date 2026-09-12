@@ -1,4 +1,4 @@
-// M6 full-system acceptance gate. Focused owning tests + adversarial Core regtest.
+// Full-system miner acceptance. --m7 preserves M6's historical result separately.
 // No migration-wide audit, deployment, monetary activation or new protocol values.
 import assert from "node:assert/strict";
 import { spawn, spawnSync } from "node:child_process";
@@ -9,8 +9,9 @@ import { arch, platform } from "node:os";
 
 assert(process.env.BITCOIND && process.env.BITCOINCLI,"Set BITCOIND and BITCOINCLI; the gate requires real isolated Core regtest");
 const root=fileURLToPath(new URL("../",import.meta.url));
-const evidence=join(root,"reports/miner_protocol_v1/m6_acceptance_results.json");
-const result={classification:"M6 TEST EVIDENCE; NOT PROTOCOL AUTHORITY",status:"RUNNING",environment:{node:process.version,platform:platform(),arch:arch(),rust:spawnSync("rustc",["--version"],{encoding:"utf8"}).stdout.trim()},stages:[],limitations:["An internally consistent whole-journal rollback requires external backup provenance; SQLite alone cannot identify its own old snapshot."]};
+const milestone=process.argv.includes("--m7")?"M7":"M6";
+const evidence=join(root,`reports/miner_protocol_v1/${milestone.toLowerCase()}_acceptance_results.json`);
+const result={classification:`${milestone} TEST EVIDENCE; NOT PROTOCOL AUTHORITY`,status:"RUNNING",environment:{node:process.version,platform:platform(),arch:arch(),rust:spawnSync("rustc",["--version"],{encoding:"utf8"}).stdout.trim()},stages:[],limitations:["An internally consistent whole-journal rollback requires external backup provenance; SQLite alone cannot identify its own old snapshot."]};
 async function persist(){await mkdir(join(root,"reports/miner_protocol_v1"),{recursive:true});await writeFile(evidence,JSON.stringify(result,null,2)+"\n");}
 async function stage(name,command,args,{tests=true,core=false}={}) {
   const started=performance.now();let output="";
@@ -49,5 +50,5 @@ try {
     "packages/aura_sdk_v1_ts/src/minerV1.test.ts","packages/aura_sdk_v1_ts/src/minerSearchV1.test.ts","packages/aura_sdk_v1_ts/tests/authorization_v2.test.ts","packages/aura_sdk_v1_ts/src/economicV1.test.ts",...bitcoin]);
   await stage("sdk_production_compile","cargo",["check","-p","aura_sdk_v1","--offline","--lib","--bins","--examples"],{tests:false});
   await stage("bitcoin_adversarial_end_to_end","node",["scripts/verify_miner_regtest_v1.mjs","--adversarial"],{tests:false,core:true});
-  result.status="PASS";await persist();console.log(`PASS Aura Miner V1 M6 acceptance: ${result.stages.length} stages; evidence ${evidence}`);
+  result.status="PASS";await persist();console.log(`PASS Aura Miner V1 ${milestone} acceptance: ${result.stages.length} stages; evidence ${evidence}`);
 }catch(error){result.status="FAIL";result.failure=String(error);await persist();throw error;}

@@ -18,7 +18,7 @@ use aura_sdk_v1::{
 use rusqlite::Connection;
 use std::{
     path::PathBuf,
-    sync::{Arc, Barrier},
+    sync::{atomic::{AtomicU64, Ordering}, Arc, Barrier},
     time::{SystemTime, UNIX_EPOCH},
 };
 const N: BitcoinNetworkV1 = BitcoinNetworkV1::Regtest;
@@ -32,14 +32,16 @@ fn limits() -> EconomicLimitsV1 {
 struct File(PathBuf);
 impl File {
     fn new() -> Self {
+        static NEXT_FILE: AtomicU64 = AtomicU64::new(0);
         Self(
             std::env::temp_dir().join(format!(
-                "aura-economic-{}-{}.db",
+                "aura-economic-{}-{}-{}.db",
                 std::process::id(),
                 SystemTime::now()
                     .duration_since(UNIX_EPOCH)
                     .unwrap()
-                    .as_nanos()
+                    .as_nanos(),
+                NEXT_FILE.fetch_add(1, Ordering::Relaxed)
             )),
         )
     }
