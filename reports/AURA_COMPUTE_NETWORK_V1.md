@@ -1,8 +1,10 @@
 # Aura Compute Network V1 — C0 architecture and owner map
 
-Classification: PROPOSED DESIGN / IMPLEMENTATION EVIDENCE; NOT ACTIVE AUTHORITY.
+Classification: APPROVED C0 ARCHITECTURE / IMPLEMENTATION EVIDENCE; NOT ACTIVE PROTOCOL AUTHORITY.
 Date: 2026-09-12. Baseline: completed Miner V1 at `97ff01f`.
-Status: C0 architecture prepared; decisions D1–D4 below require approval before C1.
+Status: C0 DONE. D1–D4 APPROVED with the user's controlling amendments in section 9.
+C1 READY for design only; see [C1 contract design](AURA_COMPUTE_JOB_V1_C1_DESIGN.md).
+Reconciliation: DOC > CODE for compute; Miner V1 remains the implemented baseline.
 No compute codec, workload adapter, payment contract or public worker is implemented
 by this document. It does not reopen the completed Miner V1 or Bitcoin migration.
 
@@ -20,7 +22,7 @@ There are two distinct rewards:
 
 | Obligation | Source | Eligibility | Existing Aura relationship |
 | --- | --- | --- | --- |
-| Compute compensation | Customer funds the requested useful unit | Authorized assignment, contract-valid verified result, durable delivery availability | Proposed ordinary economic finalization and payment through the existing journal/publisher; no target predicate |
+| Compute compensation | Customer funds the requested useful unit | Authorized assignment, contract-valid verified result, durable delivery availability | Authenticated additive compute accounting in EconomicJournalV1 and the shared payment owner; no automatic Aura burn, Head V2 transition or target predicate |
 | Optional mining bonus | Existing Miner V1 sponsor funding | Unchanged Miner V1 PoC, target, admission and Accepted winner | Existing mining round, authorization, Head V2, reward obligation and Bitcoin publication |
 
 Useful outputs and compute entitlements survive a failed target test, round expiry,
@@ -33,19 +35,24 @@ The proposed lifecycle is:
 ```text
 customer-funded job → bounded assignment → isolated useful execution
 → workload verifier → durable result available to customer + compute obligation
-→ ordinary existing Aura finalization → existing Bitcoin publisher pays worker
+→ authenticated compute acceptance/accounting → shared payment owner pays worker
 
 independently, if worker opts in:
-same finalized result reference + a current signed MinerJobV1
-→ existing meter/profile → nonce-conditioned Storm search
+verified result commitment → derived existing MinerJobV1-controlled inputs
+→ operator signs/publishes J → existing profile → nonce-conditioned Storm search
 → existing full PoC + proof_hash target → existing coordinated mining bonus
 ```
 
-Normal compensation needs no mining winner. Aura binding/authorization must precede
-Bitcoin publication because that is the existing settlement boundary; a literal
-"pay first, then authenticate the payment" implementation would bypass it. Workload
-output availability can precede Bitcoin confirmation. Payment owed, payment broadcast
-and payment confirmed are distinct durable states, not interchangeable success flags.
+Normal compensation needs no mining winner and no automatic Aura burn or Head V2
+advance. Authenticated compute admission, result acceptance and payment accounting
+extend EconomicJournalV1; they do not pretend to be existing Aura authorization.
+The unchanged burn/Authorization V2/Head V2 rules apply when a result enters the
+existing Aura mining/settlement path. Do not apply those charges twice.
+
+Output availability, compensation owed, payment broadcast and payment confirmed
+are distinct states. C1 designs commitments only; live monetary settlement remains
+unimplemented and unapproved. Sharing a payment owner does not permit claiming
+that today's miner-only publisher already pays ordinary compute obligations.
 
 ## 2. Direct current-state evidence
 
@@ -56,19 +63,19 @@ and payment confirmed are distinct durable states, not interchangeable success f
 | [Economic meter](../crates/aura_l2_local_chain_v0/src/economic_meter.rs) | One canonical M; existing attestation evidence can bind data. Its local digest/truth checks do not verify an arbitrary external proof system. |
 | [Economic coordinator](../crates/aura_sdk_v1/src/economic/journal.rs) | Existing admission/debit and service execution, actual Aura proof verification, atomic authorization/head/outbox. Accepted does not currently mean external workload verification. |
 | [Funding/payment owner](../crates/aura_sdk_v1/src/economic/journal/miner/publication.rs) | `obligation` joins `miner_rewards` to an Accepted round. It cannot pay a non-winning compute worker. General compensation requires an approved additive obligation kind and shared publication ownership. |
-| [Authorization](../docs/authoritative/AURA_AUTHORIZATION_LINEAGE_V1.md), [economic consent](../docs/authoritative/AURA_LEDGER_AND_BURN_V1.md) | Both signatures bind a specific completed Aura work/reference. A customer's pre-execution job signature cannot implicitly authorize an unknown future Aura proof_hash. |
-| [Head V2](../docs/authoritative/AURA_CONTINUOUS_SETTLEMENT_V1.md), [Bitcoin](../docs/authoritative/AURA_REPORT_CONTRACT_V1.md) | Preserve formulas, wire, fees/burn separation and reorg behavior. More authorized payments are additional instances of the same path, not another settlement protocol. |
+| [Authorization](../docs/authoritative/AURA_AUTHORIZATION_LINEAGE_V1.md), [economic consent](../docs/authoritative/AURA_LEDGER_AND_BURN_V1.md) | Existing economic consent and Authorization V2 bind completed Aura work/reference. New authenticated compute admission/result acceptance needs its own contract; it must not fabricate either existing envelope or automatically invoke their burn/head path. |
+| [Head V2](../docs/authoritative/AURA_CONTINUOUS_SETTLEMENT_V1.md), [Bitcoin](../docs/authoritative/AURA_REPORT_CONTRACT_V1.md) | Preserve formulas, anchor wire, fees/burn separation and reorg behavior. Ordinary compute accounting does not itself advance Head V2. Payment orchestration must extend the shared owner without claiming an unapproved new anchor identity. |
 
 Only these direct boundaries were inspected. Existing M7 acceptance remains the
 frozen baseline; no migration, mining or cryptographic gate was rerun for C0.
 
-## 3. Ownership proposal — D4
+## 3. Approved ownership boundary — D4
 
-Add one neutral compute specification to the registry after approval:
-`docs/authoritative/AURA_COMPUTE_NETWORK_V1.md`. This would be the 26th document,
-not a replacement for the Aurafarming/Miner V1 owner. Do not create it as active
-authority until approved contracts and their implementation evidence are ready.
-C1/C2 may develop reviewed candidate contracts in this report area first.
+Aura core owns the common compute contracts; adapters own workload semantics and
+hardware remains replaceable. A future neutral compute owner is the intended home
+for those core definitions. C0 does not add a 26th active authority document or
+change registry membership. C1/C2 candidate definitions remain in reports until
+reviewed contracts and implementation evidence justify promotion through the registry.
 
 | Concept | Single intended owner |
 | --- | --- |
@@ -76,8 +83,8 @@ C1/C2 may develop reviewed candidate contracts in this report area first.
 | Worker assignment/identity, execution receipt, verified-result envelope and adapter registration | Same compute owner; C2 defines distinct worker claims and verifier-issued acceptance |
 | Input/program/output/evidence meaning | Versioned workload adapter specification referenced by the job; core treats content as committed opaque bytes |
 | Actual external proof acceptance | Pinned workload-specific verifier; never the scheduler or a worker-supplied boolean |
-| Existing W/M and Aura economic debit/authorization | Existing pipeline/ledger/authorization owners, extended by explicit compute integration references only |
-| Compute obligation, atomic finalization and payment-state integration | Existing economic journal/ledger owner; operational job/assignment/obligation tables, not a new account/balance ledger |
+| Existing W/M and Aura economic debit/authorization | Existing pipeline/ledger/authorization owners, invoked under their unchanged rules only when entering the existing Aura mining/settlement path |
+| Compute obligation, authenticated acceptance and payment-state integration | Existing economic journal/ledger owner; operational job/assignment/obligation tables, not a new account/balance ledger |
 | Bitcoin funding/publication/replacement/observation | Existing report contract and shared funding/payment implementation; original miner adapter retains its exact behavior |
 | Optional mining eligibility and bonus | Existing Aurafarming/Miner V1 owner; no competing proof identifier or compute-only fork choice |
 | Scheduler policy, capability selection and market scoring | Compute owner defines the contract; scheduler implementation never owns proof correctness or payment entitlement |
@@ -123,85 +130,79 @@ timely completion. No speculative first-to-finish redundancy or unbounded unpaid
 replacement lease is allowed. Customer acknowledgement must not be a discretionary
 veto after valid contracted work and durable delivery availability.
 
-## 5. Compensation and Aura authorization — D1/D2
+## 5. Approved compensation and coordination — D1/D2
 
-Recommended initial compensation: a fixed customer-funded BTC amount for the
-requested unit, reserved before assignment in an operator-custodied dedicated
-outpoint. The existing Bitcoin payment owner is generalized once to consume either
-a compute entitlement or an unchanged miner entitlement; two independently copied
-publishers are not acceptable. Fee budgets remain explicit and separate from burn.
-No new service fee, pricing curve, refund charge, transferable credit or token is
-selected here. C2 must freeze the funding/cancellation/refund details before use.
+The requester prefunds compensation before workers can earn against a job. A
+durable coordinator reservation protects that commitment. Compute compensation
+and sponsor-funded mining rewards remain separate obligations. Bitcoin is the
+intended external payment asset; no Aura token, issuance, inflation or synthetic
+balance is introduced. C1 may design funding/payment commitments, not live settlement.
+Later batching or payment channels must not change compute-job identity.
 
-The useful worker is the payment beneficiary, not necessarily the actor paying
-Aura's existing local burn. Recommended D2: a configured coordinator account pays
-that unchanged burn and signs the ordinary Aura work after workload verification.
-The customer's job authorization covers the compute purchase; the worker signs
-its result; the coordinator's existing two envelopes cover Aura finalization.
-There is no fabricated pre-signed future proof_hash, implicit delegation, signature
-conversion, Authorization V2 bypass or Bitcoin-fee-to-Aura conversion.
+EconomicJournalV1 is the only durable coordinator. Authenticated compute-job
+admission and result acceptance extend that owner, using compute records in the
+same durable transaction system rather than another ledger. Useful completion
+alone consumes no existing Miner V1 burn and advances no Head V2. Normal compute
+compensation does not depend on mining qualification. Existing burn, Authorization
+V2 and Head V2 apply exactly as already defined on entry to Aura mining/settlement.
 
-A valid delivered result creates one durable compute entitlement. The existing
-Aura finalization must succeed before the Bitcoin publisher can discharge it.
-Coordinator outage, stale head, insufficient coordinator burn balance or Bitcoin
-failure keeps the valid worker's entitlement pending; it must not be relabelled as
-bad work or conditioned on winning a mining round. C2 must define retry ownership
-so only one Accepted payment attempt discharges that obligation, without duplicate
-payment or release of existing nonce reservations. Customer/worker results remain
-available while settlement recovers. A reconstructed Aura wrapper never requires
-redoing the already verified useful task merely to get another mining nonce.
+The earlier recommendation to make the coordinator automatically burn and advance
+Head V2 for every ordinary compute payment is SUPERSEDED by approved D2. Do not
+implement it or treat the C0 approval as acceptance of that earlier recommendation.
 
-Use the same SQLite transaction owner for job/assignment/result/payment metadata
-and the existing economic history. There is no second ledger/head or replicated
-consensus assumption. Object storage holds immutable output/evidence; staged blobs
-must be durable before committing the result/entitlement reference. Recovery must
-handle abandoned staged blobs and missing/corrupt objects without paying fabricated
-results. An output commitment alone is not delivery or data availability.
+C2 must define authentication, durable reservation/assignment/result/payment
+transitions, retries, cancellation/refunds and recovery before production use.
+One accepted useful unit creates at most one compute obligation. Payment failures
+must not relabel valid delivered work as invalid or require winning a mining round.
+Requester acknowledgement cannot become an unreviewed veto after contracted valid
+delivery. Existing Bitcoin fees and Aura burn remain separate accounting concepts.
 
-Existing open miner rounds pin the ledger until expiry/admission. Compute payment
-may wait for that bounded current owner, but must not wait for a mining winner.
-The initial scheduler should serve ready compute finalizations before opening a
-new optional bonus round. It cannot preempt an already admitted Miner V1 attempt.
-C2 must test this scheduling interaction without changing Miner V1 expiry/burn rules.
+The current miner publication implementation requires an Accepted miner attempt;
+D2 does not change that implementation today. Ordinary compute publication needs
+an additive shared-owner extension. It must not invent a dummy miner winner,
+a fake proof_hash, automatic burn/head transition or a copied second publisher.
+Specific payment/anchor transaction behavior is later contract work, not silently
+chosen here. No on-chain trustless escrow or fair-exchange guarantee is established.
 
-Custody prevents customer discretion from being required after execution, but the
-operator still controls funds and can fail or misbehave. This is not trustless
-escrow or atomic fair exchange. Approval must acknowledge that trust boundary.
+Immutable output/evidence storage must become durable before accepted references
+and entitlement are committed. An output hash alone is not delivery. Detailed
+retention, unavailable/corrupt objects and coordinated recovery belong to C2.
 
-## 6. Optional mining binding — D3
+## 6. Approved result binding — D3
 
-Recommended carrier: the existing M attestation-evidence surface. C1/C2 freeze a
-strict reference-only compute binding profile whose ASCII/binary representation
-is unambiguous and unaffected by the existing evidence normalization. Tests must
-prove that property; C0 does not declare an untested encoding canonical.
+There is exactly one canonical compute_result_commitment. It binds the canonical
+compute-job commitment, worker, input, program/model, output, execution evidence,
+verification method and verdict, and resource-accounting commitment. C2 will own
+the exact result-envelope preimage. Job-owned fields must resolve unambiguously
+through the job; there must not be independently editable duplicate definitions.
+The result commitment is an upstream object commitment, not another Aura proof ID.
+
+For compute-linked mining the binding MUST be in signed MinerJobV1-controlled
+computation inputs before qualification. C1 must freeze and vector one
+domain-separated result-to-input derivation without changing the frozen J wire.
 
 ```text
-final verified result commitment
-→ exact existing M evidence reference
-→ existing MinerJobV1.build_work / job-and-meter intent
-→ existing context, fresh nonce, Storm, TRACE_ROOT, proof/material/FractalKey
-→ existing proof_hash and signed target
+verified result commitment → prescribed existing J inputs
+→ operator signs/publishes J → existing J + M intent/profile
+→ nonce-conditioned Storm → TRACE_ROOT → proof/material/FractalKey
+→ existing proof_hash → existing signed-target predicate
 ```
 
-The immutable verified record must bind the worker and job before association.
-The external verifier establishes workload validity; the existing M attestation
-only establishes its defined evidence/digest relation. Storm still proves Storm.
-Never describe this composition as a new succinct proof of GPU execution or as
-the external proof backend replacing Aura's witness backend.
+A result reference added only to miner-selected M evidence is INSUFFICIENT and the
+earlier M-only recommendation is SUPERSEDED. A mutable post-proof attachment is
+also insufficient. A result cannot be attached retroactively to an already-signed
+unbound round; it must be known before that compute-linked J is signed.
 
-Ordinary Miner V1 remains available unchanged. A compute worker may use its own
-verified receipt when constructing a normal miner candidate. A copied reference
-does not transfer compute compensation or verified-worker attribution. An unlinked
-ordinary miner can still win under existing rules; this proposal introduces no
-compute-only mining pool, mandatory useful-work quota, one-use compute credit or
-changed winner predicate. Those would be additional protocol decisions.
+The existing round-opening API already accepts side_a and side_b as 110-byte
+inputs, and the existing J signature and profile bind both. This is the C1 design
+boundary; exact derivation is not approved merely because these fields exist.
+Changing signed target still changes the prescribed computation. No additional
+nonce, mining_hash, alternate proof/settlement identifier or changed winner rule.
 
-Compute payment and optional bonus use distinct existing economic attempts and
-funding obligations. Both use the same canonical machinery and Bitcoin publisher;
-they are not two competing proof formats or ledger chains. The signed target stays
-inside J and therefore inside the existing computation dependency. No outer-hash
-loop, extra mining nonce, claim-slot reuse, side-input substitution or mutable
-post-proof result field is introduced.
+Workload verification establishes external correctness; Storm still verifies its
+own prescribed computation. Useful outputs and normal compute payment remain
+available without mining. Original Miner V1 remains intact; worker-exclusive bonus
+rules or a mandatory compute-only mining pool are not introduced by this approval.
 
 ## 7. Adapters, hardware and hostile execution
 
@@ -236,7 +237,7 @@ must distinguish a safely stopped assignment from a completed payable result.
 CPU/GPU/Aura Proof ASIC/Aura Matrix ASIC are capability classes, not separate
 protocols or proof-strength claims. Accept measured/attested capabilities only to
 the extent the measurement supports them; advertisements are untrusted hints.
-Initial fixed-price assignments need no performance premium from an unverified
+The fixed-price candidate in C1 needs no performance premium from an unverified
 claim. C8 freezes hardware interfaces only after real kernel/backend measurements;
 no ASIC instruction set, wattage or throughput is invented at C0.
 
@@ -252,7 +253,7 @@ Future sensitive genomic/model/customer data is not routed to arbitrary workers.
 
 | Node | Dependency and bounded output |
 | --- | --- |
-| C0 | This map and D1–D4 approval. Resolve authority/payment/binding architecture before implementation. |
+| C0 | DONE: D1–D4 approved as amended in section 9; C1 design authorized. |
 | C1 | C0: freeze universal job bytes, signatures/commitments, limits/identity and Rust/TS negative vectors; no workload implementation. |
 | C2 | C1: capability/assignment/receipt/verified-result contracts, independent compensation state machine and shared payment extension design; freeze binding and lifecycle before adapters. |
 | C3 | C2: one real GPU-oriented Priority 0 proving adapter, minimal necessary isolation, actual verification/delivery/compute payment and optional unchanged mining path. |
@@ -276,25 +277,69 @@ host credential/network access, privacy downgrade, unavailable verifier/objects,
 stale snapshots and Bitcoin replacement/reorg. No correctness or payment claim
 is inferred from a successful scheduler dispatch.
 
-## 9. Decisions required before C1
+## 9. Controlling approval record — D1–D4 APPROVED
 
-These choices are proposals, not changes to existing authority or implementation.
+Source: the user's explicit approval in this task on 2026-09-12. This record
+supersedes the pre-approval recommendations; it approves C0 only and C1 design,
+not unspecified C1 bytes, adapters, live funds or public worker execution.
 
-| ID | Exact decision and recommendation | Viable alternative / tradeoff |
-| --- | --- | --- |
-| D1 — compute compensation | Fixed customer-prefunded BTC, custodial reservation, independent compute entitlement and extension of the existing journal/Bitcoin publisher. No target/winner condition. | Trustless Bitcoin escrow would reduce custody trust but needs a separately designed on-chain contract/dispute model; it is not supplied by Miner V1 or the current OP_RETURN. |
-| D2 — Aura signer and burn payer | A configured coordinator account signs the ordinary compute-settlement W/reference and pays the unchanged Aura burn after workload verification. Customer job authorization and worker receipt remain separate. | Worker signs and pays that burn from an existing Aura account; preserves direct worker authorization but requires onboarding/funding and additional worker completion availability. Requiring customer post-result approval risks withholding and is not recommended. |
-| D3 — optional result binding | Bind the finalized verified-result reference through a strict profile of existing M attestation evidence; retain all Miner V1 bytes, eligibility and normal unlinked mining. | Bind each result through freshly signed J side inputs; needs per-result job publication, changes the requested Storm trajectory and is less reusable. Neither choice makes Storm verify the external workload. |
-| D4 — ownership | One new neutral compute owner, registered as the 26th authoritative document when contracts/implementation are ready; existing generic economic/Bitcoin/miner owners retain their concepts. | Expand the current Aurafarming owner to cover non-mining compute; avoids a registry addition but conflates a universal compute lifecycle with optional mining. |
+### D1 — FUNDING CUSTODY — APPROVED
 
-Approval requested is for these architectural directions and subsequent C1/C2
-contract design. It is not approval of unspecified canonical bytes, a particular
-proof backend, confidential execution, new tariffs, live funds or public execution.
-C0 stops here; C1 is blocked until this owner/economic/binding decision is resolved.
+- Customer-prefunded compensation with durable coordinator reservation.
+- Requester funds useful compute before workers can earn against the job.
+- Compute compensation and Miner V1 rewards are separate economic obligations.
+- No Aura token, inflation, issuance or synthetic balance.
+- Bitcoin remains the intended external payment asset unless separately approved.
+- C1 may define funding/payment commitments; no live monetary settlement yet.
+- Future batching/payment-channel optimizations may be additive and must not
+  change compute-job identity.
 
-## 10. C0 verification evidence
+### D2 — COORDINATOR / AUTHORIZATION / BURN — APPROVED
 
-Validated 24 local links across this proposal, the active slice register and the
+- EconomicJournalV1 remains the sole durable coordinator.
+- Useful-job admission/result acceptance must be authenticated and coordinated
+  through an additive extension of that owner, not a second ledger/coordinator.
+- Completing useful compute does NOT automatically consume existing Miner V1 burn
+  and does NOT automatically advance Head V2.
+- Normal compute compensation is independent of mining qualification.
+- Existing Aura burn, Authorization V2 and Head V2 apply exactly as already defined
+  when a verified result enters the existing Aura mining/settlement path.
+- Do not double-burn a result simply because it was useful work. Preserve frozen
+  Miner V1 economics.
+
+### D3 — RESULT BINDING — APPROVED
+
+- One canonical compute_result_commitment binds at minimum: canonical job
+  commitment, worker identity, input commitment, program/model commitment, output
+  commitment, execution-evidence commitment, verification method, verification
+  verdict and resource-accounting commitment.
+- No second Aura proof identity, mining_hash or alternate settlement identifier.
+- A useful result made mining-eligible MUST be cryptographically included in the
+  signed Miner V1 job/computation before qualification is evaluated.
+- Preserve frozen MinerJobV1 wire and existing proof_hash.
+- C1 must vector/freeze one domain-separated derivation from the result commitment
+  into existing signed MinerJobV1-controlled inputs before adapters depend on it.
+
+### D4 — COMPUTE OWNERSHIP — APPROVED
+
+- Aura core owns job/result envelopes, commitments, coordination, verification
+  verdict, accounting state and settlement state.
+- Workload adapters own workload-specific execution and verification semantics.
+- CPU/GPU/FPGA/Aura ASIC backends are replaceable and must not change job meaning
+  or result identity. Hardware neutrality is mandatory.
+- Requester retains ownership/control of inputs and useful output by default.
+- Workers receive only minimum temporary execution rights; execution grants no
+  ownership of inputs, model weights or outputs.
+- Aura retains commitments/evidence needed for verification/accounting, not
+  automatic ownership of customer content.
+- Public/open workloads may explicitly opt into different licensing.
+
+C0 is closed. C1 is READY and its design has begun. New semantic decisions in C1
+remain explicit; this approval is not a blanket approval of the original proposal.
+
+## 10. Prior C0 proposal verification evidence
+
+At the pre-approval checkpoint, validated 24 local links across this proposal, the active slice register and the
 archived miner register. The archive is byte-identical to the completed register
 at `97ff01f`. Changed-file scope is exactly those three documentation/register
 files; source, authoritative documents and frozen fixtures are unchanged.
