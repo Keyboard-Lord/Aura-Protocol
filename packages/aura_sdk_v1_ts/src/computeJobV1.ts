@@ -1,5 +1,6 @@
 // C1 request codec/profile only. No funded admission, verdict or state mutation.
 import { createHash } from "node:crypto";
+import { computeContentDigest } from "./computeContentInternalV1.ts";
 import { schnorr, secp256k1 } from "@noble/curves/secp256k1.js";
 import { bitcoinNetworkTagV1 } from "../../aura_bitcoin_v1_ts/src/index.ts";
 import type { BitcoinNetworkV1 } from "../../aura_bitcoin_v1_ts/src/index.ts";
@@ -208,7 +209,7 @@ export function validateComputeAssignmentV1(j: AuraComputeJobV1, now: bigint, de
 }
 export function computeContentCommitmentV1(kind: ComputeContentKindV1, payload: Uint8Array): Uint8Array {
   ensure(COMPUTE_CONTENT_KINDS_V1.includes(kind), "unsupported compute content kind"); bytes(payload);
-  return sha(Buffer.from(`AURA_COMPUTE_${kind}_V1`, "ascii"), le(BigInt(payload.length)), payload);
+  return computeContentDigest(`AURA_COMPUTE_${kind}_V1`, payload);
 }
 export type ComputeFixedCorePolicyKindV1 = "PRIVACY_POLICY" | "HARDWARE_REQUIREMENTS" | "DATA_RIGHTS";
 /** Each kind retains its existing independent content-commitment domain. */

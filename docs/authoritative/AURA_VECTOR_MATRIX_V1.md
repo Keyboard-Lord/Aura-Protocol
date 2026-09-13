@@ -121,3 +121,20 @@ Historical local-runner compatibility (unchanged bytes):
 - Evidence: `reports/compute_network_v1/c1_freeze_results.json` and
   `reports/AURA_COMPUTE_JOB_V1_C1_DESIGN.md`; fixture notes distinguish synthetic
   test parameters from any future production values.
+
+## Compute Lifecycle V1 (C2)
+
+- Owner: [compute lifecycle](AURA_COMPUTE_NETWORK_V1.md#c2-assignment-receipt-and-verified-result).
+- `fixtures/compute_result_v1/result_vectors_v1.json`: exact assignment, receipt,
+  result, cancellation and byte-accounting wires; all signature roles, result
+  commitments and unchanged C1 side derivation. No worker telemetry enters R.
+- Rust: `crates/aura_sdk_v1/tests/compute_result_v1.rs`; independent TS:
+  `packages/aura_sdk_v1_ts/src/computeResultV1.test.ts`.
+- `crates/aura_sdk_v1/src/economic/journal/compute/tests.rs`: sealed test-only
+  adapter, atomic reservation/assignment/receipt/entitlement, races, immutable
+  retries, expiry, corruption, funding overlap and process-exit recovery.
+- `scripts/verify_compute_result_v1.mjs`: C2 parity/durability plus full frozen C1/M2
+  gate and affected existing miner/economic journal regressions. Includes compile
+  rejection of client-deserialized backing tokens. No live Bitcoin execution.
+- `reports/compute_network_v1/c2_freeze_results.json`: commands, environment,
+  fixture hashes and results; the C2 evidence report states actual claim limits.

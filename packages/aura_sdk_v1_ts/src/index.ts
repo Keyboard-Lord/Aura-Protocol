@@ -17,3 +17,5 @@ export * from "./computeJobV1.ts";
 export { ProofMaterialV1Error, FractalKeyV1Error, FractalKeyBindingErrorV1, AuraSdkErrorV1, UdotHashError, UdotParseError, UdotValidationError, prepareBoundProofMaterialV1, generateUdotBundleV2, validateUdotBundleV2, generateWalletVisualV1, parseWalletVisualV1, validateWalletVisualV1, proofHashHexFromWalletVisualV1 } from "./sdkCoreV1.ts";
 export type { ProofMaterialV1, FractalComponentV1, FractalKeyV1, PreparedBoundProofMaterialV1, UdotBundleV2 } from "./sdkCoreV1.ts";
 export * as legacy from "./legacy/index.ts";
+
+export * from "./computeResultV1.ts";

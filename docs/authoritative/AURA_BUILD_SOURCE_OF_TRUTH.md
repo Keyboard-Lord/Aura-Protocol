@@ -73,9 +73,9 @@ does not calibrate production difficulty or assert permissionless consensus.
 
 C1 freezes the approved common compute-job, request authentication, core policy
 and upstream result-binding contract in `AURA_COMPUTE_NETWORK_V1.md`. Independent
-Rust/TS vectors and the bounded C1 gate establish its SDK boundary. C2 remains
-responsible for worker/result and durable compute lifecycle enforcement within
-EconomicJournalV1. Contract authority does not activate workloads, payments or
+Rust/TS vectors and bounded C1/C2 gates establish its SDK boundary. C2 implements
+worker/result contracts and durable compute lifecycle enforcement within
+EconomicJournalV1; only test adapters are registered, and no compute payout is published. Contract authority does not activate workloads, payments or
 public execution. Existing Miner V1 and the production Aura path are unchanged.
 
 Research, historical evidence, and unapproved proposals do not acquire authority
@@ -113,7 +113,7 @@ The 26 authoritative documents are fixed in this order:
 21. `AURA_HASH_V1.md` — **FROZEN LEGACY**
 22. `AURA_UDOT_UNICODE_LAYER_V3.md` — **SUPPORTING**
 23. `AURA_AURAFARMING_NODES.md` — **ACTIVE AUTHORITY** (coordinated Miner V1; prior network research archived)
-24. `AURA_COMPUTE_NETWORK_V1.md` — **ACTIVE AUTHORITY** (C1 job/core policy contract only; lifecycle enforcement deferred)
+24. `AURA_COMPUTE_NETWORK_V1.md` — **ACTIVE AUTHORITY** (C1/C2 compute contracts and durable lifecycle; no workload activation)
 25. `AURA_BUILD_SOURCE_OF_TRUTH.md` — **ROOT AUTHORITY / META**
 
 **Resolution Rule:** When documents conflict, the lower-numbered document governs.
@@ -138,7 +138,7 @@ In particular:
   are owned by `AURA_AURAFARMING_NODES.md`; generic economic, head, authorization
   and Bitcoin wire definitions retain their existing owners
 
-- useful-compute request, core policies and result-to-signed-miner-input derivation
+- useful-compute request, core policies, worker/result lifecycle and signed-miner-input derivation
   are owned by `AURA_COMPUTE_NETWORK_V1.md`; workload adapters do not redefine
   common envelopes, economics, proof identity or settlement
 
@@ -158,8 +158,8 @@ Active behavior is limited to:
 - the canonical `BitcoinAnchorRequestV1` wire
 - the approved `MinerJobV1` profile and coordinated miner lifecycle through the
   existing economic journal; local qualification alone is not a winner or payment
-- the approved C1 compute-job codec/authentication/core-policy and upstream binding
-  contract; no durable compute lifecycle or workload execution is implemented yet
+- the approved C1/C2 compute contracts and durable lifecycle in EconomicJournalV1;
+  real workload execution and compute payment publication remain unactivated
 - the local ledger, burn, and settlement fixtures still exercised by `scripts/verify_active_foundation.sh`
 
 `PROOF_MATERIAL_V2` is a repository name only.

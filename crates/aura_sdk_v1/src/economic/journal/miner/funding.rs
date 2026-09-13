@@ -4,7 +4,7 @@
 use super::*;
 use serde_json::{json, Value};
 
-pub(super) const MAX_SATOSHIS: u64 = 2_100_000_000_000_000;
+pub(in crate::economic::journal) const MAX_SATOSHIS: u64 = 2_100_000_000_000_000;
 
 /// Internal operational evidence, not a protocol wire or a trustless funding proof.
 /// Constructed by the Core check below, never from a candidate's `funded=true`.
@@ -60,7 +60,7 @@ impl MinerFundingReservationV1 {
     }
 }
 
-pub(super) fn sats(v: &Value) -> AuthorizationResultV2<u64> {
+pub(in crate::economic::journal) fn sats(v: &Value) -> AuthorizationResultV2<u64> {
     // Parse Core's decimal amount without binary floating point or truncation.
     let n = v
         .as_number()
@@ -207,7 +207,7 @@ pub fn reserve_miner_funding_v1(
     Ok(reservation)
 }
 
-pub(super) fn check_network(
+pub(in crate::economic::journal) fn check_network(
     rpc: &mut impl FnMut(&str, Value) -> AuthorizationResultV2<Value>,
     network: BitcoinNetworkV1,
 ) -> AuthorizationResultV2<()> {
@@ -249,6 +249,7 @@ impl EconomicJournalV1 {
         if owned {
             return Err("funding has a later live owner".into());
         }
+        super::super::funding_registry::no_compute_owner(&tx, r.funding.txid(), r.funding.vout())?;
         check_network(&mut rpc, self.network)?;
         let locks = rpc("listlockunspent", json!([]))?;
         let locks = locks.as_array().ok_or("invalid Core wallet lock list")?;

@@ -3,9 +3,9 @@
 Classification: TOOLING / IMPLEMENTATION EVIDENCE; not protocol authority.
 Runtime: AURA Runtime V4
 Program: Aura Compute Network V1, master goal C0–C10
-Current milestone: C2 — IN PROGRESS (approved worker/result implementation)
+Current milestone: C2 — DONE (canonical contracts and durable lifecycle frozen)
 Last updated: 2026-09-12
-Next node: C2 implementation and freeze gate; C3 remains BLOCKED
+Next node: C3 — READY; not started in this slice
 
 ## Mission and frozen baseline
 
@@ -30,8 +30,8 @@ No public worker execution or live monetary activation is authorized.
 | --- | --- | --- |
 | C0 | DONE | D1–D4 explicitly approved as amended; controlling approval recorded in C0 evidence. |
 | C1 | DONE | C1-D1–D3 and C1-P1 APPROVED; job/core schemas, authentication and signed-side binding frozen with independent Rust/TS vectors. |
-| C2 | IN PROGRESS | C1 complete. C2-D1/D2 APPROVED; implementation and freeze gate pending. |
-| C3 | BLOCKED | C2: real GPU-oriented ZK proving, verification, delivery, payment and optional mining binding; minimal isolation required. |
+| C2 | DONE | C2-D1/D2 APPROVED; exact lifecycle codecs, durable assignment/reservation/receipt/result and full gate passed. |
+| C3 | READY | C2 complete: real GPU-oriented ZK proving, verification, delivery, payment and optional mining binding; minimal isolation required. |
 | C4 | BLOCKED | C3: deterministic/open-model inference. |
 | C5 | BLOCKED | C4: molecular, media and Monte Carlo adapters, one at a time. |
 | C6 | BLOCKED | C5: generic sandboxed CPU/GPU worker. |
@@ -42,29 +42,27 @@ No public worker execution or live monetary activation is authorized.
 
 ## Current evidence
 
-[C0 approval record](../reports/AURA_COMPUTE_NETWORK_V1.md) and
-[C1 freeze evidence](../reports/AURA_COMPUTE_JOB_V1_C1_DESIGN.md) retain decisions
-and implementation evidence. The registered
+[C1 freeze](../reports/AURA_COMPUTE_JOB_V1_C1_DESIGN.md) remains intact.
+[C2 approval/freeze evidence](../reports/AURA_COMPUTE_C2_CONTRACT_DECISIONS.md) records
+implementation and limitations. The registered
 [compute owner](../docs/authoritative/AURA_COMPUTE_NETWORK_V1.md) owns definitions.
 
-- Exact request bytes, signatures/replay comparison, core policy schemas,
-  compensation/fee vectors and result-to-signed-miner binding pass independently
-  in Rust and TS. Unsupported profiles/privacy reject even if hashes match.
-- [C1 gate](../scripts/verify_compute_job_v1.mjs): 10 Rust C1 + 9 M2 and 13 TS C1
-  + 10 M2 tests pass; affected SDK/examples compile and Node syntax/exports pass.
-  [Recorded result](../reports/compute_network_v1/c1_freeze_results.json): PASS.
-  No standalone tsc, journal, adapter or Bitcoin gate claimed.
-- All pre-existing Aura/Miner owners and fixtures are unchanged. Original C1
-  vectors are preserved; approved core-policy vectors are additive.
-- No assignment, durable compute reservation, result verdict, output delivery or
-  payment state machine was added. Approved lifecycle enforcement belongs to C2.
-
-C2 direct-owner inspection confirms the existing admission method burns Aura and
-the publisher requires an Accepted miner winner. Ordinary compute needs an additive
-extension inside EconomicJournalV1. No existing economic path is being repurposed.
-[C2 decision proposal](../reports/AURA_COMPUTE_C2_CONTRACT_DECISIONS.md) defines the
-smallest outstanding receipt/result and assignment/reservation choices. Layouts and
-local links checked; no C2 source, fixtures or durable state implemented yet.
+- Distinct assignment/receipt/result/cancellation bytes and signatures; one result
+  commitment, canonical byte counts and no hardware/time telemetry in identity.
+- Same EconomicJournalV1: explicit installation, authenticated replay, full net/fee
+  reserve at assignment, one assignment/receipt, durable artifacts, internal verifier
+  finalization and atomic full-net entitlement/retention. No payment/acceptance boolean.
+- [C2 gate](../scripts/verify_compute_result_v1.mjs) PASS:
+  5 Rust + 6 TS codec tests; 12 journal tests (including 11 process-exit cases);
+  1 opaque-token compile-fail test; 32 miner + 12 economic journal regressions;
+  full C1/M2 gate (19 Rust + 23 TS), SDK compile and Node syntax/export checks.
+  [Recorded result](../reports/compute_network_v1/c2_freeze_results.json).
+- Funding overlap rejected in both directions; races/retries, corruption, timely
+  pending receipt recovery, invalid/late work and no-double-entitlement checked.
+- Frozen C1/Miner/Aura fixtures and semantics remain unchanged. Existing journal
+  modifications are additive compute audit and shared backing-ownership guards.
+- Only a sealed test adapter exists. No production workload, GPU measurement,
+  public worker execution, compute payment or live monetary activation claimed.
 
 ## Decisions
 
@@ -82,15 +80,14 @@ that gate passed. No unresolved C1 semantic decision remains. Policy payloads an
 lifecycle promises live in the compute owner, not this execution register.
 No deployment values, payout transport, live funds or public execution approved.
 
-## C2 approval
+## C2 approval and closure
 
-C2-D1/D2 APPROVED as documented, with the user's clarification that full net
-compensation plus signed fee ceiling is reserved at assignment. One immutable
-assignment/receipt; exact transition retries only. No canonical freeze yet.
+C2-D1/D2 APPROVED as documented, with full net plus fee reservation at assignment.
+Required parity, mutation, replay, funding and crash/recovery checks passed; the
+contract is now frozen. No unresolved C2 protocol decision remains.
 
 ## Stop condition
 
-Complete C2 codecs, journal lifecycle, independent Rust/TS vectors, funding and
-crash/recovery evidence; freeze only after the full C2 gate passes. Then mark C2
-DONE and C3 READY and stop. Preserve all frozen C1/Miner/Aura bytes. No live funds
-or public worker execution.
+Satisfied: C2 DONE; C3 READY. Stop here. C3 must select/approve and implement the
+real Priority 0 proving adapter with GPU capability/isolation and shared compute
+payment integration. Do not begin C3 in this slice or activate live funds/workers.

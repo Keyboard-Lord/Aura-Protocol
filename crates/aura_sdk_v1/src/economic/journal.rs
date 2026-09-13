@@ -21,6 +21,8 @@ use rusqlite::{params, Connection, OptionalExtension, TransactionBehavior};
 use std::path::Path;
 
 pub mod miner;
+pub mod compute;
+mod funding_registry;
 
 /// Trusted migration input, never a successor admission object or relabeled V2 head.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
@@ -703,6 +705,7 @@ impl EconomicJournalV1 {
         }
         self.outbox()?; // Also checks orphaned outbox entries and observation shape.
         miner::audit(&read, self.network)?;
+        compute::audit(&read, self.network)?;
         read.commit()?;
         Ok(())
     }

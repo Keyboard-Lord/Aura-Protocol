@@ -1,7 +1,7 @@
 {
   "classification": "C1 CONTRACT VALIDATION EVIDENCE; NOT DEPLOYMENT OR PAYMENT EVIDENCE",
   "status": "PASS",
-  "recorded_at": "2026-09-12T23:11:05.094Z",
+  "recorded_at": "2026-09-13T05:58:21.282Z",
   "environment": {
     "node": "v22.22.2",
     "platform": "darwin",
@@ -28,7 +28,7 @@
         "miner_v1"
       ],
       "exit_code": 0,
-      "elapsed_ms": 4313,
+      "elapsed_ms": 3522,
       "passed_test_counts": [
         10,
         9
@@ -44,7 +44,7 @@
         "packages/aura_sdk_v1_ts/src/minerV1.test.ts"
       ],
       "exit_code": 0,
-      "elapsed_ms": 2294,
+      "elapsed_ms": 1188,
       "passed_test_counts": [
         23
       ],
@@ -62,7 +62,7 @@
         "--examples"
       ],
       "exit_code": 0,
-      "elapsed_ms": 1892,
+      "elapsed_ms": 995,
       "passed_test_counts": [],
       "status": "PASS"
     },
@@ -74,7 +74,7 @@
         "packages/aura_sdk_v1_ts/src/computeJobV1.ts"
       ],
       "exit_code": 0,
-      "elapsed_ms": 38,
+      "elapsed_ms": 29,
       "passed_test_counts": [],
       "status": "PASS"
     },
@@ -87,7 +87,7 @@
         "\n    import assert from 'node:assert/strict';\n    import * as sdk from './packages/aura_sdk_v1_ts/src/index.ts';\n    assert.equal(sdk.COMPUTE_JOB_V1_BYTE_LEN, 546);\n    assert.equal(sdk.COMPUTE_PAYMENT_TERMS_V1_BYTE_LEN, 17);\n    for (const name of ['encodeComputeJobV1', 'decodeComputeJobV1', 'verifyComputeRequestV1',\n      'classifyComputeRetryV1', 'computeMinerSideV1', 'computeFixedCorePolicyPayloadV1',\n      'validateComputeFixedCorePolicyV1', 'encodeComputePaymentTermsV1',\n      'decodeComputePaymentTermsV1', 'computePaymentTermsCommitmentV1',\n      'validateComputePublicationFeeV1', 'verifyComputeCorePoliciesV1'])\n      assert.equal(typeof sdk[name], 'function', name);\n  "
       ],
       "exit_code": 0,
-      "elapsed_ms": 164,
+      "elapsed_ms": 106,
       "passed_test_counts": [],
       "status": "PASS"
     }

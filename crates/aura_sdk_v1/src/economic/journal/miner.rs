@@ -342,6 +342,7 @@ impl EconomicJournalV1 {
         let next = number.checked_add(1).ok_or("round number exhausted")?;
         let funding = reserve(&job)?;
         funding.validate(&job)?;
+        super::funding_registry::no_compute_owner(&tx, funding.txid(), funding.vout())?;
         tx.execute(
             "INSERT INTO miner_rounds VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,0,NULL)",
             params![

@@ -195,3 +195,26 @@ recovery. A whole, internally consistent older database can pass its internal au
 do not infer latest-history provenance from successful opening. Restore coordinated
 history from a verified backup and reconcile external publication before accepting
 work. Independent copies are not coordinated journals and cannot safely merge.
+
+## Useful-compute coordinator extension
+
+The [compute owner](AURA_COMPUTE_NETWORK_V1.md#c2-assignment-receipt-and-verified-result)
+defines the approved C2 objects and lifecycle. EconomicJournalV1 owns their durable
+transactions in its existing database. Ordinary useful-compute registration,
+assignment, receipt and acceptance do not invoke this document's Aura debit,
+Authorization V2 or Head V2 finalizer. Existing mining entry retains those effects
+under its unchanged rules.
+
+Compute funding reserves external customer custody; it is not an account balance
+or issuance in the Aura ledger. Shared ownership checks exclude backing already
+reserved for a compute or miner obligation. Result acceptance, the full-net worker
+entitlement and retention state commit atomically; no supplied acceptance/payment
+boolean can bypass the owning verifier or publication path. Internal records and
+checksums are implementation evidence, not new canonical settlement identities.
+Actual compute payment publication remains an extension of the shared transport;
+no dummy miner winner or anchor is created to discharge an ordinary obligation.
+
+The same durability and backup provenance requirements above apply. A recovered
+pending receipt retains its reservation; corrupt/incomplete records require recovery
+rather than unpaid failure. No journal copy can claim coordinated replay protection
+across independent writers without the existing shared transaction boundary.

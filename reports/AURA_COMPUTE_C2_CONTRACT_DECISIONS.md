@@ -1,226 +1,148 @@
-# C2 — Worker/result contract decisions
+# C2 — Approval and freeze evidence
 
-Classification: APPROVED IMPLEMENTATION DIRECTION / EVIDENCE; NON-AUTHORITATIVE.
-Date: 2026-09-12. C2 IN PROGRESS; C2-D1/D2 APPROVED; implementation and freeze evidence pending.
-C1 remains DONE and frozen. No C2 runtime or canonical wire is implemented here.
+Classification: IMPLEMENTATION / APPROVAL EVIDENCE; NON-AUTHORITATIVE.
+Date: 2026-09-12. C2 DONE; C3 READY, not started.
+DOC = CODE for C2 codecs and durable lifecycle. Real workloads/payment remain C3 work.
 
-## Scope and direct evidence
-
-The [C1 owner](../docs/authoritative/AURA_COMPUTE_NETWORK_V1.md) freezes request
-identity, core policy promises and result-to-miner side expansion. It explicitly
-leaves the result preimage, assignments, durable receipts and lifecycle to C2.
-[C0 approval](AURA_COMPUTE_NETWORK_V1.md#9-controlling-approval-record--d1d4-approved)
-requires one coordinator, independent compensation and hardware-neutral meaning.
-
-| Direct owner | Evidence and consequence |
-| --- | --- |
-| [Compute codec](../crates/aura_sdk_v1/src/compute_job.rs) | C1 request authentication, pure retry comparison and supported policies exist; no worker/result contract. Reuse unchanged. |
-| [EconomicJournalV1](../crates/aura_sdk_v1/src/economic/journal.rs) | Owns the existing SQLite connection. `admit_with_clock` debits burn; `finalize` advances the head. Ordinary compute must extend this owner with its own authenticated operations, not invoke those effects. |
-| [Miner coordination](../crates/aura_sdk_v1/src/economic/journal/miner.rs) | Atomic owner/obligation transactions and funding uniqueness exist for miner rounds. Compute reservations must also prevent cross-use of already reserved mining funds. |
-| [Miner publisher](../crates/aura_sdk_v1/src/economic/journal/miner/publication.rs) | `obligation` requires an Accepted miner round/attempt; payment also has an Aura anchor. It cannot directly publish ordinary compute compensation. No dummy winner or fake proof reference is permitted. |
-
-No Bitcoin migration or miner re-audit was performed. This is the first C2 design
-checkpoint after the full C1 freeze gate. Existing source and fixtures are untouched.
-
-## C2-D1 — Approved canonical receipt/result and authentication
-
-**Conflict:** C1 binds a 32-byte result commitment into signed mining inputs but
-deliberately does not define its preimage. New worker authentication and result
-bytes cannot be inferred from the existing requester or Aura authorization wire.
-
-**Recommendation:** one worker assignment, one worker receipt and one verifier-issued
-result, each referencing its upstream object by commitment. Bind job-owned fields
-transitively; do not repeat independently editable input/program/verifier fields.
-Signatures and measured hardware/time telemetry remain outside result identity.
-
-### Proposed exact bytes
-
-All domains below are literal ASCII without terminators. Each object starts with
-its domain and mandatory `u8(version=1)`. Digests and x-only keys are raw 32-byte
-values. Signatures are detached 64-byte BIP340 values, never inside hashed bytes.
-No optional fields, normalization, JSON wire, extra nonce or implicit versions.
-
-| Object | Fields after domain and version, in order | Total bytes |
-| --- | --- | --- |
-| `ComputeAssignmentV1` / `AURA_COMPUTE_ASSIGNMENT_V1` | `compute_job_commitment[32]`, `worker_key[32]` | 91 |
-| `ComputeReceiptV1` / `AURA_COMPUTE_RECEIPT_V1` | `assignment_commitment[32]`, `output_commitment[32]`, `execution_evidence_commitment[32]`, `resource_accounting_commitment[32]` | 152 |
-| `VerifiedComputeResultV1` / `AURA_COMPUTE_RESULT_V1` | `receipt_commitment[32]`, `verification_verdict=u8(1)` | 56 |
-| `ComputeCancelV1` / `AURA_COMPUTE_CANCEL_V1` | `compute_job_commitment[32]` | 55 |
-
-For assignment and receipt, their commitment is SHA256 of their complete canonical
-bytes. `compute_result_commitment` is SHA256 of the complete result bytes; it is the
-only verified-result commitment. Verdict 1 means accepted; every other value
-rejects in this verified-result type. Invalid work has a failure record, not a
-second form of verified result. Cancellation has no new canonical identifier.
-
-Use the existing C1 domain/length content framing for three new result content kinds:
-
-| Content kind | Domain | Exact payload |
-| --- | --- | --- |
-| Output | `AURA_COMPUTE_OUTPUT_V1` | Adapter-defined canonical output bytes |
-| Execution evidence | `AURA_COMPUTE_EXECUTION_EVIDENCE_V1` | Adapter-defined canonical evidence bytes |
-| Resource accounting | `AURA_COMPUTE_RESOURCE_ACCOUNTING_V1` | `01 || u64_le(input_bytes) || u64_le(output_bytes) || u64_le(evidence_bytes)`; exactly 25 bytes |
-
-The three resource counts are independently derived from the committed payloads,
-checked against the signed limits, and must match exactly. They are not worker
-runtime, FLOPs, power or hardware claims. No payment scales with these counters.
-Physical measurements stay in attributed implementation evidence. A valid proof
-does not establish device identity, resource enforcement or actual physical cost.
-
-The complete resolution path is:
-
-```text
-verified result -> receipt -> assignment -> frozen C1 job
-                   |                        |
-                   output/evidence/counts   input/program/adapter/verifier/policies
-```
-
-This binds all approved C0-D3 facts without copying upstream objects into downstream
-wires. Resolution must verify every content hash and relationship, including the
-requester's signature, assigned worker and pinned adapter/verifier. Merely hashing
-a fabricated `verification_verdict=1` does not make it an accepted result.
-
-The trusted coordinator independently runs the pinned verifier against immutable
-content. Only its successful internal verification path can finalize acceptance.
-Result consumers authenticate the coordinator's result signature and resolve the
-associated contracts/evidence. A boolean supplied by a worker or arbitrary customer
-verifier is insufficient. C2 uses explicitly test-only adapters; the real Priority 0
-backend and its approval remain C3.
-
-### Proposed detached signatures
-
-Each digest uses C1's tagged-SHA256 construction over that object's exact bytes.
-Reuse existing BIP340 primitives; none is an Authorization V2 message.
-
-| Signed object | Signing key | Tag |
-| --- | --- | --- |
-| Assignment acceptance | Assignment worker | `AURA_COMPUTE_ASSIGN_WORKER_V1` |
-| Durable assignment acknowledgement | Job coordinator | `AURA_COMPUTE_ASSIGN_COORDINATOR_V1` |
-| Receipt | Assigned worker | `AURA_COMPUTE_RECEIPT_SIGNATURE_V1` |
-| Verified result | Job coordinator | `AURA_COMPUTE_RESULT_SIGNATURE_V1` |
-| Cancellation | Job requester | `AURA_COMPUTE_CANCEL_SIGNATURE_V1` |
-
-The job already binds network, coordinator, namespace, requester and unique nonce.
-Assignment/receipt/result inheritance supplies that scope; no global replay claim
-or separate mining nonce is introduced. The worker signs voluntary acceptance of
-the exact job before durable assignment. The coordinator countersigns in the same
-transaction that acquires assignment. Workers execute only after authenticated
-acknowledgement. Signature re-randomization changes no object commitment.
-
-Coordinator-observed assignment/receipt/acceptance times are durable journal
-metadata. They enforce deadlines and retention but are excluded from R, preventing
-timestamp or signature variation from manufacturing result identities. Backend
-class, device/vendor, telemetry and measured capability evidence likewise remain
-outside R. Identical canonical result content produces identical R across equivalent
-backends. Different workers, actual outputs or canonical proof bytes are different
-content; hardware neutrality does not claim all randomized proofs are byte-identical.
-
-Capabilities are operational, bound to worker identity and the pinned adapter.
-Record CPU/GPU/FPGA/Aura-ASIC class, measured limits, supported isolation, measurement
-provenance and freshness. Self-declared performance is not sufficient eligibility.
-No network capability wire, public scheduler, device-specific job meaning or future
-ASIC instruction set is selected here. Unsupported privacy/isolation refuses work.
-
-**Alternative:** flatten job/result fields or include physical telemetry in R.
-Flattening duplicates ownership; telemetry changes identity across equivalent
-backends and gives an avoidable source of cheap result variation. Recommended:
-the referenced structure and deterministic byte-count accounting above.
-
-## C2-D2 — Approved assignment, receipt and reservation fencing
-
-**Conflict:** C1 fixes payment promises but not whether workers can be replaced or
-submit different receipt revisions under one paid job. These choices decide which
-work can earn compensation and cannot be treated as arbitrary storage details.
-
-**Recommendation:** one assignment and one immutable timely receipt per job in V1.
-No automatic replacement worker, lease recycling or first-to-finish competition.
-A fresh attempt after terminal failure requires a new requester-signed job/nonce
-and its own funding; no worker is silently assigned an unpaid replacement attempt.
-
-### Proposed transitions in EconomicJournalV1
-
-| Transition | Required behavior |
-| --- | --- |
-| Authenticated request -> funded/open | Reuse C1 request signature/replay checks; validate supported content, adapter and core policies. Reserve the full signed net compensation plus signed fee ceiling against verified customer custody backing before assignment. Use wide arithmetic and reject over-allocation; this is a reservation, not an Aura or synthetic balance. |
-| Open -> cancelled/expired | Requester-signed cancellation before assignment, or server-observed assignment expiry. Release the unused job reservation; refund eligibility is recorded separately from actual payment publication. Replay tombstone remains. |
-| Open -> assigned | Under one immediate transaction, check funding, capability support, worker opt-in/signature and C1 assignment budget; sample trusted time after acquiring the lock. Acquire exactly one worker and persist the coordinator acknowledgement atomically. |
-| Assigned -> receipt pending | Authenticate that worker, resolve exact assignment, enforce payload bounds and core/adaptor framing. Make complete immutable output/evidence durably available before receipt commit; sample receipt time under the write lock, strictly before `complete_by`. Persist receipt identity and time once. |
-| Assigned -> expired | Deadline passed with no durable timely receipt. No compute compensation; unused funding becomes releasable. A pending timely receipt prevents this transition. |
-| Receipt pending -> accepted/owed | Re-read immutable artifacts, run the pinned workload verifier and validate job/public-input/count bindings. Atomically persist result, coordinator signature, retention obligation and one full-net worker entitlement. No burn, authorization nonce, Head or miner winner is created. |
-| Receipt pending -> rejected | Definitive verifier rejection of the committed timely receipt earns no compensation. Different receipt bytes cannot replace it. Transport, storage or verifier-infrastructure failure is not proof of invalid work and leaves recovery pending. |
-| Accepted/owed -> publication pending | Future shared payment transport owns publication, replacement and confirmation. C2 may record an obligation but cannot mark it paid from a caller boolean or invented transaction ID. Fee shortfall never releases an earned entitlement or shortens required retention. |
-
-Same authenticated bytes retry idempotently, even after deadlines or response loss.
-Different worker assignments or receipt bytes conflict; they do not erase an earlier
-valid record. A losing assignment race is rejected before execution is authorized.
-Malformed/unauthenticated or incomplete submissions rejected before durable receipt
-creation do not consume the one receipt slot. After durable receipt commit, even
-an invalid proof is immutable and can terminally fail that requested attempt.
-
-The coordinator controls receipt time, not the worker clock or upload start. A hash,
-URI or partial upload alone is not durable output delivery. Artifact persistence
-must precede the receipt transaction; a crash may leave unreferenced staged objects,
-but never an accepted reference to a missing object. Live referenced content cannot
-be reclaimed while verification, required availability or payment is pending.
-Verification retries after a timely receipt can complete after the job deadline.
-No infrastructure timeout silently converts pending verification to unpaid failure.
-
-One same-journal reservation owner must reject overlap between compute assignments
-and miner funding. Keep refund/fee remainder, earned net entitlement and Bitcoin
-transaction observations separate. No duplicate obligation can result from retry,
-restart, replacement or reorg. Reorg may invalidate backing or require payment
-recovery; it cannot erase an earned result or invoke another burn/head transition.
-An unsafe funding observation stops new assignment and preserves recovery evidence.
-
-No concrete outpoint, payout script, transport, confirmation count, fee default,
-retention default or production capacity is selected. The worker key identifies
-the beneficiary; it does not silently select a Bitcoin payout script. C2's tests
-can exercise custody and publication interfaces with clearly identified fixtures;
-real payment discharge must use the reviewed shared transport in later work.
-
-**Alternative:** allow replacement leases or multiple durable receipt revisions.
-That needs extra fencing, paid-work attribution and deadline arbitration. It can
-improve recovery/worker correction but expands the economic contract. Recommended:
-the single-assignment/receipt model, with its explicit lost-work/retry limitation.
-
-## Implementation order after approval
-
-1. Rust/TS assignment, receipt, result, accounting and cancellation codecs and
-   distinct signatures; exact positive/negative vectors. Preserve the entire C1 gate.
-2. Add explicit compute schema installation/audit to EconomicJournalV1; implement
-   authenticated request replay, custody reservations, cancellation and assignment.
-   No silent migration and no separate database or generic Aura debit path.
-3. Add durable artifact receipt and internal adapter-verification boundary, then
-   atomic result/retention/entitlement finalization. No public `accept(true)` escape.
-4. Test restart, competing workers, cancellation/assignment races, duplicate receipts,
-   byte mutations, invalid proofs, corrupt/missing artifacts, time boundaries,
-   pending verification, failed infrastructure and atomic rollback. Test funding
-   cross-use with miner obligations and unchanged burn/head/authorization state.
-5. Record bounded C2 evidence, promote only approved definitions into the existing
-   compute owner and relevant coordinator owner, then mark C2 DONE/C3 READY and stop.
-
-C2 closes only when those tests establish durable behavior; this proposal does not
-close C2. It does not select a real prover backend or claim useful compute, safe
-public execution, live payment, fairness against a dishonest coordinator or a
-succinct/zero-knowledge Aura Storm proof.
-
-## Validation of this checkpoint
-
-Direct-owner inspection and proposed layout arithmetic only. No Rust/TS C2 parity
-or durable lifecycle test is claimed before contract approval. Existing C1/Miner
-gates were not repeated for this documentation-only checkpoint. Local links and
-the proposed byte lengths are checked before recording the decision request.
+Definitions now live solely in the registered
+[compute owner](../docs/authoritative/AURA_COMPUTE_NETWORK_V1.md#c2-assignment-receipt-and-verified-result),
+with transaction ownership in the
+[existing ledger owner](../docs/authoritative/AURA_LEDGER_AND_BURN_V1.md#useful-compute-coordinator-extension).
+The prior proposal is retained in repository history, not as parallel authority.
 
 ## Controlling approval
 
-The user explicitly APPROVED C2-D1/D2 as documented, including distinct object
-bytes/signature domains, one immutable assignment/receipt and full-net entitlement.
-The user clarified that the full compensation plus fee reservation is acquired
-**at assignment**. An open registered request is not a funded or assigned job.
-No same-job reassignment/replacement is allowed; terminal retry needs a new signed
-job and nonce, funding, assignment and receipt. Exact-transition retries remain
-idempotent. This approval supersedes the earlier table's pre-assignment reservation
-timing. Existing C0/C1/Miner/Aura meanings remain unchanged.
+The user APPROVED C2-D1 and C2-D2 as documented, then explicitly clarified:
 
-Freeze requires passing Rust/TS parity, mutation/negative vectors, replay,
-funding and crash/recovery tests. C3 remains blocked until C2 is complete.
+- Distinct assignment, receipt and verified-result objects/signature domains; one
+  canonical result commitment, with operational hardware/time telemetry outside it.
+- Exactly one durable assignment and immutable timely receipt for each signed job.
+- Full net compensation plus the signed fee allowance is reserved **at assignment**.
+  An open registered request alone is not funded and authorizes no execution.
+- Timely pending verification keeps funding reserved. Accepted work earns full net
+  compensation. Terminal retry requires a new signed job/nonce and new lifecycle.
+- Exact-transition retries are idempotent; they cannot create duplicate assignments,
+  receipts, entitlements or payments. A replayed acknowledgement is not a new lease.
+- Existing C1/Miner/Aura semantics remain unchanged. Freeze is conditional on parity,
+  negative vectors, replay, funding and crash/recovery evidence.
+
+The at-assignment timing supersedes the earlier draft table's pre-assignment wording.
+No payout script, concrete funding coin, deployment confirmation count, fee ceiling,
+retention default, live monetary workload or public worker execution was selected.
+
+## Implementation
+
+- [Rust lifecycle owner](../crates/aura_sdk_v1/src/compute_result.rs) and
+  [TypeScript counterpart](../packages/aura_sdk_v1_ts/src/computeResultV1.ts) implement
+  strict encodings, content commitments, separate signature roles and resolved
+  lineage. Shared C1 content framing was factored into one helper without changing
+  its bytes. Canonical objects have no serde/JSON wire or telemetry fields.
+- [Journal extension](../crates/aura_sdk_v1/src/economic/journal/compute/mod.rs)
+  explicitly installs compute state inside EconomicJournalV1. Complete bounded
+  content/output/evidence are stored in the existing SQLite transaction system.
+  There is no second ledger, authorizer, filesystem execution area or Bitcoin writer.
+- [Operations](../crates/aura_sdk_v1/src/economic/journal/compute/operations.rs)
+  enforce authenticated registration, storage-budget preflight, measured-capability
+  eligibility, single assignment, receipt immutability, trusted receipt time,
+  internal verification, cancellation/expiry and atomic result/entitlement retention.
+  No public accepted=true or paid=true method exists.
+- [Custody token](../crates/aura_sdk_v1/src/economic/journal/compute/funding.rs)
+  validates trusted Core observations and locks explicit customer backing. The token
+  cannot be fabricated through client deserialization. Funding reserves net and fee
+  separately, including exactly zero fees. It does not construct a payment.
+- [Shared ownership guard](../crates/aura_sdk_v1/src/economic/journal/funding_registry.rs)
+  prevents compute/miner backing collisions in both directions. Existing miner open
+  and funding-release paths gained only this guard; shared exact amount/network
+  helpers retain their original behavior.
+
+Opening validates schema, configuration, canonical bytes/signatures, content and
+index consistency, replay scopes, reservation ownership, lifecycle and entitlement.
+Infrastructure errors preserve pending verification and its reservation. Only a
+registered verifier's rejection creates an invalid-result terminal state. Earned
+funding cannot be released; no customer acknowledgement can veto acceptance.
+
+## Validation evidence
+
+Reproduce: `node scripts/verify_compute_result_v1.mjs`.
+[Recorded full gate](compute_network_v1/c2_freeze_results.json): PASS, nine stages.
+It embeds the passing C1 gate and records commands, environment and fixture hashes.
+
+| Check | Passed |
+| --- | --- |
+| Rust C2 canonical vectors/mutations | 5 |
+| Independent TS C2 parity/mutations | 6 |
+| Rust C2 journal lifecycle | 12 |
+| Compile-fail: backing cannot deserialize client claims | 1 |
+| Existing miner journal regression | 32 |
+| Existing economic journal regression | 12 |
+| Frozen C1/M2 gate | 10 + 9 Rust; 13 + 10 TS |
+| Affected SDK library/examples, TS syntax and public exports | Passed |
+
+The 12 journal tests include one subprocess entry point and a parent test that
+executes 11 real process-exit cases. Counts do not substitute for their coverage.
+Environment: macOS arm64, Node v22.22.2, rustc 1.88.0. Native Node TS checks are not
+represented as a standalone tsc typecheck. No full Bitcoin migration gate was rerun.
+
+[Shared vectors](../fixtures/compute_result_v1/result_vectors_v1.json) cover three
+resolved assignment/receipt/result chains, all detached signature roles, cancellation,
+resource-accounting extremes and existing C1 result-to-signed-miner side expansion.
+Rust sha2/libsecp256k1 and TS Node SHA256/Noble independently reproduce complete
+byte strings, signatures, commitments and mutation classifications. Test-only
+requester/worker keys and amounts are not production settings or real accepted work.
+
+Security/failure evidence:
+
+- Every lifecycle byte and detached signature byte mutated; all truncations,
+  trailing bytes, invalid versions/verdicts/keys and TS extra/missing/accessor/coercion
+  cases rejected or detected through binding. Same-key cross-role signatures fail.
+- Wrong job, worker, program, receipt, output/evidence and resource counts reject.
+  Signature re-randomization changes no result commitment. Telemetry is rejected
+  from canonical objects, not silently normalized away.
+- New jobs acquire funds at assignment; duplicate assignment, competing workers,
+  cancellation/assignment races, distinct receipt races and concurrent verifiers
+  cannot create a second owner/result/entitlement. Failed jobs cannot recycle.
+- Exact retries survive restart and deadlines. A timely receipt survives expiry and
+  verifier infrastructure failure. Late/partial/unauthenticated input cannot consume
+  a receipt slot; an immutable invalid proof cannot be replaced with a valid one.
+- Wrong network, spent/unsafe/ambiguous/malformed backing, lock failure, insufficient
+  net-plus-fee, zero fee and oversized sums checked. Real journal APIs reject both
+  compute-first and miner-first collisions using explicit Core test responses.
+- Process exit before/after reservation, assignment commit, receipt commit,
+  during verification, after result, after entitlement and around final commit:
+  reopening preserves the correct pending/terminal state and resumes once.
+- Corrupt record/index/artifact, missing entitlement and partial schema fail closed.
+  No split result/entitlement survives restart. Host storage capacity and assignment
+  timing reject before funding or worker execution authorization. Slow custody
+  verification cannot backdate assignment: trusted time is checked again before
+  persistence, and deadline crossing or clock regression aborts the assignment.
+- Ordinary compute preserves Aura ledger balances, prior head, economic attempts,
+  authorization nonce count and Bitcoin outbox. No automatic burn or Head advance.
+
+## Frozen baseline and remaining boundaries
+
+C1/M2 fixtures and all earlier Aura fixtures remain byte-identical. HASH_V2, field,
+Storm/TRACE_ROOT, proof/material/FractalKey/proof_hash, Authorization V2, burn tariff,
+Head V2, UDOT and Bitcoin anchor definitions/bytes are unchanged. The existing SDK
+and journal received additive compute integration only. No mining execution change.
+
+C2 uses a sealed deterministic replay adapter compiled exclusively for tests.
+Production has no registered workload until C3 supplies the reviewed real proving
+backend, capability/isolation checks and GPU path. This is not a ZK or useful-work
+performance claim. Customer-facing authenticated delivery routing and actual compute
+payment publication/discharge remain unimplemented; accepted obligations stay owed.
+No caller can declare them paid. Real payment must extend the existing shared owner.
+
+Core RPC fixtures establish the custody adapter checks, not live Bitcoin funding.
+The host must attribute customer custody correctly and reconcile wallet locks after
+ambiguous commits/restart. Whole coherent database rollback needs verified external
+backup provenance; checksums do not establish anti-rollback or trustless escrow.
+No live funds, public worker execution or deployment defaults were activated.
+
+Local links, authoritative ownership, proposed/frozen layout correspondence and
+whitespace are checked at closure. No additional benchmark was required in C2;
+recorded gate timings are test execution evidence only.
+
+## Milestone boundary
+
+C0 DONE; C1 DONE; C2 DONE; C3 READY; C4–C10 BLOCKED. Stop here.
+C3 is the next Priority 0 real proving adapter milestone. It was not started.
