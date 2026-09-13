@@ -1,7 +1,7 @@
 # C3 — Real proving adapter and compute payment decisions
 
 Classification: APPROVAL / IMPLEMENTATION-READINESS EVIDENCE; NON-AUTHORITATIVE.
-Date: 2026-09-13. Status: C3-D1/D2 APPROVED; USER_DECISION C3-METAL-1.
+Date: 2026-09-13. Status: C3-D1/D2 APPROVED; C3-METAL-1 qualification APPROVED; adoption pending.
 No adapter, payment transport or new canonical bytes are activated by this report.
 
 ## Controlling approval
@@ -241,8 +241,18 @@ even when the linked round never opens, expires or produces no qualified candida
 
 ## C3-METAL-1 — Candidate cannot meet the approved Metal requirement
 
-Status: USER_DECISION, discovered after D1/D2 approval. This is a new backend
-qualification boundary, not a request to reapprove the workload or payment model.
+Status: bounded qualification APPROVED after this finding. Adoption remains a
+separate USER_DECISION; the workload/payment approvals are unchanged.
+
+Controlling qualification scope: consider official stable/releases first, official
+upstream revisions second, and minimal restoration only if no qualified upstream
+revision exists. Compare every serious candidate against v3.0.5's proof format,
+verifier/security, image/control parameters, halt/journal, dev rejection, bounded
+parsing, assumptions, randomness and toolchain. Build/prove on CPU and actual Metal
+where feasible, independently verify and measure both. The supplied
+`3bbcd44d6459b9ef6ac0df3846dc9215514934e8` is a candidate only. Return one immutable
+pin before adoption. No Aura dependency/canonical change, adapter or C3 closure is
+authorized by qualification; no public workers, live funds or CPU-only completion.
 
 The stock v3.0.5 tag resolves to commit
 `8eb06ab020a92dc5b63ba6dd0836d432aba6d890`. Targeted reads of ten upstream files

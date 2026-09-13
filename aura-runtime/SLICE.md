@@ -3,7 +3,7 @@
 Classification: TOOLING / IMPLEMENTATION EVIDENCE; not protocol authority.
 Runtime: AURA Runtime V4
 Program: Aura Compute Network V1, master goal C0–C10
-Current milestone: C3 — IN PROGRESS (D1/D2 APPROVED; USER_DECISION C3-METAL-1)
+Current milestone: C3 — IN PROGRESS (C3-METAL-1 qualification APPROVED; adoption NOT approved)
 Last updated: 2026-09-13
 Next node: C4 — BLOCKED until C3 acceptance; no later READY node
 
@@ -31,7 +31,7 @@ No public worker execution or live monetary activation is authorized.
 | C0 | DONE | D1–D4 explicitly approved as amended; controlling approval recorded in C0 evidence. |
 | C1 | DONE | C1-D1–D3 and C1-P1 APPROVED; job/core schemas, authentication and signed-side binding frozen with independent Rust/TS vectors. |
 | C2 | DONE | C2-D1/D2 APPROVED; exact lifecycle codecs, durable assignment/reservation/receipt/result and full gate passed. |
-| C3 | IN PROGRESS | D1/D2 APPROVED; stock v3.0.5 Metal incompatibility confirmed. Await C3-METAL-1 before candidate change/contract freeze. No production adapter registered. |
+| C3 | IN PROGRESS | D1/D2 and bounded C3-METAL-1 qualification APPROVED. Evaluate official releases, then exact upstream revisions; return one immutable pin for separate adoption approval. No production adapter registered. |
 | C4 | BLOCKED | C3: deterministic/open-model inference. |
 | C5 | BLOCKED | C4: molecular, media and Monte Carlo adapters, one at a time. |
 | C6 | BLOCKED | C5: generic sandboxed CPU/GPU worker. |
@@ -105,9 +105,11 @@ records controlling approval and the new candidate qualification decision.
   files show segment and recursion selectors using CPU without CUDA; their Metal
   branches are commented out and their circuit HALs have no active Metal modules.
   A generic ZKP Metal HAL exists but is not selected by those circuit constructors.
-- C3-METAL-1 USER_DECISION: authorize narrow qualification of another exact upstream
-  revision, then approve its pin/security/format differences before adoption; a
-  reviewed v3.0.5 Metal restoration is an alternative. Neither change was made.
+- C3-METAL-1 qualification APPROVED: official stable/release first, official commit
+  second, restoration only if no qualified upstream revision exists. The supplied
+  `3bbcd44d6459b9ef6ac0df3846dc9215514934e8` is a candidate, not an approved pin.
+  Source/security comparison and isolated CPU/actual-Metal proof probes precede
+  an immutable-pin USER_DECISION. No Aura dependencies or canonical bytes may change.
 - No proof/backend runtime, memory/time measurement, adapter, payment or mining
   integration was run. Current code cannot discharge ordinary compute entitlement.
   Follow the approved bounded order after the new decision; C4 remains blocked.
@@ -117,9 +119,10 @@ records controlling approval and the new candidate qualification decision.
 
 ## Stop condition
 
-Current stop: USER_DECISION C3-METAL-1, required by the controlling D1 clarification.
-D1/D2 remain approved. Do not change the candidate or weaken Metal without the
-new decision. C3 closes only with real GPU proof/verification, authenticated
+Current work: bounded qualification only, outside Aura's dependency tree. Stop with
+one exact candidate and evidence for separate adoption approval. No weakening of
+Metal, adapter registration or live activation. D1/D2 remain approved.
+C3 closes only with real GPU proof/verification, authenticated
 customer delivery, independent compute payment, optional unchanged mining and
 end-to-end/recovery evidence. Then mark C3 DONE/C4 READY and stop this node.
 Do not activate live funds or public workers.
