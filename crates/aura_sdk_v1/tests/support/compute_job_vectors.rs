@@ -222,3 +222,67 @@ pub fn snapshot() -> Value {
         "contents":ComputeContentKindV1::ALL.map(|k| json!({"domain":String::from_utf8(k.domain().to_vec()).unwrap(),"payload_hex":hex(&payload(k)),"commitment_hex":hex(&content(k))})),
         "bindings":bindings})
 }
+
+/// C1-P1 contracts, with test-only numeric parameters and synthetic adapter data.
+pub fn core_policy_snapshot() -> Value {
+    let fixed = [
+        ComputeContentKindV1::PrivacyPolicy,
+        ComputeContentKindV1::HardwareRequirements,
+        ComputeContentKindV1::DataRights,
+    ];
+    let profiles: Vec<Value> = fixed.iter().map(|&kind| {
+        let p = compute_fixed_core_policy_payload_v1(kind).unwrap();
+        json!({"domain":String::from_utf8(kind.domain().to_vec()).unwrap(),"payload_hex":hex(&p),"commitment_hex":hex(&compute_content_commitment_v1(kind,&p).unwrap())})
+    }).collect();
+    let mut payments = Vec::new();
+    for (fee, seconds) in [
+        (0, 1),
+        (42, 3600),
+        (9007199254740993, 9007199254740995),
+        (u64::MAX, u64::MAX),
+    ] {
+        let terms = ComputePaymentTermsV1 {
+            max_payment_fee_satoshis: fee,
+            result_availability_seconds: seconds,
+        };
+        let mut checks = vec![(0, true), (fee, true)];
+        if fee < u64::MAX {
+            checks.push((fee + 1, false));
+        }
+        let mut jobs = Vec::new();
+        for privacy_class in [0, 1] {
+            let mut j = job();
+            j.privacy_class = privacy_class;
+            j.privacy_policy_commitment = compute_content_commitment_v1(fixed[0], &[1]).unwrap();
+            j.hardware_requirements_commitment =
+                compute_content_commitment_v1(fixed[1], &[1]).unwrap();
+            j.data_rights_commitment = compute_content_commitment_v1(fixed[2], &[1]).unwrap();
+            j.payment_terms_commitment = terms.commitment().unwrap();
+            jobs.push(job_record(
+                if privacy_class == 0 {
+                    "public"
+                } else {
+                    "sandboxed"
+                },
+                &j,
+                3,
+            ));
+        }
+        let b = terms.canonical_bytes().unwrap();
+        let mutation_decodes: String = (0..17)
+            .map(|i| {
+                let mut v = b;
+                v[i] ^= 1;
+                if ComputePaymentTermsV1::decode(&v).is_ok() {
+                    '1'
+                } else {
+                    '0'
+                }
+            })
+            .collect();
+        payments.push(json!({"max_payment_fee_satoshis":fee.to_string(),"result_availability_seconds":seconds.to_string(),
+            "payload_hex":hex(&b),"commitment_hex":hex(&terms.commitment().unwrap()),"single_bit_mutation_decodes":mutation_decodes,
+            "fee_checks":checks.iter().map(|(fee,ok)|json!({"fee_satoshis":fee.to_string(),"allowed":ok})).collect::<Vec<_>>(),"jobs":jobs}));
+    }
+    json!({"classification":"C1-P1 CORE POLICY CONTRACT VECTORS; TEST PARAMETERS ONLY; NO WORKLOAD OR PAYMENT EXECUTION","fixed_profiles":profiles,"payments":payments})
+}

@@ -2,6 +2,7 @@
 
 pub mod authorization;
 pub mod compute_job;
+pub mod compute_result;
 pub mod economic;
 pub mod miner;
 pub mod miner_search;

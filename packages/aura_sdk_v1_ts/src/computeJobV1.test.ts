@@ -29,7 +29,7 @@ test('independent TS construction equals every Rust-generated canonical byte vec
   assert.equal(Buffer.from(c.encodeComputeJobV1(job())).readBigUInt64LE(473),10000n);
 });
 test('every field occupies its exact approved byte offset and width',()=>{
-  const spec=readFileSync(new URL('../../../reports/AURA_COMPUTE_JOB_V1_C1_DESIGN.md',import.meta.url),'utf8');
+  const spec=readFileSync(new URL('../../../docs/authoritative/AURA_COMPUTE_NETWORK_V1.md',import.meta.url),'utf8');
   const rows=[...spec.matchAll(/^\| (\d+) \| (\d+) \| `([^`]+)` \|/gm)];
   const j=job(), b=Buffer.from(c.encodeComputeJobV1(j));let end=0;
   assert.equal(rows.length,30);
@@ -122,9 +122,74 @@ test('result binding requires the exact signed sides and existing miner verifica
     const blocks=[];for(let i=1;i<=4;i++){const counter=Buffer.alloc(4);counter.writeUInt32LE(i);blocks.push(createHash('sha256').update(Buffer.concat([Buffer.from('AURA_COMPUTE_MINER_SIDE_V1'),Uint8Array.of(0),r,counter])).digest());}
     assert.throws(()=>c.validateComputeMinerBindingV1(j,{...miner,sideA:Buffer.concat(blocks).subarray(0,110)},r));
     const changed={...miner,sideA:Uint8Array.from(miner.sideA)};changed.sideA[109]^=1;assert.throws(()=>c.validateComputeMinerBindingV1(j,changed,r));
+    const padded=new Uint8Array(110);padded.set(r);assert.throws(()=>c.validateComputeMinerBindingV1(j,{...miner,sideA:padded},r));
     assert.throws(()=>c.validateComputeMinerBindingV1({...j,miningMode:0},miner,r));
     assert.throws(()=>c.validateComputeMinerBindingV1(j,baseMiner(),r));
     for(const lane of [2,-1,-0,0.5,NaN])assert.throws(()=>c.computeMinerSideV1(r,lane));
     for(const bad of [r.subarray(1),new Uint8Array(33),hex(r)])assert.throws(()=>c.computeMinerSideV1(bad as any,0));
   }
+});
+
+const coreVector=JSON.parse(readFileSync(new URL('../../../fixtures/compute_job_v1/core_policy_vectors_v1.json',import.meta.url),'utf8'));
+test('independent core policy bytes, commitments, signatures and net-fee semantics',async()=>{
+  const {corePolicySnapshot}=await import('../tests/support/computeJobVectorsV1.ts');
+  assert.deepEqual(corePolicySnapshot(),coreVector);
+  const domains=new Set();
+  for(const kind of ['PRIVACY_POLICY','HARDWARE_REQUIREMENTS','DATA_RIGHTS'] as const){
+    const p=c.computeFixedCorePolicyPayloadV1(kind);assert.equal(hex(p),'01');c.validateComputeFixedCorePolicyV1(kind,p);
+    domains.add(hex(c.computeContentCommitmentV1(kind,p)));
+  }
+  assert.equal(domains.size,3);
+  for(const x of coreVector.payments){
+    const p=unhex(x.payload_hex),t=c.decodeComputePaymentTermsV1(p);assert.equal(p.length,17);assert.equal(p[0],1);
+    assert.equal(t.maxPaymentFeeSatoshis.toString(),x.max_payment_fee_satoshis);assert.equal(t.resultAvailabilitySeconds.toString(),x.result_availability_seconds);
+    assert.equal(hex(c.encodeComputePaymentTermsV1(t)),x.payload_hex);assert.equal(hex(c.computePaymentTermsCommitmentV1(t)),x.commitment_hex);
+    for(const r of x.jobs){const j=c.decodeComputeJobV1(unhex(r.job_hex));assert.deepEqual(c.verifyComputeCorePoliciesV1(j,Uint8Array.of(1),Uint8Array.of(1),Uint8Array.of(1),p),t);
+      c.verifyComputeRequestV1(j,unhex(r.signature_hex));assert.equal(j.compensationSatoshis,10000n);
+    }
+    for(const check of x.fee_checks){const f=()=>c.validateComputePublicationFeeV1(t,BigInt(check.fee_satoshis));if(check.allowed)f();else assert.throws(f);}
+  }
+});
+test('core policy framing, every payment byte and zero availability fail closed',()=>{
+  for(const kind of ['PRIVACY_POLICY','HARDWARE_REQUIREMENTS','DATA_RIGHTS'] as const){
+    for(let tag=0;tag<=255;tag++){const f=()=>c.validateComputeFixedCorePolicyV1(kind,Uint8Array.of(tag));if(tag===1)f();else assert.throws(f);}
+    for(const p of [new Uint8Array(),Uint8Array.of(1,0),Uint8Array.of(0,1),Buffer.from('01')])assert.throws(()=>c.validateComputeFixedCorePolicyV1(kind,p));
+  }
+  for(const kind of ['INPUT','PAYMENT_TERMS','unknown'])assert.throws(()=>c.computeFixedCorePolicyPayloadV1(kind as any));
+  for(const x of coreVector.payments){
+    const b=unhex(x.payload_hex),j=c.decodeComputeJobV1(unhex(x.jobs[0].job_hex));
+    for(let n=0;n<17;n++)assert.throws(()=>c.decodeComputePaymentTermsV1(b.subarray(0,n)));
+    for(const n of [1,17])assert.throws(()=>c.decodeComputePaymentTermsV1(Buffer.concat([b,Buffer.alloc(n)])));
+    for(let tag=0;tag<=255;tag++){const bad=Uint8Array.from(b);bad[0]=tag;const f=()=>c.decodeComputePaymentTermsV1(bad);if(tag===1)f();else assert.throws(f);}
+    for(let i=0;i<17;i++){const bad=Uint8Array.from(b);bad[i]^=1;let decoded;try{decoded=c.decodeComputePaymentTermsV1(bad);}catch{}
+      assert.equal(!!decoded,x.single_bit_mutation_decodes[i]==='1');
+      assert.throws(()=>c.verifyComputeCorePoliciesV1(j,Uint8Array.of(1),Uint8Array.of(1),Uint8Array.of(1),bad));
+      if(decoded)assert.notEqual(hex(c.computePaymentTermsCommitmentV1(decoded)),hex(j.paymentTermsCommitment));
+    }
+    const zero=Uint8Array.from(b);zero.fill(0,9);assert.throws(()=>c.decodeComputePaymentTermsV1(zero));
+  }
+  const t={maxPaymentFeeSatoshis:0n,resultAvailabilitySeconds:1n};c.validateComputePublicationFeeV1(t,0n);assert.throws(()=>c.validateComputePublicationFeeV1(t,1n));
+});
+test('core policy TS API rejects coercion, omitted/extra fields and accessors',()=>{
+  const t={maxPaymentFeeSatoshis:0n,resultAvailabilitySeconds:1n};
+  for(const f of Object.keys(t))for(const value of [0,1,'1',null,undefined,-1n,1n<<64n])assert.throws(()=>c.encodeComputePaymentTermsV1({...t,[f]:value} as any));
+  for(const f of Object.keys(t)){const missing={...t} as any;delete missing[f];assert.throws(()=>c.encodeComputePaymentTermsV1(missing));}
+  assert.throws(()=>c.encodeComputePaymentTermsV1({...t,profile:1} as any));
+  const accessor={...t};Object.defineProperty(accessor,'maxPaymentFeeSatoshis',{get(){throw Error('must not execute');}});assert.throws(()=>c.encodeComputePaymentTermsV1(accessor),/noncanonical/);
+  assert.throws(()=>c.encodeComputePaymentTermsV1({...t,resultAvailabilitySeconds:0n}));
+  for(const bad of ['01',[],null])assert.throws(()=>c.validateComputeFixedCorePolicyV1('PRIVACY_POLICY',bad as any));
+});
+test('hash equality cannot manufacture a supported policy or privacy capability',()=>{
+  const p=unhex(coreVector.payments[0].payload_hex),j=c.decodeComputeJobV1(unhex(coreVector.payments[0].jobs[0].job_hex)),one=Uint8Array.of(1);
+  for(const privacyClass of [2,3,4]){const job={...j,privacyClass};c.encodeComputeJobV1(job);assert.throws(()=>c.verifyComputeCorePoliciesV1(job,one,one,one,p));}
+  const kinds=['PRIVACY_POLICY','HARDWARE_REQUIREMENTS','DATA_RIGHTS','PAYMENT_TERMS'] as const;
+  const fields=['privacyPolicyCommitment','hardwareRequirementsCommitment','dataRightsCommitment','paymentTermsCommitment'] as const;
+  for(let slot=0;slot<4;slot++){
+    const bad=slot===3?Uint8Array.from(p):Uint8Array.of(2);bad[0]=2;
+    const changed={...j,[fields[slot]]:c.computeContentCommitmentV1(kinds[slot],bad)};
+    c.verifyComputeContentV1(changed,kinds[slot],bad);
+    const ps=[one,one,one,p];ps[slot]=bad;assert.throws(()=>c.verifyComputeCorePoliciesV1(changed,ps[0],ps[1],ps[2],ps[3]));
+  }
+  assert.throws(()=>c.verifyComputeCorePoliciesV1({...j,privacyPolicyCommitment:j.hardwareRequirementsCommitment,hardwareRequirementsCommitment:j.privacyPolicyCommitment},one,one,one,p));
+  assert.throws(()=>c.verifyComputeCorePoliciesV1(job(),one,one,one,p));
 });

@@ -4,6 +4,11 @@ mod support;
 fn main() {
     println!(
         "{}",
-        serde_json::to_string_pretty(&support::snapshot()).unwrap()
+        serde_json::to_string_pretty(&if std::env::args().any(|a| a == "--core-policies") {
+            support::core_policy_snapshot()
+        } else {
+            support::snapshot()
+        })
+        .unwrap()
     );
 }

@@ -3,9 +3,9 @@
 Classification: TOOLING / IMPLEMENTATION EVIDENCE; not protocol authority.
 Runtime: AURA Runtime V4
 Program: Aura Compute Network V1, master goal C0–C10
-Current milestone: C1 — READY (design begun; USER_DECISION before freeze)
+Current milestone: C2 — IN PROGRESS (approved worker/result implementation)
 Last updated: 2026-09-12
-Next node: C1 design; C2 remains BLOCKED
+Next node: C2 implementation and freeze gate; C3 remains BLOCKED
 
 ## Mission and frozen baseline
 
@@ -29,8 +29,8 @@ No public worker execution or live monetary activation is authorized.
 | ID | State | Dependency / bounded output |
 | --- | --- | --- |
 | C0 | DONE | D1–D4 explicitly approved as amended; controlling approval recorded in C0 evidence. |
-| C1 | READY — DESIGN ONLY | C0 satisfied. Contract candidate prepared; C1-D1/D2/D3 review required before freeze or implementation. |
-| C2 | BLOCKED | C1: worker/result contracts and independent compute-payment state machine. |
+| C1 | DONE | C1-D1–D3 and C1-P1 APPROVED; job/core schemas, authentication and signed-side binding frozen with independent Rust/TS vectors. |
+| C2 | IN PROGRESS | C1 complete. C2-D1/D2 APPROVED; implementation and freeze gate pending. |
 | C3 | BLOCKED | C2: real GPU-oriented ZK proving, verification, delivery, payment and optional mining binding; minimal isolation required. |
 | C4 | BLOCKED | C3: deterministic/open-model inference. |
 | C5 | BLOCKED | C4: molecular, media and Monte Carlo adapters, one at a time. |
@@ -42,21 +42,29 @@ No public worker execution or live monetary activation is authorized.
 
 ## Current evidence
 
-[C0 architecture and approval record](../reports/AURA_COMPUTE_NETWORK_V1.md)
-records the user's D1–D4 amendments, not blanket approval of the earlier proposal.
-[C1 design candidate](../reports/AURA_COMPUTE_JOB_V1_C1_DESIGN.md) begins the next
-node without adding SDK code, an adapter, a journal migration or active authority.
+[C0 approval record](../reports/AURA_COMPUTE_NETWORK_V1.md) and
+[C1 freeze evidence](../reports/AURA_COMPUTE_JOB_V1_C1_DESIGN.md) retain decisions
+and implementation evidence. The registered
+[compute owner](../docs/authoritative/AURA_COMPUTE_NETWORK_V1.md) owns definitions.
 
-- Useful completion does not automatically burn or advance Head V2. The sole
-  EconomicJournalV1 owns authenticated additive compute admission/acceptance.
-- Result binding must enter signed J before qualification. The prior M-only
-  recommendation is superseded; existing round opening accepts both side inputs.
-- C1 proposes a 546-byte job, explicit commitments/signature/replay and fixed net
-  BTC compensation. Funding/payment transport remains outside job identity.
-- C1 proposes one result-to-signed-side expansion. [Draft binding vectors](../reports/compute_network_v1/c1_binding_candidate_vectors.json)
-  are review evidence only, not frozen fixtures or verified Aura results.
-- C1 is not DONE: proposed bytes, policy details and production Rust/TS parity
-  still require resolution. No Miner/Bitcoin runtime gate is needed for this design.
+- Exact request bytes, signatures/replay comparison, core policy schemas,
+  compensation/fee vectors and result-to-signed-miner binding pass independently
+  in Rust and TS. Unsupported profiles/privacy reject even if hashes match.
+- [C1 gate](../scripts/verify_compute_job_v1.mjs): 10 Rust C1 + 9 M2 and 13 TS C1
+  + 10 M2 tests pass; affected SDK/examples compile and Node syntax/exports pass.
+  [Recorded result](../reports/compute_network_v1/c1_freeze_results.json): PASS.
+  No standalone tsc, journal, adapter or Bitcoin gate claimed.
+- All pre-existing Aura/Miner owners and fixtures are unchanged. Original C1
+  vectors are preserved; approved core-policy vectors are additive.
+- No assignment, durable compute reservation, result verdict, output delivery or
+  payment state machine was added. Approved lifecycle enforcement belongs to C2.
+
+C2 direct-owner inspection confirms the existing admission method burns Aura and
+the publisher requires an Accepted miner winner. Ordinary compute needs an additive
+extension inside EconomicJournalV1. No existing economic path is being repurposed.
+[C2 decision proposal](../reports/AURA_COMPUTE_C2_CONTRACT_DECISIONS.md) defines the
+smallest outstanding receipt/result and assignment/reservation choices. Layouts and
+local links checked; no C2 source, fixtures or durable state implemented yet.
 
 ## Decisions
 
@@ -69,13 +77,20 @@ See the C0 record for the controlling approval and C1 for new contract decisions
 | D3 | One result commitment binding the required result facts; one vector-frozen derivation into existing signed MinerJobV1 inputs before qualification. |
 | D4 | Core owns common envelopes/coordination/accounting; adapters own workload semantics; backends are replaceable; requester retains content rights by default. |
 
-C1-D1 (canonical envelope/authentication), C1-D2 (fixed net price/transport
-separation) and C1-D3 (exact side expansion) are UNAPPROVED design candidates.
-Core policy schemas remain to be specified before C1 freeze. C0 approval does not
-authorize unspecified C1 bytes, new winner rules, confidential execution or live funds.
+C1-D1–D3 and C1-P1 are APPROVED. Freeze was conditional on full C1 validation;
+that gate passed. No unresolved C1 semantic decision remains. Policy payloads and
+lifecycle promises live in the compute owner, not this execution register.
+No deployment values, payout transport, live funds or public execution approved.
+
+## C2 approval
+
+C2-D1/D2 APPROVED as documented, with the user's clarification that full net
+compensation plus signed fee ceiling is reserved at assignment. One immutable
+assignment/receipt; exact transition retries only. No canonical freeze yet.
 
 ## Stop condition
 
-C0 is closed and C1 design has begun as requested. Stop for the genuinely new C1
-contract choices; no canonical freeze, SDK implementation, C2 advancement or
-authority promotion in this design-only execution.
+Complete C2 codecs, journal lifecycle, independent Rust/TS vectors, funding and
+crash/recovery evidence; freeze only after the full C2 gate passes. Then mark C2
+DONE and C3 READY and stop. Preserve all frozen C1/Miner/Aura bytes. No live funds
+or public worker execution.

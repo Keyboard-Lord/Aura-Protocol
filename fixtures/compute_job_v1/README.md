@@ -1,17 +1,24 @@
-# C1 compute-job codec evidence — NOT YET CANONICALLY FROZEN
+# C1 compute-job contract — frozen 2026-09-12
 
-`job_vectors_v1.json` records exact request/signature/content and result-to-MinerJobV1
-profile bytes. Rust and TypeScript independently construct and compare them.
-All secrets, nonces, amounts and policy payloads are test-only. Synthetic policy
-payloads do not constitute supported privacy/hardware/payment/rights contracts.
-No fixture represents funded admission, a verified useful result or a payment.
+Authority: [compute contract](../../docs/authoritative/AURA_COMPUTE_NETWORK_V1.md).
+Approval and full gate: [C1 evidence](../../reports/AURA_COMPUTE_JOB_V1_C1_DESIGN.md).
 
-Contract and freeze gate: [C1 evidence](../../reports/AURA_COMPUTE_JOB_V1_C1_DESIGN.md).
-Existing M2 fixtures are unchanged. Do not regenerate expected bytes to hide a
-failure; investigate against the approved layout and derivation first.
+- `job_vectors_v1.json`: original exact job/signature/content and signed-miner
+  profile bytes, preserved unchanged. Its synthetic core-policy payloads exercise
+  structural content binding only and fail supported-core-policy validation.
+- `core_policy_vectors_v1.json`: approved core payloads, commitments, signed jobs,
+  fee limits and mutation classifications. Adapter contents and numeric parameters
+  are test-only, not activated workloads or deployment defaults.
 
-Explicit producer (stdout only; tests never rewrite expected values):
-`cargo run -p aura_sdk_v1 --offline --example compute_job_vectors_v1`.
+Rust and TS independently reconstruct every exact byte vector. Neither fixture
+represents funded admission, assignment, a verified useful result or payment.
+Existing M2 fixtures are unchanged. Never regenerate expected bytes to hide a
+failure; investigate against the owning contract first.
 
-No compute contract is frozen until the remaining core profiles are resolved and
-the final required validation passes. No production parameter is selected here.
+Reproduction gate: `node scripts/verify_compute_job_v1.mjs`.
+Explicit producer, stdout only (tests never rewrite expected values):
+
+```sh
+cargo run -p aura_sdk_v1 --offline --example compute_job_vectors_v1
+cargo run -p aura_sdk_v1 --offline --example compute_job_vectors_v1 -- --core-policies
+```

@@ -1,0 +1,99 @@
+{
+  "classification": "C1 CONTRACT VALIDATION EVIDENCE; NOT DEPLOYMENT OR PAYMENT EVIDENCE",
+  "status": "PASS",
+  "recorded_at": "2026-09-12T23:11:05.094Z",
+  "environment": {
+    "node": "v22.22.2",
+    "platform": "darwin",
+    "arch": "arm64",
+    "rust": "rustc 1.88.0 (6b00bc388 2025-06-23)"
+  },
+  "fixture_sha256": {
+    "fixtures/compute_job_v1/job_vectors_v1.json": "e67d64d4329a3171afb1bc4680d5069fcd775715a6495ed4fbb80fe7f67c5d7d",
+    "fixtures/compute_job_v1/core_policy_vectors_v1.json": "6e79691de1702f34f62f233dda391b777580100dbae1da9eace6bfd53832ab6f",
+    "fixtures/miner_v1/job_profile_vector_v1.json": "6474d102a52e47a366bcc6c2d3c127a061c0e89fec9e6f513605201b4f3a8c64"
+  },
+  "stages": [
+    {
+      "name": "rust_c1_and_frozen_m2",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "aura_sdk_v1",
+        "--offline",
+        "--test",
+        "compute_job_v1",
+        "--test",
+        "miner_v1"
+      ],
+      "exit_code": 0,
+      "elapsed_ms": 4313,
+      "passed_test_counts": [
+        10,
+        9
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "independent_typescript_c1_and_frozen_m2",
+      "command": [
+        "node",
+        "--test",
+        "packages/aura_sdk_v1_ts/src/computeJobV1.test.ts",
+        "packages/aura_sdk_v1_ts/src/minerV1.test.ts"
+      ],
+      "exit_code": 0,
+      "elapsed_ms": 2294,
+      "passed_test_counts": [
+        23
+      ],
+      "status": "PASS"
+    },
+    {
+      "name": "affected_rust_sdk_and_examples",
+      "command": [
+        "cargo",
+        "check",
+        "-p",
+        "aura_sdk_v1",
+        "--offline",
+        "--lib",
+        "--examples"
+      ],
+      "exit_code": 0,
+      "elapsed_ms": 1892,
+      "passed_test_counts": [],
+      "status": "PASS"
+    },
+    {
+      "name": "typescript_syntax",
+      "command": [
+        "node",
+        "--check",
+        "packages/aura_sdk_v1_ts/src/computeJobV1.ts"
+      ],
+      "exit_code": 0,
+      "elapsed_ms": 38,
+      "passed_test_counts": [],
+      "status": "PASS"
+    },
+    {
+      "name": "public_sdk_exports",
+      "command": [
+        "node",
+        "--input-type=module",
+        "-e",
+        "\n    import assert from 'node:assert/strict';\n    import * as sdk from './packages/aura_sdk_v1_ts/src/index.ts';\n    assert.equal(sdk.COMPUTE_JOB_V1_BYTE_LEN, 546);\n    assert.equal(sdk.COMPUTE_PAYMENT_TERMS_V1_BYTE_LEN, 17);\n    for (const name of ['encodeComputeJobV1', 'decodeComputeJobV1', 'verifyComputeRequestV1',\n      'classifyComputeRetryV1', 'computeMinerSideV1', 'computeFixedCorePolicyPayloadV1',\n      'validateComputeFixedCorePolicyV1', 'encodeComputePaymentTermsV1',\n      'decodeComputePaymentTermsV1', 'computePaymentTermsCommitmentV1',\n      'validateComputePublicationFeeV1', 'verifyComputeCorePoliciesV1'])\n      assert.equal(typeof sdk[name], 'function', name);\n  "
+      ],
+      "exit_code": 0,
+      "elapsed_ms": 164,
+      "passed_test_counts": [],
+      "status": "PASS"
+    }
+  ],
+  "limitations": [
+    "Node native TypeScript runtime/syntax checks are not a standalone tsc typecheck.",
+    "No durable compute lifecycle, real workload, isolation or monetary execution is tested in C1."
+  ]
+}

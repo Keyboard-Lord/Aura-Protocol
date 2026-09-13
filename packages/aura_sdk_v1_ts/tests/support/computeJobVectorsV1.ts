@@ -57,3 +57,21 @@ export function snapshot(){
     invalid_patches:patches.map(([name,offset,replacement])=>({name,offset,replacement_hex:hex(replacement)})),retry_cases,
     contents:c.COMPUTE_CONTENT_KINDS_V1.map(k=>({domain:`AURA_COMPUTE_${k}_V1`,payload_hex:hex(payload(k)),commitment_hex:hex(content(k))})),bindings};
 }
+
+export function corePolicySnapshot(){
+  const kinds=['PRIVACY_POLICY','HARDWARE_REQUIREMENTS','DATA_RIGHTS'] as const;
+  const fixed_profiles=kinds.map(kind=>{const p=c.computeFixedCorePolicyPayloadV1(kind);return {domain:`AURA_COMPUTE_${kind}_V1`,payload_hex:hex(p),commitment_hex:hex(c.computeContentCommitmentV1(kind,p))};});
+  const payments=[[0n,1n],[42n,3600n],[9007199254740993n,9007199254740995n],[0xffffffffffffffffn,0xffffffffffffffffn]].map(([fee,seconds])=>{
+    const terms={maxPaymentFeeSatoshis:fee,resultAvailabilitySeconds:seconds};
+    const checks:[bigint,boolean][]=[[0n,true],[fee,true]];if(fee<0xffffffffffffffffn)checks.push([fee+1n,false]);
+    const jobs=[0,1].map(privacyClass=>record(privacyClass===0?'public':'sandboxed',{
+      ...job(),privacyClass,privacyPolicyCommitment:c.computeContentCommitmentV1(kinds[0],Uint8Array.of(1)),
+      hardwareRequirementsCommitment:c.computeContentCommitmentV1(kinds[1],Uint8Array.of(1)),
+      dataRightsCommitment:c.computeContentCommitmentV1(kinds[2],Uint8Array.of(1)),paymentTermsCommitment:c.computePaymentTermsCommitmentV1(terms)}));
+    const b=c.encodeComputePaymentTermsV1(terms);
+    const single_bit_mutation_decodes=Array.from(b,(_,i)=>{const v=Uint8Array.from(b);v[i]^=1;try{c.decodeComputePaymentTermsV1(v);return '1';}catch{return '0';}}).join('');
+    return {max_payment_fee_satoshis:fee.toString(),result_availability_seconds:seconds.toString(),payload_hex:hex(b),commitment_hex:hex(c.computePaymentTermsCommitmentV1(terms)),single_bit_mutation_decodes,
+      fee_checks:checks.map(([fee,allowed])=>({fee_satoshis:fee.toString(),allowed})),jobs};
+  });
+  return {classification:'C1-P1 CORE POLICY CONTRACT VECTORS; TEST PARAMETERS ONLY; NO WORKLOAD OR PAYMENT EXECUTION',fixed_profiles,payments};
+}

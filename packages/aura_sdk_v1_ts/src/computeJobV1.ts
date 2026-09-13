@@ -210,11 +210,55 @@ export function computeContentCommitmentV1(kind: ComputeContentKindV1, payload: 
   ensure(COMPUTE_CONTENT_KINDS_V1.includes(kind), "unsupported compute content kind"); bytes(payload);
   return sha(Buffer.from(`AURA_COMPUTE_${kind}_V1`, "ascii"), le(BigInt(payload.length)), payload);
 }
+export type ComputeFixedCorePolicyKindV1 = "PRIVACY_POLICY" | "HARDWARE_REQUIREMENTS" | "DATA_RIGHTS";
+/** Each kind retains its existing independent content-commitment domain. */
+export function computeFixedCorePolicyPayloadV1(kind: ComputeFixedCorePolicyKindV1): Uint8Array {
+  ensure(kind === "PRIVACY_POLICY" || kind === "HARDWARE_REQUIREMENTS" || kind === "DATA_RIGHTS", "not a fixed compute core policy kind");
+  return Uint8Array.of(1);
+}
+export function validateComputeFixedCorePolicyV1(kind: ComputeFixedCorePolicyKindV1, payload: Uint8Array): void {
+  bytes(payload, 1);
+  ensure(equal(payload, computeFixedCorePolicyPayloadV1(kind)), "unsupported compute core policy");
+}
+export const COMPUTE_PAYMENT_TERMS_V1_BYTE_LEN = 17;
+export type ComputePaymentTermsV1 = { maxPaymentFeeSatoshis: bigint; resultAvailabilitySeconds: bigint };
+export function encodeComputePaymentTermsV1(terms: ComputePaymentTermsV1): Uint8Array {
+  fields(terms, ["maxPaymentFeeSatoshis", "resultAvailabilitySeconds"]);
+  u64(terms.maxPaymentFeeSatoshis); u64(terms.resultAvailabilitySeconds);
+  ensure(terms.resultAvailabilitySeconds > 0n, "compute result availability must be positive");
+  return Buffer.concat([Uint8Array.of(1), le(terms.maxPaymentFeeSatoshis), le(terms.resultAvailabilitySeconds)]);
+}
+export function decodeComputePaymentTermsV1(payload: Uint8Array): ComputePaymentTermsV1 {
+  bytes(payload, COMPUTE_PAYMENT_TERMS_V1_BYTE_LEN);
+  ensure(payload[0] === 1, "unsupported compute payment profile");
+  const b = Buffer.from(payload);
+  const terms = { maxPaymentFeeSatoshis: b.readBigUInt64LE(1), resultAvailabilitySeconds: b.readBigUInt64LE(9) };
+  ensure(equal(encodeComputePaymentTermsV1(terms), payload), "noncanonical compute payment terms");
+  return terms;
+}
+export function computePaymentTermsCommitmentV1(terms: ComputePaymentTermsV1): Uint8Array {
+  return computeContentCommitmentV1("PAYMENT_TERMS", encodeComputePaymentTermsV1(terms));
+}
+/** Zero permits exactly zero; fee validation never changes worker net pay. */
+export function validateComputePublicationFeeV1(terms: ComputePaymentTermsV1, feeSatoshis: bigint): void {
+  encodeComputePaymentTermsV1(terms); u64(feeSatoshis);
+  ensure(feeSatoshis <= terms.maxPaymentFeeSatoshis, "compute payment fee exceeds signed ceiling");
+}
 export function verifyComputeContentV1(j: AuraComputeJobV1, kind: ComputeContentKindV1, payload: Uint8Array): void {
   shape(j); bytes(payload);
   const digest = computeContentCommitmentV1(kind, payload);
   if (kind === "INPUT") ensure(BigInt(payload.length) <= j.maxInputBytes, "compute input too large");
   ensure(equal(digest, j[contentFields[kind]]), "compute content commitment mismatch");
+}
+/** Approved core schemas/bindings only, not actual isolation, hardware or admission. */
+export function verifyComputeCorePoliciesV1(j: AuraComputeJobV1, privacy: Uint8Array, hardware: Uint8Array, rights: Uint8Array, payment: Uint8Array): ComputePaymentTermsV1 {
+  shape(j); ensure(j.privacyClass <= 1, "unsupported compute privacy class for profile 01");
+  for (const [kind, payload] of [["PRIVACY_POLICY", privacy], ["HARDWARE_REQUIREMENTS", hardware], ["DATA_RIGHTS", rights]] as const) {
+    validateComputeFixedCorePolicyV1(kind, payload); verifyComputeContentV1(j, kind, payload);
+  }
+  const terms = decodeComputePaymentTermsV1(payment);
+  verifyComputeContentV1(j, "PAYMENT_TERMS", payment);
+  return terms;
 }
 /** Result association only; cannot manufacture C2's verified result record. */
 export function validateComputeMinerBindingV1(j: AuraComputeJobV1, miner: MinerJobV1, result: Uint8Array): void {

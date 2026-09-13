@@ -3,10 +3,12 @@
 Classification: APPROVED C0 ARCHITECTURE / IMPLEMENTATION EVIDENCE; NOT ACTIVE PROTOCOL AUTHORITY.
 Date: 2026-09-12. Baseline: completed Miner V1 at `97ff01f`.
 Status: C0 DONE. D1–D4 APPROVED with the user's controlling amendments in section 9.
-C1 READY for design only; see [C1 contract design](AURA_COMPUTE_JOB_V1_C1_DESIGN.md).
-Reconciliation: DOC > CODE for compute; Miner V1 remains the implemented baseline.
-No compute codec, workload adapter, payment contract or public worker is implemented
-by this document. It does not reopen the completed Miner V1 or Bitcoin migration.
+Subsequent C1 approval, implementation and freeze state: [C1 evidence](AURA_COMPUTE_JOB_V1_C1_DESIGN.md).
+Reconciliation: C1's codec/core contracts are now frozen and implemented; later
+compute lifecycle/workloads remain DOC > CODE. This C0 record preserves architecture
+and approval history. Current definitions live in the
+[compute owner](../docs/authoritative/AURA_COMPUTE_NETWORK_V1.md); current execution
+state lives in the slice register. Miner V1 and Bitcoin migration remain unchanged.
 
 ## 1. Architectural contract
 
@@ -54,11 +56,11 @@ are distinct states. C1 designs commitments only; live monetary settlement remai
 unimplemented and unapproved. Sharing a payment owner does not permit claiming
 that today's miner-only publisher already pays ordinary compute obligations.
 
-## 2. Direct current-state evidence
+## 2. Direct C0 baseline evidence
 
 | Existing owner | Established dependency / gap |
 | --- | --- |
-| [Registry](../docs/authoritative/AURA_BUILD_SOURCE_OF_TRUTH.md) | Exactly 25 current authority documents. No general compute job/result owner is registered. |
+| [Registry](../docs/authoritative/AURA_BUILD_SOURCE_OF_TRUTH.md) | At C0: 25 authority documents, no compute owner. C1 now registers the approved compute contract; its evidence records the freeze. |
 | [Miner profile](../crates/aura_sdk_v1/src/miner.rs) | Frozen J/profile. Intent commits J and exact M. Caller-selected context/route/side/target alternatives reject. |
 | [Economic meter](../crates/aura_l2_local_chain_v0/src/economic_meter.rs) | One canonical M; existing attestation evidence can bind data. Its local digest/truth checks do not verify an arbitrary external proof system. |
 | [Economic coordinator](../crates/aura_sdk_v1/src/economic/journal.rs) | Existing admission/debit and service execution, actual Aura proof verification, atomic authorization/head/outbox. Accepted does not currently mean external workload verification. |
@@ -72,10 +74,11 @@ frozen baseline; no migration, mining or cryptographic gate was rerun for C0.
 ## 3. Approved ownership boundary — D4
 
 Aura core owns the common compute contracts; adapters own workload semantics and
-hardware remains replaceable. A future neutral compute owner is the intended home
-for those core definitions. C0 does not add a 26th active authority document or
-change registry membership. C1/C2 candidate definitions remain in reports until
-reviewed contracts and implementation evidence justify promotion through the registry.
+hardware remains replaceable. The registered neutral
+[compute owner](../docs/authoritative/AURA_COMPUTE_NETWORK_V1.md) now holds C1's
+approved common definitions. C0 itself did not change registry membership;
+C1 promoted the contract after approval and full gate evidence. C2 definitions
+remain future work and must not acquire authority implicitly.
 
 | Concept | Single intended owner |
 | --- | --- |
@@ -334,8 +337,9 @@ not unspecified C1 bytes, adapters, live funds or public worker execution.
   automatic ownership of customer content.
 - Public/open workloads may explicitly opt into different licensing.
 
-C0 is closed. C1 is READY and its design has begun. New semantic decisions in C1
-remain explicit; this approval is not a blanket approval of the original proposal.
+This approval closed C0 and opened C1. Subsequent C1 approvals and the completed
+freeze are recorded in [C1 evidence](AURA_COMPUTE_JOB_V1_C1_DESIGN.md). Neither
+approval is blanket approval of later compute implementation or public activation.
 
 ## 10. Prior C0 proposal verification evidence
 

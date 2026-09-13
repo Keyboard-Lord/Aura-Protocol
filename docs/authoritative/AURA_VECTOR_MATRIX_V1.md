@@ -102,3 +102,22 @@ Historical local-runner compatibility (unchanged bytes):
   under `reports/miner_protocol_v1/`, not production parameter constants.
 - [Miner operations](../AURA_MINER_OPERATIONS_V1.md) describes reproduction and the
   distinction between implementation readiness and separately approved activation.
+
+## Compute Job V1 (C1)
+
+- Owner: [compute contract](AURA_COMPUTE_NETWORK_V1.md). C1 is frozen; supported
+  contract bytes do not imply workload execution or durable payment acceptance.
+- `fixtures/compute_job_v1/job_vectors_v1.json`: exact job/signature/content bytes,
+  pure replay cases, compensation extremes and existing signed-miner expansion.
+  Synthetic policy payloads here test structural binding, not supported policies.
+- `fixtures/compute_job_v1/core_policy_vectors_v1.json`: supported core payloads,
+  independent domain commitments, exact payment terms and signed-job bindings.
+- Rust: `crates/aura_sdk_v1/tests/compute_job_v1.rs`; independent TS:
+  `packages/aura_sdk_v1_ts/src/computeJobV1.test.ts`. All-byte mutations, framing,
+  unsupported profiles/classes, fee and availability boundaries are covered.
+- `scripts/verify_compute_job_v1.mjs`: C1 tests, frozen M2 regression, affected
+  SDK compile and Node syntax/public exports. No fixture regeneration, durable
+  compute state, adapter execution or Bitcoin deployment in this gate.
+- Evidence: `reports/compute_network_v1/c1_freeze_results.json` and
+  `reports/AURA_COMPUTE_JOB_V1_C1_DESIGN.md`; fixture notes distinguish synthetic
+  test parameters from any future production values.

@@ -297,10 +297,199 @@ fn result_expansion_and_existing_signed_miner_profile_are_bound() {
         changed = m.clone();
         changed.side_a[109] ^= 1;
         assert!(j.validate_miner_binding(&changed, &r).is_err());
+        changed = m.clone();
+        changed.side_a = [0; 110];
+        changed.side_a[..32].copy_from_slice(&r);
+        assert!(j.validate_miner_binding(&changed, &r).is_err());
         let mut disabled = j.clone();
         disabled.mining_mode = 0;
         assert!(disabled.validate_miner_binding(&m, &r).is_err());
         assert!(j.validate_miner_binding(&base_miner(), &r).is_err()); // M-only/post-proof attachment cannot repair J
         assert!(compute_miner_side_v1(&r, 2).is_err());
     }
+}
+
+fn core_vector() -> Value {
+    serde_json::from_str(include_str!(
+        "../../../fixtures/compute_job_v1/core_policy_vectors_v1.json"
+    ))
+    .unwrap()
+}
+
+#[test]
+fn core_policy_schemas_commitments_jobs_and_signatures_match_shared_vectors() {
+    let v = core_vector();
+    assert_eq!(core_policy_snapshot(), v);
+    let mut commitments = std::collections::HashSet::new();
+    for kind in [
+        ComputeContentKindV1::PrivacyPolicy,
+        ComputeContentKindV1::HardwareRequirements,
+        ComputeContentKindV1::DataRights,
+    ] {
+        let payload = compute_fixed_core_policy_payload_v1(kind).unwrap();
+        assert_eq!(payload, [1]);
+        validate_compute_fixed_core_policy_v1(kind, &payload).unwrap();
+        assert!(commitments.insert(compute_content_commitment_v1(kind, &payload).unwrap()));
+    }
+    for x in v["payments"].as_array().unwrap() {
+        let b = data(x, "payload_hex");
+        assert_eq!(b.len(), 17);
+        assert_eq!(b[0], 1);
+        let t = ComputePaymentTermsV1::decode(&b).unwrap();
+        assert_eq!(
+            t.max_payment_fee_satoshis.to_string(),
+            x["max_payment_fee_satoshis"]
+        );
+        assert_eq!(
+            t.result_availability_seconds.to_string(),
+            x["result_availability_seconds"]
+        );
+        assert_eq!(t.canonical_bytes().unwrap().as_slice(), b);
+        assert_eq!(
+            t.commitment().unwrap().as_slice(),
+            data(x, "commitment_hex")
+        );
+        for r in x["jobs"].as_array().unwrap() {
+            let j = AuraComputeJobV1::decode(&data(r, "job_hex")).unwrap();
+            assert_eq!(j.verify_core_policies(&[1], &[1], &[1], &b).unwrap(), t);
+            j.verify_request(&data(r, "signature_hex")).unwrap();
+            assert_eq!(j.compensation_satoshis, 10000);
+        }
+        for check in x["fee_checks"].as_array().unwrap() {
+            let fee = check["fee_satoshis"].as_str().unwrap().parse().unwrap();
+            assert_eq!(
+                t.validate_publication_fee(fee).is_ok(),
+                check["allowed"].as_bool().unwrap()
+            );
+        }
+    }
+}
+
+#[test]
+fn policy_framing_mutations_and_zero_retention_reject_or_change_signed_binding() {
+    let v = core_vector();
+    for kind in [
+        ComputeContentKindV1::PrivacyPolicy,
+        ComputeContentKindV1::HardwareRequirements,
+        ComputeContentKindV1::DataRights,
+    ] {
+        for tag in 0..=255 {
+            assert_eq!(
+                validate_compute_fixed_core_policy_v1(kind, &[tag]).is_ok(),
+                tag == 1
+            );
+        }
+        for bytes in [vec![], vec![1, 0], vec![0, 1], b"01".to_vec()] {
+            assert!(validate_compute_fixed_core_policy_v1(kind, &bytes).is_err());
+        }
+    }
+    assert!(compute_fixed_core_policy_payload_v1(ComputeContentKindV1::Input).is_err());
+    assert!(compute_fixed_core_policy_payload_v1(ComputeContentKindV1::PaymentTerms).is_err());
+    for x in v["payments"].as_array().unwrap() {
+        let b = data(x, "payload_hex");
+        let j = AuraComputeJobV1::decode(&data(&x["jobs"][0], "job_hex")).unwrap();
+        for n in 0..17 {
+            assert!(ComputePaymentTermsV1::decode(&b[..n]).is_err());
+        }
+        for extra in [1, 17] {
+            let mut bad = b.clone();
+            bad.extend(vec![0; extra]);
+            assert!(ComputePaymentTermsV1::decode(&bad).is_err());
+        }
+        for tag in 0..=255 {
+            let mut bad = b.clone();
+            bad[0] = tag;
+            assert_eq!(ComputePaymentTermsV1::decode(&bad).is_ok(), tag == 1);
+        }
+        for i in 0..17 {
+            let mut bad = b.clone();
+            bad[i] ^= 1;
+            let decoded = ComputePaymentTermsV1::decode(&bad);
+            assert_eq!(
+                decoded.is_ok(),
+                x["single_bit_mutation_decodes"]
+                    .as_str()
+                    .unwrap()
+                    .as_bytes()[i]
+                    == b'1'
+            );
+            assert!(j.verify_core_policies(&[1], &[1], &[1], &bad).is_err());
+            if let Ok(t) = decoded {
+                assert_ne!(t.commitment().unwrap(), j.payment_terms_commitment);
+            }
+        }
+        let mut zero = b.clone();
+        zero[9..17].fill(0);
+        assert!(ComputePaymentTermsV1::decode(&zero).is_err());
+    }
+    assert!(ComputePaymentTermsV1 {
+        max_payment_fee_satoshis: 0,
+        result_availability_seconds: 0
+    }
+    .canonical_bytes()
+    .is_err());
+    let zero_fee = ComputePaymentTermsV1 {
+        max_payment_fee_satoshis: 0,
+        result_availability_seconds: 1,
+    };
+    zero_fee.validate_publication_fee(0).unwrap();
+    assert!(zero_fee.validate_publication_fee(1).is_err());
+}
+
+#[test]
+fn valid_content_hash_is_not_a_supported_policy_or_privacy_capability() {
+    let v = core_vector();
+    let p = data(&v["payments"][0], "payload_hex");
+    let j = AuraComputeJobV1::decode(&data(&v["payments"][0]["jobs"][0], "job_hex")).unwrap();
+    for privacy in 2..=4 {
+        let mut c = j.clone();
+        c.privacy_class = privacy;
+        c.validate_shape().unwrap();
+        assert!(c.verify_core_policies(&[1], &[1], &[1], &p).is_err());
+    }
+    for slot in 0..4 {
+        let mut c = j.clone();
+        let malformed = if slot == 3 {
+            let mut b = p.clone();
+            b[0] = 2;
+            b
+        } else {
+            vec![2]
+        };
+        let kind = match slot {
+            0 => ComputeContentKindV1::PrivacyPolicy,
+            1 => ComputeContentKindV1::HardwareRequirements,
+            2 => ComputeContentKindV1::DataRights,
+            _ => ComputeContentKindV1::PaymentTerms,
+        };
+        let digest = compute_content_commitment_v1(kind, &malformed).unwrap();
+        match slot {
+            0 => c.privacy_policy_commitment = digest,
+            1 => c.hardware_requirements_commitment = digest,
+            2 => c.data_rights_commitment = digest,
+            _ => c.payment_terms_commitment = digest,
+        };
+        c.verify_content(kind, &malformed).unwrap();
+        let payloads: Vec<&[u8]> = (0..4)
+            .map(|i| {
+                if i == slot {
+                    malformed.as_slice()
+                } else if i == 3 {
+                    p.as_slice()
+                } else {
+                    &[1]
+                }
+            })
+            .collect();
+        assert!(c
+            .verify_core_policies(payloads[0], payloads[1], payloads[2], payloads[3])
+            .is_err());
+    }
+    let mut swapped = j.clone();
+    std::mem::swap(
+        &mut swapped.privacy_policy_commitment,
+        &mut swapped.hardware_requirements_commitment,
+    );
+    assert!(swapped.verify_core_policies(&[1], &[1], &[1], &p).is_err());
+    assert!(job().verify_core_policies(&[1], &[1], &[1], &p).is_err()); // old synthetic core content is not promoted
 }

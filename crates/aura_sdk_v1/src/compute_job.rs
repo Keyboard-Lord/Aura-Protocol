@@ -115,11 +115,83 @@ pub fn compute_content_commitment_v1(
     kind: ComputeContentKindV1,
     payload: &[u8],
 ) -> ComputeJobResultV1<[u8; 32]> {
+    content_digest(kind.domain(), payload)
+}
+// Shared compute content framing; callers own their disjoint domain registries.
+pub(crate) fn content_digest(domain: &[u8], payload: &[u8]) -> ComputeJobResultV1<[u8; 32]> {
     let mut h = Sha256::new();
-    h.update(kind.domain());
+    h.update(domain);
     h.update(u64::try_from(payload.len())?.to_le_bytes());
     h.update(payload);
     Ok(h.finalize().into())
+}
+
+/// The three fixed C1-P1 payloads share a byte, not a commitment domain.
+pub fn compute_fixed_core_policy_payload_v1(
+    kind: ComputeContentKindV1,
+) -> ComputeJobResultV1<[u8; 1]> {
+    match kind {
+        ComputeContentKindV1::PrivacyPolicy
+        | ComputeContentKindV1::HardwareRequirements
+        | ComputeContentKindV1::DataRights => Ok([1]),
+        _ => Err("not a fixed compute core policy kind".into()),
+    }
+}
+
+pub fn validate_compute_fixed_core_policy_v1(
+    kind: ComputeContentKindV1,
+    payload: &[u8],
+) -> ComputeJobResultV1<()> {
+    if payload != compute_fixed_core_policy_payload_v1(kind)? {
+        return Err("unsupported or noncanonical compute core policy".into());
+    }
+    Ok(())
+}
+
+pub const COMPUTE_PAYMENT_TERMS_V1_BYTE_LEN: usize = 17;
+
+/// Profile 01: exact net-worker-payment terms; no transport or lifecycle state.
+/// The fixed profile marker belongs to the wire, not an optional/default field.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct ComputePaymentTermsV1 {
+    pub max_payment_fee_satoshis: u64,
+    pub result_availability_seconds: u64,
+}
+impl ComputePaymentTermsV1 {
+    pub fn canonical_bytes(&self) -> ComputeJobResultV1<[u8; 17]> {
+        if self.result_availability_seconds == 0 {
+            return Err("compute result availability must be positive".into());
+        }
+        let mut bytes = [0; 17];
+        bytes[0] = 1;
+        bytes[1..9].copy_from_slice(&self.max_payment_fee_satoshis.to_le_bytes());
+        bytes[9..17].copy_from_slice(&self.result_availability_seconds.to_le_bytes());
+        Ok(bytes)
+    }
+    pub fn decode(bytes: &[u8]) -> ComputeJobResultV1<Self> {
+        if bytes.len() != COMPUTE_PAYMENT_TERMS_V1_BYTE_LEN || bytes[0] != 1 {
+            return Err("invalid compute payment terms framing/profile".into());
+        }
+        let terms = Self {
+            max_payment_fee_satoshis: u64::from_le_bytes(bytes[1..9].try_into()?),
+            result_availability_seconds: u64::from_le_bytes(bytes[9..17].try_into()?),
+        };
+        if terms.canonical_bytes()? != bytes {
+            return Err("noncanonical compute payment terms".into());
+        }
+        Ok(terms)
+    }
+    pub fn commitment(&self) -> ComputeJobResultV1<[u8; 32]> {
+        compute_content_commitment_v1(ComputeContentKindV1::PaymentTerms, &self.canonical_bytes()?)
+    }
+    /// A zero ceiling permits exactly zero. Never subtract this fee from net pay.
+    pub fn validate_publication_fee(&self, fee_satoshis: u64) -> ComputeJobResultV1<()> {
+        self.canonical_bytes()?;
+        if fee_satoshis > self.max_payment_fee_satoshis {
+            return Err("compute payment fee exceeds signed ceiling".into());
+        }
+        Ok(())
+    }
 }
 impl AuraComputeJobV1 {
     pub fn validate_shape(&self) -> ComputeJobResultV1<()> {
@@ -352,6 +424,32 @@ impl AuraComputeJobV1 {
             return Err("compute content commitment mismatch".into());
         }
         Ok(())
+    }
+    /// Checks the four approved core schemas and their job commitments. This is
+    /// not adapter support, measured hardware, isolation enforcement, funding,
+    /// result acceptance or a durable coordinator transaction.
+    pub fn verify_core_policies(
+        &self,
+        privacy: &[u8],
+        hardware: &[u8],
+        rights: &[u8],
+        payment: &[u8],
+    ) -> ComputeJobResultV1<ComputePaymentTermsV1> {
+        self.validate_shape()?;
+        if self.privacy_class > 1 {
+            return Err("compute privacy class is not supported by profile 01".into());
+        }
+        for (kind, payload) in [
+            (ComputeContentKindV1::PrivacyPolicy, privacy),
+            (ComputeContentKindV1::HardwareRequirements, hardware),
+            (ComputeContentKindV1::DataRights, rights),
+        ] {
+            validate_compute_fixed_core_policy_v1(kind, payload)?;
+            self.verify_content(kind, payload)?;
+        }
+        let terms = ComputePaymentTermsV1::decode(payment)?;
+        self.verify_content(ComputeContentKindV1::PaymentTerms, payment)?;
+        Ok(terms)
     }
     /// Structural association only: R must independently resolve to this job's
     /// verified result. This method cannot manufacture that C2 verification.
