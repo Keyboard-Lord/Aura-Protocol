@@ -24,8 +24,11 @@ the receipt; accepted output can be read by the owning service. No payment is
 published here. C2's only adapter is compiled exclusively into tests; no production
 workload is registered until C3 adds its reviewed real proving/verifier backend.
 No supported workload, public worker execution or live monetary activation follows
-from this contract freeze. No deployment fee ceiling, retention duration, payout
-transport, funding outpoint or production default is selected.
+from this contract freeze. No deployment fee ceiling, retention duration, funding
+outpoint or production default is selected. C3-D1/D2's workload and payment
+directions are now approved, with an explicit actual-Metal requirement; their
+[approval and candidate evidence](../../reports/AURA_COMPUTE_C3_CONTRACT_DECISIONS.md)
+record implementation work still pending. This does not freeze or activate a C3 adapter.
 
 Existing [Miner V1](AURA_AURAFARMING_NODES.md), [economics](AURA_LEDGER_AND_BURN_V1.md),
 [Authorization V2](AURA_AUTHORIZATION_LINEAGE_V1.md),
@@ -161,7 +164,8 @@ IDs, replacement attempts, batching and channel routes remain durable operationa
 metadata linked to compute_job_commitment in the existing coordinator. Changing
 those transport details cannot mutate B, reduce the obligation or mint another job.
 C2 must prove reservation uniqueness, no over-allocation and replay-safe discharge.
-No live settlement, payout script, deployment fee amount or channel is chosen.
+No live settlement, deployment fee amount or channel is chosen. C3-D2's approved
+payout direction is not yet implemented by the shared publication owner.
 Ordinary payment does not fabricate an Aura proof_hash/OP_RETURN or mining winner.
 
 Hardware predicates identify capabilities required by the task, not who executes
@@ -327,8 +331,9 @@ The trusted coordinator independently runs the pinned verifier against immutable
 content. Only its successful internal verification path can finalize acceptance.
 Result consumers authenticate the coordinator's result signature and resolve the
 associated contracts/evidence. A boolean supplied by a worker or arbitrary customer
-verifier is insufficient. C2 uses explicitly test-only adapters; the real Priority 0
-backend and its approval remain C3.
+verifier is insufficient. C2 uses explicitly test-only adapters; C3's approved real
+Priority 0 direction still requires a compatible pinned backend, contract freeze
+and actual Metal/independent-verification evidence before registration.
 
 ### Detached lifecycle signatures
 
@@ -399,10 +404,11 @@ restart, replacement or reorg. Reorg may invalidate backing or require payment
 recovery; it cannot erase an earned result or invoke another burn/head transition.
 An unsafe funding observation stops new assignment and preserves recovery evidence.
 
-No concrete outpoint, payout script, transport, confirmation count, fee default,
-retention default or production capacity is selected. The worker key identifies
-the beneficiary; it does not silently select a Bitcoin payout script. C2 validates custody with explicit trusted Core RPC fixtures; real payment
-discharge must use the reviewed shared transport in later work.
+No concrete outpoint, confirmation count, fee default, retention default or
+production capacity is selected. C3-D2 explicitly approves the worker's final
+Taproot output-key payment direction; C2 itself still implements only custody and
+entitlement. Payment construction/discharge and worker spending-capability checks
+remain C3 work in the existing shared transport. No live payment is activated.
 
 ### Implemented durability and capability boundary
 

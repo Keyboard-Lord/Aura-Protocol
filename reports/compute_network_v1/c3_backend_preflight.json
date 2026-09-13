@@ -1,0 +1,90 @@
+{
+  "classification": "C3 SOURCE PREFLIGHT; NOT GPU RUNTIME OR PROOF VALIDATION",
+  "recorded_at": "2026-09-13T19:39:52.872329+00:00",
+  "upstream": {
+    "tag": "v3.0.5",
+    "commit": "8eb06ab020a92dc5b63ba6dd0836d432aba6d890",
+    "commit_url": "https://github.com/risc0/risc0/commit/8eb06ab020a92dc5b63ba6dd0836d432aba6d890"
+  },
+  "source_retrieval": "Eight files read via the v3.0.5 raw tag; two circuit HAL declarations read via its resolved commit. No upstream code executed.",
+  "source_sha256": {
+    "risc0/circuit/recursion/Cargo.toml": "c04f2039d7be2351b67557159a66a7a598649c569bd8d02ebd7dcf0cf0634e08",
+    "risc0/circuit/recursion/src/prove/hal/mod.rs": "58bc185f173b6aaf3be043e4c9d798beed19380b95ba4f37490a0cd56c658f0a",
+    "risc0/circuit/recursion/src/prove/mod.rs": "f064718a6313551ded8c94309eba67cadd4c40fbab9d3738d675c90098822908",
+    "risc0/circuit/rv32im/Cargo.toml": "69aecdda462f4794778963eb7eb6f14eaac10e134618918aa1fbb8af94116327",
+    "risc0/circuit/rv32im/src/prove/hal/mod.rs": "0774d48229e450417b03afd757c381c1fb292f11916786596e6a7bce175b4dbd",
+    "risc0/circuit/rv32im/src/prove/mod.rs": "bc52e7d40036c5e1a47692cea0dc8249df87f224b3dbde66474544ea91e5ec3f",
+    "risc0/zkp/Cargo.toml": "2efe49df0561916d7ca25cac47721576a6660403347ddbbe6f61772f9765e321",
+    "risc0/zkp/src/hal/mod.rs": "fa3e0df13b91aa4e568732dcf6de8d24c934cde0bcbd0c02baa9f24b3b51436d",
+    "risc0/zkvm/Cargo.toml": "6713feee876b868fefbdedee62dbee681eacc27ef5621802ef0e361fda3522d9",
+    "risc0/zkvm/src/host/server/prove/prover_impl.rs": "2b3e6e61cfaf07d78cb935d5db6a7c0053c3581cfdf1347705b39844e15209a5"
+  },
+  "findings": [
+    {
+      "path": "risc0/circuit/rv32im/src/prove/mod.rs",
+      "lines": [
+        45,
+        55
+      ],
+      "finding": "Stock segment_prover selects CUDA when enabled, otherwise CPU; Metal selector is commented out."
+    },
+    {
+      "path": "risc0/circuit/recursion/src/prove/mod.rs",
+      "lines": [
+        82,
+        91
+      ],
+      "finding": "Stock recursion_prover selects CUDA when enabled, otherwise CPU; Metal selector is commented out."
+    },
+    {
+      "path": "risc0/circuit/rv32im/src/prove/hal/mod.rs",
+      "lines": [
+        15,
+        17
+      ],
+      "finding": "Circuit HAL declares CPU and CUDA, no active Metal circuit module."
+    },
+    {
+      "path": "risc0/circuit/recursion/src/prove/hal/mod.rs",
+      "lines": [
+        20,
+        27
+      ],
+      "finding": "Circuit HAL Metal declaration is commented out."
+    },
+    {
+      "path": "risc0/zkvm/src/host/server/prove/prover_impl.rs",
+      "lines": [
+        236,
+        262
+      ],
+      "finding": "The local zkVM prover calls the stock segment_prover for preflight and proof generation."
+    },
+    {
+      "path": "risc0/zkvm/Cargo.toml",
+      "lines": [
+        172,
+        172
+      ],
+      "finding": "The metal feature only enables prove; it does not switch the disabled circuit selectors."
+    },
+    {
+      "path": "risc0/zkp/src/hal/mod.rs",
+      "lines": [
+        17,
+        22
+      ],
+      "finding": "A generic Metal HAL exists; its presence is not evidence of selection by the zkVM circuit prover."
+    }
+  ],
+  "source_assertions": "Both stock circuit selectors have active CUDA/CPU choices, commented Metal choices, and no active circuit Metal module declarations.",
+  "result": "INCOMPATIBLE_WITH_REQUIRED_METAL_PATH",
+  "scope": "Unmodified v3.0.5 local segment and succinct-recursion prover path on Apple Silicon without CUDA. Not a claim that all generic Metal kernels are absent.",
+  "runtime_evidence": {
+    "proof_generated": false,
+    "independent_proof_verified": false,
+    "metal_execution_observed": false,
+    "measurements": "NOT RUN: no proof/verification time, memory or proof-size claim"
+  },
+  "action": "USER_DECISION C3-METAL-1 before any candidate version/backend change. D1 and D2 remain approved; C3 incomplete."
+}

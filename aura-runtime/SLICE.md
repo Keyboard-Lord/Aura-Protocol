@@ -3,7 +3,7 @@
 Classification: TOOLING / IMPLEMENTATION EVIDENCE; not protocol authority.
 Runtime: AURA Runtime V4
 Program: Aura Compute Network V1, master goal C0–C10
-Current milestone: C3 — IN PROGRESS (USER_DECISION C3-D1/D2)
+Current milestone: C3 — IN PROGRESS (D1/D2 APPROVED; USER_DECISION C3-METAL-1)
 Last updated: 2026-09-13
 Next node: C4 — BLOCKED until C3 acceptance; no later READY node
 
@@ -31,7 +31,7 @@ No public worker execution or live monetary activation is authorized.
 | C0 | DONE | D1–D4 explicitly approved as amended; controlling approval recorded in C0 evidence. |
 | C1 | DONE | C1-D1–D3 and C1-P1 APPROVED; job/core schemas, authentication and signed-side binding frozen with independent Rust/TS vectors. |
 | C2 | DONE | C2-D1/D2 APPROVED; exact lifecycle codecs, durable assignment/reservation/receipt/result and full gate passed. |
-| C3 | IN PROGRESS | C2 complete; backend/workload and shared compute-payment decisions prepared, awaiting C3-D1/D2. No production adapter registered. |
+| C3 | IN PROGRESS | D1/D2 APPROVED; stock v3.0.5 Metal incompatibility confirmed. Await C3-METAL-1 before candidate change/contract freeze. No production adapter registered. |
 | C4 | BLOCKED | C3: deterministic/open-model inference. |
 | C5 | BLOCKED | C4: molecular, media and Monte Carlo adapters, one at a time. |
 | C6 | BLOCKED | C5: generic sandboxed CPU/GPU worker. |
@@ -78,7 +78,8 @@ See the C0 record for the controlling approval and C1 for new contract decisions
 C1-D1–D3 and C1-P1 are APPROVED. Freeze was conditional on full C1 validation;
 that gate passed. No unresolved C1 semantic decision remains. Policy payloads and
 lifecycle promises live in the compute owner, not this execution register.
-No deployment values, payout transport, live funds or public execution approved.
+C1 selected no deployment values or payout transport. C3's payment direction is
+now approved below; no live funds or public execution are approved.
 
 ## C2 approval and closure
 
@@ -88,29 +89,37 @@ contract is now frozen. No unresolved C2 protocol decision remains.
 
 ## Current C3 evidence and decisions
 
-[C3 proposal and direct-owner map](../reports/AURA_COMPUTE_C3_CONTRACT_DECISIONS.md)
-records the exact remaining decisions. It is non-authoritative; neither choice
-has been implemented or approved.
+[C3 approval and direct-owner map](../reports/AURA_COMPUTE_C3_CONTRACT_DECISIONS.md)
+records controlling approval and the new candidate qualification decision.
 
-- C3-D1: recommend local RISC Zero v3.0.5 succinct STARK proving for one reviewed
-  batch SHA256 Merkle-membership guest, measured Metal GPU execution and CPU
-  reference. Exact adapter byte contracts remain subject to vectors and real proof
-  validation before registration. Preserve genuine proof randomness and C2 identity.
-- C3-D2: recommend direct worker output-key payment and an anchor-free compute
-  obligation case in the existing shared Bitcoin publisher. Full net, separate
-  bounded fees and replay/reorg recovery; no live activation or deployment defaults.
-- Host observation: M4 Pro, 16 GPU cores, Metal reported. No installed prover found;
-  no GPU proof, sandbox/resource-enforcement or performance result yet.
-- Existing publication requires miner reward/anchor; it cannot currently discharge
-  an ordinary compute entitlement. Extend that owner after approval, not its ledger
-  or frozen miner meaning. Existing signed-side binding and winner rule suffice.
-- This step edited only the proposal and this register. Checked local references
-  and whitespace; unchanged C2/Miner gates were not rerun. No frozen output changed.
+- C3-D1 APPROVED: fixed batch SHA256 Merkle-membership service, RISC Zero succinct
+  STARKs, CPU reference and actual Metal GPU proof. v3.0.5 is an initial candidate
+  only; documentation, feature flags, successful CPU proof or remote proving do not
+  establish Metal. Exact contract/image/parameters/vectors must freeze before admission.
+- C3-D2 APPROVED: direct worker final output-key payment through the existing shared
+  publisher, exact net, bounded separate customer fees and durable retry/reorg safety.
+  Worker understanding/spending capability required. No miner prerequisite or Aura
+  burn/Head/authorization/anchor for ordinary compute. No live activation.
+- [Backend preflight](../reports/compute_network_v1/c3_backend_preflight.json):
+  v3.0.5 resolves to `8eb06ab020a92dc5b63ba6dd0836d432aba6d890`. Ten targeted source
+  files show segment and recursion selectors using CPU without CUDA; their Metal
+  branches are commented out and their circuit HALs have no active Metal modules.
+  A generic ZKP Metal HAL exists but is not selected by those circuit constructors.
+- C3-METAL-1 USER_DECISION: authorize narrow qualification of another exact upstream
+  revision, then approve its pin/security/format differences before adoption; a
+  reviewed v3.0.5 Metal restoration is an alternative. Neither change was made.
+- No proof/backend runtime, memory/time measurement, adapter, payment or mining
+  integration was run. Current code cannot discharge ordinary compute entitlement.
+  Follow the approved bounded order after the new decision; C4 remains blocked.
+- Only approval/status documents and source-preflight evidence changed. Checked
+  references, source evidence and whitespace; no repeated C2/Miner runtime gate.
+  Frozen implementation, canonical byte tables, dependency lock and fixtures unchanged.
 
 ## Stop condition
 
-Current stop: USER_DECISION C3-D1/D2. Resume their bounded implementation order
-after approval. C3 closes only with real GPU proof/verification, authenticated
+Current stop: USER_DECISION C3-METAL-1, required by the controlling D1 clarification.
+D1/D2 remain approved. Do not change the candidate or weaken Metal without the
+new decision. C3 closes only with real GPU proof/verification, authenticated
 customer delivery, independent compute payment, optional unchanged mining and
 end-to-end/recovery evidence. Then mark C3 DONE/C4 READY and stop this node.
 Do not activate live funds or public workers.
