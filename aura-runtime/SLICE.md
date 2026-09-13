@@ -3,9 +3,9 @@
 Classification: TOOLING / IMPLEMENTATION EVIDENCE; not protocol authority.
 Runtime: AURA Runtime V4
 Program: Aura Compute Network V1, master goal C0–C10
-Current milestone: C2 — DONE (canonical contracts and durable lifecycle frozen)
-Last updated: 2026-09-12
-Next node: C3 — READY; not started in this slice
+Current milestone: C3 — IN PROGRESS (USER_DECISION C3-D1/D2)
+Last updated: 2026-09-13
+Next node: C4 — BLOCKED until C3 acceptance; no later READY node
 
 ## Mission and frozen baseline
 
@@ -31,7 +31,7 @@ No public worker execution or live monetary activation is authorized.
 | C0 | DONE | D1–D4 explicitly approved as amended; controlling approval recorded in C0 evidence. |
 | C1 | DONE | C1-D1–D3 and C1-P1 APPROVED; job/core schemas, authentication and signed-side binding frozen with independent Rust/TS vectors. |
 | C2 | DONE | C2-D1/D2 APPROVED; exact lifecycle codecs, durable assignment/reservation/receipt/result and full gate passed. |
-| C3 | READY | C2 complete: real GPU-oriented ZK proving, verification, delivery, payment and optional mining binding; minimal isolation required. |
+| C3 | IN PROGRESS | C2 complete; backend/workload and shared compute-payment decisions prepared, awaiting C3-D1/D2. No production adapter registered. |
 | C4 | BLOCKED | C3: deterministic/open-model inference. |
 | C5 | BLOCKED | C4: molecular, media and Monte Carlo adapters, one at a time. |
 | C6 | BLOCKED | C5: generic sandboxed CPU/GPU worker. |
@@ -40,7 +40,7 @@ No public worker execution or live monetary activation is authorized.
 | C9 | BLOCKED | C8: capability discovery, routing, reliability and market. |
 | C10 | BLOCKED | C9: adversarial network and activation-readiness evidence. |
 
-## Current evidence
+## Frozen C2 evidence
 
 [C1 freeze](../reports/AURA_COMPUTE_JOB_V1_C1_DESIGN.md) remains intact.
 [C2 approval/freeze evidence](../reports/AURA_COMPUTE_C2_CONTRACT_DECISIONS.md) records
@@ -86,8 +86,31 @@ C2-D1/D2 APPROVED as documented, with full net plus fee reservation at assignmen
 Required parity, mutation, replay, funding and crash/recovery checks passed; the
 contract is now frozen. No unresolved C2 protocol decision remains.
 
+## Current C3 evidence and decisions
+
+[C3 proposal and direct-owner map](../reports/AURA_COMPUTE_C3_CONTRACT_DECISIONS.md)
+records the exact remaining decisions. It is non-authoritative; neither choice
+has been implemented or approved.
+
+- C3-D1: recommend local RISC Zero v3.0.5 succinct STARK proving for one reviewed
+  batch SHA256 Merkle-membership guest, measured Metal GPU execution and CPU
+  reference. Exact adapter byte contracts remain subject to vectors and real proof
+  validation before registration. Preserve genuine proof randomness and C2 identity.
+- C3-D2: recommend direct worker output-key payment and an anchor-free compute
+  obligation case in the existing shared Bitcoin publisher. Full net, separate
+  bounded fees and replay/reorg recovery; no live activation or deployment defaults.
+- Host observation: M4 Pro, 16 GPU cores, Metal reported. No installed prover found;
+  no GPU proof, sandbox/resource-enforcement or performance result yet.
+- Existing publication requires miner reward/anchor; it cannot currently discharge
+  an ordinary compute entitlement. Extend that owner after approval, not its ledger
+  or frozen miner meaning. Existing signed-side binding and winner rule suffice.
+- This step edited only the proposal and this register. Checked local references
+  and whitespace; unchanged C2/Miner gates were not rerun. No frozen output changed.
+
 ## Stop condition
 
-Satisfied: C2 DONE; C3 READY. Stop here. C3 must select/approve and implement the
-real Priority 0 proving adapter with GPU capability/isolation and shared compute
-payment integration. Do not begin C3 in this slice or activate live funds/workers.
+Current stop: USER_DECISION C3-D1/D2. Resume their bounded implementation order
+after approval. C3 closes only with real GPU proof/verification, authenticated
+customer delivery, independent compute payment, optional unchanged mining and
+end-to-end/recovery evidence. Then mark C3 DONE/C4 READY and stop this node.
+Do not activate live funds or public workers.
