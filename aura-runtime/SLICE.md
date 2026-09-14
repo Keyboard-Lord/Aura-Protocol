@@ -3,7 +3,7 @@
 Classification: TOOLING / IMPLEMENTATION EVIDENCE; not protocol authority.
 Runtime: AURA Runtime V4
 Program: Aura Compute Network V1, master goal C0–C10
-Current milestone: C3 — IN PROGRESS (C3-METAL-1 qualification PASS; exact-pin adoption USER_DECISION)
+Current milestone: C3 — IN PROGRESS (C3-METAL-1 exact-pin adoption APPROVED; fixed workload implementation)
 Last updated: 2026-09-14
 Next node: C4 — BLOCKED until C3 acceptance; no later READY node
 
@@ -31,7 +31,7 @@ No public worker execution or live monetary activation is authorized.
 | C0 | DONE | D1–D4 explicitly approved as amended; controlling approval recorded in C0 evidence. |
 | C1 | DONE | C1-D1–D3 and C1-P1 APPROVED; job/core schemas, authentication and signed-side binding frozen with independent Rust/TS vectors. |
 | C2 | DONE | C2-D1/D2 APPROVED; exact lifecycle codecs, durable assignment/reservation/receipt/result and full gate passed. |
-| C3 | IN PROGRESS | D1/D2 APPROVED; C3-METAL-1 minimal CPU/actual-Metal qualification PASS. Exact pin returned for adoption USER_DECISION. No production adapter registered. |
+| C3 | IN PROGRESS | D1/D2 APPROVED; C3-METAL-1 minimal CPU/actual-Metal qualification PASS. Exact pin adoption APPROVED. No production adapter registered. |
 | C4 | BLOCKED | C3: deterministic/open-model inference. |
 | C5 | BLOCKED | C4: molecular, media and Monte Carlo adapters, one at a time. |
 | C6 | BLOCKED | C5: generic sandboxed CPU/GPU worker. |
@@ -90,7 +90,7 @@ contract is now frozen. No unresolved C2 protocol decision remains.
 ## Current C3 evidence and decisions
 
 [C3 approval and direct-owner map](../reports/AURA_COMPUTE_C3_CONTRACT_DECISIONS.md)
-records controlling approval and the new candidate qualification decision.
+records controlling approval, accepted qualification and exact-pin adoption.
 
 - C3-D1 APPROVED: fixed batch SHA256 Merkle-membership service, RISC Zero succinct
   STARKs, CPU reference and actual Metal GPU proof. v3.0.5 is an initial candidate
@@ -106,10 +106,8 @@ records controlling approval and the new candidate qualification decision.
   branches are commented out and their circuit HALs have no active Metal modules.
   A generic ZKP Metal HAL exists but is not selected by those circuit constructors.
 - C3-METAL-1 qualification APPROVED: official stable/release first, official commit
-  second, restoration only if no qualified upstream revision exists. The supplied
-  `3bbcd44d6459b9ef6ac0df3846dc9215514934e8` is a candidate, not an approved pin.
-  Source/security comparison and isolated CPU/actual-Metal proof probes precede
-  an immutable-pin USER_DECISION. No Aura dependencies or canonical bytes may change.
+  second, restoration only if no qualified upstream revision exists. Qualification of
+  `3bbcd44d6459b9ef6ac0df3846dc9215514934e8` completed before separate adoption approval.
 - [Qualification evidence](../reports/AURA_COMPUTE_C3_METAL_QUALIFICATION.md) PASS:
   exact official commit `3bbcd44d6459b9ef6ac0df3846dc9215514934e8`, isolated build,
   real CPU and Metal succinct proofs of the same fixed qualification statement,
@@ -119,15 +117,20 @@ records controlling approval and the new candidate qualification decision.
 - Sixteen receipt mutation checks and dev-mode conflict rejection passed. Source
   comparison covers verifier/control/format/security changes from v3.0.5. Current
   stable has no full Metal path; old Metal-capable v1.2.6 rejected on security grounds.
-- Exact-pin adoption is NOT approved. No Aura dependency, frozen bytes, production
-  adapter, compute payment, batch-Merkle acceptance or later-node implementation changed.
-  Complete C3 workload/parser/isolation/delivery/payment/mining/regression remains open.
+- C3-METAL-1 ADOPTION APPROVED on 2026-09-14 for exactly
+  `3bbcd44d6459b9ef6ac0df3846dc9215514934e8`. Freeze candidate-specific guest,
+  input/journal, bounded succinct output, verifier parameters and reproducible source/
+  dependency locks. No upstream revision change without qualification and approval.
+  Accepted qualification measurements are machine-specific evidence only.
+- Implement the real fixed workload first, then CPU/Metal proofs, reviewed adapter/
+  authenticated C2 delivery, compute payment, optional mining and full C3 regression.
+  PUBLIC/SANDBOXED only; no confidentiality, arbitrary guest, live funds or public workers.
 
 ## Stop condition
 
-Bounded qualification is complete. Stop for separate adoption approval of the exact
-pin in the qualification report; do not adopt or freeze its dependent contract yet. No weakening of
-Metal, adapter registration or live activation. D1/D2 remain approved.
+Exact-pin adoption and C3-D1/D2 are approved. Continue bounded C3 implementation.
+Register the reviewed adapter only after its actual workload/proof contract and
+CPU/actual-Metal verification evidence pass. Stop for genuinely new semantic decisions.
 C3 closes only with real GPU proof/verification, authenticated
 customer delivery, independent compute payment, optional unchanged mining and
 end-to-end/recovery evidence. Then mark C3 DONE/C4 READY and stop this node.

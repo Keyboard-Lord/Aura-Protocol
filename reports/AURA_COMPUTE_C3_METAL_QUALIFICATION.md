@@ -230,7 +230,14 @@ It does not change the C1/C2 algorithms, frozen prior results, MinerJobV1,
 HASH_V2, Storm, FractalKey, proof_hash, authorization, economics or Bitcoin wire.
 Different randomized receipts must not be normalized into a substitute identity.
 
-## USER_DECISION — exact-pin adoption
+## Exact-pin adoption decision — APPROVED 2026-09-14
+
+The user approved the exact pin below for C3 implementation and the new workload/
+proof-contract freeze. The proposal and qualification record below are retained as
+historical decision evidence. Controlling conditions are recorded in the
+[C3 decision record](AURA_COMPUTE_C3_CONTRACT_DECISIONS.md#exact-pin-adoption--approved-2026-09-14).
+
+### Original adoption proposal
 
 **Conflict:** v3.0.5 cannot provide the approved Metal path. The qualified candidate
 has working Metal but belongs to a changed RV32IM circuit/verifier lineage.
@@ -256,4 +263,5 @@ CPU/Metal evidence. An old vulnerable release or a maintained Aura prover fork
 is not warranted by the evidence. The full C3 workload, parser/isolation,
 delivery/payment, optional mining and regression gate must still pass.
 
-C3 remains IN PROGRESS and C4 remains BLOCKED. Stop here for the adoption decision.
+C3 remains IN PROGRESS and C4 remains BLOCKED. Adoption is now approved; the
+real workload and complete C3 acceptance gate remain required.

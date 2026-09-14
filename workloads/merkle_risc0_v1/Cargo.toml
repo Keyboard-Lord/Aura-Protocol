@@ -1,0 +1,13 @@
+[workspace]
+resolver = "2"
+members = ["host"]
+exclude = ["guest", "vendor/risc0", "vendor/risc0/*", "vendor/risc0/risc0/*", "vendor/risc0/risc0/circuit/*", "vendor/risc0/risc0/zkvm/*", "vendor/risc0/tools/*", "vendor/risc0/vendor/*"]
+
+[workspace.metadata.aura-c3]
+risc0-revision = "3bbcd44d6459b9ef6ac0df3846dc9215514934e8"
+source-lock = "source-lock.json"
+# Paths below resolve only into the hash-verified, unmodified pinned vendor tree.
+# No registry version or moving git dependency may replace these sources.
+
+[profile.release]
+debug = 1

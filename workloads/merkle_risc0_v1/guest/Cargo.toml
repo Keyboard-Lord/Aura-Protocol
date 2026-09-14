@@ -1,0 +1,16 @@
+[package]
+name = "aura-c3-merkle-guest"
+version = "0.1.0"
+edition = "2021"
+
+[workspace]
+
+[dependencies]
+aura_compute_merkle_v1 = { path = "../../../crates/aura_compute_merkle_v1" }
+risc0-zkvm = { path = "../vendor/risc0/risc0/zkvm", default-features = false, features = ["std", "disable-dev-mode"] }
+
+[profile.release]
+codegen-units = 1
+opt-level = 3
+lto = true
+panic = "abort"

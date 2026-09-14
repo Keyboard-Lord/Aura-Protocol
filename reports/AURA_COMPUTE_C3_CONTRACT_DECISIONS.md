@@ -1,10 +1,25 @@
 # C3 — Real proving adapter and compute payment decisions
 
 Classification: APPROVAL / IMPLEMENTATION-READINESS EVIDENCE; NON-AUTHORITATIVE.
-Date: 2026-09-14. Status: C3-D1/D2 APPROVED; C3-METAL-1 qualification PASS; exact-pin adoption USER_DECISION.
+Date: 2026-09-14. Status: C3-D1/D2 APPROVED; C3-METAL-1 qualification PASS; exact-pin adoption APPROVED.
 No adapter, payment transport or new canonical bytes are activated by this report.
 
-## Controlling approval
+## Exact-pin adoption — APPROVED 2026-09-14
+
+The user approved `3bbcd44d6459b9ef6ac0df3846dc9215514934e8` for the fixed batch
+SHA256 Merkle workload and candidate-specific proof-contract freeze. This supersedes
+qualification-only restrictions for this commit. Preserve exact source/transitive
+locks; any revision change needs new qualification and USER_DECISION.
+
+The accepted qualification is backend evidence, not the useful service or a production
+performance claim. Freeze guest/build/kernel/ImageID, recursion/verifier parameters,
+exact succinct-only framing, halt/journal/input rules, bounded parsing and vectors
+before registration. Enforce actual Metal evidence, PUBLIC/SANDBOXED isolation,
+resource bounds, no secrets/network, and fail-closed dev/fake rejection. No change
+to C1/C2/Miner/Aura semantics, public workers, live funds or deployment is approved.
+Proceed through the existing C3 order; C4 stays BLOCKED until the full gate passes.
+
+## Original controlling approval
 
 The user approved C3-D1/D2 as documented, with these controlling clarifications:
 

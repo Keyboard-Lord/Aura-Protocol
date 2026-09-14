@@ -1,0 +1,9 @@
+[package]
+name = "aura_compute_merkle_v1"
+version = "0.1.0"
+edition = "2021"
+
+[dev-dependencies]
+sha2 = "=0.10.9"
+hex = "=0.4.3"
+serde_json = "1"

@@ -2,6 +2,9 @@
 resolver = "2"
 members = ["crates/*"]
 exclude = [
+    "workloads/merkle_risc0_v1",
+    "workloads/merkle_risc0_v1/guest",
+    "workloads/merkle_risc0_v1/vendor/risc0",
     "crates/aura_cli_v1",
     "crates/aura_submission_client_v1",
     "crates/aura_reference_demo_v1",
