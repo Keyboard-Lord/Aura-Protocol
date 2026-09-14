@@ -1,0 +1,371 @@
+{
+  "classification": "non-authoritative qualification evidence; no adoption",
+  "date": "2026-09-13",
+  "baseline": "8eb06ab020a92dc5b63ba6dd0836d432aba6d890",
+  "candidate": "3bbcd44d6459b9ef6ac0df3846dc9215514934e8",
+  "provenance": "Update guest building docker image to 1.97.0 (#3786)",
+  "comparison": {
+    "status": "diverged",
+    "ahead_by": 274,
+    "behind_by": 43,
+    "total_commits": 274
+  },
+  "source_manifest": [
+    {
+      "revision": "baseline",
+      "path": "Cargo.toml",
+      "sha256": "0cef9318d92039de4eb60ddd0f00222520e8d3dced168a62e759985fd62ba6e3",
+      "source": "https://github.com/risc0/risc0/blob/8eb06ab020a92dc5b63ba6dd0836d432aba6d890/Cargo.toml"
+    },
+    {
+      "revision": "baseline",
+      "path": "rust-toolchain.toml",
+      "sha256": "717baa517ba631b0c2255d9469cbecb41e500228ec0f8890b0adf2b0415c58ba",
+      "source": "https://github.com/risc0/risc0/blob/8eb06ab020a92dc5b63ba6dd0836d432aba6d890/rust-toolchain.toml"
+    },
+    {
+      "revision": "baseline",
+      "path": "risc0/zkvm/src/receipt.rs",
+      "sha256": "c0c6c6b20a34c402d206bf7cbac5553a72ec30c87827c7a33e4b40ea8b2d396f",
+      "source": "https://github.com/risc0/risc0/blob/8eb06ab020a92dc5b63ba6dd0836d432aba6d890/risc0/zkvm/src/receipt.rs"
+    },
+    {
+      "revision": "baseline",
+      "path": "risc0/zkvm/src/receipt/succinct.rs",
+      "sha256": "8e0165b3210e30e77074763d71d85fd0595e4190b96725182f33665b7df90d60",
+      "source": "https://github.com/risc0/risc0/blob/8eb06ab020a92dc5b63ba6dd0836d432aba6d890/risc0/zkvm/src/receipt/succinct.rs"
+    },
+    {
+      "revision": "baseline",
+      "path": "risc0/zkvm/src/receipt/composite.rs",
+      "sha256": "ad4e54397353f69851bf7bd80193b248b462dd32581b3fcca953413d80589d0f",
+      "source": "https://github.com/risc0/risc0/blob/8eb06ab020a92dc5b63ba6dd0836d432aba6d890/risc0/zkvm/src/receipt/composite.rs"
+    },
+    {
+      "revision": "baseline",
+      "path": "risc0/zkvm/src/claim/receipt.rs",
+      "sha256": "7c8dafb73bbf96394ebd1a0e651c4e7bcf7b3a166438444e35615bb397223ba1",
+      "source": "https://github.com/risc0/risc0/blob/8eb06ab020a92dc5b63ba6dd0836d432aba6d890/risc0/zkvm/src/claim/receipt.rs"
+    },
+    {
+      "revision": "baseline",
+      "path": "risc0/zkvm/src/lib.rs",
+      "sha256": "09a9610d5ecb2d27086c0d7fd55b908a5b4ad62459db53ae61f12d936c024c17",
+      "source": "https://github.com/risc0/risc0/blob/8eb06ab020a92dc5b63ba6dd0836d432aba6d890/risc0/zkvm/src/lib.rs"
+    },
+    {
+      "revision": "baseline",
+      "path": "risc0/binfmt/src/elf.rs",
+      "sha256": "fc94b21c5fdd1934b6381abdb6442ea3eb385c94359723248ccc9ecd9c48fcc3",
+      "source": "https://github.com/risc0/risc0/blob/8eb06ab020a92dc5b63ba6dd0836d432aba6d890/risc0/binfmt/src/elf.rs"
+    },
+    {
+      "revision": "baseline",
+      "path": "risc0/binfmt/src/image.rs",
+      "sha256": "86f2f22c96ae6dffd4a6a0be72522950832be5e39c1b323dd2e2b3e6e95242ee",
+      "source": "https://github.com/risc0/risc0/blob/8eb06ab020a92dc5b63ba6dd0836d432aba6d890/risc0/binfmt/src/image.rs"
+    },
+    {
+      "revision": "baseline",
+      "path": "risc0/binfmt/src/exit_code.rs",
+      "sha256": "a2b66afa4f0830735cf1cae4ff022b4b86f4b992581f4c39781cffb3e340c703",
+      "source": "https://github.com/risc0/risc0/blob/8eb06ab020a92dc5b63ba6dd0836d432aba6d890/risc0/binfmt/src/exit_code.rs"
+    },
+    {
+      "revision": "baseline",
+      "path": "risc0/zkos/v1compat/src/main.rs",
+      "sha256": "b125b19e4c578e025dbb7b5b5bf677fe8e3b9afe9b12703cb8bd2c9374870bcc",
+      "source": "https://github.com/risc0/risc0/blob/8eb06ab020a92dc5b63ba6dd0836d432aba6d890/risc0/zkos/v1compat/src/main.rs"
+    },
+    {
+      "revision": "baseline",
+      "path": "risc0/zkos/v1compat/elfs/v1compat.elf",
+      "sha256": "7ffd942e4e8babd771094f549ad080cfea8ecb2c05c986e275c011f41979d921",
+      "source": "https://github.com/risc0/risc0/blob/8eb06ab020a92dc5b63ba6dd0836d432aba6d890/risc0/zkos/v1compat/elfs/v1compat.elf"
+    },
+    {
+      "revision": "baseline",
+      "path": "risc0/circuit/recursion/src/control_id.rs",
+      "sha256": "6fedf46fad3ca0ce3e537139be7873a43dd68fee5fc803d3e58604b4e9ae16cb",
+      "source": "https://github.com/risc0/risc0/blob/8eb06ab020a92dc5b63ba6dd0836d432aba6d890/risc0/circuit/recursion/src/control_id.rs"
+    },
+    {
+      "revision": "baseline",
+      "path": "risc0/circuit/recursion/src/prove/mod.rs",
+      "sha256": "f064718a6313551ded8c94309eba67cadd4c40fbab9d3738d675c90098822908",
+      "source": "https://github.com/risc0/risc0/blob/8eb06ab020a92dc5b63ba6dd0836d432aba6d890/risc0/circuit/recursion/src/prove/mod.rs"
+    },
+    {
+      "revision": "baseline",
+      "path": "risc0/circuit/recursion/src/prove/witgen.rs",
+      "sha256": "88d480d025c4f2e685a205647cc07b73407d83ed6844a5c341be213b86cf0d8c",
+      "source": "https://github.com/risc0/risc0/blob/8eb06ab020a92dc5b63ba6dd0836d432aba6d890/risc0/circuit/recursion/src/prove/witgen.rs"
+    },
+    {
+      "revision": "baseline",
+      "path": "risc0/zkp/src/verify/read_iop.rs",
+      "sha256": "40a7027486fbce5979bd045860e3014ebc1d40f242c4b71ce2adf5722b6d81bc",
+      "source": "https://github.com/risc0/risc0/blob/8eb06ab020a92dc5b63ba6dd0836d432aba6d890/risc0/zkp/src/verify/read_iop.rs"
+    },
+    {
+      "revision": "baseline",
+      "path": "risc0/zkp/src/hal/metal.rs",
+      "sha256": "8b568e98e67ac7599d9d0ae1a8ea01339aff311377ebb78a054cd87ccfdc9d28",
+      "source": "https://github.com/risc0/risc0/blob/8eb06ab020a92dc5b63ba6dd0836d432aba6d890/risc0/zkp/src/hal/metal.rs"
+    },
+    {
+      "revision": "baseline",
+      "path": "risc0/circuit/rv32im/src/prove/mod.rs",
+      "sha256": "bc52e7d40036c5e1a47692cea0dc8249df87f224b3dbde66474544ea91e5ec3f",
+      "source": "https://github.com/risc0/risc0/blob/8eb06ab020a92dc5b63ba6dd0836d432aba6d890/risc0/circuit/rv32im/src/prove/mod.rs"
+    },
+    {
+      "revision": "candidate",
+      "path": "Cargo.toml",
+      "sha256": "bce42c602334727f2896aa0efb2f3c66aaf4d45cb033335d65be476afdd08669",
+      "source": "https://github.com/risc0/risc0/blob/3bbcd44d6459b9ef6ac0df3846dc9215514934e8/Cargo.toml"
+    },
+    {
+      "revision": "candidate",
+      "path": "rust-toolchain.toml",
+      "sha256": "30858de9845a0ab58cd6519580160d83e46a67012d1dde84ff5f015d8a6c4704",
+      "source": "https://github.com/risc0/risc0/blob/3bbcd44d6459b9ef6ac0df3846dc9215514934e8/rust-toolchain.toml"
+    },
+    {
+      "revision": "candidate",
+      "path": "risc0/zkvm/src/receipt.rs",
+      "sha256": "703943ca22b382fcaae0f62e1f3a4c461e6e503164532d3fe4ec557d491c1e11",
+      "source": "https://github.com/risc0/risc0/blob/3bbcd44d6459b9ef6ac0df3846dc9215514934e8/risc0/zkvm/src/receipt.rs"
+    },
+    {
+      "revision": "candidate",
+      "path": "risc0/zkvm/src/receipt/succinct.rs",
+      "sha256": "34bd25361a5474664b8a7543f4a3712d4f61b073641ff137908f0ac3793bd334",
+      "source": "https://github.com/risc0/risc0/blob/3bbcd44d6459b9ef6ac0df3846dc9215514934e8/risc0/zkvm/src/receipt/succinct.rs"
+    },
+    {
+      "revision": "candidate",
+      "path": "risc0/zkvm/src/receipt/composite.rs",
+      "sha256": "3a5915e0e805adc5cd39e24991cdb4d9bd4544d9517cd54ee050a4a873b73bd8",
+      "source": "https://github.com/risc0/risc0/blob/3bbcd44d6459b9ef6ac0df3846dc9215514934e8/risc0/zkvm/src/receipt/composite.rs"
+    },
+    {
+      "revision": "candidate",
+      "path": "risc0/zkvm/src/claim/receipt.rs",
+      "sha256": "70ebdbdfa991872e0ce2d3b406e4217a1d2c1181275843e1a1bbd881a07c7fd8",
+      "source": "https://github.com/risc0/risc0/blob/3bbcd44d6459b9ef6ac0df3846dc9215514934e8/risc0/zkvm/src/claim/receipt.rs"
+    },
+    {
+      "revision": "candidate",
+      "path": "risc0/zkvm/src/lib.rs",
+      "sha256": "659c12b5274b1170b9f14d1285a5009b2b93ecdb1e0fb7946155868f5b2e196c",
+      "source": "https://github.com/risc0/risc0/blob/3bbcd44d6459b9ef6ac0df3846dc9215514934e8/risc0/zkvm/src/lib.rs"
+    },
+    {
+      "revision": "candidate",
+      "path": "risc0/binfmt/src/elf.rs",
+      "sha256": "7f52ff50c60e102efe7e61faae19b5be0427dccd1cafc3866981e3c9a24ed4d8",
+      "source": "https://github.com/risc0/risc0/blob/3bbcd44d6459b9ef6ac0df3846dc9215514934e8/risc0/binfmt/src/elf.rs"
+    },
+    {
+      "revision": "candidate",
+      "path": "risc0/binfmt/src/image.rs",
+      "sha256": "9401538fb4c2a31eacfb0cb3574e316ced3518ae90555cc8bff270a5215b03e5",
+      "source": "https://github.com/risc0/risc0/blob/3bbcd44d6459b9ef6ac0df3846dc9215514934e8/risc0/binfmt/src/image.rs"
+    },
+    {
+      "revision": "candidate",
+      "path": "risc0/binfmt/src/exit_code.rs",
+      "sha256": "10b531e68d592969b47cbe976062cd2b64f7fd9a51f97ac31c0f89c8350a5f6d",
+      "source": "https://github.com/risc0/risc0/blob/3bbcd44d6459b9ef6ac0df3846dc9215514934e8/risc0/binfmt/src/exit_code.rs"
+    },
+    {
+      "revision": "candidate",
+      "path": "risc0/zkos/v1compat/src/main.rs",
+      "sha256": "df2b0fe6d17725b4bec2ed772e94512f5be749e6e74936148a3d63fd227f44e6",
+      "source": "https://github.com/risc0/risc0/blob/3bbcd44d6459b9ef6ac0df3846dc9215514934e8/risc0/zkos/v1compat/src/main.rs"
+    },
+    {
+      "revision": "candidate",
+      "path": "risc0/zkos/v1compat/elfs/v1compat.elf",
+      "sha256": "9dd8af014a24db3752b9beda71c837f553ff361fc1bca83cc79584bd38ac9de5",
+      "source": "https://github.com/risc0/risc0/blob/3bbcd44d6459b9ef6ac0df3846dc9215514934e8/risc0/zkos/v1compat/elfs/v1compat.elf"
+    },
+    {
+      "revision": "candidate",
+      "path": "risc0/circuit/recursion/src/control_id.rs",
+      "sha256": "fae3a1b05614f9d6b328dbcd6b4b722634cf96b0db54d7327e2728ae90b36844",
+      "source": "https://github.com/risc0/risc0/blob/3bbcd44d6459b9ef6ac0df3846dc9215514934e8/risc0/circuit/recursion/src/control_id.rs"
+    },
+    {
+      "revision": "candidate",
+      "path": "risc0/circuit/recursion/src/prove/mod.rs",
+      "sha256": "aaf72c360bca1f46252fb2d954c9b40a461ebcd8de95abfcc8c63cc5c449ee37",
+      "source": "https://github.com/risc0/risc0/blob/3bbcd44d6459b9ef6ac0df3846dc9215514934e8/risc0/circuit/recursion/src/prove/mod.rs"
+    },
+    {
+      "revision": "candidate",
+      "path": "risc0/circuit/recursion/src/prove/witgen.rs",
+      "sha256": "b2c072d268a669551b18f400b45b4f0c1b82411005e1d1070baf4ee8a2d852f8",
+      "source": "https://github.com/risc0/risc0/blob/3bbcd44d6459b9ef6ac0df3846dc9215514934e8/risc0/circuit/recursion/src/prove/witgen.rs"
+    },
+    {
+      "revision": "candidate",
+      "path": "risc0/zkp/src/verify/read_iop.rs",
+      "sha256": "142208defdb795418b138f3903336d25cea1f96f5cb2c2b80a31ac8890b67f78",
+      "source": "https://github.com/risc0/risc0/blob/3bbcd44d6459b9ef6ac0df3846dc9215514934e8/risc0/zkp/src/verify/read_iop.rs"
+    },
+    {
+      "revision": "candidate",
+      "path": "risc0/zkp/src/hal/metal.rs",
+      "sha256": "281d80c9ce30fc821a07ab6a1c465e25e7a306a0d9f0c8296ab3f736a46a2458",
+      "source": "https://github.com/risc0/risc0/blob/3bbcd44d6459b9ef6ac0df3846dc9215514934e8/risc0/zkp/src/hal/metal.rs"
+    },
+    {
+      "revision": "candidate",
+      "path": "risc0/zkvm/src/host/server/testdata/jalr_addr_lowest_bit.bin",
+      "sha256": "925d9b4fc5879f0ca63a414036a7a07e89f0e1b09298da430172d824bbaed3ed",
+      "source": "https://github.com/risc0/risc0/blob/3bbcd44d6459b9ef6ac0df3846dc9215514934e8/risc0/zkvm/src/host/server/testdata/jalr_addr_lowest_bit.bin"
+    },
+    {
+      "revision": "candidate",
+      "path": "risc0/circuit/rv32im/src/prove.rs",
+      "sha256": "9fa9e9658a9d0242b7db771598a5ce48ac24a6c4894781bd97d80368680fe02e",
+      "source": "https://github.com/risc0/risc0/blob/3bbcd44d6459b9ef6ac0df3846dc9215514934e8/risc0/circuit/rv32im/src/prove.rs"
+    },
+    {
+      "revision": "candidate",
+      "path": "risc0/circuit/rv32im-sys/build.rs",
+      "sha256": "ce31a4f431bcf1a2dde81391ddb2701fe1235b9c3e06931f217c185141aa40d9",
+      "source": "https://github.com/risc0/risc0/blob/3bbcd44d6459b9ef6ac0df3846dc9215514934e8/risc0/circuit/rv32im-sys/build.rs"
+    },
+    {
+      "revision": "candidate",
+      "path": "risc0/circuit/rv32im-sys/cxx/hal/metal/hal.cpp",
+      "sha256": "ef8b991aac983a4df6acb7a25a3e6424d16de09886fa20d80ac92a0d3e32ddfa",
+      "source": "https://github.com/risc0/risc0/blob/3bbcd44d6459b9ef6ac0df3846dc9215514934e8/risc0/circuit/rv32im-sys/cxx/hal/metal/hal.cpp"
+    },
+    {
+      "revision": "candidate",
+      "path": "risc0/circuit/recursion/src/prove/hal/metal.rs",
+      "sha256": "9b4130ad4363111eb828db8d0c3e10b1b14f5892e52bf560a484e1c65ae591eb",
+      "source": "https://github.com/risc0/risc0/blob/3bbcd44d6459b9ef6ac0df3846dc9215514934e8/risc0/circuit/recursion/src/prove/hal/metal.rs"
+    }
+  ],
+  "relevant_candidate_side_changes": [
+    {
+      "sha": "4d81f75cafecf7b67880172360ba1efc48963387",
+      "message": "Fix bounds checking issue in zkp eltwise code (#3341)"
+    },
+    {
+      "sha": "57fd1b069fb4afda0be36cac253b8054b080b67d",
+      "message": "rv32im-m3: Fix for out of bounds access in bigint (#3538)"
+    },
+    {
+      "sha": "f585cdde689f0139bfc50e5a77b3c8c60c11d72c",
+      "message": "Fix operator precedence issue in check_bigint_addr (#3564)"
+    },
+    {
+      "sha": "8e694b8c2d19370879aab0a948fbd0308192049c",
+      "message": "Constrain Receipt::journal to be empty when no output is expected (#3632)"
+    },
+    {
+      "sha": "11ed520bb70c058c9a4dbbaf10ed31acff2ccd57",
+      "message": "Remove asserts and potentially panicking index operations based on seal data (#3637)"
+    },
+    {
+      "sha": "9c9ecf8e820936dc9d2317331688bd272299610b",
+      "message": "M3 soundness fixes and determinism proofs for most blocks (#3567)"
+    },
+    {
+      "sha": "da5ee1ad18fc9708109a0607a0fe3eeed0c58575",
+      "message": "Set dev_mode to false in VerifierContext::empty and inherit dev_mode in CompositeReceipt assumption verification (#3654)"
+    },
+    {
+      "sha": "b5d722a4b86a0f9eebcf752d6cf5e4c34c74ac4b",
+      "message": "Remove CompositeReceipt from InnerAssumptionReceipt (#3682)"
+    },
+    {
+      "sha": "7ea1b176d4bee8fa2fbf486d55d9b8c44ae9d3a2",
+      "message": "On SuccinctReceipt, check that the control_id on seal matches metadata (#3687)"
+    },
+    {
+      "sha": "da5eab76fa375476427f780362628e46e041b7d1",
+      "message": "Enable metal support (#3688)"
+    },
+    {
+      "sha": "b030a9124d3b2e0b28aa142c27dfc64043b7c273",
+      "message": "Add fuzzing harness to detect panics in receipt verification (#3641)"
+    },
+    {
+      "sha": "ab24c9d6cbf1c5e9158b52b36de46d086511fa3b",
+      "message": "Fix some m3 metal things (#3721)"
+    },
+    {
+      "sha": "6efb53d44d2a80d878106b9bcd553ff149bd352a",
+      "message": "Fix a bounds issue with the Keccak prover. (#3723)"
+    },
+    {
+      "sha": "6470cece517060e291d59d2e4d7048c70a2f27f8",
+      "message": "Fix underconstrained bug in EcallP2Block (#3711)"
+    },
+    {
+      "sha": "2e2c8b575762472114ab552dd57232989e5eb610",
+      "message": "Fix m3 jalr and bigint issues (#3732)"
+    },
+    {
+      "sha": "0e3b0fd004a621ca31b06f249db2a79e3366b4c9",
+      "message": "Verify proper cycle order for BigInt operations (#3736)"
+    },
+    {
+      "sha": "c0ae7ba1a9ffbcc12f974bfc1ec25f7adaf96414",
+      "message": "Avoid panic during cast in verify (#3740)"
+    }
+  ],
+  "lfs_objects": [
+    {
+      "file": "risc0/circuit/recursion-zkrs/src/zkrs.tar.xz",
+      "sha256": "a36353c5ba81e21949386594d10744435663789845eb8ace9bfc7ecce1f8d438",
+      "bytes": 9700312,
+      "url": "https://media.githubusercontent.com/media/risc0/risc0/3bbcd44d6459b9ef6ac0df3846dc9215514934e8/risc0/circuit/recursion-zkrs/src/zkrs.tar.xz"
+    },
+    {
+      "file": "risc0/circuit/recursion-povw-zkrs/src/zkrs.tar.xz",
+      "sha256": "3fa2508aad43ee67025a050ef290b27735ae06e888b12afc135f753e5f2f2d66",
+      "bytes": 9092448,
+      "url": "https://media.githubusercontent.com/media/risc0/risc0/3bbcd44d6459b9ef6ac0df3846dc9215514934e8/risc0/circuit/recursion-povw-zkrs/src/zkrs.tar.xz"
+    },
+    {
+      "file": "risc0/circuit/keccak/src/prove/keccak_lift_14.zkr.xz",
+      "sha256": "71d5fa93c8c8add29707638c4c498ed69bf42435c0867536c6b4b3aaef7c949c",
+      "bytes": 908484,
+      "url": "https://media.githubusercontent.com/media/risc0/risc0/3bbcd44d6459b9ef6ac0df3846dc9215514934e8/risc0/circuit/keccak/src/prove/keccak_lift_14.zkr.xz"
+    },
+    {
+      "file": "risc0/circuit/keccak/src/prove/keccak_lift_15.zkr.xz",
+      "sha256": "13903e78289e9701c0e6e8f6e52d3536cf5467493e36688eb2688068ea4db482",
+      "bytes": 966052,
+      "url": "https://media.githubusercontent.com/media/risc0/risc0/3bbcd44d6459b9ef6ac0df3846dc9215514934e8/risc0/circuit/keccak/src/prove/keccak_lift_15.zkr.xz"
+    },
+    {
+      "file": "risc0/circuit/keccak/src/prove/keccak_lift_16.zkr.xz",
+      "sha256": "e0808ff1a80013251275494d9510601199f14978ca5b101703c61f98ce183db9",
+      "bytes": 823956,
+      "url": "https://media.githubusercontent.com/media/risc0/risc0/3bbcd44d6459b9ef6ac0df3846dc9215514934e8/risc0/circuit/keccak/src/prove/keccak_lift_16.zkr.xz"
+    },
+    {
+      "file": "risc0/circuit/keccak/src/prove/keccak_lift_17.zkr.xz",
+      "sha256": "5a3991a3c2a11a97128c23121549d83f99e7a5c56e60eec122d34c634a87bf61",
+      "bytes": 1022276,
+      "url": "https://media.githubusercontent.com/media/risc0/risc0/3bbcd44d6459b9ef6ac0df3846dc9215514934e8/risc0/circuit/keccak/src/prove/keccak_lift_17.zkr.xz"
+    },
+    {
+      "file": "risc0/circuit/keccak/src/prove/keccak_lift_18.zkr.xz",
+      "sha256": "d42b130814a9724157560b2fcca40c9beee6b73406e9219eea92520fb9000f0d",
+      "bytes": 1062536,
+      "url": "https://media.githubusercontent.com/media/risc0/risc0/3bbcd44d6459b9ef6ac0df3846dc9215514934e8/risc0/circuit/keccak/src/prove/keccak_lift_18.zkr.xz"
+    }
+  ],
+  "adoption_approved": false,
+  "runtime_qualification": "pending"
+}
