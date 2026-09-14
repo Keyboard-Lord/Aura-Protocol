@@ -335,6 +335,7 @@ dependencies = [
  "aura_compute_merkle_v1",
  "hex",
  "risc0-binfmt",
+ "risc0-core",
  "risc0-zkvm",
  "serde_json",
  "tracing-subscriber 0.3.23",

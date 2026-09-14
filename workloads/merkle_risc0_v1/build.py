@@ -73,6 +73,8 @@ def main():
         env["RUSTC"] = str(rustc)
         # Verbatim flags from the approved pin's risc0-build for a user guest.
         env["CARGO_ENCODED_RUSTFLAGS"] = "\x1f".join(["-C", "passes=lower-atomic", "-C", "link-arg=-Ttext=0x00200800", "-C", "link-arg=--fatal-warnings", "-C", "panic=abort", "--cfg", 'getrandom_backend="custom"'])
+        for origin, replacement in [(str(HERE.parent.parent), "/aura"), (env.get("CARGO_HOME", str(Path.home()/".cargo")), "/cargo"), (str(a.guest_rust), "/risc0-rust")]:
+            env["CARGO_ENCODED_RUSTFLAGS"] += "\x1f--remap-path-prefix=" + origin + "=" + replacement
         cmd = base + ["build", "--release", "--locked", "--manifest-path", str(HERE/"guest/Cargo.toml"), "--target", "riscv32im-risc0-zkvm-elf"]
     else:
         cmd = base + ["rustc" if a.action == "cpu" else "build", "--release", "--locked", "--manifest-path", str(HERE/"Cargo.toml")]

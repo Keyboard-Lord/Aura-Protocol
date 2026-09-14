@@ -256,8 +256,8 @@ even when the linked round never opens, expires or produces no qualified candida
 
 ## C3-METAL-1 — Candidate cannot meet the approved Metal requirement
 
-Status: bounded qualification APPROVED after this finding. Adoption remains a
-separate USER_DECISION; the workload/payment approvals are unchanged.
+Historical qualification status: bounded qualification was approved after this
+finding. Exact-pin adoption was subsequently separately approved above.
 
 Controlling qualification scope: consider official stable/releases first, official
 upstream revisions second, and minimal restoration only if no qualified upstream
@@ -325,9 +325,8 @@ qualification of `3bbcd44d6459b9ef6ac0df3846dc9215514934e8`.
 ## State and stop
 
 C0/C1/C2 DONE. C3 IN PROGRESS; D1/D2 APPROVED; bounded C3-METAL-1 qualification PASS.
-The exact-pin adoption USER_DECISION is in the qualification report. C4–C10 remain
-BLOCKED. No Aura dependency change, production adapter, compute payout or later-node
-implementation occurred. Frozen canonical tables, implementation, Cargo.lock and
-fixtures are unchanged. Only non-authoritative evidence/harness and status records
-changed. The complete fixed batch-Merkle workload, hostile parser, isolation,
-delivery, payment, optional mining and C3 regression gate still remain after adoption.
+The original exact-pin proposal and subsequent approval are in the qualification
+report. C4–C10 remain BLOCKED. Qualification changed only evidence and harnesses;
+the now-approved implementation proceeds with a separately pinned workload workspace.
+The complete fixed batch-Merkle workload, hostile parser, isolation, delivery,
+payment, optional mining and C3 regression gate remain required for closure.

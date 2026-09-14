@@ -1,16 +1,17 @@
 # C3-METAL-1 — RISC Zero revision qualification
 
 Classification: NON-AUTHORITATIVE DESIGN / IMPLEMENTATION EVIDENCE.
-Date: 2026-09-14. Minimal CPU/Metal qualification **PASS**; adoption **not** authorized.
+Date: 2026-09-14. Minimal CPU/Metal qualification **PASS**; subsequent exact-pin
+adoption **APPROVED** (see the decision section below).
 
-Recommended exact pin for a separate adoption decision:
+Qualified and subsequently approved exact pin:
 `3bbcd44d6459b9ef6ac0df3846dc9215514934e8`. It produced independently verified
 CPU and actual-Metal succinct receipts for the same fixed statement. This
 qualifies the backend mechanics, not the full C3 workload or deployment.
 
 This records bounded upstream qualification, not C3 completion or adapter
-registration. Aura dependencies, canonical contracts and frozen fixtures remain
-unchanged. The controlling scope is recorded in the
+registration. Qualification itself changed no Aura dependency or frozen fixture;
+the subsequent implementation has its own evidence. The controlling scope is recorded in the
 [C3 decision record](AURA_COMPUTE_C3_CONTRACT_DECISIONS.md).
 
 ## Candidate order and disposition
@@ -21,7 +22,7 @@ unchanged. The controlling scope is recorded in the
 | Latest official stable v3.0.6, release-3.0 | `1cc70cf05033a79ebc90f07c679cb4bd1cd301b9` | Both circuit Metal selectors still disabled. Not eligible. Release fixes guest building with Rust 1.97; that does not restore Metal. |
 | Official v2.3.2, release-2.3 | `218e3bc4a8ffcd203a9cd4e46f921bf60aa7e2bd` | Recursion has Metal, segment proving does not. Not eligible. The screened v2.0.2/v2.1.0/v2.2.0 selectors have the same gap. |
 | Official v1.2.6, release-1.2 | `1866e2a1cce4fbfa3596a49818fed03c8c869044` | Both Metal paths exist, but this is an unsafe rollback from the reviewed security baseline. Rejected before building. |
-| Official development commit, workspace 5.0.0 | `3bbcd44d6459b9ef6ac0df3846dc9215514934e8` | Both Metal paths selected in source. Selected for isolated runtime qualification; not a stable release or approved Aura dependency. |
+| Official development commit, workspace 5.0.0 | `3bbcd44d6459b9ef6ac0df3846dc9215514934e8` | Both Metal paths selected in source. Qualified, then separately approved for C3; not a stable release. |
 
 The selected commit is dated 2026-07-20 and updates the guest-building Docker
 image to Rust 1.97.0. Its parent is

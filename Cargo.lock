@@ -35,6 +35,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "aura_compute_merkle_v1"
+version = "0.1.0"
+dependencies = [
+ "serde_json",
+ "sha2 0.10.9",
+]
+
+[[package]]
 name = "aura_fractal_key_integration_v1"
 version = "0.1.0"
 dependencies = [
