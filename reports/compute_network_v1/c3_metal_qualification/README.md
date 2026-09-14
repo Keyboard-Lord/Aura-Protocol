@@ -28,7 +28,11 @@ The two backends use the same source, lockfile, harness, guest and kernel:
   Load it into the prover with `DYLD_INSERT_LIBRARIES`.
 - CPU reference: build the same package with
   `--target x86_64-apple-darwin`, using the corresponding Rust target. Run through
-  Rosetta on Apple Silicon. The unmodified upstream constructors select CPU.
+  Rosetta on Apple Silicon. For this revision the final link requires
+  `cargo +1.97.0 rustc --release --locked --target x86_64-apple-darwin --
+  -l framework=Metal -l framework=Foundation`: upstream includes a macOS Metal
+  C++ object even on x86_64. These are harness link arguments, not source patches.
+  The unmodified upstream constructors select CPU.
   This is a CPU correctness reference with translation overhead, not a native
   CPU performance comparison.
 

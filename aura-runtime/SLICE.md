@@ -3,8 +3,8 @@
 Classification: TOOLING / IMPLEMENTATION EVIDENCE; not protocol authority.
 Runtime: AURA Runtime V4
 Program: Aura Compute Network V1, master goal C0–C10
-Current milestone: C3 — IN PROGRESS (C3-METAL-1 qualification APPROVED; adoption NOT approved)
-Last updated: 2026-09-13
+Current milestone: C3 — IN PROGRESS (C3-METAL-1 qualification PASS; exact-pin adoption USER_DECISION)
+Last updated: 2026-09-14
 Next node: C4 — BLOCKED until C3 acceptance; no later READY node
 
 ## Mission and frozen baseline
@@ -31,7 +31,7 @@ No public worker execution or live monetary activation is authorized.
 | C0 | DONE | D1–D4 explicitly approved as amended; controlling approval recorded in C0 evidence. |
 | C1 | DONE | C1-D1–D3 and C1-P1 APPROVED; job/core schemas, authentication and signed-side binding frozen with independent Rust/TS vectors. |
 | C2 | DONE | C2-D1/D2 APPROVED; exact lifecycle codecs, durable assignment/reservation/receipt/result and full gate passed. |
-| C3 | IN PROGRESS | D1/D2 and bounded C3-METAL-1 qualification APPROVED. Evaluate official releases, then exact upstream revisions; return one immutable pin for separate adoption approval. No production adapter registered. |
+| C3 | IN PROGRESS | D1/D2 APPROVED; C3-METAL-1 minimal CPU/actual-Metal qualification PASS. Exact pin returned for adoption USER_DECISION. No production adapter registered. |
 | C4 | BLOCKED | C3: deterministic/open-model inference. |
 | C5 | BLOCKED | C4: molecular, media and Monte Carlo adapters, one at a time. |
 | C6 | BLOCKED | C5: generic sandboxed CPU/GPU worker. |
@@ -110,17 +110,23 @@ records controlling approval and the new candidate qualification decision.
   `3bbcd44d6459b9ef6ac0df3846dc9215514934e8` is a candidate, not an approved pin.
   Source/security comparison and isolated CPU/actual-Metal proof probes precede
   an immutable-pin USER_DECISION. No Aura dependencies or canonical bytes may change.
-- No proof/backend runtime, memory/time measurement, adapter, payment or mining
-  integration was run. Current code cannot discharge ordinary compute entitlement.
-  Follow the approved bounded order after the new decision; C4 remains blocked.
-- Only approval/status documents and source-preflight evidence changed. Checked
-  references, source evidence and whitespace; no repeated C2/Miner runtime gate.
-  Frozen implementation, canonical byte tables, dependency lock and fixtures unchanged.
+- [Qualification evidence](../reports/AURA_COMPUTE_C3_METAL_QUALIFICATION.md) PASS:
+  exact official commit `3bbcd44d6459b9ef6ac0df3846dc9215514934e8`, isolated build,
+  real CPU and Metal succinct proofs of the same fixed qualification statement,
+  independent verification and cross-architecture acceptance. Cold/warm Metal
+  runs each recorded 619 completed GPU buffers; warm prove call 2.401 s,
+  Rosetta CPU reference 14.751 s; seals 222,668 bytes. Memory/timing limits recorded.
+- Sixteen receipt mutation checks and dev-mode conflict rejection passed. Source
+  comparison covers verifier/control/format/security changes from v3.0.5. Current
+  stable has no full Metal path; old Metal-capable v1.2.6 rejected on security grounds.
+- Exact-pin adoption is NOT approved. No Aura dependency, frozen bytes, production
+  adapter, compute payment, batch-Merkle acceptance or later-node implementation changed.
+  Complete C3 workload/parser/isolation/delivery/payment/mining/regression remains open.
 
 ## Stop condition
 
-Current work: bounded qualification only, outside Aura's dependency tree. Stop with
-one exact candidate and evidence for separate adoption approval. No weakening of
+Bounded qualification is complete. Stop for separate adoption approval of the exact
+pin in the qualification report; do not adopt or freeze its dependent contract yet. No weakening of
 Metal, adapter registration or live activation. D1/D2 remain approved.
 C3 closes only with real GPU proof/verification, authenticated
 customer delivery, independent compute payment, optional unchanged mining and

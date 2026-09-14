@@ -1,0 +1,19 @@
+AURA_NEGATIVE_RESULTS ["journal","seal","empty_seal","control_id","metadata_parameters","inner_parameters","fake_receipt","image_id"]
+        0.08 real         0.06 user         0.00 sys
+            10076160  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                1146  page reclaims
+                 178  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   9  voluntary context switches
+                 131  involuntary context switches
+           587382565  instructions retired
+           184924346  cycles elapsed
+             3391944  peak memory footprint

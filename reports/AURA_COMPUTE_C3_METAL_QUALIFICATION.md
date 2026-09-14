@@ -1,7 +1,12 @@
 # C3-METAL-1 — RISC Zero revision qualification
 
 Classification: NON-AUTHORITATIVE DESIGN / IMPLEMENTATION EVIDENCE.
-Date: 2026-09-13. Qualification authorized; adoption **not** authorized.
+Date: 2026-09-14. Minimal CPU/Metal qualification **PASS**; adoption **not** authorized.
+
+Recommended exact pin for a separate adoption decision:
+`3bbcd44d6459b9ef6ac0df3846dc9215514934e8`. It produced independently verified
+CPU and actual-Metal succinct receipts for the same fixed statement. This
+qualifies the backend mechanics, not the full C3 workload or deployment.
 
 This records bounded upstream qualification, not C3 completion or adapter
 registration. Aura dependencies, canonical contracts and frozen fixtures remain
@@ -95,10 +100,14 @@ dev-mode inheritance, seal/control-ID equality, and checked transcript reads.
 The candidate's input-read kernel chunks a checked user slice and rejects a
 host response larger than the requested chunk. Host journal output remains
 bounded at 100 MiB; that upstream maximum is not an approved Aura job limit.
+The M3 host-read implementation checks pointer overflow and a 1,024-byte bound
+before allocating its read buffer; host writes enforce the same I/O bound before
+loading data. These are direct counterparts to the host-allocation hardening.
 
 Relevant changes in the candidate's history include:
 
-- #3564: bigint-address operator precedence; #3632: no-output journal binding;
+- #3351: guest input-read safety; #3545: bounded host allocation;
+  #3564: bigint-address operator precedence; #3632: no-output journal binding;
   #3637: remove seal-driven assertion/index panics; #3654: explicit dev-mode
   inheritance; #3687: seal/control-ID equality. These match baseline hardening.
 - #3682 removes recursive Composite assumption receipts; #3740 changes invalid
@@ -120,8 +129,11 @@ claim. [Upstream zero-knowledge advisory](https://github.com/risc0/risc0/securit
 
 ## Local qualification evidence
 
-Runtime qualification is in progress. No successful CPU/Metal proof or benchmark
-is claimed by this draft. Build artifacts are isolated under
+[Machine-readable results](compute_network_v1/c3_metal_qualification/results.json),
+[raw receipts/logs](compute_network_v1/c3_metal_qualification/raw),
+[build evidence](compute_network_v1/c3_metal_qualification/build_evidence.json),
+and the [reproduction harness](compute_network_v1/c3_metal_qualification/README.md)
+record the completed minimal qualification. Build artifacts were isolated under
 `/tmp/aura-c3-qualification`; no Aura dependency manifest or lockfile was changed.
 
 Environment: Apple M4 Pro, 12 CPU cores (8 performance/4 efficiency), 16 GPU cores,
@@ -134,6 +146,74 @@ candidate's v1compat kernel, a successful halt and empty journal. It tests real
 proving/backend/verifier mechanics. It is not the batch Merkle workload, a
 registered adapter, an arbitrary-customer-ELF service, or a C3 acceptance result.
 Session limit is 2^20 cycles; segment limit is 2^16. No remote prover or dev mode.
+
+| Run | Prove call + local serialization (s) | Entire process wall (s) | Independent native verification (ms) | Max process RSS (bytes) | Peak process footprint (bytes) |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Metal, cold | 273.991 | 275.87 | 18.13 | 456,982,528 | 2,493,465,656 |
+| Metal, warm | 2.401 | 2.50 | 15.61 | 540,622,848 | 2,483,504,232 |
+| CPU reference, x86_64 under Rosetta | 14.751 | 19.19 | 15.56 | 1,533,489,152 | 1,526,741,784 |
+
+Each receipt is a real **Succinct STARK**, with **222,668 seal bytes** and
+**223,226 bytes** in the qualification harness's bincode artifact. The artifact
+format is measurement evidence, not Aura's future canonical receipt contract.
+Independent verification ran in fresh processes without the GPU observer.
+The separate x86_64 verifier also accepted the Metal receipt (18.76 ms).
+
+This is one run per condition, not a statistical throughput study. The cold Metal
+run includes substantial first-use Apple kernel compilation and overlaps part of
+the CPU build. Warm timing includes instrumentation; CPU timing includes Rosetta.
+Do not use their ratio as a native CPU-versus-GPU performance claim. Process RSS
+and footprint exclude Apple's separate compiler services and do not establish
+total unified-memory use. One cold-start sample found compiler-service RSS of
+3,202,000 and 2,922,640 KiB in addition to the prover. No production capacity,
+fee, workload bound or timing guarantee is selected from these measurements.
+
+Backend evidence for **each** Metal run:
+
+- The unmodified Apple-aarch64 segment and recursion selectors were inspected.
+- Nonempty RV32IM (8,452,681 bytes), recursion (1,716,943 bytes) and generic ZKP
+  (116,305 bytes) Metal libraries compiled; their hashes are recorded.
+- The C++ log records Apple M4 Pro selection, witness generation and constraint
+  checking. The recursion path records operations from `risc0_zkp::hal::metal`.
+- The external observer recorded **619 completed command buffers**, all status
+  4, with positive GPU start/end intervals, and **800 pipeline selections**.
+  Events occur during RV32IM witness/constraint processing and during recursion
+  Metal processing. This is runtime GPU execution evidence, not architecture
+  detection or library presence. Pipelines were unlabelled; the observer does
+  not claim to recover a complete per-kernel performance breakdown.
+- The observer neither creates proof data nor submits any setup kernels. Both
+  generated receipts passed the independently invoked pinned verifier.
+
+The CPU binary required explicit final-link `Metal` and `Foundation` frameworks:
+upstream compiles a C++ Metal object on macOS even for x86_64, but does not emit
+those link flags in that configuration. Only harness link arguments changed;
+neither backend selector nor upstream source was patched. The x86_64 segment and
+recursion constructors select their CPU implementations. Its receipt was verified
+by the native verifier, and the Metal receipt was verified by the x86_64 verifier.
+
+All three real receipts verify the same statement:
+
+- ImageID: `04a1e43795245bd79dff61e2a90b258dc7bc3e278b59a8d39b542808f5541c28`.
+- Empty journal, successful `Halted(0)`, no unresolved assumptions, enforced by
+  `Receipt::verify` and its exact expected claim comparison.
+- Control ID: `85cce34af124324c4d198906d16a671e7484d44c8b9beb53f6400e177f7d4562`.
+- Verifier-parameter digest: the candidate digest recorded above.
+
+Their receipt SHA-256 values are all different. These hashes identify saved
+qualification artifacts only; they are not Aura proof identities. The two Metal
+runs demonstrate output variability for one statement; they do not establish a
+cryptographic randomness distribution or confidentiality property.
+
+Focused negative checks passed independently against the CPU and cold-Metal
+receipts: changed journal, changed seal, empty seal, changed control ID, changed
+metadata parameters, changed inner parameters, fake receipt and wrong ImageID.
+All sixteen checks returned rejection without a verifier panic. A conflicting
+`RISC0_DEV_MODE=1` failed closed with exit 101 at the explicit configuration guard.
+This expected configuration panic is distinct from hostile-receipt rejection.
+
+The earlier automatic approval-review usage failure interrupted verification,
+not proving. After usage became available, the same authorized checks completed.
+No remaining tool-approval blocker is hidden in this result.
 
 ## Compatibility and adoption boundary
 
@@ -150,6 +230,30 @@ It does not change the C1/C2 algorithms, frozen prior results, MinerJobV1,
 HASH_V2, Storm, FractalKey, proof_hash, authorization, economics or Bitcoin wire.
 Different randomized receipts must not be normalized into a substitute identity.
 
-No adoption recommendation is final until local qualification results are recorded.
-The eventual USER_DECISION must name exactly one immutable pin and its changed
-verifier/format/image contract. C3 remains IN PROGRESS and C4 remains BLOCKED.
+## USER_DECISION — exact-pin adoption
+
+**Conflict:** v3.0.5 cannot provide the approved Metal path. The qualified candidate
+has working Metal but belongs to a changed RV32IM circuit/verifier lineage.
+
+**Existing approved behavior:** the fixed batch Merkle workload, succinct receipt,
+real local Metal plus CPU reference, independent pinned verification, bounded
+parsing, no confidentiality claim, and all frozen Aura semantics remain required.
+Qualification approval expressly withheld dependency adoption.
+
+**Required alternative:** use official upstream commit
+`3bbcd44d6459b9ef6ac0df3846dc9215514934e8` for C3, with its exact new guest/kernel,
+ImageID, control IDs and verifier parameters and a separately frozen adapter
+receipt contract. It is a development revision, not a stable release.
+
+**Smallest decision needed:** approve that exact pin for C3 implementation and
+workload/proof-contract freeze, accepting the documented upstream format/verifier
+changes. This does not itself approve adapter registration, C3 closure, public
+workers, live funds or any change to frozen Aura outputs.
+
+**Recommended option:** approve this upstream pin for the remaining bounded C3
+work. It retains the reviewed safeguards examined here and has direct local
+CPU/Metal evidence. An old vulnerable release or a maintained Aura prover fork
+is not warranted by the evidence. The full C3 workload, parser/isolation,
+delivery/payment, optional mining and regression gate must still pass.
+
+C3 remains IN PROGRESS and C4 remains BLOCKED. Stop here for the adoption decision.

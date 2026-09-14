@@ -1,0 +1,4 @@
+
+thread 'main' (4803539) panicked at /tmp/aura-c3-qualification/upstream/risc0-3bbcd44d6459b9ef6ac0df3846dc9215514934e8/risc0/zkvm/src/lib.rs:211:9:
+zkVM: Inconsistent settings -- please resolve. The RISC0_DEV_MODE environment variable is set but dev mode has been disabled by feature flag.
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

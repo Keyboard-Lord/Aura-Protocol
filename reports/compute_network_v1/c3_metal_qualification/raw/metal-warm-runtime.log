@@ -1,0 +1,717 @@
+AURA_METAL_OBSERVER device=Apple M4 Pro command_class=AGXG16XFamilyCommandBuffer encoder_class=AGXG16XFamilyComputeContext
+[2m2026-09-14T06:28:19.623729Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im::prove::preflight[0m[2m:[0m Finalizing, trace row count = 3278, aux size = 115698
+[2m2026-09-14T06:28:19.623805Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im::prove::preflight[0m[2m:[0m endCycle: 75, retiredCycle: 75, isFinal: true
+[2m2026-09-14T06:28:19.624231Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Opening metal device: Apple M4 Pro
+[2m2026-09-14T06:28:19.708183Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Copying to GPU
+[2m2026-09-14T06:28:19.708234Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Proving
+[2m2026-09-14T06:28:19.708240Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Witgen
+[2m2026-09-14T06:28:19.708473Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Computing data witness
+AURA_METAL_COMPLETED command=1 status=4 gpu_start=312686.924844375 gpu_end=312686.924891792 pipeline_sets=0
+AURA_METAL_PIPELINE label=<unlabelled>
+AURA_METAL_COMPLETED command=2 status=4 gpu_start=312686.925373875 gpu_end=312686.926651000 pipeline_sets=2
+[2m2026-09-14T06:28:19.713373Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Write globals
+[2m2026-09-14T06:28:19.713402Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Copy
+[2m2026-09-14T06:28:19.713459Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Interpolate + Shift
+[2m2026-09-14T06:28:19.713492Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Eval + commit
+AURA_METAL_COMPLETED command=3 status=4 gpu_start=312686.927136667 gpu_end=312686.963347917 pipeline_sets=47
+[2m2026-09-14T06:28:19.750163Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m root = dfe53d042898864887460029acbc0732ccf6805ddfc77746dffaf4560e491f10
+[2m2026-09-14T06:28:19.750180Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Generate mix
+AURA_METAL_COMPLETED command=4 status=4 gpu_start=312686.963687042 gpu_end=312686.963765250 pipeline_sets=48
+[2m2026-09-14T06:28:19.750498Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Witgen
+[2m2026-09-14T06:28:19.750526Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Computing accum witness
+AURA_METAL_COMPLETED command=5 status=4 gpu_start=312686.964117000 gpu_end=312686.970738167 pipeline_sets=50
+[2m2026-09-14T06:28:19.757475Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Accum tot = (0, 0, 0, 0)
+[2m2026-09-14T06:28:19.757486Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Copy
+[2m2026-09-14T06:28:19.757508Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Interpolate + Shift
+[2m2026-09-14T06:28:19.757534Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Eval + commit
+AURA_METAL_COMPLETED command=6 status=4 gpu_start=312686.971120292 gpu_end=312686.988493375 pipeline_sets=95
+[2m2026-09-14T06:28:19.775343Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m root = 345cf1495ac81533e395ae65a8e98a720ab2c76fef0a9e3e2ab48b4e3a9c9b04
+AURA_METAL_COMPLETED command=7 status=4 gpu_start=312686.988858417 gpu_end=312686.988932625 pipeline_sets=96
+[2m2026-09-14T06:28:19.775623Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Doing eval check, mix = (964357772, 535212794, 1142665075, 560426113)
+[2m2026-09-14T06:28:19.775632Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Do eval check
+AURA_METAL_COMPLETED command=8 status=4 gpu_start=312686.990221375 gpu_end=312687.053652625 pipeline_sets=97
+[2m2026-09-14T06:28:19.840375Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Interopate in place
+[2m2026-09-14T06:28:19.840436Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Eval + commit check group
+AURA_METAL_COMPLETED command=9 status=4 gpu_start=312687.054088000 gpu_end=312687.056777000 pipeline_sets=143
+[2m2026-09-14T06:28:19.843520Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Check root = bfa49467a1fd2255c56c086d0ecb9a4fc391243def5f6b501aa2cf59b57d3a33
+[2m2026-09-14T06:28:19.843532Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Selected z = (1533102972, 1653004499, 950082910, 1430759193)
+[2m2026-09-14T06:28:19.843538Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Compute eval, offset = 0
+AURA_METAL_COMPLETED command=10 status=4 gpu_start=312687.057032750 gpu_end=312687.057042625 pipeline_sets=144
+AURA_METAL_COMPLETED command=11 status=4 gpu_start=312687.057210125 gpu_end=312687.059489250 pipeline_sets=145
+[2m2026-09-14T06:28:19.846170Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Compute eval, offset = 199
+AURA_METAL_COMPLETED command=12 status=4 gpu_start=312687.059669667 gpu_end=312687.061959625 pipeline_sets=146
+[2m2026-09-14T06:28:19.848668Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Compute check eval, offset = 395
+AURA_METAL_COMPLETED command=13 status=4 gpu_start=312687.062192167 gpu_end=312687.062373250 pipeline_sets=147
+[2m2026-09-14T06:28:19.849045Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Translate to coefficients
+[2m2026-09-14T06:28:19.849101Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Commit to data
+[2m2026-09-14T06:28:19.849371Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Coeffs digest = b2e50302ec4f15367aec5e2ebdc2ca747607fe6196cb720b2176b72e913d8e65
+[2m2026-09-14T06:28:19.849382Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Combo mix = (676420943, 1852494779, 5436700, 666732395)
+[2m2026-09-14T06:28:19.849405Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Mixing in polynomial
+[2m2026-09-14T06:28:19.849420Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Mixing in polynomial
+[2m2026-09-14T06:28:19.849426Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Mixing in check
+[2m2026-09-14T06:28:19.849431Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Prepare combos (i.e. subtract coeffs)
+AURA_METAL_COMPLETED command=14 status=4 gpu_start=312687.062913167 gpu_end=312687.064490250 pipeline_sets=150
+[2m2026-09-14T06:28:19.851223Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Divide combos
+[2m2026-09-14T06:28:19.852026Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Prepare final polynomial
+[2m2026-09-14T06:28:19.852078Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Do FRI
+AURA_METAL_COMPLETED command=15 status=4 gpu_start=312687.065592167 gpu_end=312687.067487625 pipeline_sets=177
+AURA_METAL_COMPLETED command=16 status=4 gpu_start=312687.067697667 gpu_end=312687.068291542 pipeline_sets=196
+AURA_METAL_COMPLETED command=17 status=4 gpu_start=312687.068524667 gpu_end=312687.068548000 pipeline_sets=198
+AURA_METAL_COMPLETED command=18 status=4 gpu_start=312687.068735375 gpu_end=312687.068739500 pipeline_sets=199
+AURA_METAL_COMPLETED command=19 status=4 gpu_start=312687.068905792 gpu_end=312687.068909792 pipeline_sets=200
+AURA_METAL_COMPLETED command=20 status=4 gpu_start=312687.069067917 gpu_end=312687.069071875 pipeline_sets=201
+AURA_METAL_COMPLETED command=21 status=4 gpu_start=312687.069233500 gpu_end=312687.069236667 pipeline_sets=202
+AURA_METAL_COMPLETED command=22 status=4 gpu_start=312687.069394625 gpu_end=312687.069397875 pipeline_sets=203
+AURA_METAL_COMPLETED command=23 status=4 gpu_start=312687.069618917 gpu_end=312687.069623000 pipeline_sets=204
+AURA_METAL_COMPLETED command=24 status=4 gpu_start=312687.069764250 gpu_end=312687.069768000 pipeline_sets=205
+AURA_METAL_COMPLETED command=25 status=4 gpu_start=312687.069904375 gpu_end=312687.069907917 pipeline_sets=206
+AURA_METAL_COMPLETED command=26 status=4 gpu_start=312687.070057125 gpu_end=312687.070060042 pipeline_sets=207
+AURA_METAL_COMPLETED command=27 status=4 gpu_start=312687.070203917 gpu_end=312687.070206750 pipeline_sets=208
+AURA_METAL_COMPLETED command=28 status=4 gpu_start=312687.070340542 gpu_end=312687.070343792 pipeline_sets=209
+AURA_METAL_COMPLETED command=29 status=4 gpu_start=312687.070480375 gpu_end=312687.070483792 pipeline_sets=210
+AURA_METAL_COMPLETED command=30 status=4 gpu_start=312687.070613625 gpu_end=312687.070617042 pipeline_sets=211
+AURA_METAL_COMPLETED command=31 status=4 gpu_start=312687.070746417 gpu_end=312687.070749375 pipeline_sets=212
+AURA_METAL_COMPLETED command=32 status=4 gpu_start=312687.070886625 gpu_end=312687.070889667 pipeline_sets=213
+AURA_METAL_COMPLETED command=33 status=4 gpu_start=312687.071022292 gpu_end=312687.071025875 pipeline_sets=214
+AURA_METAL_COMPLETED command=34 status=4 gpu_start=312687.071161625 gpu_end=312687.071165250 pipeline_sets=215
+AURA_METAL_COMPLETED command=35 status=4 gpu_start=312687.071299667 gpu_end=312687.071303042 pipeline_sets=216
+AURA_METAL_COMPLETED command=36 status=4 gpu_start=312687.071457292 gpu_end=312687.071460875 pipeline_sets=217
+AURA_METAL_COMPLETED command=37 status=4 gpu_start=312687.071600375 gpu_end=312687.071604500 pipeline_sets=218
+AURA_METAL_COMPLETED command=38 status=4 gpu_start=312687.071738667 gpu_end=312687.071742375 pipeline_sets=219
+AURA_METAL_COMPLETED command=39 status=4 gpu_start=312687.071870125 gpu_end=312687.071873667 pipeline_sets=220
+AURA_METAL_COMPLETED command=40 status=4 gpu_start=312687.072004750 gpu_end=312687.072008125 pipeline_sets=221
+AURA_METAL_COMPLETED command=41 status=4 gpu_start=312687.072138750 gpu_end=312687.072141917 pipeline_sets=222
+AURA_METAL_COMPLETED command=42 status=4 gpu_start=312687.072277417 gpu_end=312687.072280625 pipeline_sets=223
+AURA_METAL_COMPLETED command=43 status=4 gpu_start=312687.072416375 gpu_end=312687.072419792 pipeline_sets=224
+AURA_METAL_COMPLETED command=44 status=4 gpu_start=312687.072550542 gpu_end=312687.072554625 pipeline_sets=225
+AURA_METAL_COMPLETED command=45 status=4 gpu_start=312687.072684625 gpu_end=312687.072687917 pipeline_sets=226
+AURA_METAL_COMPLETED command=46 status=4 gpu_start=312687.072819625 gpu_end=312687.072822625 pipeline_sets=227
+AURA_METAL_COMPLETED command=47 status=4 gpu_start=312687.072954625 gpu_end=312687.072957667 pipeline_sets=228
+AURA_METAL_COMPLETED command=48 status=4 gpu_start=312687.073089792 gpu_end=312687.073093750 pipeline_sets=229
+AURA_METAL_COMPLETED command=49 status=4 gpu_start=312687.073225625 gpu_end=312687.073229250 pipeline_sets=230
+AURA_METAL_COMPLETED command=50 status=4 gpu_start=312687.073360542 gpu_end=312687.073364000 pipeline_sets=231
+AURA_METAL_COMPLETED command=51 status=4 gpu_start=312687.073494167 gpu_end=312687.073497167 pipeline_sets=232
+AURA_METAL_COMPLETED command=52 status=4 gpu_start=312687.073631250 gpu_end=312687.073634167 pipeline_sets=233
+AURA_METAL_COMPLETED command=53 status=4 gpu_start=312687.073772042 gpu_end=312687.073775750 pipeline_sets=234
+AURA_METAL_COMPLETED command=54 status=4 gpu_start=312687.073908042 gpu_end=312687.073911500 pipeline_sets=235
+AURA_METAL_COMPLETED command=55 status=4 gpu_start=312687.074044875 gpu_end=312687.074048250 pipeline_sets=236
+AURA_METAL_COMPLETED command=56 status=4 gpu_start=312687.074180875 gpu_end=312687.074183875 pipeline_sets=237
+AURA_METAL_COMPLETED command=57 status=4 gpu_start=312687.074314250 gpu_end=312687.074317125 pipeline_sets=238
+AURA_METAL_COMPLETED command=58 status=4 gpu_start=312687.074457750 gpu_end=312687.074461250 pipeline_sets=239
+AURA_METAL_COMPLETED command=59 status=4 gpu_start=312687.074579500 gpu_end=312687.074582875 pipeline_sets=240
+AURA_METAL_COMPLETED command=60 status=4 gpu_start=312687.074922500 gpu_end=312687.074925917 pipeline_sets=241
+AURA_METAL_COMPLETED command=61 status=4 gpu_start=312687.075106417 gpu_end=312687.075109500 pipeline_sets=242
+AURA_METAL_COMPLETED command=62 status=4 gpu_start=312687.075252000 gpu_end=312687.075255042 pipeline_sets=243
+AURA_METAL_COMPLETED command=63 status=4 gpu_start=312687.075388875 gpu_end=312687.075392500 pipeline_sets=244
+AURA_METAL_COMPLETED command=64 status=4 gpu_start=312687.075536125 gpu_end=312687.075539750 pipeline_sets=245
+AURA_METAL_COMPLETED command=65 status=4 gpu_start=312687.075682750 gpu_end=312687.075686000 pipeline_sets=246
+AURA_METAL_COMPLETED command=66 status=4 gpu_start=312687.075839792 gpu_end=312687.075842792 pipeline_sets=247
+AURA_METAL_COMPLETED command=67 status=4 gpu_start=312687.076009250 gpu_end=312687.076012000 pipeline_sets=248
+AURA_METAL_COMPLETED command=68 status=4 gpu_start=312687.076133042 gpu_end=312687.076136667 pipeline_sets=249
+AURA_METAL_COMPLETED command=69 status=4 gpu_start=312687.076343250 gpu_end=312687.076347125 pipeline_sets=250
+AURA_METAL_COMPLETED command=70 status=4 gpu_start=312687.076510375 gpu_end=312687.076513750 pipeline_sets=251
+AURA_METAL_COMPLETED command=71 status=4 gpu_start=312687.076642875 gpu_end=312687.076645625 pipeline_sets=252
+AURA_METAL_COMPLETED command=72 status=4 gpu_start=312687.076794375 gpu_end=312687.076797292 pipeline_sets=253
+AURA_METAL_COMPLETED command=73 status=4 gpu_start=312687.076931917 gpu_end=312687.076935542 pipeline_sets=254
+AURA_METAL_COMPLETED command=74 status=4 gpu_start=312687.077088875 gpu_end=312687.077092625 pipeline_sets=255
+AURA_METAL_COMPLETED command=75 status=4 gpu_start=312687.077235667 gpu_end=312687.077238792 pipeline_sets=256
+AURA_METAL_COMPLETED command=76 status=4 gpu_start=312687.077394875 gpu_end=312687.077398125 pipeline_sets=257
+AURA_METAL_COMPLETED command=77 status=4 gpu_start=312687.077544792 gpu_end=312687.077547667 pipeline_sets=258
+AURA_METAL_COMPLETED command=78 status=4 gpu_start=312687.077706250 gpu_end=312687.077710000 pipeline_sets=259
+AURA_METAL_COMPLETED command=79 status=4 gpu_start=312687.077868667 gpu_end=312687.077872500 pipeline_sets=260
+AURA_METAL_COMPLETED command=80 status=4 gpu_start=312687.078022500 gpu_end=312687.078025875 pipeline_sets=261
+AURA_METAL_COMPLETED command=81 status=4 gpu_start=312687.078161875 gpu_end=312687.078164875 pipeline_sets=262
+AURA_METAL_COMPLETED command=82 status=4 gpu_start=312687.078301125 gpu_end=312687.078304125 pipeline_sets=263
+AURA_METAL_COMPLETED command=83 status=4 gpu_start=312687.078436750 gpu_end=312687.078440500 pipeline_sets=264
+AURA_METAL_COMPLETED command=84 status=4 gpu_start=312687.078576042 gpu_end=312687.078579500 pipeline_sets=265
+AURA_METAL_COMPLETED command=85 status=4 gpu_start=312687.078712625 gpu_end=312687.078715625 pipeline_sets=266
+AURA_METAL_COMPLETED command=86 status=4 gpu_start=312687.078865667 gpu_end=312687.078868625 pipeline_sets=267
+AURA_METAL_COMPLETED command=87 status=4 gpu_start=312687.079010750 gpu_end=312687.079013625 pipeline_sets=268
+AURA_METAL_COMPLETED command=88 status=4 gpu_start=312687.079147375 gpu_end=312687.079151167 pipeline_sets=269
+AURA_METAL_COMPLETED command=89 status=4 gpu_start=312687.079280375 gpu_end=312687.079283875 pipeline_sets=270
+AURA_METAL_COMPLETED command=90 status=4 gpu_start=312687.079417417 gpu_end=312687.079420500 pipeline_sets=271
+AURA_METAL_COMPLETED command=91 status=4 gpu_start=312687.079554750 gpu_end=312687.079557625 pipeline_sets=272
+AURA_METAL_COMPLETED command=92 status=4 gpu_start=312687.079684667 gpu_end=312687.079687500 pipeline_sets=273
+AURA_METAL_COMPLETED command=93 status=4 gpu_start=312687.079817875 gpu_end=312687.079821000 pipeline_sets=274
+AURA_METAL_COMPLETED command=94 status=4 gpu_start=312687.079951625 gpu_end=312687.079955125 pipeline_sets=275
+AURA_METAL_COMPLETED command=95 status=4 gpu_start=312687.080082875 gpu_end=312687.080086167 pipeline_sets=276
+AURA_METAL_COMPLETED command=96 status=4 gpu_start=312687.080220792 gpu_end=312687.080223667 pipeline_sets=277
+AURA_METAL_COMPLETED command=97 status=4 gpu_start=312687.080363875 gpu_end=312687.080366625 pipeline_sets=278
+AURA_METAL_COMPLETED command=98 status=4 gpu_start=312687.080508500 gpu_end=312687.080512042 pipeline_sets=279
+AURA_METAL_COMPLETED command=99 status=4 gpu_start=312687.080648375 gpu_end=312687.080652000 pipeline_sets=280
+AURA_METAL_COMPLETED command=100 status=4 gpu_start=312687.080789792 gpu_end=312687.080792875 pipeline_sets=281
+AURA_METAL_COMPLETED command=101 status=4 gpu_start=312687.080940250 gpu_end=312687.080943500 pipeline_sets=282
+AURA_METAL_COMPLETED command=102 status=4 gpu_start=312687.081096125 gpu_end=312687.081099625 pipeline_sets=283
+AURA_METAL_COMPLETED command=103 status=4 gpu_start=312687.081251125 gpu_end=312687.081254667 pipeline_sets=284
+AURA_METAL_COMPLETED command=104 status=4 gpu_start=312687.081392125 gpu_end=312687.081396250 pipeline_sets=285
+AURA_METAL_COMPLETED command=105 status=4 gpu_start=312687.081538375 gpu_end=312687.081541625 pipeline_sets=286
+AURA_METAL_COMPLETED command=106 status=4 gpu_start=312687.081713750 gpu_end=312687.081717125 pipeline_sets=287
+AURA_METAL_COMPLETED command=107 status=4 gpu_start=312687.081880292 gpu_end=312687.081883500 pipeline_sets=288
+AURA_METAL_COMPLETED command=108 status=4 gpu_start=312687.082035250 gpu_end=312687.082038917 pipeline_sets=289
+AURA_METAL_COMPLETED command=109 status=4 gpu_start=312687.082182292 gpu_end=312687.082185792 pipeline_sets=290
+AURA_METAL_COMPLETED command=110 status=4 gpu_start=312687.082319750 gpu_end=312687.082322875 pipeline_sets=291
+AURA_METAL_COMPLETED command=111 status=4 gpu_start=312687.082460542 gpu_end=312687.082463542 pipeline_sets=292
+AURA_METAL_COMPLETED command=112 status=4 gpu_start=312687.082615000 gpu_end=312687.082618167 pipeline_sets=293
+AURA_METAL_COMPLETED command=113 status=4 gpu_start=312687.082775417 gpu_end=312687.082779292 pipeline_sets=294
+AURA_METAL_COMPLETED command=114 status=4 gpu_start=312687.082928917 gpu_end=312687.082932542 pipeline_sets=295
+AURA_METAL_COMPLETED command=115 status=4 gpu_start=312687.083063042 gpu_end=312687.083066000 pipeline_sets=296
+AURA_METAL_COMPLETED command=116 status=4 gpu_start=312687.083192750 gpu_end=312687.083195792 pipeline_sets=297
+AURA_METAL_COMPLETED command=117 status=4 gpu_start=312687.083326750 gpu_end=312687.083329917 pipeline_sets=298
+AURA_METAL_COMPLETED command=118 status=4 gpu_start=312687.083457167 gpu_end=312687.083460750 pipeline_sets=299
+AURA_METAL_COMPLETED command=119 status=4 gpu_start=312687.083589000 gpu_end=312687.083592375 pipeline_sets=300
+AURA_METAL_COMPLETED command=120 status=4 gpu_start=312687.083723250 gpu_end=312687.083726250 pipeline_sets=301
+AURA_METAL_COMPLETED command=121 status=4 gpu_start=312687.083859625 gpu_end=312687.083862500 pipeline_sets=302
+AURA_METAL_COMPLETED command=122 status=4 gpu_start=312687.083999792 gpu_end=312687.084002542 pipeline_sets=303
+AURA_METAL_COMPLETED command=123 status=4 gpu_start=312687.084133875 gpu_end=312687.084137250 pipeline_sets=304
+AURA_METAL_COMPLETED command=124 status=4 gpu_start=312687.084299875 gpu_end=312687.084303125 pipeline_sets=305
+AURA_METAL_COMPLETED command=125 status=4 gpu_start=312687.084476417 gpu_end=312687.084479500 pipeline_sets=306
+AURA_METAL_COMPLETED command=126 status=4 gpu_start=312687.084610667 gpu_end=312687.084613625 pipeline_sets=307
+AURA_METAL_COMPLETED command=127 status=4 gpu_start=312687.084739000 gpu_end=312687.084741750 pipeline_sets=308
+AURA_METAL_COMPLETED command=128 status=4 gpu_start=312687.084872542 gpu_end=312687.084876000 pipeline_sets=309
+AURA_METAL_COMPLETED command=129 status=4 gpu_start=312687.085002875 gpu_end=312687.085006250 pipeline_sets=310
+AURA_METAL_COMPLETED command=130 status=4 gpu_start=312687.085128667 gpu_end=312687.085132000 pipeline_sets=311
+AURA_METAL_COMPLETED command=131 status=4 gpu_start=312687.085267125 gpu_end=312687.085269875 pipeline_sets=312
+AURA_METAL_COMPLETED command=132 status=4 gpu_start=312687.085399125 gpu_end=312687.085402000 pipeline_sets=313
+AURA_METAL_COMPLETED command=133 status=4 gpu_start=312687.085541042 gpu_end=312687.085544792 pipeline_sets=314
+AURA_METAL_COMPLETED command=134 status=4 gpu_start=312687.085667250 gpu_end=312687.085671000 pipeline_sets=315
+AURA_METAL_COMPLETED command=135 status=4 gpu_start=312687.085901917 gpu_end=312687.085905125 pipeline_sets=316
+AURA_METAL_COMPLETED command=136 status=4 gpu_start=312687.086064750 gpu_end=312687.086068000 pipeline_sets=317
+AURA_METAL_COMPLETED command=137 status=4 gpu_start=312687.086338750 gpu_end=312687.086341625 pipeline_sets=318
+AURA_METAL_COMPLETED command=138 status=4 gpu_start=312687.086493917 gpu_end=312687.086497375 pipeline_sets=319
+AURA_METAL_COMPLETED command=139 status=4 gpu_start=312687.086637125 gpu_end=312687.086640750 pipeline_sets=320
+AURA_METAL_COMPLETED command=140 status=4 gpu_start=312687.086777000 gpu_end=312687.086780292 pipeline_sets=321
+AURA_METAL_COMPLETED command=141 status=4 gpu_start=312687.086914000 gpu_end=312687.086917000 pipeline_sets=322
+AURA_METAL_COMPLETED command=142 status=4 gpu_start=312687.087052792 gpu_end=312687.087055750 pipeline_sets=323
+AURA_METAL_COMPLETED command=143 status=4 gpu_start=312687.087189125 gpu_end=312687.087192750 pipeline_sets=324
+AURA_METAL_COMPLETED command=144 status=4 gpu_start=312687.087331042 gpu_end=312687.087334625 pipeline_sets=325
+AURA_METAL_COMPLETED command=145 status=4 gpu_start=312687.087474875 gpu_end=312687.087478000 pipeline_sets=326
+AURA_METAL_COMPLETED command=146 status=4 gpu_start=312687.087616750 gpu_end=312687.087619667 pipeline_sets=327
+AURA_METAL_COMPLETED command=147 status=4 gpu_start=312687.087757625 gpu_end=312687.087760625 pipeline_sets=328
+AURA_METAL_COMPLETED command=148 status=4 gpu_start=312687.087899750 gpu_end=312687.087903125 pipeline_sets=329
+AURA_METAL_COMPLETED command=149 status=4 gpu_start=312687.088032042 gpu_end=312687.088036250 pipeline_sets=330
+AURA_METAL_COMPLETED command=150 status=4 gpu_start=312687.088205250 gpu_end=312687.088209792 pipeline_sets=331
+AURA_METAL_COMPLETED command=151 status=4 gpu_start=312687.088336417 gpu_end=312687.088339375 pipeline_sets=332
+AURA_METAL_COMPLETED command=152 status=4 gpu_start=312687.088488875 gpu_end=312687.088492042 pipeline_sets=333
+AURA_METAL_COMPLETED command=153 status=4 gpu_start=312687.088625500 gpu_end=312687.088629000 pipeline_sets=334
+AURA_METAL_COMPLETED command=154 status=4 gpu_start=312687.088775500 gpu_end=312687.088779000 pipeline_sets=335
+AURA_METAL_COMPLETED command=155 status=4 gpu_start=312687.088913875 gpu_end=312687.088917125 pipeline_sets=336
+AURA_METAL_COMPLETED command=156 status=4 gpu_start=312687.089057625 gpu_end=312687.089060500 pipeline_sets=337
+AURA_METAL_COMPLETED command=157 status=4 gpu_start=312687.089196125 gpu_end=312687.089198875 pipeline_sets=338
+AURA_METAL_COMPLETED command=158 status=4 gpu_start=312687.089343125 gpu_end=312687.089346542 pipeline_sets=339
+AURA_METAL_COMPLETED command=159 status=4 gpu_start=312687.089489667 gpu_end=312687.089493042 pipeline_sets=340
+AURA_METAL_COMPLETED command=160 status=4 gpu_start=312687.089627000 gpu_end=312687.089630375 pipeline_sets=341
+AURA_METAL_COMPLETED command=161 status=4 gpu_start=312687.089763375 gpu_end=312687.089766292 pipeline_sets=342
+AURA_METAL_COMPLETED command=162 status=4 gpu_start=312687.089904125 gpu_end=312687.089907042 pipeline_sets=343
+AURA_METAL_COMPLETED command=163 status=4 gpu_start=312687.090041750 gpu_end=312687.090045000 pipeline_sets=344
+AURA_METAL_COMPLETED command=164 status=4 gpu_start=312687.090182125 gpu_end=312687.090185625 pipeline_sets=345
+AURA_METAL_COMPLETED command=165 status=4 gpu_start=312687.090330250 gpu_end=312687.090333375 pipeline_sets=346
+AURA_METAL_COMPLETED command=166 status=4 gpu_start=312687.090472042 gpu_end=312687.090475042 pipeline_sets=347
+AURA_METAL_COMPLETED command=167 status=4 gpu_start=312687.090607042 gpu_end=312687.090609875 pipeline_sets=348
+AURA_METAL_COMPLETED command=168 status=4 gpu_start=312687.090752667 gpu_end=312687.090756375 pipeline_sets=349
+AURA_METAL_COMPLETED command=169 status=4 gpu_start=312687.090888000 gpu_end=312687.090891375 pipeline_sets=350
+AURA_METAL_COMPLETED command=170 status=4 gpu_start=312687.091025125 gpu_end=312687.091028375 pipeline_sets=351
+AURA_METAL_COMPLETED command=171 status=4 gpu_start=312687.091168500 gpu_end=312687.091171292 pipeline_sets=352
+AURA_METAL_COMPLETED command=172 status=4 gpu_start=312687.091313625 gpu_end=312687.091316250 pipeline_sets=353
+AURA_METAL_COMPLETED command=173 status=4 gpu_start=312687.091498500 gpu_end=312687.091502000 pipeline_sets=354
+AURA_METAL_COMPLETED command=174 status=4 gpu_start=312687.091672917 gpu_end=312687.091676625 pipeline_sets=355
+AURA_METAL_COMPLETED command=175 status=4 gpu_start=312687.091835625 gpu_end=312687.091838625 pipeline_sets=356
+AURA_METAL_COMPLETED command=176 status=4 gpu_start=312687.091977625 gpu_end=312687.091980625 pipeline_sets=357
+AURA_METAL_COMPLETED command=177 status=4 gpu_start=312687.092112417 gpu_end=312687.092115500 pipeline_sets=358
+AURA_METAL_COMPLETED command=178 status=4 gpu_start=312687.092247125 gpu_end=312687.092251000 pipeline_sets=359
+AURA_METAL_COMPLETED command=179 status=4 gpu_start=312687.092371875 gpu_end=312687.092375542 pipeline_sets=360
+AURA_METAL_COMPLETED command=180 status=4 gpu_start=312687.092497875 gpu_end=312687.092501167 pipeline_sets=361
+AURA_METAL_COMPLETED command=181 status=4 gpu_start=312687.092623375 gpu_end=312687.092626042 pipeline_sets=362
+AURA_METAL_COMPLETED command=182 status=4 gpu_start=312687.092748417 gpu_end=312687.092751125 pipeline_sets=363
+AURA_METAL_COMPLETED command=183 status=4 gpu_start=312687.092876167 gpu_end=312687.092879667 pipeline_sets=364
+AURA_METAL_COMPLETED command=184 status=4 gpu_start=312687.093006625 gpu_end=312687.093010250 pipeline_sets=365
+AURA_METAL_COMPLETED command=185 status=4 gpu_start=312687.093134875 gpu_end=312687.093138417 pipeline_sets=366
+AURA_METAL_COMPLETED command=186 status=4 gpu_start=312687.093276417 gpu_end=312687.093279375 pipeline_sets=367
+AURA_METAL_COMPLETED command=187 status=4 gpu_start=312687.093414042 gpu_end=312687.093417000 pipeline_sets=368
+AURA_METAL_COMPLETED command=188 status=4 gpu_start=312687.093546792 gpu_end=312687.093550167 pipeline_sets=369
+AURA_METAL_COMPLETED command=189 status=4 gpu_start=312687.093679292 gpu_end=312687.093682792 pipeline_sets=370
+AURA_METAL_COMPLETED command=190 status=4 gpu_start=312687.093812667 gpu_end=312687.093816125 pipeline_sets=371
+AURA_METAL_COMPLETED command=191 status=4 gpu_start=312687.093957375 gpu_end=312687.093960042 pipeline_sets=372
+AURA_METAL_COMPLETED command=192 status=4 gpu_start=312687.094084500 gpu_end=312687.094087375 pipeline_sets=373
+AURA_METAL_COMPLETED command=193 status=4 gpu_start=312687.094223750 gpu_end=312687.094227125 pipeline_sets=374
+AURA_METAL_COMPLETED command=194 status=4 gpu_start=312687.094357417 gpu_end=312687.094361000 pipeline_sets=375
+AURA_METAL_COMPLETED command=195 status=4 gpu_start=312687.094507875 gpu_end=312687.094511000 pipeline_sets=376
+AURA_METAL_COMPLETED command=196 status=4 gpu_start=312687.094662292 gpu_end=312687.094665042 pipeline_sets=377
+AURA_METAL_COMPLETED command=197 status=4 gpu_start=312687.094788042 gpu_end=312687.094790750 pipeline_sets=378
+AURA_METAL_COMPLETED command=198 status=4 gpu_start=312687.094941750 gpu_end=312687.094945250 pipeline_sets=379
+AURA_METAL_COMPLETED command=199 status=4 gpu_start=312687.095086042 gpu_end=312687.095089500 pipeline_sets=380
+AURA_METAL_COMPLETED command=200 status=4 gpu_start=312687.095222500 gpu_end=312687.095225500 pipeline_sets=381
+AURA_METAL_COMPLETED command=201 status=4 gpu_start=312687.095357125 gpu_end=312687.095360042 pipeline_sets=382
+AURA_METAL_COMPLETED command=202 status=4 gpu_start=312687.095489292 gpu_end=312687.095492167 pipeline_sets=383
+AURA_METAL_COMPLETED command=203 status=4 gpu_start=312687.095634000 gpu_end=312687.095637500 pipeline_sets=384
+AURA_METAL_COMPLETED command=204 status=4 gpu_start=312687.095766625 gpu_end=312687.095770250 pipeline_sets=385
+AURA_METAL_COMPLETED command=205 status=4 gpu_start=312687.095902125 gpu_end=312687.095905292 pipeline_sets=386
+AURA_METAL_COMPLETED command=206 status=4 gpu_start=312687.096033875 gpu_end=312687.096036792 pipeline_sets=387
+AURA_METAL_COMPLETED command=207 status=4 gpu_start=312687.096201875 gpu_end=312687.096205417 pipeline_sets=388
+AURA_METAL_COMPLETED command=208 status=4 gpu_start=312687.096359000 gpu_end=312687.096363250 pipeline_sets=389
+AURA_METAL_COMPLETED command=209 status=4 gpu_start=312687.096496167 gpu_end=312687.096500667 pipeline_sets=390
+AURA_METAL_COMPLETED command=210 status=4 gpu_start=312687.096661375 gpu_end=312687.096664875 pipeline_sets=391
+AURA_METAL_COMPLETED command=211 status=4 gpu_start=312687.096822000 gpu_end=312687.096825042 pipeline_sets=392
+AURA_METAL_COMPLETED command=212 status=4 gpu_start=312687.096984167 gpu_end=312687.096987375 pipeline_sets=393
+AURA_METAL_COMPLETED command=213 status=4 gpu_start=312687.097137500 gpu_end=312687.097141250 pipeline_sets=394
+AURA_METAL_COMPLETED command=214 status=4 gpu_start=312687.097286000 gpu_end=312687.097290250 pipeline_sets=395
+AURA_METAL_COMPLETED command=215 status=4 gpu_start=312687.097439250 gpu_end=312687.097442667 pipeline_sets=396
+AURA_METAL_COMPLETED command=216 status=4 gpu_start=312687.097579167 gpu_end=312687.097582417 pipeline_sets=397
+AURA_METAL_COMPLETED command=217 status=4 gpu_start=312687.097730917 gpu_end=312687.097733750 pipeline_sets=398
+AURA_METAL_COMPLETED command=218 status=4 gpu_start=312687.097882875 gpu_end=312687.097886250 pipeline_sets=399
+AURA_METAL_COMPLETED command=219 status=4 gpu_start=312687.098036750 gpu_end=312687.098040042 pipeline_sets=400
+AURA_METAL_COMPLETED command=220 status=4 gpu_start=312687.098196750 gpu_end=312687.098200375 pipeline_sets=401
+AURA_METAL_COMPLETED command=221 status=4 gpu_start=312687.098353500 gpu_end=312687.098356500 pipeline_sets=402
+AURA_METAL_COMPLETED command=222 status=4 gpu_start=312687.098511375 gpu_end=312687.098514500 pipeline_sets=403
+AURA_METAL_COMPLETED command=223 status=4 gpu_start=312687.098666875 gpu_end=312687.098670500 pipeline_sets=404
+AURA_METAL_COMPLETED command=224 status=4 gpu_start=312687.098805542 gpu_end=312687.098808875 pipeline_sets=405
+AURA_METAL_COMPLETED command=225 status=4 gpu_start=312687.098940625 gpu_end=312687.098943750 pipeline_sets=406
+AURA_METAL_COMPLETED command=226 status=4 gpu_start=312687.099076167 gpu_end=312687.099079000 pipeline_sets=407
+AURA_METAL_COMPLETED command=227 status=4 gpu_start=312687.099208875 gpu_end=312687.099211625 pipeline_sets=408
+AURA_METAL_COMPLETED command=228 status=4 gpu_start=312687.099345750 gpu_end=312687.099349125 pipeline_sets=409
+AURA_METAL_COMPLETED command=229 status=4 gpu_start=312687.099473125 gpu_end=312687.099476917 pipeline_sets=410
+AURA_METAL_COMPLETED command=230 status=4 gpu_start=312687.099570875 gpu_end=312687.099574000 pipeline_sets=411
+AURA_METAL_COMPLETED command=231 status=4 gpu_start=312687.099694250 gpu_end=312687.099697375 pipeline_sets=412
+AURA_METAL_COMPLETED command=232 status=4 gpu_start=312687.099971042 gpu_end=312687.099973625 pipeline_sets=413
+AURA_METAL_COMPLETED command=233 status=4 gpu_start=312687.100173167 gpu_end=312687.100176625 pipeline_sets=414
+AURA_METAL_COMPLETED command=234 status=4 gpu_start=312687.100299792 gpu_end=312687.100303167 pipeline_sets=415
+AURA_METAL_COMPLETED command=235 status=4 gpu_start=312687.100500292 gpu_end=312687.100503375 pipeline_sets=416
+AURA_METAL_COMPLETED command=236 status=4 gpu_start=312687.100647292 gpu_end=312687.100650125 pipeline_sets=417
+AURA_METAL_COMPLETED command=237 status=4 gpu_start=312687.100918292 gpu_end=312687.100921042 pipeline_sets=418
+AURA_METAL_COMPLETED command=238 status=4 gpu_start=312687.101057917 gpu_end=312687.101061792 pipeline_sets=419
+AURA_METAL_COMPLETED command=239 status=4 gpu_start=312687.101183750 gpu_end=312687.101187125 pipeline_sets=420
+AURA_METAL_COMPLETED command=240 status=4 gpu_start=312687.101356500 gpu_end=312687.101360042 pipeline_sets=421
+AURA_METAL_COMPLETED command=241 status=4 gpu_start=312687.101487875 gpu_end=312687.101491042 pipeline_sets=422
+AURA_METAL_COMPLETED command=242 status=4 gpu_start=312687.101605000 gpu_end=312687.101607875 pipeline_sets=423
+AURA_METAL_COMPLETED command=243 status=4 gpu_start=312687.101713042 gpu_end=312687.101716542 pipeline_sets=424
+AURA_METAL_COMPLETED command=244 status=4 gpu_start=312687.101846875 gpu_end=312687.101850292 pipeline_sets=425
+AURA_METAL_COMPLETED command=245 status=4 gpu_start=312687.101953625 gpu_end=312687.101956625 pipeline_sets=426
+AURA_METAL_COMPLETED command=246 status=4 gpu_start=312687.102061792 gpu_end=312687.102064542 pipeline_sets=427
+AURA_METAL_COMPLETED command=247 status=4 gpu_start=312687.102179417 gpu_end=312687.102182250 pipeline_sets=428
+AURA_METAL_COMPLETED command=248 status=4 gpu_start=312687.102287000 gpu_end=312687.102290625 pipeline_sets=429
+AURA_METAL_COMPLETED command=249 status=4 gpu_start=312687.102390875 gpu_end=312687.102394375 pipeline_sets=430
+AURA_METAL_COMPLETED command=250 status=4 gpu_start=312687.102502500 gpu_end=312687.102505625 pipeline_sets=431
+AURA_METAL_COMPLETED command=251 status=4 gpu_start=312687.102627625 gpu_end=312687.102630125 pipeline_sets=432
+AURA_METAL_COMPLETED command=252 status=4 gpu_start=312687.102733542 gpu_end=312687.102736292 pipeline_sets=433
+AURA_METAL_COMPLETED command=253 status=4 gpu_start=312687.102836292 gpu_end=312687.102840000 pipeline_sets=434
+AURA_METAL_COMPLETED command=254 status=4 gpu_start=312687.103050500 gpu_end=312687.103054250 pipeline_sets=435
+AURA_METAL_COMPLETED command=255 status=4 gpu_start=312687.103161667 gpu_end=312687.103164875 pipeline_sets=436
+AURA_METAL_COMPLETED command=256 status=4 gpu_start=312687.103275875 gpu_end=312687.103279042 pipeline_sets=437
+AURA_METAL_COMPLETED command=257 status=4 gpu_start=312687.103386917 gpu_end=312687.103389875 pipeline_sets=438
+AURA_METAL_COMPLETED command=258 status=4 gpu_start=312687.103643750 gpu_end=312687.103647000 pipeline_sets=439
+AURA_METAL_COMPLETED command=259 status=4 gpu_start=312687.103774750 gpu_end=312687.103778042 pipeline_sets=440
+AURA_METAL_COMPLETED command=260 status=4 gpu_start=312687.103883500 gpu_end=312687.103886625 pipeline_sets=441
+AURA_METAL_COMPLETED command=261 status=4 gpu_start=312687.103992625 gpu_end=312687.103995417 pipeline_sets=442
+AURA_METAL_COMPLETED command=262 status=4 gpu_start=312687.104101000 gpu_end=312687.104103875 pipeline_sets=443
+AURA_METAL_COMPLETED command=263 status=4 gpu_start=312687.104215167 gpu_end=312687.104218792 pipeline_sets=444
+AURA_METAL_COMPLETED command=264 status=4 gpu_start=312687.104330167 gpu_end=312687.104334250 pipeline_sets=445
+AURA_METAL_COMPLETED command=265 status=4 gpu_start=312687.104447167 gpu_end=312687.104450625 pipeline_sets=446
+AURA_METAL_COMPLETED command=266 status=4 gpu_start=312687.104562792 gpu_end=312687.104565750 pipeline_sets=447
+AURA_METAL_COMPLETED command=267 status=4 gpu_start=312687.104675750 gpu_end=312687.104678500 pipeline_sets=448
+[2m2026-09-14T06:28:19.892378Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Merkle root = dfe53d042898864887460029acbc0732ccf6805ddfc77746dffaf4560e491f10
+[2m2026-09-14T06:28:19.892518Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Merkle root = 345cf1495ac81533e395ae65a8e98a720ab2c76fef0a9e3e2ab48b4e3a9c9b04
+[2m2026-09-14T06:28:19.892524Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m evalCheckMix = (964357772, 535212794, 1142665075, 560426113)
+[2m2026-09-14T06:28:19.892612Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Check root = bfa49467a1fd2255c56c086d0ecb9a4fc391243def5f6b501aa2cf59b57d3a33
+[2m2026-09-14T06:28:19.892615Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Selected z = (1533102972, 1653004499, 950082910, 1430759193)
+[2m2026-09-14T06:28:19.892883Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Coeffs digest = b2e50302ec4f15367aec5e2ebdc2ca747607fe6196cb720b2176b72e913d8e65
+[2m2026-09-14T06:28:19.892891Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Combo mix = (676420943, 1852494779, 5436700, 666732395)
+[2m2026-09-14T06:28:19.894190Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m constraintPoly = (778898469, 1741881995, 1858595749, 519664634)
+[2m2026-09-14T06:28:19.894200Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m check = (778898469, 1741881995, 1858595749, 519664634)
+[2m2026-09-14T06:28:19.907748Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Completed successfuly
+AURA_METAL_COMPLETED command=268 status=4 gpu_start=312687.365512625 gpu_end=312687.365730167 pipeline_sets=449
+[2m2026-09-14T06:28:20.152659Z[0m [34mDEBUG[0m [2mrisc0_zkp::hal::metal[0m[2m:[0m io: 6029312, count: 23
+AURA_METAL_COMPLETED command=269 status=4 gpu_start=312687.366304625 gpu_end=312687.366604375 pipeline_sets=450
+AURA_METAL_COMPLETED command=270 status=4 gpu_start=312687.366834500 gpu_end=312687.367145125 pipeline_sets=451
+AURA_METAL_COMPLETED command=271 status=4 gpu_start=312687.367314292 gpu_end=312687.367614792 pipeline_sets=452
+AURA_METAL_COMPLETED command=272 status=4 gpu_start=312687.367764917 gpu_end=312687.368056167 pipeline_sets=453
+AURA_METAL_COMPLETED command=273 status=4 gpu_start=312687.368213917 gpu_end=312687.368498875 pipeline_sets=454
+AURA_METAL_COMPLETED command=274 status=4 gpu_start=312687.368650875 gpu_end=312687.368933750 pipeline_sets=455
+AURA_METAL_COMPLETED command=275 status=4 gpu_start=312687.369125167 gpu_end=312687.369416375 pipeline_sets=456
+AURA_METAL_COMPLETED command=276 status=4 gpu_start=312687.369667625 gpu_end=312687.369964875 pipeline_sets=457
+AURA_METAL_COMPLETED command=277 status=4 gpu_start=312687.370131292 gpu_end=312687.370432292 pipeline_sets=458
+AURA_METAL_COMPLETED command=278 status=4 gpu_start=312687.370585875 gpu_end=312687.370883000 pipeline_sets=459
+AURA_METAL_COMPLETED command=279 status=4 gpu_start=312687.371119417 gpu_end=312687.371427500 pipeline_sets=460
+AURA_METAL_COMPLETED command=280 status=4 gpu_start=312687.371616750 gpu_end=312687.371917000 pipeline_sets=461
+AURA_METAL_COMPLETED command=281 status=4 gpu_start=312687.372083000 gpu_end=312687.372366625 pipeline_sets=462
+AURA_METAL_COMPLETED command=282 status=4 gpu_start=312687.372528417 gpu_end=312687.372838292 pipeline_sets=463
+AURA_METAL_COMPLETED command=283 status=4 gpu_start=312687.373005000 gpu_end=312687.373378625 pipeline_sets=464
+AURA_METAL_COMPLETED command=284 status=4 gpu_start=312687.373531167 gpu_end=312687.373818375 pipeline_sets=465
+AURA_METAL_COMPLETED command=285 status=4 gpu_start=312687.373974667 gpu_end=312687.374263500 pipeline_sets=466
+AURA_METAL_COMPLETED command=286 status=4 gpu_start=312687.374428875 gpu_end=312687.374714792 pipeline_sets=467
+AURA_METAL_COMPLETED command=287 status=4 gpu_start=312687.375045542 gpu_end=312687.375178792 pipeline_sets=468
+AURA_METAL_COMPLETED command=288 status=4 gpu_start=312687.375406875 gpu_end=312687.377774750 pipeline_sets=469
+[2m2026-09-14T06:28:20.164570Z[0m [34mDEBUG[0m [2mrisc0_zkp::hal::metal[0m[2m:[0m output: 24117248, input: 6029312, count: 23
+AURA_METAL_COMPLETED command=289 status=4 gpu_start=312687.389580500 gpu_end=312687.390183875 pipeline_sets=470
+[2m2026-09-14T06:28:20.176925Z[0m [34mDEBUG[0m [2mrisc0_zkp::hal::metal[0m[2m:[0m output: 24117248, count: 23, expand_bits: 2
+AURA_METAL_COMPLETED command=290 status=4 gpu_start=312687.390585792 gpu_end=312687.391880875 pipeline_sets=471
+AURA_METAL_COMPLETED command=291 status=4 gpu_start=312687.392126667 gpu_end=312687.393427000 pipeline_sets=472
+AURA_METAL_COMPLETED command=292 status=4 gpu_start=312687.394029667 gpu_end=312687.395293625 pipeline_sets=473
+AURA_METAL_COMPLETED command=293 status=4 gpu_start=312687.395481292 gpu_end=312687.396769667 pipeline_sets=474
+AURA_METAL_COMPLETED command=294 status=4 gpu_start=312687.396966250 gpu_end=312687.398342292 pipeline_sets=475
+AURA_METAL_COMPLETED command=295 status=4 gpu_start=312687.398524250 gpu_end=312687.399900375 pipeline_sets=476
+AURA_METAL_COMPLETED command=296 status=4 gpu_start=312687.400070792 gpu_end=312687.401452000 pipeline_sets=477
+AURA_METAL_COMPLETED command=297 status=4 gpu_start=312687.401723292 gpu_end=312687.403104875 pipeline_sets=478
+AURA_METAL_COMPLETED command=298 status=4 gpu_start=312687.403321292 gpu_end=312687.404722500 pipeline_sets=479
+AURA_METAL_COMPLETED command=299 status=4 gpu_start=312687.404925375 gpu_end=312687.406414375 pipeline_sets=480
+AURA_METAL_COMPLETED command=300 status=4 gpu_start=312687.406596625 gpu_end=312687.408025625 pipeline_sets=481
+AURA_METAL_COMPLETED command=301 status=4 gpu_start=312687.408205042 gpu_end=312687.409623500 pipeline_sets=482
+AURA_METAL_COMPLETED command=302 status=4 gpu_start=312687.409821667 gpu_end=312687.411241000 pipeline_sets=483
+AURA_METAL_COMPLETED command=303 status=4 gpu_start=312687.411438125 gpu_end=312687.412883167 pipeline_sets=484
+AURA_METAL_COMPLETED command=304 status=4 gpu_start=312687.413092000 gpu_end=312687.414524750 pipeline_sets=485
+AURA_METAL_COMPLETED command=305 status=4 gpu_start=312687.414715417 gpu_end=312687.416207125 pipeline_sets=486
+AURA_METAL_COMPLETED command=306 status=4 gpu_start=312687.416408500 gpu_end=312687.417841750 pipeline_sets=487
+AURA_METAL_COMPLETED command=307 status=4 gpu_start=312687.418062500 gpu_end=312687.419475792 pipeline_sets=488
+[2m2026-09-14T06:28:20.206201Z[0m [34mDEBUG[0m [2mrisc0_zkp::hal::metal[0m[2m:[0m io: 6029312, count: 23, row_size: 262144, bits: 18
+AURA_METAL_COMPLETED command=308 status=4 gpu_start=312687.419769167 gpu_end=312687.420220000 pipeline_sets=489
+AURA_METAL_COMPLETED command=309 status=4 gpu_start=312687.422788917 gpu_end=312687.453374250 pipeline_sets=490
+AURA_METAL_COMPLETED command=310 status=4 gpu_start=312687.453860125 gpu_end=312687.462821417 pipeline_sets=491
+AURA_METAL_COMPLETED command=311 status=4 gpu_start=312687.463071167 gpu_end=312687.467081625 pipeline_sets=492
+AURA_METAL_COMPLETED command=312 status=4 gpu_start=312687.467323875 gpu_end=312687.469223375 pipeline_sets=493
+AURA_METAL_COMPLETED command=313 status=4 gpu_start=312687.469447167 gpu_end=312687.470425375 pipeline_sets=494
+AURA_METAL_COMPLETED command=314 status=4 gpu_start=312687.470627792 gpu_end=312687.471130417 pipeline_sets=495
+AURA_METAL_COMPLETED command=315 status=4 gpu_start=312687.471301625 gpu_end=312687.471559250 pipeline_sets=496
+AURA_METAL_COMPLETED command=316 status=4 gpu_start=312687.471725000 gpu_end=312687.471992000 pipeline_sets=497
+AURA_METAL_COMPLETED command=317 status=4 gpu_start=312687.472144125 gpu_end=312687.472444917 pipeline_sets=498
+AURA_METAL_COMPLETED command=318 status=4 gpu_start=312687.472647167 gpu_end=312687.472937250 pipeline_sets=499
+AURA_METAL_COMPLETED command=319 status=4 gpu_start=312687.473109292 gpu_end=312687.473365917 pipeline_sets=500
+AURA_METAL_COMPLETED command=320 status=4 gpu_start=312687.473548292 gpu_end=312687.473683750 pipeline_sets=501
+AURA_METAL_COMPLETED command=321 status=4 gpu_start=312687.473858667 gpu_end=312687.473933750 pipeline_sets=502
+AURA_METAL_COMPLETED command=322 status=4 gpu_start=312687.474104500 gpu_end=312687.474164917 pipeline_sets=503
+AURA_METAL_COMPLETED command=323 status=4 gpu_start=312687.474342875 gpu_end=312687.474399792 pipeline_sets=504
+AURA_METAL_COMPLETED command=324 status=4 gpu_start=312687.474562375 gpu_end=312687.474617000 pipeline_sets=505
+AURA_METAL_COMPLETED command=325 status=4 gpu_start=312687.474782375 gpu_end=312687.474832750 pipeline_sets=506
+AURA_METAL_COMPLETED command=326 status=4 gpu_start=312687.475067125 gpu_end=312687.475117375 pipeline_sets=507
+AURA_METAL_COMPLETED command=327 status=4 gpu_start=312687.475295125 gpu_end=312687.475345292 pipeline_sets=508
+AURA_METAL_COMPLETED command=328 status=4 gpu_start=312687.475514875 gpu_end=312687.475565125 pipeline_sets=509
+AURA_METAL_COMPLETED command=329 status=4 gpu_start=312687.475733500 gpu_end=312687.475781792 pipeline_sets=510
+AURA_METAL_COMPLETED command=330 status=4 gpu_start=312687.498492417 gpu_end=312687.499694667 pipeline_sets=511
+[2m2026-09-14T06:28:20.286450Z[0m [34mDEBUG[0m [2mrisc0_zkp::hal::metal[0m[2m:[0m io: 33554432, count: 128
+AURA_METAL_COMPLETED command=331 status=4 gpu_start=312687.500020042 gpu_end=312687.501970750 pipeline_sets=512
+AURA_METAL_COMPLETED command=332 status=4 gpu_start=312687.502211500 gpu_end=312687.504201625 pipeline_sets=513
+AURA_METAL_COMPLETED command=333 status=4 gpu_start=312687.504388292 gpu_end=312687.506547500 pipeline_sets=514
+AURA_METAL_COMPLETED command=334 status=4 gpu_start=312687.506788167 gpu_end=312687.508763167 pipeline_sets=515
+AURA_METAL_COMPLETED command=335 status=4 gpu_start=312687.508942417 gpu_end=312687.510911167 pipeline_sets=516
+AURA_METAL_COMPLETED command=336 status=4 gpu_start=312687.511126250 gpu_end=312687.513065250 pipeline_sets=517
+AURA_METAL_COMPLETED command=337 status=4 gpu_start=312687.513290500 gpu_end=312687.515192917 pipeline_sets=518
+AURA_METAL_COMPLETED command=338 status=4 gpu_start=312687.515413125 gpu_end=312687.517418875 pipeline_sets=519
+AURA_METAL_COMPLETED command=339 status=4 gpu_start=312687.517600375 gpu_end=312687.519516917 pipeline_sets=520
+AURA_METAL_COMPLETED command=340 status=4 gpu_start=312687.519822125 gpu_end=312687.521818917 pipeline_sets=521
+AURA_METAL_COMPLETED command=341 status=4 gpu_start=312687.522035000 gpu_end=312687.523998750 pipeline_sets=522
+AURA_METAL_COMPLETED command=342 status=4 gpu_start=312687.524211875 gpu_end=312687.526165375 pipeline_sets=523
+AURA_METAL_COMPLETED command=343 status=4 gpu_start=312687.526364125 gpu_end=312687.528166875 pipeline_sets=524
+AURA_METAL_COMPLETED command=344 status=4 gpu_start=312687.528360250 gpu_end=312687.530145750 pipeline_sets=525
+AURA_METAL_COMPLETED command=345 status=4 gpu_start=312687.530333417 gpu_end=312687.532324250 pipeline_sets=526
+AURA_METAL_COMPLETED command=346 status=4 gpu_start=312687.532506500 gpu_end=312687.534306000 pipeline_sets=527
+AURA_METAL_COMPLETED command=347 status=4 gpu_start=312687.534543500 gpu_end=312687.536325875 pipeline_sets=528
+AURA_METAL_COMPLETED command=348 status=4 gpu_start=312687.536514292 gpu_end=312687.538318875 pipeline_sets=529
+AURA_METAL_COMPLETED command=349 status=4 gpu_start=312687.538508250 gpu_end=312687.539957792 pipeline_sets=530
+AURA_METAL_COMPLETED command=350 status=4 gpu_start=312687.540154417 gpu_end=312687.552194292 pipeline_sets=531
+[2m2026-09-14T06:28:20.339014Z[0m [34mDEBUG[0m [2mrisc0_zkp::hal::metal[0m[2m:[0m output: 134217728, input: 33554432, count: 128
+AURA_METAL_COMPLETED command=351 status=4 gpu_start=312687.631099375 gpu_end=312687.635079542 pipeline_sets=532
+[2m2026-09-14T06:28:20.421837Z[0m [34mDEBUG[0m [2mrisc0_zkp::hal::metal[0m[2m:[0m output: 134217728, count: 128, expand_bits: 2
+AURA_METAL_COMPLETED command=352 status=4 gpu_start=312687.635386542 gpu_end=312687.642724500 pipeline_sets=533
+AURA_METAL_COMPLETED command=353 status=4 gpu_start=312687.642930000 gpu_end=312687.650245667 pipeline_sets=534
+AURA_METAL_COMPLETED command=354 status=4 gpu_start=312687.650457000 gpu_end=312687.657602750 pipeline_sets=535
+AURA_METAL_COMPLETED command=355 status=4 gpu_start=312687.657808875 gpu_end=312687.665154750 pipeline_sets=536
+AURA_METAL_COMPLETED command=356 status=4 gpu_start=312687.665383875 gpu_end=312687.673211875 pipeline_sets=537
+AURA_METAL_COMPLETED command=357 status=4 gpu_start=312687.673414875 gpu_end=312687.681131500 pipeline_sets=538
+AURA_METAL_COMPLETED command=358 status=4 gpu_start=312687.681358375 gpu_end=312687.689196167 pipeline_sets=539
+AURA_METAL_COMPLETED command=359 status=4 gpu_start=312687.689398625 gpu_end=312687.697434042 pipeline_sets=540
+AURA_METAL_COMPLETED command=360 status=4 gpu_start=312687.697709750 gpu_end=312687.705514375 pipeline_sets=541
+AURA_METAL_COMPLETED command=361 status=4 gpu_start=312687.705724000 gpu_end=312687.713527625 pipeline_sets=542
+AURA_METAL_COMPLETED command=362 status=4 gpu_start=312687.713731875 gpu_end=312687.721601542 pipeline_sets=543
+AURA_METAL_COMPLETED command=363 status=4 gpu_start=312687.721791375 gpu_end=312687.729681917 pipeline_sets=544
+AURA_METAL_COMPLETED command=364 status=4 gpu_start=312687.729893792 gpu_end=312687.737865917 pipeline_sets=545
+AURA_METAL_COMPLETED command=365 status=4 gpu_start=312687.738058125 gpu_end=312687.746606042 pipeline_sets=546
+AURA_METAL_COMPLETED command=366 status=4 gpu_start=312687.746833125 gpu_end=312687.755157500 pipeline_sets=547
+AURA_METAL_COMPLETED command=367 status=4 gpu_start=312687.755350500 gpu_end=312687.763547792 pipeline_sets=548
+AURA_METAL_COMPLETED command=368 status=4 gpu_start=312687.763782417 gpu_end=312687.771780167 pipeline_sets=549
+AURA_METAL_COMPLETED command=369 status=4 gpu_start=312687.771970750 gpu_end=312687.779925375 pipeline_sets=550
+[2m2026-09-14T06:28:20.566693Z[0m [34mDEBUG[0m [2mrisc0_zkp::hal::metal[0m[2m:[0m io: 33554432, count: 128, row_size: 262144, bits: 18
+AURA_METAL_COMPLETED command=370 status=4 gpu_start=312687.780226167 gpu_end=312687.782812250 pipeline_sets=551
+AURA_METAL_COMPLETED command=371 status=4 gpu_start=312687.785087750 gpu_end=312687.937253375 pipeline_sets=552
+AURA_METAL_COMPLETED command=372 status=4 gpu_start=312687.937496542 gpu_end=312687.948525250 pipeline_sets=553
+AURA_METAL_COMPLETED command=373 status=4 gpu_start=312687.948785875 gpu_end=312687.953982250 pipeline_sets=554
+AURA_METAL_COMPLETED command=374 status=4 gpu_start=312687.954319250 gpu_end=312687.957410625 pipeline_sets=555
+AURA_METAL_COMPLETED command=375 status=4 gpu_start=312687.957616625 gpu_end=312687.959062500 pipeline_sets=556
+AURA_METAL_COMPLETED command=376 status=4 gpu_start=312687.959239375 gpu_end=312687.960005875 pipeline_sets=557
+AURA_METAL_COMPLETED command=377 status=4 gpu_start=312687.960190625 gpu_end=312687.960548167 pipeline_sets=558
+AURA_METAL_COMPLETED command=378 status=4 gpu_start=312687.960776875 gpu_end=312687.961134792 pipeline_sets=559
+AURA_METAL_COMPLETED command=379 status=4 gpu_start=312687.961359000 gpu_end=312687.961715125 pipeline_sets=560
+AURA_METAL_COMPLETED command=380 status=4 gpu_start=312687.961947750 gpu_end=312687.962303375 pipeline_sets=561
+AURA_METAL_COMPLETED command=381 status=4 gpu_start=312687.962494417 gpu_end=312687.962850625 pipeline_sets=562
+AURA_METAL_COMPLETED command=382 status=4 gpu_start=312687.963039917 gpu_end=312687.963226625 pipeline_sets=563
+AURA_METAL_COMPLETED command=383 status=4 gpu_start=312687.963440500 gpu_end=312687.963545042 pipeline_sets=564
+AURA_METAL_COMPLETED command=384 status=4 gpu_start=312687.963771167 gpu_end=312687.963844542 pipeline_sets=565
+AURA_METAL_COMPLETED command=385 status=4 gpu_start=312687.964080375 gpu_end=312687.964149125 pipeline_sets=566
+AURA_METAL_COMPLETED command=386 status=4 gpu_start=312687.964408000 gpu_end=312687.964477750 pipeline_sets=567
+AURA_METAL_COMPLETED command=387 status=4 gpu_start=312687.964682875 gpu_end=312687.964743125 pipeline_sets=568
+AURA_METAL_COMPLETED command=388 status=4 gpu_start=312687.964951125 gpu_end=312687.965010667 pipeline_sets=569
+AURA_METAL_COMPLETED command=389 status=4 gpu_start=312687.965218125 gpu_end=312687.965278167 pipeline_sets=570
+AURA_METAL_COMPLETED command=390 status=4 gpu_start=312687.965477500 gpu_end=312687.965540500 pipeline_sets=571
+AURA_METAL_COMPLETED command=391 status=4 gpu_start=312687.965738250 gpu_end=312687.965800667 pipeline_sets=572
+AURA_METAL_COMPLETED command=392 status=4 gpu_start=312687.970381000 gpu_end=312687.974872625 pipeline_sets=573
+AURA_METAL_COMPLETED command=393 status=4 gpu_start=312687.979351375 gpu_end=312687.981398667 pipeline_sets=574
+AURA_METAL_COMPLETED command=394 status=4 gpu_start=312687.982910875 gpu_end=312687.983004667 pipeline_sets=575
+[2m2026-09-14T06:28:20.769717Z[0m [34mDEBUG[0m [2mrisc0_zkp::hal::metal[0m[2m:[0m io: 3145728, count: 12
+AURA_METAL_COMPLETED command=395 status=4 gpu_start=312687.983326292 gpu_end=312687.983468750 pipeline_sets=576
+AURA_METAL_COMPLETED command=396 status=4 gpu_start=312687.983635500 gpu_end=312687.983789042 pipeline_sets=577
+AURA_METAL_COMPLETED command=397 status=4 gpu_start=312687.983968000 gpu_end=312687.984113000 pipeline_sets=578
+AURA_METAL_COMPLETED command=398 status=4 gpu_start=312687.984271000 gpu_end=312687.984401875 pipeline_sets=579
+AURA_METAL_COMPLETED command=399 status=4 gpu_start=312687.984561542 gpu_end=312687.984693667 pipeline_sets=580
+AURA_METAL_COMPLETED command=400 status=4 gpu_start=312687.984847792 gpu_end=312687.984975500 pipeline_sets=581
+AURA_METAL_COMPLETED command=401 status=4 gpu_start=312687.985143125 gpu_end=312687.985271250 pipeline_sets=582
+AURA_METAL_COMPLETED command=402 status=4 gpu_start=312687.985431375 gpu_end=312687.985559417 pipeline_sets=583
+AURA_METAL_COMPLETED command=403 status=4 gpu_start=312687.985722917 gpu_end=312687.985849625 pipeline_sets=584
+AURA_METAL_COMPLETED command=404 status=4 gpu_start=312687.986010000 gpu_end=312687.986135250 pipeline_sets=585
+AURA_METAL_COMPLETED command=405 status=4 gpu_start=312687.986339292 gpu_end=312687.986476167 pipeline_sets=586
+AURA_METAL_COMPLETED command=406 status=4 gpu_start=312687.986664042 gpu_end=312687.986800500 pipeline_sets=587
+AURA_METAL_COMPLETED command=407 status=4 gpu_start=312687.986968375 gpu_end=312687.987105625 pipeline_sets=588
+AURA_METAL_COMPLETED command=408 status=4 gpu_start=312687.987268125 gpu_end=312687.987404375 pipeline_sets=589
+AURA_METAL_COMPLETED command=409 status=4 gpu_start=312687.987566375 gpu_end=312687.987702250 pipeline_sets=590
+AURA_METAL_COMPLETED command=410 status=4 gpu_start=312687.987878625 gpu_end=312687.988018625 pipeline_sets=591
+AURA_METAL_COMPLETED command=411 status=4 gpu_start=312687.988188250 gpu_end=312687.988329125 pipeline_sets=592
+AURA_METAL_COMPLETED command=412 status=4 gpu_start=312687.988495542 gpu_end=312687.988637250 pipeline_sets=593
+AURA_METAL_COMPLETED command=413 status=4 gpu_start=312687.988816125 gpu_end=312687.988870375 pipeline_sets=594
+AURA_METAL_COMPLETED command=414 status=4 gpu_start=312687.989049250 gpu_end=312687.990729000 pipeline_sets=595
+[2m2026-09-14T06:28:20.777443Z[0m [34mDEBUG[0m [2mrisc0_zkp::hal::metal[0m[2m:[0m output: 12582912, input: 3145728, count: 12
+AURA_METAL_COMPLETED command=415 status=4 gpu_start=312687.993273625 gpu_end=312687.993547375 pipeline_sets=596
+[2m2026-09-14T06:28:20.780275Z[0m [34mDEBUG[0m [2mrisc0_zkp::hal::metal[0m[2m:[0m output: 12582912, count: 12, expand_bits: 2
+AURA_METAL_COMPLETED command=416 status=4 gpu_start=312687.993912000 gpu_end=312687.994652917 pipeline_sets=597
+AURA_METAL_COMPLETED command=417 status=4 gpu_start=312687.994894250 gpu_end=312687.995640750 pipeline_sets=598
+AURA_METAL_COMPLETED command=418 status=4 gpu_start=312687.995887625 gpu_end=312687.996613125 pipeline_sets=599
+AURA_METAL_COMPLETED command=419 status=4 gpu_start=312687.996833125 gpu_end=312687.997557500 pipeline_sets=600
+AURA_METAL_COMPLETED command=420 status=4 gpu_start=312687.997814250 gpu_end=312687.998584000 pipeline_sets=601
+AURA_METAL_COMPLETED command=421 status=4 gpu_start=312687.998807500 gpu_end=312687.999581250 pipeline_sets=602
+AURA_METAL_COMPLETED command=422 status=4 gpu_start=312687.999778750 gpu_end=312688.000577125 pipeline_sets=603
+AURA_METAL_COMPLETED command=423 status=4 gpu_start=312688.000752125 gpu_end=312688.001524000 pipeline_sets=604
+AURA_METAL_COMPLETED command=424 status=4 gpu_start=312688.001716250 gpu_end=312688.002480542 pipeline_sets=605
+AURA_METAL_COMPLETED command=425 status=4 gpu_start=312688.002683167 gpu_end=312688.003468875 pipeline_sets=606
+AURA_METAL_COMPLETED command=426 status=4 gpu_start=312688.003677250 gpu_end=312688.004468250 pipeline_sets=607
+AURA_METAL_COMPLETED command=427 status=4 gpu_start=312688.004714167 gpu_end=312688.005582292 pipeline_sets=608
+AURA_METAL_COMPLETED command=428 status=4 gpu_start=312688.005798542 gpu_end=312688.006653875 pipeline_sets=609
+AURA_METAL_COMPLETED command=429 status=4 gpu_start=312688.006898000 gpu_end=312688.007789500 pipeline_sets=610
+AURA_METAL_COMPLETED command=430 status=4 gpu_start=312688.007979500 gpu_end=312688.008858375 pipeline_sets=611
+AURA_METAL_COMPLETED command=431 status=4 gpu_start=312688.009087542 gpu_end=312688.009931750 pipeline_sets=612
+AURA_METAL_COMPLETED command=432 status=4 gpu_start=312688.010142917 gpu_end=312688.011030292 pipeline_sets=613
+AURA_METAL_COMPLETED command=433 status=4 gpu_start=312688.011284375 gpu_end=312688.012066042 pipeline_sets=614
+[2m2026-09-14T06:28:20.798801Z[0m [34mDEBUG[0m [2mrisc0_zkp::hal::metal[0m[2m:[0m io: 3145728, count: 12, row_size: 262144, bits: 18
+AURA_METAL_COMPLETED command=434 status=4 gpu_start=312688.012315750 gpu_end=312688.012574042 pipeline_sets=615
+AURA_METAL_COMPLETED command=435 status=4 gpu_start=312688.015525000 gpu_end=312688.037259625 pipeline_sets=616
+AURA_METAL_COMPLETED command=436 status=4 gpu_start=312688.037513000 gpu_end=312688.048766792 pipeline_sets=617
+AURA_METAL_COMPLETED command=437 status=4 gpu_start=312688.049026917 gpu_end=312688.054479125 pipeline_sets=618
+AURA_METAL_COMPLETED command=438 status=4 gpu_start=312688.054706667 gpu_end=312688.057779125 pipeline_sets=619
+AURA_METAL_COMPLETED command=439 status=4 gpu_start=312688.057999167 gpu_end=312688.059378000 pipeline_sets=620
+AURA_METAL_COMPLETED command=440 status=4 gpu_start=312688.059604375 gpu_end=312688.060303125 pipeline_sets=621
+AURA_METAL_COMPLETED command=441 status=4 gpu_start=312688.060525250 gpu_end=312688.060882500 pipeline_sets=622
+AURA_METAL_COMPLETED command=442 status=4 gpu_start=312688.061146500 gpu_end=312688.061504125 pipeline_sets=623
+AURA_METAL_COMPLETED command=443 status=4 gpu_start=312688.061723625 gpu_end=312688.062081750 pipeline_sets=624
+AURA_METAL_COMPLETED command=444 status=4 gpu_start=312688.062318542 gpu_end=312688.062675167 pipeline_sets=625
+AURA_METAL_COMPLETED command=445 status=4 gpu_start=312688.062880792 gpu_end=312688.063234667 pipeline_sets=626
+AURA_METAL_COMPLETED command=446 status=4 gpu_start=312688.063459250 gpu_end=312688.063646625 pipeline_sets=627
+AURA_METAL_COMPLETED command=447 status=4 gpu_start=312688.063869375 gpu_end=312688.063974917 pipeline_sets=628
+AURA_METAL_COMPLETED command=448 status=4 gpu_start=312688.064180500 gpu_end=312688.064258625 pipeline_sets=629
+AURA_METAL_COMPLETED command=449 status=4 gpu_start=312688.064472375 gpu_end=312688.064548792 pipeline_sets=630
+AURA_METAL_COMPLETED command=450 status=4 gpu_start=312688.064793292 gpu_end=312688.064868375 pipeline_sets=631
+AURA_METAL_COMPLETED command=451 status=4 gpu_start=312688.065087500 gpu_end=312688.065153375 pipeline_sets=632
+AURA_METAL_COMPLETED command=452 status=4 gpu_start=312688.065351250 gpu_end=312688.065417875 pipeline_sets=633
+AURA_METAL_COMPLETED command=453 status=4 gpu_start=312688.065638292 gpu_end=312688.065706917 pipeline_sets=634
+AURA_METAL_COMPLETED command=454 status=4 gpu_start=312688.065934750 gpu_end=312688.066003917 pipeline_sets=635
+AURA_METAL_COMPLETED command=455 status=4 gpu_start=312688.066209417 gpu_end=312688.066274000 pipeline_sets=636
+AURA_METAL_COMPLETED command=456 status=4 gpu_start=312688.149382000 gpu_end=312688.908319917 pipeline_sets=637
+[2m2026-09-14T06:28:21.695467Z[0m [34mDEBUG[0m [2mrisc0_zkp::hal::metal[0m[2m:[0m io: 4194304, count: 4
+AURA_METAL_COMPLETED command=457 status=4 gpu_start=312688.909400625 gpu_end=312688.909780542 pipeline_sets=638
+AURA_METAL_COMPLETED command=458 status=4 gpu_start=312688.910234292 gpu_end=312688.910472875 pipeline_sets=639
+AURA_METAL_COMPLETED command=459 status=4 gpu_start=312688.910682500 gpu_end=312688.910909792 pipeline_sets=640
+AURA_METAL_COMPLETED command=460 status=4 gpu_start=312688.911084292 gpu_end=312688.911310542 pipeline_sets=641
+AURA_METAL_COMPLETED command=461 status=4 gpu_start=312688.911485125 gpu_end=312688.911729167 pipeline_sets=642
+AURA_METAL_COMPLETED command=462 status=4 gpu_start=312688.911905292 gpu_end=312688.912161125 pipeline_sets=643
+AURA_METAL_COMPLETED command=463 status=4 gpu_start=312688.912341125 gpu_end=312688.912593667 pipeline_sets=644
+AURA_METAL_COMPLETED command=464 status=4 gpu_start=312688.912769000 gpu_end=312688.913014375 pipeline_sets=645
+AURA_METAL_COMPLETED command=465 status=4 gpu_start=312688.913195625 gpu_end=312688.913451625 pipeline_sets=646
+AURA_METAL_COMPLETED command=466 status=4 gpu_start=312688.913622250 gpu_end=312688.913875917 pipeline_sets=647
+AURA_METAL_COMPLETED command=467 status=4 gpu_start=312688.914049292 gpu_end=312688.914306500 pipeline_sets=648
+AURA_METAL_COMPLETED command=468 status=4 gpu_start=312688.914485375 gpu_end=312688.914737875 pipeline_sets=649
+AURA_METAL_COMPLETED command=469 status=4 gpu_start=312688.914921375 gpu_end=312688.915171542 pipeline_sets=650
+AURA_METAL_COMPLETED command=470 status=4 gpu_start=312688.915357125 gpu_end=312688.915614250 pipeline_sets=651
+AURA_METAL_COMPLETED command=471 status=4 gpu_start=312688.915781750 gpu_end=312688.916034750 pipeline_sets=652
+AURA_METAL_COMPLETED command=472 status=4 gpu_start=312688.916213375 gpu_end=312688.916469500 pipeline_sets=653
+AURA_METAL_COMPLETED command=473 status=4 gpu_start=312688.916721625 gpu_end=312688.916987875 pipeline_sets=654
+AURA_METAL_COMPLETED command=474 status=4 gpu_start=312688.917335125 gpu_end=312688.917613375 pipeline_sets=655
+AURA_METAL_COMPLETED command=475 status=4 gpu_start=312688.917919625 gpu_end=312688.918187417 pipeline_sets=656
+AURA_METAL_COMPLETED command=476 status=4 gpu_start=312688.918372292 gpu_end=312688.918624917 pipeline_sets=657
+AURA_METAL_COMPLETED command=477 status=4 gpu_start=312688.918843417 gpu_end=312688.918951375 pipeline_sets=658
+[2m2026-09-14T06:28:21.705735Z[0m [34mDEBUG[0m [2mrisc0_zkp::hal::metal[0m[2m:[0m output: 16777216, input: 4194304, count: 16
+AURA_METAL_COMPLETED command=478 status=4 gpu_start=312688.925274417 gpu_end=312688.926060250 pipeline_sets=659
+[2m2026-09-14T06:28:21.712842Z[0m [34mDEBUG[0m [2mrisc0_zkp::hal::metal[0m[2m:[0m output: 16777216, count: 16, expand_bits: 2
+AURA_METAL_COMPLETED command=479 status=4 gpu_start=312688.926612917 gpu_end=312688.927811917 pipeline_sets=660
+AURA_METAL_COMPLETED command=480 status=4 gpu_start=312688.928094292 gpu_end=312688.929299375 pipeline_sets=661
+AURA_METAL_COMPLETED command=481 status=4 gpu_start=312688.929627625 gpu_end=312688.930807875 pipeline_sets=662
+AURA_METAL_COMPLETED command=482 status=4 gpu_start=312688.931121000 gpu_end=312688.932314375 pipeline_sets=663
+AURA_METAL_COMPLETED command=483 status=4 gpu_start=312688.932562667 gpu_end=312688.933764375 pipeline_sets=664
+AURA_METAL_COMPLETED command=484 status=4 gpu_start=312688.933989000 gpu_end=312688.935161500 pipeline_sets=665
+AURA_METAL_COMPLETED command=485 status=4 gpu_start=312688.935596792 gpu_end=312688.936788625 pipeline_sets=666
+AURA_METAL_COMPLETED command=486 status=4 gpu_start=312688.937057250 gpu_end=312688.938284542 pipeline_sets=667
+AURA_METAL_COMPLETED command=487 status=4 gpu_start=312688.938531000 gpu_end=312688.939775125 pipeline_sets=668
+AURA_METAL_COMPLETED command=488 status=4 gpu_start=312688.940028375 gpu_end=312688.941274375 pipeline_sets=669
+AURA_METAL_COMPLETED command=489 status=4 gpu_start=312688.941536375 gpu_end=312688.942782625 pipeline_sets=670
+AURA_METAL_COMPLETED command=490 status=4 gpu_start=312688.943033917 gpu_end=312688.944281500 pipeline_sets=671
+AURA_METAL_COMPLETED command=491 status=4 gpu_start=312688.944576667 gpu_end=312688.945758250 pipeline_sets=672
+AURA_METAL_COMPLETED command=492 status=4 gpu_start=312688.946005250 gpu_end=312688.947198000 pipeline_sets=673
+AURA_METAL_COMPLETED command=493 status=4 gpu_start=312688.947481500 gpu_end=312688.948897875 pipeline_sets=674
+AURA_METAL_COMPLETED command=494 status=4 gpu_start=312688.949319500 gpu_end=312688.950442500 pipeline_sets=675
+AURA_METAL_COMPLETED command=495 status=4 gpu_start=312688.951033500 gpu_end=312688.952211250 pipeline_sets=676
+AURA_METAL_COMPLETED command=496 status=4 gpu_start=312688.952523875 gpu_end=312688.953737625 pipeline_sets=677
+[2m2026-09-14T06:28:21.740528Z[0m [34mDEBUG[0m [2mrisc0_zkp::hal::metal[0m[2m:[0m io: 4194304, count: 16, row_size: 262144, bits: 18
+AURA_METAL_COMPLETED command=497 status=4 gpu_start=312688.954117125 gpu_end=312688.954542292 pipeline_sets=678
+AURA_METAL_COMPLETED command=498 status=4 gpu_start=312688.959463500 gpu_end=312688.982418167 pipeline_sets=679
+AURA_METAL_COMPLETED command=499 status=4 gpu_start=312688.982813792 gpu_end=312688.995256750 pipeline_sets=680
+AURA_METAL_COMPLETED command=500 status=4 gpu_start=312688.995634750 gpu_end=312689.001462792 pipeline_sets=681
+AURA_METAL_COMPLETED command=501 status=4 gpu_start=312689.001889250 gpu_end=312689.004872292 pipeline_sets=682
+AURA_METAL_COMPLETED command=502 status=4 gpu_start=312689.005206750 gpu_end=312689.006796125 pipeline_sets=683
+AURA_METAL_COMPLETED command=503 status=4 gpu_start=312689.007033375 gpu_end=312689.007830875 pipeline_sets=684
+AURA_METAL_COMPLETED command=504 status=4 gpu_start=312689.008102875 gpu_end=312689.008459792 pipeline_sets=685
+AURA_METAL_COMPLETED command=505 status=4 gpu_start=312689.008673500 gpu_end=312689.009033292 pipeline_sets=686
+AURA_METAL_COMPLETED command=506 status=4 gpu_start=312689.009211417 gpu_end=312689.009567125 pipeline_sets=687
+AURA_METAL_COMPLETED command=507 status=4 gpu_start=312689.009770250 gpu_end=312689.010127000 pipeline_sets=688
+AURA_METAL_COMPLETED command=508 status=4 gpu_start=312689.010294750 gpu_end=312689.010647667 pipeline_sets=689
+AURA_METAL_COMPLETED command=509 status=4 gpu_start=312689.010816500 gpu_end=312689.011003042 pipeline_sets=690
+AURA_METAL_COMPLETED command=510 status=4 gpu_start=312689.011176167 gpu_end=312689.011280542 pipeline_sets=691
+AURA_METAL_COMPLETED command=511 status=4 gpu_start=312689.011457750 gpu_end=312689.011538375 pipeline_sets=692
+AURA_METAL_COMPLETED command=512 status=4 gpu_start=312689.011706750 gpu_end=312689.011782875 pipeline_sets=693
+AURA_METAL_COMPLETED command=513 status=4 gpu_start=312689.011945125 gpu_end=312689.012020625 pipeline_sets=694
+AURA_METAL_COMPLETED command=514 status=4 gpu_start=312689.012185750 gpu_end=312689.012252292 pipeline_sets=695
+AURA_METAL_COMPLETED command=515 status=4 gpu_start=312689.012428625 gpu_end=312689.012497875 pipeline_sets=696
+AURA_METAL_COMPLETED command=516 status=4 gpu_start=312689.012673625 gpu_end=312689.012743125 pipeline_sets=697
+AURA_METAL_COMPLETED command=517 status=4 gpu_start=312689.012915875 gpu_end=312689.012983042 pipeline_sets=698
+AURA_METAL_COMPLETED command=518 status=4 gpu_start=312689.013158375 gpu_end=312689.013227000 pipeline_sets=699
+AURA_METAL_COMPLETED command=519 status=4 gpu_start=312689.013731667 gpu_end=312689.015316250 pipeline_sets=700
+AURA_METAL_COMPLETED command=520 status=4 gpu_start=312689.017005625 gpu_end=312689.019867625 pipeline_sets=701
+AURA_METAL_COMPLETED command=521 status=4 gpu_start=312689.020318875 gpu_end=312689.073017625 pipeline_sets=702
+AURA_METAL_COMPLETED command=522 status=4 gpu_start=312689.076731875 gpu_end=312689.078297125 pipeline_sets=703
+[2m2026-09-14T06:28:21.872239Z[0m [34mDEBUG[0m [2mrisc0_zkp::hal::metal[0m[2m:[0m output: 1572864, input: 3145728, combos: 12, input_size: 12, count: 262144
+AURA_METAL_COMPLETED command=523 status=4 gpu_start=312689.086818625 gpu_end=312689.087928542 pipeline_sets=704
+[2m2026-09-14T06:28:21.874696Z[0m [34mDEBUG[0m [2mrisc0_zkp::hal::metal[0m[2m:[0m output: 1572864, input: 6029312, combos: 23, input_size: 23, count: 262144
+AURA_METAL_COMPLETED command=524 status=4 gpu_start=312689.088294625 gpu_end=312689.090273875 pipeline_sets=705
+[2m2026-09-14T06:28:21.876979Z[0m [34mDEBUG[0m [2mrisc0_zkp::hal::metal[0m[2m:[0m output: 1572864, input: 33554432, combos: 128, input_size: 128, count: 262144
+AURA_METAL_COMPLETED command=525 status=4 gpu_start=312689.090514375 gpu_end=312689.100429500 pipeline_sets=706
+[2m2026-09-14T06:28:21.887220Z[0m [34mDEBUG[0m [2mrisc0_zkp::hal::metal[0m[2m:[0m output: 1572864, input: 4194304, combos: 16, input_size: 16, count: 262144
+AURA_METAL_COMPLETED command=526 status=4 gpu_start=312689.100799917 gpu_end=312689.102109500 pipeline_sets=707
+AURA_METAL_COMPLETED command=527 status=4 gpu_start=312689.162293875 gpu_end=312689.162453375 pipeline_sets=708
+[2m2026-09-14T06:28:21.949182Z[0m [34mDEBUG[0m [2mrisc0_zkp::hal::metal[0m[2m:[0m io: 1048576, count: 4, row_size: 262144, bits: 18
+AURA_METAL_COMPLETED command=528 status=4 gpu_start=312689.163040625 gpu_end=312689.163103875 pipeline_sets=709
+[2m2026-09-14T06:28:21.949834Z[0m [34mDEBUG[0m [2mrisc0_zkp::hal::metal[0m[2m:[0m output: 4194304, input: 1048576, count: 4
+AURA_METAL_COMPLETED command=529 status=4 gpu_start=312689.163926542 gpu_end=312689.163974250 pipeline_sets=710
+[2m2026-09-14T06:28:21.950672Z[0m [34mDEBUG[0m [2mrisc0_zkp::hal::metal[0m[2m:[0m output: 4194304, count: 4, expand_bits: 2
+AURA_METAL_COMPLETED command=530 status=4 gpu_start=312689.164210667 gpu_end=312689.164391042 pipeline_sets=711
+AURA_METAL_COMPLETED command=531 status=4 gpu_start=312689.164610750 gpu_end=312689.164785125 pipeline_sets=712
+AURA_METAL_COMPLETED command=532 status=4 gpu_start=312689.165001000 gpu_end=312689.165174125 pipeline_sets=713
+AURA_METAL_COMPLETED command=533 status=4 gpu_start=312689.165405500 gpu_end=312689.165583167 pipeline_sets=714
+AURA_METAL_COMPLETED command=534 status=4 gpu_start=312689.165809917 gpu_end=312689.165992750 pipeline_sets=715
+AURA_METAL_COMPLETED command=535 status=4 gpu_start=312689.166201750 gpu_end=312689.166380625 pipeline_sets=716
+AURA_METAL_COMPLETED command=536 status=4 gpu_start=312689.166785500 gpu_end=312689.166988917 pipeline_sets=717
+AURA_METAL_COMPLETED command=537 status=4 gpu_start=312689.167194375 gpu_end=312689.167380042 pipeline_sets=718
+AURA_METAL_COMPLETED command=538 status=4 gpu_start=312689.167607625 gpu_end=312689.167786542 pipeline_sets=719
+AURA_METAL_COMPLETED command=539 status=4 gpu_start=312689.167996167 gpu_end=312689.168176000 pipeline_sets=720
+AURA_METAL_COMPLETED command=540 status=4 gpu_start=312689.168395375 gpu_end=312689.168578250 pipeline_sets=721
+AURA_METAL_COMPLETED command=541 status=4 gpu_start=312689.168808500 gpu_end=312689.168985625 pipeline_sets=722
+AURA_METAL_COMPLETED command=542 status=4 gpu_start=312689.169227125 gpu_end=312689.169401625 pipeline_sets=723
+AURA_METAL_COMPLETED command=543 status=4 gpu_start=312689.169643375 gpu_end=312689.169823292 pipeline_sets=724
+AURA_METAL_COMPLETED command=544 status=4 gpu_start=312689.170050792 gpu_end=312689.170231625 pipeline_sets=725
+AURA_METAL_COMPLETED command=545 status=4 gpu_start=312689.170452750 gpu_end=312689.170638000 pipeline_sets=726
+AURA_METAL_COMPLETED command=546 status=4 gpu_start=312689.170855750 gpu_end=312689.171041000 pipeline_sets=727
+AURA_METAL_COMPLETED command=547 status=4 gpu_start=312689.171262250 gpu_end=312689.171450750 pipeline_sets=728
+AURA_METAL_COMPLETED command=548 status=4 gpu_start=312689.171813542 gpu_end=312689.176713167 pipeline_sets=729
+AURA_METAL_COMPLETED command=549 status=4 gpu_start=312689.176948375 gpu_end=312689.177510917 pipeline_sets=730
+AURA_METAL_COMPLETED command=550 status=4 gpu_start=312689.177714042 gpu_end=312689.178002375 pipeline_sets=731
+AURA_METAL_COMPLETED command=551 status=4 gpu_start=312689.178206917 gpu_end=312689.178493667 pipeline_sets=732
+AURA_METAL_COMPLETED command=552 status=4 gpu_start=312689.178700250 gpu_end=312689.178987375 pipeline_sets=733
+AURA_METAL_COMPLETED command=553 status=4 gpu_start=312689.179215125 gpu_end=312689.179502625 pipeline_sets=734
+AURA_METAL_COMPLETED command=554 status=4 gpu_start=312689.179733625 gpu_end=312689.180018042 pipeline_sets=735
+AURA_METAL_COMPLETED command=555 status=4 gpu_start=312689.180243042 gpu_end=312689.180394917 pipeline_sets=736
+AURA_METAL_COMPLETED command=556 status=4 gpu_start=312689.180631292 gpu_end=312689.180719625 pipeline_sets=737
+AURA_METAL_COMPLETED command=557 status=4 gpu_start=312689.180949542 gpu_end=312689.181014125 pipeline_sets=738
+AURA_METAL_COMPLETED command=558 status=4 gpu_start=312689.181251042 gpu_end=312689.181311042 pipeline_sets=739
+AURA_METAL_COMPLETED command=559 status=4 gpu_start=312689.181551500 gpu_end=312689.181610250 pipeline_sets=740
+AURA_METAL_COMPLETED command=560 status=4 gpu_start=312689.181827500 gpu_end=312689.181881375 pipeline_sets=741
+AURA_METAL_COMPLETED command=561 status=4 gpu_start=312689.182124875 gpu_end=312689.182188125 pipeline_sets=742
+AURA_METAL_COMPLETED command=562 status=4 gpu_start=312689.182398625 gpu_end=312689.182469417 pipeline_sets=743
+AURA_METAL_COMPLETED command=563 status=4 gpu_start=312689.182706250 gpu_end=312689.182760125 pipeline_sets=744
+AURA_METAL_COMPLETED command=564 status=4 gpu_start=312689.182947250 gpu_end=312689.183000875 pipeline_sets=745
+AURA_METAL_COMPLETED command=565 status=4 gpu_start=312689.183464750 gpu_end=312689.183586250 pipeline_sets=746
+[2m2026-09-14T06:28:21.970293Z[0m [34mDEBUG[0m [2mrisc0_zkp::hal::metal[0m[2m:[0m output: 262144, input: 65536, count: 4
+AURA_METAL_COMPLETED command=566 status=4 gpu_start=312689.183851375 gpu_end=312689.183857375 pipeline_sets=747
+[2m2026-09-14T06:28:21.970536Z[0m [34mDEBUG[0m [2mrisc0_zkp::hal::metal[0m[2m:[0m output: 262144, count: 4, expand_bits: 2
+AURA_METAL_COMPLETED command=567 status=4 gpu_start=312689.184078500 gpu_end=312689.184092667 pipeline_sets=748
+AURA_METAL_COMPLETED command=568 status=4 gpu_start=312689.184331750 gpu_end=312689.184349292 pipeline_sets=749
+AURA_METAL_COMPLETED command=569 status=4 gpu_start=312689.184614125 gpu_end=312689.184628125 pipeline_sets=750
+AURA_METAL_COMPLETED command=570 status=4 gpu_start=312689.184819000 gpu_end=312689.184833125 pipeline_sets=751
+AURA_METAL_COMPLETED command=571 status=4 gpu_start=312689.185017500 gpu_end=312689.185031625 pipeline_sets=752
+AURA_METAL_COMPLETED command=572 status=4 gpu_start=312689.185223292 gpu_end=312689.185237500 pipeline_sets=753
+AURA_METAL_COMPLETED command=573 status=4 gpu_start=312689.185425167 gpu_end=312689.185439375 pipeline_sets=754
+AURA_METAL_COMPLETED command=574 status=4 gpu_start=312689.185637792 gpu_end=312689.185652125 pipeline_sets=755
+AURA_METAL_COMPLETED command=575 status=4 gpu_start=312689.185857625 gpu_end=312689.185872000 pipeline_sets=756
+AURA_METAL_COMPLETED command=576 status=4 gpu_start=312689.186099042 gpu_end=312689.186113375 pipeline_sets=757
+AURA_METAL_COMPLETED command=577 status=4 gpu_start=312689.186392500 gpu_end=312689.186407917 pipeline_sets=758
+AURA_METAL_COMPLETED command=578 status=4 gpu_start=312689.186603125 gpu_end=312689.186618667 pipeline_sets=759
+AURA_METAL_COMPLETED command=579 status=4 gpu_start=312689.186810167 gpu_end=312689.186826000 pipeline_sets=760
+AURA_METAL_COMPLETED command=580 status=4 gpu_start=312689.187012875 gpu_end=312689.187029167 pipeline_sets=761
+AURA_METAL_COMPLETED command=581 status=4 gpu_start=312689.187253917 gpu_end=312689.188566917 pipeline_sets=762
+AURA_METAL_COMPLETED command=582 status=4 gpu_start=312689.188760500 gpu_end=312689.189078375 pipeline_sets=763
+AURA_METAL_COMPLETED command=583 status=4 gpu_start=312689.189272625 gpu_end=312689.189566750 pipeline_sets=764
+AURA_METAL_COMPLETED command=584 status=4 gpu_start=312689.189754375 gpu_end=312689.189906042 pipeline_sets=765
+AURA_METAL_COMPLETED command=585 status=4 gpu_start=312689.190108000 gpu_end=312689.190194250 pipeline_sets=766
+AURA_METAL_COMPLETED command=586 status=4 gpu_start=312689.190361917 gpu_end=312689.190426792 pipeline_sets=767
+AURA_METAL_COMPLETED command=587 status=4 gpu_start=312689.190594625 gpu_end=312689.190654375 pipeline_sets=768
+AURA_METAL_COMPLETED command=588 status=4 gpu_start=312689.190823375 gpu_end=312689.190882625 pipeline_sets=769
+AURA_METAL_COMPLETED command=589 status=4 gpu_start=312689.191058500 gpu_end=312689.191111875 pipeline_sets=770
+AURA_METAL_COMPLETED command=590 status=4 gpu_start=312689.191276250 gpu_end=312689.191329500 pipeline_sets=771
+AURA_METAL_COMPLETED command=591 status=4 gpu_start=312689.191563042 gpu_end=312689.191616875 pipeline_sets=772
+AURA_METAL_COMPLETED command=592 status=4 gpu_start=312689.191813250 gpu_end=312689.191867000 pipeline_sets=773
+AURA_METAL_COMPLETED command=593 status=4 gpu_start=312689.192056292 gpu_end=312689.192110292 pipeline_sets=774
+AURA_METAL_COMPLETED command=594 status=4 gpu_start=312689.192339125 gpu_end=312689.192458250 pipeline_sets=775
+[2m2026-09-14T06:28:21.979144Z[0m [34mDEBUG[0m [2mrisc0_zkp::hal::metal[0m[2m:[0m output: 16384, input: 4096, count: 4
+AURA_METAL_COMPLETED command=595 status=4 gpu_start=312689.192663417 gpu_end=312689.192667167 pipeline_sets=776
+[2m2026-09-14T06:28:21.979328Z[0m [34mDEBUG[0m [2mrisc0_zkp::hal::metal[0m[2m:[0m output: 16384, count: 4, expand_bits: 2
+AURA_METAL_COMPLETED command=596 status=4 gpu_start=312689.192845750 gpu_end=312689.192850792 pipeline_sets=777
+AURA_METAL_COMPLETED command=597 status=4 gpu_start=312689.193011750 gpu_end=312689.193016625 pipeline_sets=778
+AURA_METAL_COMPLETED command=598 status=4 gpu_start=312689.193190042 gpu_end=312689.193195250 pipeline_sets=779
+AURA_METAL_COMPLETED command=599 status=4 gpu_start=312689.193352917 gpu_end=312689.193357917 pipeline_sets=780
+AURA_METAL_COMPLETED command=600 status=4 gpu_start=312689.193524542 gpu_end=312689.193529500 pipeline_sets=781
+AURA_METAL_COMPLETED command=601 status=4 gpu_start=312689.193701625 gpu_end=312689.193706750 pipeline_sets=782
+AURA_METAL_COMPLETED command=602 status=4 gpu_start=312689.193868625 gpu_end=312689.193873750 pipeline_sets=783
+AURA_METAL_COMPLETED command=603 status=4 gpu_start=312689.194033625 gpu_end=312689.194038750 pipeline_sets=784
+AURA_METAL_COMPLETED command=604 status=4 gpu_start=312689.194214250 gpu_end=312689.194219875 pipeline_sets=785
+AURA_METAL_COMPLETED command=605 status=4 gpu_start=312689.194411500 gpu_end=312689.194417000 pipeline_sets=786
+AURA_METAL_COMPLETED command=606 status=4 gpu_start=312689.194628625 gpu_end=312689.195003625 pipeline_sets=787
+AURA_METAL_COMPLETED command=607 status=4 gpu_start=312689.195205375 gpu_end=312689.195269792 pipeline_sets=788
+AURA_METAL_COMPLETED command=608 status=4 gpu_start=312689.195504750 gpu_end=312689.195564875 pipeline_sets=789
+AURA_METAL_COMPLETED command=609 status=4 gpu_start=312689.195771792 gpu_end=312689.195830625 pipeline_sets=790
+AURA_METAL_COMPLETED command=610 status=4 gpu_start=312689.196055500 gpu_end=312689.196109625 pipeline_sets=791
+AURA_METAL_COMPLETED command=611 status=4 gpu_start=312689.196318000 gpu_end=312689.196371792 pipeline_sets=792
+AURA_METAL_COMPLETED command=612 status=4 gpu_start=312689.196585375 gpu_end=312689.196639125 pipeline_sets=793
+AURA_METAL_COMPLETED command=613 status=4 gpu_start=312689.196874500 gpu_end=312689.196928167 pipeline_sets=794
+AURA_METAL_COMPLETED command=614 status=4 gpu_start=312689.197162250 gpu_end=312689.197216250 pipeline_sets=795
+AURA_METAL_COMPLETED command=615 status=4 gpu_start=312689.197430625 gpu_end=312689.197449750 pipeline_sets=796
+AURA_METAL_COMPLETED command=616 status=4 gpu_start=312689.197678667 gpu_end=312689.197680917 pipeline_sets=797
+[2m2026-09-14T06:28:21.984353Z[0m [34mDEBUG[0m [2mrisc0_zkp::hal::metal[0m[2m:[0m io: 256, count: 4, row_size: 64, bits: 6
+AURA_METAL_COMPLETED command=617 status=4 gpu_start=312689.197890667 gpu_end=312689.197893250 pipeline_sets=798
+AURA_METAL_COMPLETED command=618 status=4 gpu_start=312689.201778875 gpu_end=312689.201803625 pipeline_sets=799
+AURA_METAL_COMPLETED command=619 status=4 gpu_start=312689.202147750 gpu_end=312689.202183042 pipeline_sets=800
+        2.50 real         0.82 user         0.30 sys
+           540622848  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               36390  page reclaims
+                1167  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  35  voluntary context switches
+               11620  involuntary context switches
+          5924630371  instructions retired
+          2803513009  cycles elapsed
+          2483504232  peak memory footprint

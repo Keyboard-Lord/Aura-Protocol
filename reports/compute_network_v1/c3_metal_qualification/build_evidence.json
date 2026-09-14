@@ -47,5 +47,12 @@
   "git_lfs_objects_materialized": 7,
   "lock_sha256": "9ca825546dc14cecc90c1342d9771da5580778ae89fc1591ddb6c02600080ed7",
   "native_binary_sha256": "ba2f2a7b712eb59de88fabeca5c3121cd0b1ed995818ac33c5f01b03eba197ad",
-  "runtime_results": "pending"
+  "runtime_results": "results.json",
+  "cpu_binary_sha256": "41d258da2120d52ee05dd2c82994ee2925854e6fc4a8526bfc4c2f0fcdf62d56",
+  "cpu_link_arguments": [
+    "-l",
+    "framework=Metal",
+    "-l",
+    "framework=Foundation"
+  ]
 }

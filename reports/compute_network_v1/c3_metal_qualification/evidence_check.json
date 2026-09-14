@@ -1,0 +1,17 @@
+{
+  "classification": "qualification evidence check; no production activation",
+  "date": "2026-09-14",
+  "qualified_pin": "3bbcd44d6459b9ef6ac0df3846dc9215514934e8",
+  "result": "PASS",
+  "source_manifest_hashes_checked": 41,
+  "saved_receipt_hashes_checked": 3,
+  "qualification_lock_hash_checked": true,
+  "local_references_checked": true,
+  "git_diff_check": "PASS",
+  "scope_base_commit": "8b8eb1d",
+  "tracked_changes_confined_to_reports_and_slice_register": true,
+  "aura_dependency_and_frozen_surface_changes": [],
+  "c3_complete": false,
+  "adoption_approved": false,
+  "next_action": "USER_DECISION for exact upstream pin adoption; no C4"
+}

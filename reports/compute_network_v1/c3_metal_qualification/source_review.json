@@ -250,6 +250,12 @@
       "path": "risc0/circuit/recursion/src/prove/hal/metal.rs",
       "sha256": "9b4130ad4363111eb828db8d0c3e10b1b14f5892e52bf560a484e1c65ae591eb",
       "source": "https://github.com/risc0/risc0/blob/3bbcd44d6459b9ef6ac0df3846dc9215514934e8/risc0/circuit/recursion/src/prove/hal/metal.rs"
+    },
+    {
+      "revision": "candidate",
+      "path": "risc0/circuit/rv32im/src/execute/r0vm.rs",
+      "sha256": "e32f6a3a3ea14b3446ad5f6985900857aed1ad629b57e7c67b5cf4dad87e08c6",
+      "source": "https://github.com/risc0/risc0/blob/3bbcd44d6459b9ef6ac0df3846dc9215514934e8/risc0/circuit/rv32im/src/execute/r0vm.rs"
     }
   ],
   "relevant_candidate_side_changes": [
@@ -320,6 +326,14 @@
     {
       "sha": "c0ae7ba1a9ffbcc12f974bfc1ec25f7adaf96414",
       "message": "Avoid panic during cast in verify (#3740)"
+    },
+    {
+      "sha": "3f00e1fa0159599c1601e788021f2169d1f0a4dc",
+      "message": "Refactor guest I/O with host (#3351)"
+    },
+    {
+      "sha": "c4b2286862144bfe591d5552a3306a6dccce1b05",
+      "message": "Avoid unbounded host buffer allocation during execution (#3545)"
     }
   ],
   "lfs_objects": [
@@ -367,5 +381,5 @@
     }
   ],
   "adoption_approved": false,
-  "runtime_qualification": "pending"
+  "runtime_qualification": "PASS_MINIMAL_CPU_AND_ACTUAL_METAL_QUALIFICATION"
 }

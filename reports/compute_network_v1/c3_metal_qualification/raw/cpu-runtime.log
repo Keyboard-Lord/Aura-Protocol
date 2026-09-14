@@ -1,0 +1,67 @@
+[2m2026-09-14T06:29:24.707675Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im::prove::preflight[0m[2m:[0m Finalizing, trace row count = 3278, aux size = 115698
+[2m2026-09-14T06:29:24.707895Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im::prove::preflight[0m[2m:[0m endCycle: 75, retiredCycle: 75, isFinal: true
+[2m2026-09-14T06:29:24.734330Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Copying to GPU
+[2m2026-09-14T06:29:24.734419Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Proving
+[2m2026-09-14T06:29:24.734432Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Witgen
+[2m2026-09-14T06:29:24.734652Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Computing data witness
+[2m2026-09-14T06:29:24.738266Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Write globals
+[2m2026-09-14T06:29:24.738355Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Copy
+[2m2026-09-14T06:29:24.738882Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Interpolate + Shift
+[2m2026-09-14T06:29:24.787668Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Eval + commit
+[2m2026-09-14T06:29:25.034146Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m root = dfe53d042898864887460029acbc0732ccf6805ddfc77746dffaf4560e491f10
+[2m2026-09-14T06:29:25.034197Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Generate mix
+[2m2026-09-14T06:29:25.034240Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Witgen
+[2m2026-09-14T06:29:25.034423Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Computing accum witness
+[2m2026-09-14T06:29:25.044733Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Accum tot = (0, 0, 0, 0)
+[2m2026-09-14T06:29:25.044755Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Copy
+[2m2026-09-14T06:29:25.045027Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Interpolate + Shift
+[2m2026-09-14T06:29:25.082142Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Eval + commit
+[2m2026-09-14T06:29:25.287564Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m root = 345cf1495ac81533e395ae65a8e98a720ab2c76fef0a9e3e2ab48b4e3a9c9b04
+[2m2026-09-14T06:29:25.287626Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Doing eval check, mix = (964357772, 535212794, 1142665075, 560426113)
+[2m2026-09-14T06:29:25.287644Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Do eval check
+[2m2026-09-14T06:29:26.357192Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Interopate in place
+[2m2026-09-14T06:29:26.358323Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Eval + commit check group
+[2m2026-09-14T06:29:26.395769Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Check root = bfa49467a1fd2255c56c086d0ecb9a4fc391243def5f6b501aa2cf59b57d3a33
+[2m2026-09-14T06:29:26.395812Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Selected z = (1533102972, 1653004499, 950082910, 1430759193)
+[2m2026-09-14T06:29:26.395827Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Compute eval, offset = 0
+[2m2026-09-14T06:29:26.436990Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Compute eval, offset = 199
+[2m2026-09-14T06:29:26.478453Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Compute check eval, offset = 395
+[2m2026-09-14T06:29:26.481783Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Translate to coefficients
+[2m2026-09-14T06:29:26.481840Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Commit to data
+[2m2026-09-14T06:29:26.482137Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Coeffs digest = b2e50302ec4f15367aec5e2ebdc2ca747607fe6196cb720b2176b72e913d8e65
+[2m2026-09-14T06:29:26.482151Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Combo mix = (676420943, 1852494779, 5436700, 666732395)
+[2m2026-09-14T06:29:26.482190Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Mixing in polynomial
+[2m2026-09-14T06:29:26.489200Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Mixing in polynomial
+[2m2026-09-14T06:29:26.495157Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Mixing in check
+[2m2026-09-14T06:29:26.495736Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Prepare combos (i.e. subtract coeffs)
+[2m2026-09-14T06:29:26.495765Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Divide combos
+[2m2026-09-14T06:29:26.496554Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Prepare final polynomial
+[2m2026-09-14T06:29:26.496768Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Do FRI
+[2m2026-09-14T06:29:26.507865Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Merkle root = dfe53d042898864887460029acbc0732ccf6805ddfc77746dffaf4560e491f10
+[2m2026-09-14T06:29:26.508007Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Merkle root = 345cf1495ac81533e395ae65a8e98a720ab2c76fef0a9e3e2ab48b4e3a9c9b04
+[2m2026-09-14T06:29:26.508015Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m evalCheckMix = (964357772, 535212794, 1142665075, 560426113)
+[2m2026-09-14T06:29:26.508112Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Check root = bfa49467a1fd2255c56c086d0ecb9a4fc391243def5f6b501aa2cf59b57d3a33
+[2m2026-09-14T06:29:26.508117Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Selected z = (1533102972, 1653004499, 950082910, 1430759193)
+[2m2026-09-14T06:29:26.508410Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Coeffs digest = b2e50302ec4f15367aec5e2ebdc2ca747607fe6196cb720b2176b72e913d8e65
+[2m2026-09-14T06:29:26.508421Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Combo mix = (676420943, 1852494779, 5436700, 666732395)
+[2m2026-09-14T06:29:26.509366Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m constraintPoly = (778898469, 1741881995, 1858595749, 519664634)
+[2m2026-09-14T06:29:26.509377Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m check = (778898469, 1741881995, 1858595749, 519664634)
+[2m2026-09-14T06:29:26.525151Z[0m [32m INFO[0m [2mrisc0_circuit_rv32im_sys::prove[0m[2m:[0m Completed successfuly
+       19.19 real       145.02 user         2.01 sys
+          1533489152  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              392141  page reclaims
+                6403  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                2990  voluntary context switches
+              169944  involuntary context switches
+       1304956588682  instructions retired
+        372353775271  cycles elapsed
+          1526741784  peak memory footprint

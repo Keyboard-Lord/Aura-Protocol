@@ -1,7 +1,7 @@
 # C3 — Real proving adapter and compute payment decisions
 
 Classification: APPROVAL / IMPLEMENTATION-READINESS EVIDENCE; NON-AUTHORITATIVE.
-Date: 2026-09-13. Status: C3-D1/D2 APPROVED; C3-METAL-1 qualification APPROVED; adoption pending.
+Date: 2026-09-14. Status: C3-D1/D2 APPROVED; C3-METAL-1 qualification PASS; exact-pin adoption USER_DECISION.
 No adapter, payment transport or new canonical bytes are activated by this report.
 
 ## Controlling approval
@@ -257,8 +257,9 @@ authorized by qualification; no public workers, live funds or CPU-only completio
 The stock v3.0.5 tag resolves to commit
 `8eb06ab020a92dc5b63ba6dd0836d432aba6d890`. Targeted reads of ten upstream files
 produced [source preflight evidence](compute_network_v1/c3_backend_preflight.json),
-including source SHA256 values and exact finding locations. No library was built
-or installed and no upstream executable was run.
+including source SHA256 values and exact finding locations. That original preflight
+built no library and ran no upstream executable. The subsequent authorized
+qualification below now has actual CPU/Metal runtime evidence.
 
 | Direct source evidence at that revision | Consequence |
 | --- | --- |
@@ -281,7 +282,7 @@ complete Metal circuit path, or explicitly commission a reviewed Metal restorati
 on v3.0.5. Neither change has been made. A CPU-only completion or silent switch to
 CUDA/remote proving would violate the approval and is not recommended.
 
-**Smallest decision needed:** authorize a bounded RISC Zero revision-qualification
+**Original decision, now APPROVED:** authorize a bounded RISC Zero revision-qualification
 step. Identify an exact candidate and its segment/recursion Metal support plus
 verifier, control-parameter, receipt-format and security differences; present that
 pin for approval before adoption. Do not automatically select an old release merely
@@ -289,22 +290,29 @@ because it has Metal code or omit the reviewed candidate's verification fixes.
 
 **Recommended option:** qualify another upstream revision first. An Aura-maintained
 prover fork would add substantial circuit/backend maintenance and validation work.
-No alternate version has been researched or chosen after reaching this stop.
+This recommendation led to the subsequently approved qualification; it is not a
+remaining request for permission to investigate.
 
-This preflight establishes a stock-source incompatibility, not a runtime benchmark.
-Proof time, verification time, memory and proof size remain unmeasured. Their
-absence is recorded rather than replaced by CPU or published benchmark results.
-Reproduce the inspection by retrieving the linked exact-commit files, checking
-their recorded digests and inspecting the selector/module locations above. Future
-source eligibility still cannot replace actual backend-identifying runtime evidence.
+The original preflight established a stock-source incompatibility. The subsequent
+[C3-METAL-1 qualification report](AURA_COMPUTE_C3_METAL_QUALIFICATION.md) records
+release screening, exact source/security comparison and successful local proof
+qualification of `3bbcd44d6459b9ef6ac0df3846dc9215514934e8`.
+
+- Actual Metal: real succinct receipt, 619 completed GPU command buffers in each
+  of cold/warm runs; independently verified. Warm prove call 2.401 seconds.
+- CPU reference under Rosetta: same verified statement, 14.751-second prove call.
+  Three differing receipt artifacts all have 222,668-byte seals.
+- Sixteen receipt-mutation checks, cross-architecture verification and explicit
+  dev-mode fail-closed check pass. Parser/isolation/workload acceptance remains C3 work.
+- Source pin is a 5.0 development revision with changed circuit/control/verifier
+  parameters. Qualification is not adoption or adapter-contract freeze.
 
 ## State and stop
 
-C0/C1/C2 DONE. C3 IN PROGRESS; D1/D2 APPROVED; C3-METAL-1 awaiting a decision.
-C4–C10 BLOCKED. Stop before changing the candidate or freezing its dependent proof
-contract. No adapter registration, compute payout or later-node implementation ran.
-Only approval/status documentation and source-preflight evidence changed. Frozen
-canonical byte tables, implementation, Cargo.lock and fixtures are unchanged.
-Local references, source-evidence consistency, scope and whitespace were checked;
-unchanged C2/Miner gates were not rerun. All C3 runtime/security acceptance remains
-open, including actual Metal execution, isolation, delivery, payment and regression.
+C0/C1/C2 DONE. C3 IN PROGRESS; D1/D2 APPROVED; bounded C3-METAL-1 qualification PASS.
+The exact-pin adoption USER_DECISION is in the qualification report. C4–C10 remain
+BLOCKED. No Aura dependency change, production adapter, compute payout or later-node
+implementation occurred. Frozen canonical tables, implementation, Cargo.lock and
+fixtures are unchanged. Only non-authoritative evidence/harness and status records
+changed. The complete fixed batch-Merkle workload, hostile parser, isolation,
+delivery, payment, optional mining and C3 regression gate still remain after adoption.
