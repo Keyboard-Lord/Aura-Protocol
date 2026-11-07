@@ -11,6 +11,11 @@ pub const REVISION: &str = "3bbcd44d6459b9ef6ac0df3846dc9215514934e8";
 pub const CONTROL_ROOT: &str = "517f405d5dbda85b2dc15f3ab6f8a05170bde64980ef594a8e9fd923febe1a03";
 pub const VERIFIER_PARAMETERS: &str =
     "556eeddcc0b9c119d11a3c8303bfba3dc380cbf6291951baf4206627497cc862";
+/// Frozen image identity of the reviewed C3 guest combined with the pinned
+/// v1compat kernel. Prove/verify must use exactly this image; it is never
+/// taken from a requester or derived from receipt metadata.
+pub const IMAGE_ID: &str =
+    "6c81a254cf79e4ba5fb03b4d797d8838d2a9f92837c2ac35a90d941cb1ebda1d";
 pub fn sha256(b: &[u8]) -> Hash {
     Impl::hash_bytes(b).as_bytes().try_into().unwrap()
 }
@@ -44,14 +49,15 @@ pub fn verify_output(
     );
     let p = ProofView::parse(output).map_err(anyhow::Error::msg)?;
     ensure!(p.journal == expected_journal, "job/input/journal binding");
-    // Pin the succinct recursion circuit's po2 before any upstream verifier work.
-    // The first 32 words are globals, followed by a BabyBear Montgomery element.
+    // Bound the lift po2 encoded in the seal before any upstream verifier work.
+    // The first 32 words are globals, followed by the raw po2 u32
+    // (upstream writes BabyBearElem::new_raw(program.po2)); it is execution-size
+    // dependent, so range-check it and let the pinned control root plus the
+    // inclusion proof bind the exact lift program. Bounds are upstream
+    // MIN_LIFT_PO2..=MAX_CYCLES_PO2 for this verifier profile.
     ensure!(p.seal.len() >= 33 * 4, "short recursion seal");
     let po2 = u32::from_le_bytes(p.seal[128..132].try_into().unwrap());
-    ensure!(
-        po2 == risc0_core::field::baby_bear::Elem::new(18).as_u32_montgomery(),
-        "unsupported recursion size"
-    );
+    ensure!((12..=24).contains(&po2), "unsupported recursion size: {po2}");
     // Claim and parameters have exactly one local construction, not caller-controlled variants.
     // The pinned upstream exposes neither a constructor for this non-exhaustive
     // type nor its MerkleProof type. Construct only this bounded in-memory value;

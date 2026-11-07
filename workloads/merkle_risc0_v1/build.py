@@ -77,7 +77,10 @@ def main():
             env["CARGO_ENCODED_RUSTFLAGS"] += "\x1f--remap-path-prefix=" + origin + "=" + replacement
         cmd = base + ["build", "--release", "--locked", "--manifest-path", str(HERE/"guest/Cargo.toml"), "--target", "riscv32im-risc0-zkvm-elf"]
     else:
-        cmd = base + ["rustc" if a.action == "cpu" else "build", "--release", "--locked", "--manifest-path", str(HERE/"Cargo.toml")]
+        # `cargo rustc` requires a real package manifest; the workspace root is virtual.
+        manifest = HERE/"host/Cargo.toml" if a.action == "cpu" else HERE/"Cargo.toml"
+        cmd = base + ["rustc" if a.action == "cpu" else "build", "--release", "--locked", "--manifest-path", str(manifest)]
+        if a.action == "cpu": cmd += ["--bin", "aura-c3-merkle-host"]
         if a.action != "verifier": cmd += ["--features", "prove"]
         if a.action == "cpu": cmd += ["--target", "x86_64-apple-darwin", "--", "-l", "framework=Metal", "-l", "framework=Foundation"]
     subprocess.run(cmd, env=env, check=True)

@@ -19,11 +19,9 @@ fn structural() -> Vec<u8> {
     b.extend([0; CONTROL_DEPTH * 32]);
     b.extend(33u32.to_le_bytes());
     b.extend([0; 128]);
-    b.extend(
-        risc0_core::field::baby_bear::Elem::new(18)
-            .as_u32_montgomery()
-            .to_le_bytes(),
-    );
+    // The seal stores the lift po2 as a raw u32 (upstream writes
+    // BabyBearElem::new_raw(program.po2)), not a Montgomery element.
+    b.extend(18u32.to_le_bytes());
     b
 }
 #[test]
@@ -58,6 +56,21 @@ fn malformed_sizes_domains_journals_and_recursion_size_reject() {
     let mut wrong = journal();
     wrong[JOURNAL_DOMAIN.len()] ^= 1;
     assert!(verify_output(&b, &wrong, Digest::ZERO).is_err());
+}
+#[test]
+fn out_of_profile_lift_po2_rejects_before_upstream_verification() {
+    let b = structural();
+    // Seal word 32 is the raw lift po2; the approved profile covers 12..=24.
+    for po2 in [0u32, 11, 25, u32::MAX] {
+        let mut bad = b.clone();
+        bad[OUTPUT_HEADER_LEN + 128..OUTPUT_HEADER_LEN + 132]
+            .copy_from_slice(&po2.to_le_bytes());
+        let err = verify_output(&bad, &journal(), Digest::ZERO).unwrap_err();
+        assert!(
+            !err.is::<VerificationError>(),
+            "po2 {po2} must reject at the profile bound, not upstream: {err:#}"
+        );
+    }
 }
 #[test]
 fn development_receipt_cannot_enter_output_codec() {
