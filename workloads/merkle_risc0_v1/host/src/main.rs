@@ -34,6 +34,12 @@ fn main() -> Result<()> {
     let kernel = include_bytes!("../../vendor/risc0/risc0/zkos/v1compat/elfs/v1compat.elf");
     let binary = risc0_binfmt::ProgramBinary::new(&user, kernel).encode();
     let image = compute_image_id(&binary)?;
+    if a[1] != "inspect" {
+        ensure!(
+            image.to_string() == IMAGE_ID,
+            "guest image is not the frozen C3 workload"
+        );
+    }
     let job: Hash = hex::decode(&a[3])?
         .try_into()
         .map_err(|_| anyhow::anyhow!("job digest length"))?;

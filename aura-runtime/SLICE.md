@@ -31,7 +31,7 @@ No public worker execution or live monetary activation is authorized.
 | C0 | DONE | D1–D4 explicitly approved as amended; controlling approval recorded in C0 evidence. |
 | C1 | DONE | C1-D1–D3 and C1-P1 APPROVED; job/core schemas, authentication and signed-side binding frozen with independent Rust/TS vectors. |
 | C2 | DONE | C2-D1/D2 APPROVED; exact lifecycle codecs, durable assignment/reservation/receipt/result and full gate passed. |
-| C3 | IN PROGRESS | D1/D2 APPROVED; C3-METAL-1 minimal CPU/actual-Metal qualification PASS. Exact pin adoption APPROVED. No production adapter registered. |
+| C3 | IN PROGRESS | D1/D2 APPROVED; C3-METAL-1 minimal CPU/actual-Metal qualification PASS. Exact pin adoption APPROVED. Fixed Merkle workload checkpoint: reproducible guest ELF, frozen ImageID, real Metal+CPU succinct proofs independently verified — [evidence](../reports/compute_network_v1/c3_merkle_workload/README.md). No production adapter registered. |
 | C4 | BLOCKED | C3: deterministic/open-model inference. |
 | C5 | BLOCKED | C4: molecular, media and Monte Carlo adapters, one at a time. |
 | C6 | BLOCKED | C5: generic sandboxed CPU/GPU worker. |
